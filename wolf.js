@@ -1,6 +1,6 @@
 class Wolf {
-    constructor(game, x, y, spritesheet) {
-        Object.assign(this, { game, x, y, spritesheet });
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
 
         this.game.wolf = this;
 
@@ -24,7 +24,7 @@ class Wolf {
          }
 
          // idle animation for state = 0
-         // this.animations[0][0] = new Animator(this.spritesheet);
+         this.animations[0][0] = new Animator(this.spritesheet, 318.5, 63, 65, 33, 1, 1, 0, false, true);
          // this.animations[0][1] = new Animator(this.spritesheet);
          // this.animations[0][2] = new Animator(this.spritesheet);
          // this.animations[0][3] = new Animator(this.spritesheet);
@@ -44,40 +44,13 @@ class Wolf {
          // this.deadAnim = new Animator(this.spritesheet, false, true);
     }
 
-    updateBB() {
-        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH,
-          PARAMS.BLOCKWIDTH);
-    }
-
-    die() {
-        this.dead = true;
-    }
-
     update() {
-        const TICK = this.game.clockTick;
-        const SPEED = 4.4;
 
         // add more code here later about speed and physics
     }
 
-    drawMinimap(ctx, mmY, mmX) {
-        ctx.fillStyle = "Red";
-        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH,
-          PARAMS.SCALE, PARAMS.SCALE * Math.min(this.size + 1, 2));
-    };
-
     draw(ctx) {
-        if (this.dead) {
-            this.deadAnim.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x,
-              this.y, PARAMS.SCALE);
-        } else {
-            this.animations[this.state][this.size][this.facing].drawFrame(this.game.clockTick,
-              ctx, this.x - this.game.camera.x, this.y, PARAMS.SCALE);
-        }
-        if (PARAMS.DEBUG) {
-            ctx.strokeStyle = 'Red';
-            ctx.strokeRect(this.BB.x - this.game.camera.x, this.BB.y, this.BB.width, this.BB.height);
-        }
+        this.animations[0][0].drawFrame(this.game.clockTick, ctx, 1, 1, 2);
     }
 
 }
