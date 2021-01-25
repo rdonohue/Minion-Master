@@ -27,6 +27,7 @@ window.requestAnimFrame = (function () {
 
 // add global parameters here
 
-//var params = {
-// 
-//};
+var params = {
+  //Tile width and height
+  TILE_W_H : 64,
+};

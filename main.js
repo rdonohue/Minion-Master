@@ -4,6 +4,7 @@ var ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload("./sprites/wolfsheet1.png");
 ASSET_MANAGER.queueDownload("./sprites/castle.png");
+ASSET_MANAGER.queueDownload("./sprites/ground_sprites.png");
 
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
@@ -12,9 +13,10 @@ ASSET_MANAGER.downloadAll(function () {
 
 	let wolf = new Wolf(gameEngine, 0, 0);
 	let castle = new HomeBase(gameEngine, 0, 0);
+	let ground = new Grassland(gameEngine, 0, 0);
 
 	gameEngine.init(ctx);
-
+	gameEngine.addEntity(ground);
 	gameEngine.addEntity(wolf);
 	gameEngine.addEntity(castle);
 
