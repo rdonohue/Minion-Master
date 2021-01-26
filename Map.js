@@ -1,4 +1,4 @@
-Map class {
+class Map {
   this.numWolves = 5; //just a place-holder really.
   this.numBush = 5;
   this.numRocks = 5;
@@ -10,7 +10,7 @@ Map class {
     this.grid = createGrid(this.xSize, this.ySize);
     populateTiles(this.grid, //whatever params we get passed will get pass to this function.
       this.numRocks, this.numBush, this.numWolves);
-    }
+  }
   //WARNING: JS might have different pass-by rules then I'm used to!
 
   //This function creates a
@@ -130,7 +130,7 @@ Tile class {
   constructor(myX, myY){
     Object.assign(this, {myX, myY});
     this.myEntitys = [];
-    
+
     //not yet implemented
     //this.myNeighbors = [];
   }
