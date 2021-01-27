@@ -9,12 +9,19 @@ class Map {
 
     this.theGrid = [];
     this.createGrid(this.theGrid, xSize, ySize, tileSize);
+
+    this.initalizeGrid();
+
     // this.theGrid.forEach(function(item, index, array) {
     //   console.log(item, index)
     // })
     //this.populateTiles(xSize, ySize); //, //whatever params we get passed will get pass to this function.
+
       // this.numRocks, this.numBush, this.numWolves);
   };
+    // this.numRocks, this.numBush, this.numWolves);
+  };
+
   //WARNING: JS might have different pass-by rules then I'm used to!
 
   //This function creates the grid for the map.
@@ -42,19 +49,85 @@ class Map {
     this.theGrid[theX][theY].myEntitys.push(theEntity);
   }
 
+  initalizeGrid(){
+    var g = this.theGrid;
+
+    for(var x = 0; x < this.xMax; x++) {
+      for(var y = 0; y < this.yMax; y++) {
+        //for each tile, give it a set of all of its neighbors.
+        g[x][y].meetNeighbors();
+      }
+    }
+  }
+
 }
 class Tile {
   constructor(myGrid, myX, myY, xMax, yMax, tileSize){
     Object.assign(this, {myGrid, myX, myY, xMax, yMax});
     this.myEntitys = [];
     this.theTileSize = tileSize;
+
     // this.enemy = True
-    // this.friendly
+
+    this.myGrid = myGrid;
+    this.xMax = xMax;
+    this.yMax = yMax;
+    // this.enemy = True
+    this.friendly = false;
+
     // this.rock
 
 
     //not yet implemented
+
     //this.myNeighbors = [];
+
+    this.myNeighbors = [];
+  }
+
+  //the neighbors are defined as follows:
+  // nw, n   ne
+  // w,  m,  e
+  // sw,  s,  se
+  //where M is THIS tile.
+  meetNeighbors() {
+    var g = this.myGrid;
+    var x = this.myX;
+    var y = this.myY;
+
+    // this.m = this;
+    this.m = g[x][y]; //yes, this might actually be used.
+    if (x > 0) {
+      this.w = g[x-1][y];
+      if (y > 0) {
+        this.n = g[x][y-1];
+        this.nw = g[x-1][y-1];
+      } else if (y < this.yMax-1) {
+        this.s = g[x][y+1];
+        this.sw = g[x-1][y+1];
+      }
+    } else if (x < this.xMax-1) {
+      this.e = g[x+1][y];
+      if (y > 0) {
+        this.n = g[x][y-1];
+        this.ne = g[x+1][y-1];
+      } else if (y < this.yMax-1) {
+        this.s = g[x][y+1];
+        this.se = g[x+1][y+1];
+      }
+    }
+
+    // //now push each reference into a set as well
+    // this.myNeighbors.push(this.ne);
+    // this.myNeighbors.push(this.n);
+    // this.myNeighbors.push(this.nw);
+    // this.myNeighbors.push(this.e);
+    // this.myNeighbors.push(this.m);
+    // this.myNeighbors.push(this.w);
+    // this.myNeighbors.push(this.se);
+    // this.myNeighbors.push(this.s);
+    // this.myNeighbors.push(this.sw);
+
   }
 
   //returns 0 if on map, returns -1 if theX is off and 1 if theY is off.
@@ -74,7 +147,15 @@ class Tile {
     // console.log("theY < 0: " + (theY < 0) );
     // console.log("this.yMax-1: " + (this.yMax-1))
     // console.log("theY > (this.yMax-1): " + (theY > (this.yMax-1)));
+
     return 0
+
+    return 0;
+
+    //if(array and array[index]) {
+
+    }
+
   }
 }
 
@@ -180,6 +261,7 @@ class Tile {
   //   }
   // }
 
+
   // My Neighbors
   // 0,  1,   2
   // 3, [ME], 4
@@ -196,3 +278,4 @@ class Tile {
    //     }
    //   }
    // }
+

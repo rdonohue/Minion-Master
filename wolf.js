@@ -52,6 +52,7 @@ class Wolf {
       //currently does nothing.
     }
 
+
     //this function determines what this entity does based on what it sees.
     //currently just gets a random Tilefrom the 9 tiles around it including its own.
     //and picks that as its move.
@@ -65,6 +66,9 @@ class Wolf {
 
       var myX = this.myTile.myX;
       var myY = this.myTile.myY;
+    }
+    updateMe() {
+
 
       var r = Math.floor((Math.random() * 2))-1;
 
@@ -132,10 +136,15 @@ class Wolf {
         oldMove.myEntitys.splice(oldMove.myEntitys.indexOf(this), 1);
         //swap this entity's tile from the old one to the new one.
         this.myTile = newMove;
-      }
     }
 
-    drawMe() {
+    drawMinimap(ctx, mmY, mmX) {
+        ctx.fillStyle = "Red";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH,
+          PARAMS.SCALE, PARAMS.SCALE * Math.min(this.size + 1, 2));
+    };
+
+    drawMe(this.game.cts) {
       // console.log(this.one++);
       //use current "direction" to decide how to draw.
       this.myAnimator.drawFrame(this.game.clockTick, this.game.ctx,

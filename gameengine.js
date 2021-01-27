@@ -22,7 +22,8 @@ class GameEngine {
         this.timer = new Timer();
     };
 
-    createANDSpawnMinion(theX, theY, theIntelligence, theSpeed, type){
+
+    createANDSpawnEntity(theX, theY, theIntelligence, theSpeed, type){
       if (type == "minion") {
           let minion = new Minion(this, theIntelligence, theSpeed);
           this.addEntity(minion);
@@ -31,9 +32,6 @@ class GameEngine {
           let wolf = new Wolf(this, theIntelligence, theSpeed);
           this.addEntity(wolf);
           this.theMap.spawnEntity(wolf, theX, theY);
-      }
-    	// create minion.
-
     }
 
     start() {
