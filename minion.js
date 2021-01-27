@@ -13,11 +13,9 @@ class Minion {
 
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
-        this.timeoutID;
     };
-
+//but that might be because of async with the draw-method being called...may need to make the minion handle its own draw-update.
     updateMe() {
-      console.log("trying to update!");
       this.timeSinceUpdate += this.timer.tick();
 
       if(this.timeSinceUpdate < this.tickDuration) {
@@ -90,7 +88,7 @@ class Minion {
       this.myAnimator.drawFrame(this.game.clockTick, this.game.ctx,
         this.theTileSize*this.myTile.myX, //draw myX many Tiles right
         this.theTileSize*this.myTile.myY, //draw myY tiles down.
-        1
+        4
       );
     };
 

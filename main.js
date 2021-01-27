@@ -9,7 +9,7 @@ ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
 
-	gameEngine.init(ctx, 4, 4, 64);
+	gameEngine.init(ctx, 15, 15, 64);
 
 	var x = 2;
 	var y = 2;
