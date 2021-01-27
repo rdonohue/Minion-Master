@@ -17,11 +17,11 @@ ASSET_MANAGER.downloadAll(function () {
 	var x = 2;
 	var y = 2;
 
-	gameEngine.createANDSpawnMinion(x, y, "minion");
-	gameEngine.createANDSpawnMinion(x, y, "minion");
-	gameEngine.createANDSpawnMinion(x, y, "minion");
-	gameEngine.createANDSpawnMinion(x, y, "minion");
-	gameEngine.createANDSpawnMinion(x, y, "minion");
+	for (var i = 0; i < 5; i++) {
+		gameEngine.createANDSpawnMinion(x, y, "minion");
+	}
+
+	gameEngine.createANDSpawnMinion(x, y, "wolf");
 	gameEngine.createANDSpawnMinion(x, y, "wolf");
 	// gameEngine.addEntity(castle);
 

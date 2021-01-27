@@ -2,8 +2,7 @@ class Wolf {
     constructor(game) {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
-        this.myAnimator = new Animator(this.spritesheet, 320, 96, 64, 34, 4, 0.1, 4, false, true);
-
+        this.myAnimator = new Animator(this.spritesheet, 320, 96, 64, 33.5, 4, 0.1, 0, false, true);
 
         this.myTile = null;
         this.theTileSize = game.theMap.tileSize
@@ -91,8 +90,7 @@ class Wolf {
       this.myAnimator.drawFrame(this.game.clockTick, this.game.ctx,
         this.theTileSize*this.myTile.myX, //draw myX many Tiles right
         this.theTileSize*this.myTile.myY, //draw myY tiles down.
-        4
-      );
+        1.5);
     };
 
     currentTick() {
