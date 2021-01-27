@@ -22,9 +22,9 @@ class GameEngine {
         this.timer = new Timer();
     };
 
-    createANDSpawnMinion(theX, theY){
+    createANDSpawnMinion(theX, theY, theIntelligence, theSpeed){
     	// create minion.
-    	let minion1 = new Minion(this);
+    	let minion1 = new Minion(this, theIntelligence, theSpeed);
 
       this.addEntity(minion1);
 

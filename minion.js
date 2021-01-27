@@ -1,18 +1,20 @@
 class Minion {
-    constructor(game) {
+    constructor(game, intelligence, speed) {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
 
-        this.myTile = null;
+        this.myTile = game.theMap.theGrid[1][1];
+        //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
+        this.myTargetTile = null;
         this.theTileSize = game.theMap.tileSize
-        this.theGrid = null;
-        this.myName = "minion";
-        this.tickDuration = game.tickDuration; //should be able to change this to allow
-        //for asyncronous entity ticks?
-        this.mydirection = 0;
-        // (0, 1, 2, 3) --> (up, right, down, left)
+        this.theGrid = game.theMap.theGrid;
 
+        this.myName = "minion";
+        this.tickDuration = 1/speed;
+        this.myDirection = null;
+        // (n, e, s, w) --> (up, right, down, left, diagonals don't exist)
+        this.myIntelligence = intelligence;
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
     };
@@ -25,11 +27,12 @@ class Minion {
         //do nothing.
         return;
       } else {
+        //if it HAS, then allow update and reset timeSinceUpdate.
         this.timeSinceUpdate = 0;
       }
       var environment = this.whatISee();
       // var myMove = this.findMyMove(0);
-      var myMove = this.findMyMove(0);
+      var myMove = this.findMyMove(this.myIntelligence);
       this.makeMove(myMove, this.myTile);
 
     };
@@ -53,19 +56,54 @@ class Minion {
       var myX = this.myTile.myX;
       var myY = this.myTile.myY;
 
-      var maxAttempts = 15;
-      while(newXCord == -1 && newYCord == -1 && maxAttempts > 0) {
-        changeX = Math.floor((Math.random() * 3))-1;
-        changeY = Math.floor((Math.random() * 3))-1;
-        if(this.myTile.isOnMap(myX+changeX, myY+changeY)==0){
-          newXCord = myX+changeX;
-          newYCord = myY+changeY;
-          success = 1;
-        }else {
-          maxAttempts -= 1;
+      var r = Math.floor((Math.random() * 2))-1;
+
+      if(true) {
+        //if dumb, do this....
+        var maxAttempts = 15;
+        while(newXCord == -1 && newYCord == -1 && maxAttempts > 0) {
+          changeX = Math.floor((Math.random() * 3))-1;
+          changeY = Math.floor((Math.random() * 3))-1;
+          if(this.myTile.isOnMap(myX+changeX, myY+changeY)==0){
+            newXCord = myX + changeX;
+            newYCord = myY + changeY;
+          } else {
+            maxAttempts -= 1;
+          }
         }
+      } else {
+        //otherwise, do this.
+
+        // this.myTile.myNeighbors;
       }
 
+      //randomly decide if we check up/down or left/right first to handle
+      //diagonals.
+      if (Math.floor((Math.random() * 2))-1){
+        //handle X first
+        if (changeX > 0) {
+          this.myDirection = this.myTile.e;
+        } else {
+          this.myDirection = this.myTile.w;
+        }
+        if (changeY > 0) {
+          this.myDirection = this.myTile.s;
+        } else {
+          this.myDirection = this.myTile.n;
+        }
+      } else {
+        //handle Y first
+        if (changeY > 0) {
+          this.myDirection = this.myTile.s;
+        } else {
+          this.myDirection = this.myTile.n;
+        }
+        if (changeX > 0) {
+          this.myDirection = this.myTile.e;
+        } else {
+          this.myDirection = this.myTile.w;
+        }
+      }
       // console.log("success: "+success);
       // console.log("newX and newY : "+newXCord+","+newYCord);
       // //we (should) now have a new tile
@@ -77,6 +115,8 @@ class Minion {
       if(newMove == oldMove) {
         //apparently we chose to do nothing?
       }else {
+        //before we swap, we want to change our direction.
+
         //swap the old tile's reference to this entity to the new one.
         newMove.myEntitys.push(this);
         oldMove.myEntitys.splice(oldMove.myEntitys.indexOf(this), 1);
@@ -92,9 +132,5 @@ class Minion {
         this.theTileSize*this.myTile.myY, //draw myY tiles down.
         4
       );
-    };
-
-    currentTick() {
-      return Math.floor(this.elapsedTime / this.tickDuration);
     };
 }

@@ -14,12 +14,13 @@ ASSET_MANAGER.downloadAll(function () {
 
 	var x = 2;
 	var y = 2;
-
-	gameEngine.createANDSpawnMinion(x,y);
-	gameEngine.createANDSpawnMinion(x,y);
-	gameEngine.createANDSpawnMinion(x,y);
-	gameEngine.createANDSpawnMinion(x,y);
-	gameEngine.createANDSpawnMinion(x,y);
+	//spawn x,y
+	//intelligence, speed
+	gameEngine.createANDSpawnMinion(x,y,0,1);
+	gameEngine.createANDSpawnMinion(x,y,0,50);
+	gameEngine.createANDSpawnMinion(x,y,0,1);
+	gameEngine.createANDSpawnMinion(x,y,0,5);
+	gameEngine.createANDSpawnMinion(x,y,0,100);
 
 	gameEngine.start();
 });
