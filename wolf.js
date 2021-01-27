@@ -2,7 +2,7 @@ class Wolf {
     constructor(game) {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
-        this.myAnimator = new Animator(this.spritesheet, 320, 96, 64, 33.5, 4, 0.1, 0, false, true);
+        this.myAnimator = new Animator(this.spritesheet, 320, 96, 64, 32.5, 4, 0.1, 0, false, true);
 
         this.myTile = null;
         this.theTileSize = game.theMap.tileSize
