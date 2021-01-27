@@ -9,8 +9,7 @@ ASSET_MANAGER.queueDownload("./sprites/human_regular.png");
 ASSET_MANAGER.downloadAll(function () {
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
-	let wolf = new Wolf(gameEngine);
-	let castle = new HomeBase(gameEngine);
+	// let castle = new HomeBase(gameEngine);
 
 	gameEngine.init(ctx, 15, 12, 64);
 	ctx.imageSmoothingEnabled = false;
@@ -24,7 +23,7 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.createANDSpawnMinion(x, y, "minion");
 	gameEngine.createANDSpawnMinion(x, y, "minion");
 	gameEngine.createANDSpawnMinion(x, y, "wolf");
-	gameEngine.addEntity(castle);
+	// gameEngine.addEntity(castle);
 
 	gameEngine.start();
 });
