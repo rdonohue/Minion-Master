@@ -14,13 +14,18 @@ ASSET_MANAGER.downloadAll(function () {
 
 	var x = 2;
 	var y = 2;
+
+	//in order:
 	//spawn x,y
-	//intelligence, speed
-	gameEngine.createANDSpawnMinion(x,y,0,1);
-	gameEngine.createANDSpawnMinion(x,y,0,50);
-	gameEngine.createANDSpawnMinion(x,y,0,1);
-	gameEngine.createANDSpawnMinion(x,y,0,5);
-	gameEngine.createANDSpawnMinion(x,y,0,100);
+	//intelligence NOT ACTUALLY IMPLEMENTED!
+	//speed
+	gameEngine.createANDSpawnMinion(x,y,0,1); //muuuhhhhhhh
+	gameEngine.createANDSpawnMinion(x,y,0,2);
+	gameEngine.createANDSpawnMinion(x,y,0,4);
+	gameEngine.createANDSpawnMinion(x,y,0,8);
+	gameEngine.createANDSpawnMinion(x,y,0,16);
+
+	gameEngine.createANDSpawnMinion(x,y,0,1000); //AAAAAAAAAAHHHHHHHHHHHHH
 
 	gameEngine.start();
 });

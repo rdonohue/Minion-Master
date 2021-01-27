@@ -16,7 +16,10 @@ class Minion {
         //this gives how long this minion will wait before moving.
         //note that its the inverse of the given speed stat.
 
-        this.myDirection = null;
+        this.n = "n";
+        this.e = "e";
+        this.w = "w";
+        this.s = "s";
         // (n, e, s, w) --> (up, right, down, left, diagonals don't exist)
         this.myIntelligence = intelligence;
         this.timer = new Timer();
@@ -29,7 +32,7 @@ class Minion {
       this.timeSinceUpdate += this.timer.tick();
 
       //this is NOT the best implmentation of making this minion not move till its ready.
-      if(this.timeSinceUpdate < this.tickDuration) {
+      if(this.timeSinceUpdate < this.timeBetweenUpdates) {
         //if its not been long enough since the last update
         //do nothing.
         return;
@@ -85,30 +88,30 @@ class Minion {
       }
 
       //randomly decide if we check up/down or left/right first to handle
-      //diagonals.
+      //diagonals by basically choosing between the two directions at random.
       if (Math.floor((Math.random() * 2))-1){
         //handle X first
         if (changeX > 0) {
-          this.myDirection = this.myTile.e;
+          this.myDirection = this.e;
         } else {
-          this.myDirection = this.myTile.w;
+          this.myDirection = this.w;
         }
         if (changeY > 0) {
-          this.myDirection = this.myTile.s;
+          this.myDirection = this.s;
         } else {
-          this.myDirection = this.myTile.n;
+          this.myDirection = this.n;
         }
       } else {
         //handle Y first
         if (changeY > 0) {
-          this.myDirection = this.myTile.s;
+          this.myDirection = this.s;
         } else {
-          this.myDirection = this.myTile.n;
+          this.myDirection = this.n;
         }
         if (changeX > 0) {
-          this.myDirection = this.myTile.e;
+          this.myDirection = this.e;
         } else {
-          this.myDirection = this.myTile.w;
+          this.myDirection = this.w;
         }
       }
       // console.log("success: "+success);
@@ -134,10 +137,11 @@ class Minion {
 
     drawMe() {
       // console.log(this.one++);
+      //use current "direction" to decide how to draw.
       this.myAnimator.drawFrame(this.game.clockTick, this.game.ctx,
         this.theTileSize*this.myTile.myX, //draw myX many Tiles right
         this.theTileSize*this.myTile.myY, //draw myY tiles down.
-        4
+        4, this.myDirection
       );
     };
 }
