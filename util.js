@@ -13,6 +13,16 @@ function hsl(h, s, l) {
     return "hsl(" + h + "," + s + "%," + l + "%)";
 };
 
+function Create2DArray(rows) {
+var arr = [];
+
+for (var i=0;i<rows;i++) {
+   arr[i] = [];
+}
+
+return arr;
+}
+
 // creates an alias for requestAnimationFrame for backwards compatibility
 window.requestAnimFrame = (function () {
     return window.requestAnimationFrame ||
@@ -30,4 +40,8 @@ window.requestAnimFrame = (function () {
 var params = {
   //Tile width and height
   TILE_W_H : 64,
+  VERT_WALL_COUNT : 10,
+  HORI_WALL_COUNT : 14,
+  CANVAS_WIDTH : 1024,
+  CANVAS_HEIGHT : 768
 };
