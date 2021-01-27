@@ -45,19 +45,28 @@ class Wolf {
     }
 
     updateBB() {
-        this.BB = new BoundingBox(this.x, this.y, PARAMS.BLOCKWIDTH,
-          PARAMS.BLOCKWIDTH);
+        this.BB = new BoundingBox(
+          this.x, this.y,
+          PARAMS.BLOCKWIDTH, PARAMS.BLOCKWIDTH);
     }
 
     die() {
         this.dead = true;
     }
 
-    update() {
+    updateMe() {
         const TICK = this.game.clockTick;
         const SPEED = 4.4;
 
         // add more code here later about speed and physics
+    }
+
+    findNextMove(){
+      makeMove(Math.floor((Math.random() * 8)));
+    }
+
+    makeMove(target){
+      updateLocation(target,this.myTile);
     }
 
     drawMinimap(ctx, mmY, mmX) {

@@ -12,19 +12,30 @@ class GameEngine {
         this.surfaceHeight = null;
     };
 
-    init(ctx) {
+    init(ctx, xSize, ySize, tileSize) {
         this.ctx = ctx;
         this.surfaceWidth = this.ctx.canvas.width;
         this.surfaceHeight = this.ctx.canvas.height;
+        this.theMap = new Map(xSize, ySize, 64);
         this.startInput();
         this.timer = new Timer();
     };
 
+    createANDSpawnMinion(theX, theY){
+    	// create minion.
+    	let minion1 = new Minion(this);
+
+      this.addEntity(minion1);
+
+    	// put minion in map and tell it where it is.
+      this.theMap.spawnEntity(minion1, theX, theY);
+    }
+
     start() {
-        var that = this;
+      console.log("STARTING UP!");
         (function gameLoop() {
-            that.loop();
-            requestAnimFrame(gameLoop, that.ctx.canvas);
+            this.loop(); //changed "that" back to "this"
+            requestAnimFrame(gameLoop, this.ctx.canvas);
         })();
     };
 
@@ -66,21 +77,22 @@ class GameEngine {
         this.entities.push(entity);
     };
 
-    draw() {
+    drawEntitys() {
+
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         for (var i = 0; i < this.entities.length; i++) {
-            this.entities[i].draw(this.ctx);
+            this.entities[i].drawMe(this.ctx);
         }
     };
 
-    update() {
+    updateEntitys() {
         var entitiesCount = this.entities.length;
 
         for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];
 
             if (!entity.removeFromWorld) {
-                entity.update();
+                entity.updateMe(this.clockTick);
             }
         }
 
@@ -93,7 +105,8 @@ class GameEngine {
 
     loop() {
         this.clockTick = this.timer.tick();
-        this.update();
-        this.draw();
+        this.updateEntitys();
+        this.drawEntitys();
+
     };
 };
