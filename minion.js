@@ -11,17 +11,24 @@ class Minion {
         this.theGrid = game.theMap.theGrid;
 
         this.myName = "minion";
-        this.tickDuration = 1/speed;
+
+        this.timeBetweenUpdates = 1/speed;
+        //this gives how long this minion will wait before moving.
+        //note that its the inverse of the given speed stat.
+
         this.myDirection = null;
         // (n, e, s, w) --> (up, right, down, left, diagonals don't exist)
         this.myIntelligence = intelligence;
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
     };
-//but that might be because of async with the draw-method being called...may need to make the minion handle its own draw-update.
+
+//the move-speed is still staggered a bit, that might be because of async
+//with the draw-method being called...may need to make the minion handle its own draw-update.
     updateMe() {
       this.timeSinceUpdate += this.timer.tick();
 
+      //this is NOT the best implmentation of making this minion not move till its ready.
       if(this.timeSinceUpdate < this.tickDuration) {
         //if its not been long enough since the last update
         //do nothing.
