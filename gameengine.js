@@ -93,7 +93,6 @@ class GameEngine {
             var entity = this.entities[i];
 
             if (!entity.removeFromWorld) {
-              console.log("trying to update!");
               entity.updateMe()
             }
         }

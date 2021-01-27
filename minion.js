@@ -2,7 +2,7 @@ class Minion {
     constructor(game) {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
-        this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 1, 0.1, 0, false, true);
+        this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
 
         this.myTile = null;
         this.theTileSize = game.theMap.tileSize
@@ -10,6 +10,8 @@ class Minion {
         this.myName = "minion";
         this.tickDuration = game.tickDuration; //should be able to change this to allow
         //for asyncronous entity ticks?
+        this.mydirection = 0;
+        // (0, 1, 2, 3) --> (up, right, down, left)
 
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
