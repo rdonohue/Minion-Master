@@ -84,7 +84,7 @@ class Map {
 
 
       //giveTileReferences(this.grid);
-        return theGrid
+        return theGrid;
     }
 
     //we want to try to generate numRocks worth of rocks, but stop if
@@ -125,14 +125,40 @@ class Map {
    // }
 
 }
+  getTile(x, y) {
+      return this.grid[x][y];
+  }
 
-Tile class {
+class Tile {
   constructor(myX, myY){
     Object.assign(this, {myX, myY});
-    this.myEntitys = [];
+    this.entities = [];
 
     //not yet implemented
     //this.myNeighbors = [];
   }
 
-}
+  // Update the references to this tile.
+  updateRef(entity, add) {
+      if (add == true) {
+          this.entities.push(entity);
+      } else {
+          var found = false;
+          var i = 0;
+          while (!found && i < this.entities.length) {
+              if (this.entities[i].x == entity.x &&
+                this.entities[i].y == entity.y) {
+                  this.entities.splice(i, 1);
+                  found = true;
+              } else {
+                  i++;
+              }
+          }
+      }
+  };
+
+  neighbors() {
+
+  }
+
+};

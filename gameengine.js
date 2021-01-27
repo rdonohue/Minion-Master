@@ -10,6 +10,7 @@ class GameEngine {
         this.wheel = null;
         this.surfaceWidth = null;
         this.surfaceHeight = null;
+        this.map = new Map(GRID_WIDTH, GRID_HEIGHT);
     };
 
     init(ctx) {

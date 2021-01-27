@@ -6,6 +6,8 @@ ASSET_MANAGER.queueDownload("./sprites/wolfsheet1.png");
 ASSET_MANAGER.queueDownload("./sprites/castle.png");
 
 ASSET_MANAGER.downloadAll(function () {
+	GRID_WIDTH = 50;
+	GRID_HEIGHT = 50;
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
 	ctx.imageSmoothingEnabled = false;
