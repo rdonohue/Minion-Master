@@ -5,6 +5,7 @@ class Minion {
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 1, 0.1, 0, false, true);
 
         this.myTile = null;
+        this.theTileSize = game.theMap.tileSize
         this.theGrid = null;
         this.myName = "minion";
         this.tickDuration = game.tickDuration; //should be able to change this to allow
@@ -13,11 +14,7 @@ class Minion {
         this.elapsedTime = 0;
     };
 
-    updateMe(tick) {
-      this.elapsedTime += tick;
-      let tick = this.currentTick();
-      if
-
+    updateMe() {
       var environment = this.whatISee();
 
       // var myMove = this.findMyMove(0);
@@ -56,8 +53,6 @@ class Minion {
           maxAttempts -= 1;
         }
       }
-      var newXCord = 2;
-      var newYCord = 2;
 
       // console.log("success: "+success);
       // console.log("newX and newY : "+newXCord+","+newYCord);
@@ -81,8 +76,8 @@ class Minion {
     drawMe() {
       // console.log(this.one++);
       this.myAnimator.drawFrame(this.game.clockTick, this.game.ctx,
-        theTileSize*this.myTile.myX, //draw myX many Tiles right
-        theTileSize*this.myTile.myY, //draw myY tiles down.
+        this.theTileSize*this.myTile.myX, //draw myX many Tiles right
+        this.theTileSize*this.myTile.myY, //draw myY tiles down.
         1
       );
     };

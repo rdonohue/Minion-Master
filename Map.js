@@ -5,6 +5,7 @@ class Map {
     Object.assign(this, {xSize, ySize, tileSize});
     this.xMax = xSize;
     this.yMax = ySize;
+    this.theTileSize = tileSize;
 
     this.theGrid = [];
     this.createGrid(this.theGrid, xSize, ySize, tileSize);
@@ -26,7 +27,7 @@ class Map {
       var newRow = [];
       //populate the row by pushing a empty Tile into each entry.
       for(var y = 0; y < theYSize; y++) {
-        newRow.push(new Tile(this.theGrid, x, y, theXSize, theYSize));
+        newRow.push(new Tile(this.theGrid, x, y, theXSize, theYSize, tileSize));
       }
       theGrid.push(newRow);
     }
@@ -43,9 +44,10 @@ class Map {
 
 }
 class Tile {
-  constructor(myGrid, myX, myY, xMax, yMax){
+  constructor(myGrid, myX, myY, xMax, yMax, tileSize){
     Object.assign(this, {myGrid, myX, myY, xMax, yMax});
     this.myEntitys = [];
+    this.theTileSize = tileSize;
     // this.enemy = True
     // this.friendly
     // this.rock

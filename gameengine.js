@@ -33,9 +33,10 @@ class GameEngine {
 
     start() {
       console.log("STARTING UP!");
+      var that = this;
         (function gameLoop() {
-            this.loop(); //changed "that" back to "this"
-            requestAnimFrame(gameLoop, this.ctx.canvas);
+            that.loop(); //changed "that" back to "this"
+            requestAnimFrame(gameLoop, that.ctx.canvas);
         })();
     };
 
@@ -92,7 +93,7 @@ class GameEngine {
             var entity = this.entities[i];
 
             if (!entity.removeFromWorld) {
-                entity.updateMe(this.clockTick);
+                entity.updateMe();
             }
         }
 
