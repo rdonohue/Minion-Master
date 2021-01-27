@@ -44,12 +44,27 @@ class Wolf {
          // this.deadAnim = new Animator(this.spritesheet, false, true);
     }
 
-    update() {
+    updateMe() {
 
         // add more code here later about speed and physics
     }
 
-    draw(ctx) {
+
+    findNextMove(){
+//       makeMove(Math.floor((Math.random() * 8)));
+    }
+
+    makeMove(target){
+      updateLocation(target,this.myTile);
+    }
+
+    drawMinimap(ctx, mmY, mmX) {
+        ctx.fillStyle = "Red";
+        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH,
+          PARAMS.SCALE, PARAMS.SCALE * Math.min(this.size + 1, 2));
+    };
+
+    drawMe(ctx) {
         this.animations[0][0].drawFrame(this.game.clockTick, ctx, 535, 400, 2);
     }
 

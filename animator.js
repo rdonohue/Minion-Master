@@ -7,7 +7,7 @@ class Animator {
 
     };
 
-    drawFrame(tick, ctx, x, y, scale) {
+    drawFrame(tick, ctx, x, y, scale, direction) {
         this.elapsedTime += tick;
 
         if (this.isDone()) {
@@ -21,14 +21,19 @@ class Animator {
         let frame = this.currentFrame();
         if (this.reverse) frame = this.frameCount - frame - 1;
 
-        ctx.drawImage(this.spritesheet,
-            this.xStart + frame * (this.width + this.framePadding), this.yStart, //source from sheet
-            this.width, this.height,
-            x, y,
-            this.width * scale,
-            this.height * scale);
-
+        //these directions might be wrong!
+        //we might need to swap which one is "w" and which is "e"
+        if(true){
+          //don't rotate.
+          ctx.drawImage(this.spritesheet,
+              this.xStart + frame * (this.width + this.framePadding), this.yStart, //source from sheet
+              this.width, this.height,
+              x, y,
+              this.width * scale,
+              this.height * scale);
+        }
     };
+
 
     currentFrame() {
         return Math.floor(this.elapsedTime / this.frameDuration);
