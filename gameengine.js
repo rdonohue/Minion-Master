@@ -22,22 +22,18 @@ class GameEngine {
         this.timer = new Timer();
     };
 
-    createANDSpawnMinion(theX, theY, type){
-    	// create entity.
+    createANDSpawnMinion(theX, theY, theIntelligence, theSpeed, type){
       if (type == "minion") {
-        let minion1 = new Minion(this);
-        this.addEntity(minion1);
-        this.theMap.spawnEntity(minion1, theX, theY);
+          let minion = new Minion(this, theIntelligence, theSpeed);
+          this.addEntity(minion);
+          this.theMap.spawnEntity(minion, theX, theY);
       } else if (type == "wolf") {
-        let wolf1 = new Wolf(this);
-        this.addEntity(wolf1);
-        this.theMap.spawnEntity(wolf1, theX, theY);
+          let wolf = new Wolf(this, theIntelligence, theSpeed);
+          this.addEntity(wolf);
+          this.theMap.spawnEntity(wolf, theX, theY);
       }
+    	// create minion.
 
-      // this.addEntity(minion1);
-
-    	// put minion in map and tell it where it is.
-      // this.theMap.spawnEntity(minion1, theX, theY);
     }
 
     start() {
@@ -101,7 +97,7 @@ class GameEngine {
             var entity = this.entities[i];
 
             if (!entity.removeFromWorld) {
-              entity.updateMe()
+              entity.updateMe();
             }
         }
 
@@ -116,6 +112,5 @@ class GameEngine {
         this.clockTick = this.timer.tick();
         this.updateEntitys();
         this.drawEntitys();
-
     };
 };

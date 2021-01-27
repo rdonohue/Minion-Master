@@ -23,12 +23,12 @@ class HomeBase {
 
     }
 
-    update() {
+    updateMe() {
 
         // add more code here later about speed and physics
     }
 
-    draw(ctx) {
+    drawMe(ctx) {
         this.animations[0].drawFrame(this.game.clockTick, ctx, 500, 300, 0.5);
     }
 
