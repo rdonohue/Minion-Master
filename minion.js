@@ -16,13 +16,13 @@ class Minion {
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
     };
-//but that might be because of async with the draw-method being called...may need to make the minion handle its own draw-update.
+
     updateMe() {
       this.timeSinceUpdate += this.timer.tick();
 
       if(this.timeSinceUpdate < this.tickDuration) {
-        //if its not been long enough since the last update
-        //do nothing.
+        // If it is not been long enough since the last update
+        // Do nothing.
         return;
       } else {
         this.timeSinceUpdate = 0;
@@ -39,9 +39,8 @@ class Minion {
       //currently does nothing.
     }
 
-    //this function determines what this entity does based on what it sees.
-    //currently just gets a random Tilefrom the 9 tiles around it including its own.
-    //and picks that as its move.
+    // Determines the behavior of this entity depending on what is in its detection
+    // range. Its range extends out to the 8 surrounding tiles.
     findMyMove(inputData){
       //keep randomly selecting values between (-1,0,1) till one doesn't go off the X-axis
       var newXCord = -1;
@@ -66,17 +65,12 @@ class Minion {
         }
       }
 
-      // console.log("success: "+success);
-      // console.log("newX and newY : "+newXCord+","+newYCord);
-      // //we (should) now have a new tile
-      // console.log("theNewMove!: "+this.theGrid[newXCord][newYCord])
       return this.theGrid[newXCord][newYCord];
     }
 
+    // updates the references to the old tile and the new tile.
     makeMove(newMove, oldMove) {
-      if(newMove == oldMove) {
-        //apparently we chose to do nothing?
-      }else {
+      if (newMove != oldMove) {
         //swap the old tile's reference to this entity to the new one.
         newMove.myEntitys.push(this);
         oldMove.myEntitys.splice(oldMove.myEntitys.indexOf(this), 1);
@@ -85,8 +79,8 @@ class Minion {
       }
     }
 
+    // Draw this entity.
     drawMe() {
-      // console.log(this.one++);
       this.myAnimator.drawFrame(this.game.clockTick, this.game.ctx,
         this.theTileSize*this.myTile.myX, //draw myX many Tiles right
         this.theTileSize*this.myTile.myY, //draw myY tiles down.
