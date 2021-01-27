@@ -1,14 +1,13 @@
-class Wolf {
+class Minion {
     constructor(game) {
         Object.assign(this, {game});
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
-        this.myAnimator = new Animator(this.spritesheet, 320, 96, 64, 34, 4, 0.1, 4, false, true);
-
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
+        this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
 
         this.myTile = null;
         this.theTileSize = game.theMap.tileSize
         this.theGrid = null;
-        this.myName = "wolf";
+        this.myName = "minion";
         this.tickDuration = game.tickDuration; //should be able to change this to allow
         //for asyncronous entity ticks?
         this.mydirection = 0;
@@ -62,7 +61,7 @@ class Wolf {
           newXCord = myX+changeX;
           newYCord = myY+changeY;
           success = 1;
-        } else {
+        }else {
           maxAttempts -= 1;
         }
       }
@@ -75,9 +74,9 @@ class Wolf {
     }
 
     makeMove(newMove, oldMove) {
-      // if(newMove == oldMove) {
-         //apparently we chose to do nothing?
-      if (newMove != oldMove) {
+      if(newMove == oldMove) {
+        //apparently we chose to do nothing?
+      }else {
         //swap the old tile's reference to this entity to the new one.
         newMove.myEntitys.push(this);
         oldMove.myEntitys.splice(oldMove.myEntitys.indexOf(this), 1);

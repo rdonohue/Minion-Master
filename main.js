@@ -4,20 +4,26 @@ var ASSET_MANAGER = new AssetManager();
 
 ASSET_MANAGER.queueDownload("./sprites/wolfsheet1.png");
 ASSET_MANAGER.queueDownload("./sprites/castle.png");
+ASSET_MANAGER.queueDownload("./sprites/human_regular.png");
 
 ASSET_MANAGER.downloadAll(function () {
-	GRID_WIDTH = 50;
-	GRID_HEIGHT = 50;
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
+	let wolf = new Wolf(gameEngine);
+	let castle = new HomeBase(gameEngine);
+
+	gameEngine.init(ctx, 15, 12, 64);
 	ctx.imageSmoothingEnabled = false;
 
-	let wolf = new Wolf(gameEngine, 0, 0);
-	let castle = new HomeBase(gameEngine, 0, 0);
+	var x = 2;
+	var y = 2;
 
-	gameEngine.init(ctx);
-
-	gameEngine.addEntity(wolf);
+	gameEngine.createANDSpawnMinion(x, y, "minion");
+	gameEngine.createANDSpawnMinion(x, y, "minion");
+	gameEngine.createANDSpawnMinion(x, y, "minion");
+	gameEngine.createANDSpawnMinion(x, y, "minion");
+	gameEngine.createANDSpawnMinion(x, y, "minion");
+	gameEngine.createANDSpawnMinion(x, y, "wolf");
 	gameEngine.addEntity(castle);
 
 	gameEngine.start();
