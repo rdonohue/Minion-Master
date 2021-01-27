@@ -11,15 +11,27 @@ class Minion {
         this.tickDuration = game.tickDuration; //should be able to change this to allow
         //for asyncronous entity ticks?
 
-        this.elapsedTime = 0;
+        this.timer = new Timer();
+        this.timeSinceUpdate = 0;
+        this.timeoutID;
     };
 
     updateMe() {
-      var environment = this.whatISee();
+      console.log("trying to update!");
+      this.timeSinceUpdate += this.timer.tick();
 
+      if(this.timeSinceUpdate < this.tickDuration) {
+        //if its not been long enough since the last update
+        //do nothing.
+        return;
+      } else {
+        this.timeSinceUpdate = 0;
+      }
+      var environment = this.whatISee();
       // var myMove = this.findMyMove(0);
       var myMove = this.findMyMove(0);
       this.makeMove(myMove, this.myTile);
+
     };
 
     //this function determines what this entity "sees"

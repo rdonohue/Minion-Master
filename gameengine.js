@@ -10,6 +10,7 @@ class GameEngine {
         this.wheel = null;
         this.surfaceWidth = null;
         this.surfaceHeight = null;
+        this.tickDuration = 0.1;
     };
 
     init(ctx, xSize, ySize, tileSize) {
@@ -32,7 +33,6 @@ class GameEngine {
     }
 
     start() {
-      console.log("STARTING UP!");
       var that = this;
         (function gameLoop() {
             that.loop(); //changed "that" back to "this"
@@ -93,7 +93,8 @@ class GameEngine {
             var entity = this.entities[i];
 
             if (!entity.removeFromWorld) {
-                entity.updateMe();
+              console.log("trying to update!");
+              entity.updateMe()
             }
         }
 
