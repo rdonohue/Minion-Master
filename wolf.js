@@ -1,61 +1,141 @@
 class Wolf {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
-
-        this.game.wolf = this;
-
+    constructor(game, intelligence, speed) {
+        Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
+        this.myAnimator = new Animator(this.spritesheet, 320, 96, 64, 32.5, 4, 0.1, 0, false, true);
 
-        this.facing = 0;  // 0 = right, 1 = left, 2 = up, 3 = down
-        this.state = 0;   // 0 = idle, 1 = running, 2 = attacking
-        this.dead = false;
+        this.myTile = game.theMap.theGrid[1][1];
+        //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
+        this.myTargetTile = null;
+        this.theTileSize = game.theMap.tileSize
+        this.theGrid = game.theMap.theGrid;
 
-        this.animations = [];
-        this.loadAnimations();
+        this.myName = "wolf";
+
+        this.timeBetweenUpdates = 1/speed;
+        //this gives how long this minion will wait before moving.
+        //note that its the inverse of the given speed stat.
+
+        this.n = "n";
+        this.e = "e";
+        this.w = "w";
+        this.s = "s";
+        // (n, e, s, w) --> (up, right, down, left, diagonals don't exist)
+        this.myIntelligence = intelligence;
+        this.timer = new Timer();
+        this.timeSinceUpdate = 0;
+    };
+
+//the move-speed is still staggered a bit, that might be because of async
+//with the draw-method being called...may need to make the minion handle its own draw-update.
+    updateMe() {
+      this.timeSinceUpdate += this.timer.tick();
+
+      //this is NOT the best implmentation of making this minion not move till its ready.
+      if(this.timeSinceUpdate < this.timeBetweenUpdates) {
+        //if its not been long enough since the last update
+        //do nothing.
+        return;
+      } else {
+        //if it HAS, then allow update and reset timeSinceUpdate.
+        this.timeSinceUpdate = 0;
+      }
+      var environment = this.whatISee();
+      // var myMove = this.findMyMove(0);
+      var myMove = this.findMyMove(this.myIntelligence);
+      this.makeMove(myMove, this.myTile);
 
     };
 
-    loadAnimations() {
-        for (var i = 0; i < 3; i++) {  // three states
-              this.animations.push([]);
-              for (var j = 0; j < 4; j++) {  // four directions
-                  this.animations[i].push([]);
-              }
-         }
-
-         // idle animation for state = 0
-         this.animations[0][0] = new Animator(this.spritesheet, 318.5, 63, 65, 33, 1, 1, 0, false, true);
-         // this.animations[0][1] = new Animator(this.spritesheet);
-         // this.animations[0][2] = new Animator(this.spritesheet);
-         // this.animations[0][3] = new Animator(this.spritesheet);
-
-         // running animation for state = 1
-         // this.animations[1][0] = new Animator(this.spritesheet);
-         // this.animations[1][1] = new Animator(this.spritesheet);
-         // this.animations[1][2] = new Animator(this.spritesheet);
-         // this.animations[1][3] = new Animator(this.spritesheet);
-
-         // attacking animation for state = 2
-         // this.animations[2][0] = new Animator(this.spritesheet);
-         // this.animations[2][1] = new Animator(this.spritesheet);
-         // this.animations[2][2] = new Animator(this.spritesheet);
-         // this.animations[2][3] = new Animator(this.spritesheet);
-
-         // this.deadAnim = new Animator(this.spritesheet, false, true);
+    //this function determines what this entity "sees"
+    whatISee(){
+      //currently does nothing.
     }
 
+
+    //this function determines what this entity does based on what it sees.
+    //currently just gets a random Tilefrom the 9 tiles around it including its own.
+    //and picks that as its move.
+    findMyMove(inputData){
+      //keep randomly selecting values between (-1,0,1) till one doesn't go off the X-axis
+      var newXCord = -1;
+      var newYCord = -1;
+      var changeX;
+      var changeY;
+      var success = 0;
+
+      var myX = this.myTile.myX;
+      var myY = this.myTile.myY;
+    }
     updateMe() {
 
-        // add more code here later about speed and physics
+
+      var r = Math.floor((Math.random() * 2))-1;
+
+      if(true) {
+        //if dumb, do this....
+        var maxAttempts = 15;
+        while(newXCord == -1 && newYCord == -1 && maxAttempts > 0) {
+          changeX = Math.floor((Math.random() * 3))-1;
+          changeY = Math.floor((Math.random() * 3))-1;
+          if(this.myTile.isOnMap(myX+changeX, myY+changeY)==0){
+            newXCord = myX + changeX;
+            newYCord = myY + changeY;
+          } else {
+            maxAttempts -= 1;
+          }
+        }
+      } else {
+        //otherwise, do this.
+
+        // this.myTile.myNeighbors;
+      }
+
+      //randomly decide if we check up/down or left/right first to handle
+      //diagonals by basically choosing between the two directions at random.
+      if (Math.floor((Math.random() * 2))-1){
+        //handle X first
+        if (changeX > 0) {
+          this.myDirection = this.e;
+        } else {
+          this.myDirection = this.w;
+        }
+        if (changeY > 0) {
+          this.myDirection = this.s;
+        } else {
+          this.myDirection = this.n;
+        }
+      } else {
+        //handle Y first
+        if (changeY > 0) {
+          this.myDirection = this.s;
+        } else {
+          this.myDirection = this.n;
+        }
+        if (changeX > 0) {
+          this.myDirection = this.e;
+        } else {
+          this.myDirection = this.w;
+        }
+      }
+      // console.log("success: "+success);
+      // console.log("newX and newY : "+newXCord+","+newYCord);
+      // //we (should) now have a new tile
+      // console.log("theNewMove!: "+this.theGrid[newXCord][newYCord])
+      return this.theGrid[newXCord][newYCord];
     }
 
+    makeMove(newMove, oldMove) {
+      if(newMove == oldMove) {
+        //apparently we chose to do nothing?
+      }else {
+        //before we swap, we want to change our direction.
 
-    findNextMove(){
-//       makeMove(Math.floor((Math.random() * 8)));
-    }
-
-    makeMove(target){
-      updateLocation(target,this.myTile);
+        //swap the old tile's reference to this entity to the new one.
+        newMove.myEntitys.push(this);
+        oldMove.myEntitys.splice(oldMove.myEntitys.indexOf(this), 1);
+        //swap this entity's tile from the old one to the new one.
+        this.myTile = newMove;
     }
 
     drawMinimap(ctx, mmY, mmX) {
@@ -64,8 +144,13 @@ class Wolf {
           PARAMS.SCALE, PARAMS.SCALE * Math.min(this.size + 1, 2));
     };
 
-    drawMe(ctx) {
-        this.animations[0][0].drawFrame(this.game.clockTick, ctx, 535, 400, 2);
-    }
-
+    drawMe(this.game.cts) {
+      // console.log(this.one++);
+      //use current "direction" to decide how to draw.
+      this.myAnimator.drawFrame(this.game.clockTick, this.game.ctx,
+        this.theTileSize*this.myTile.myX, //draw myX many Tiles right
+        this.theTileSize*this.myTile.myY, //draw myY tiles down.
+        1, this.myDirection
+      );
+    };
 }

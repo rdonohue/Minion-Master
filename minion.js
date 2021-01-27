@@ -7,11 +7,11 @@ class Minion {
         this.myTile = game.theMap.theGrid[1][1];
         //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
         this.myTargetTile = null;
+
         this.theTileSize = params.TILE_W_H;
         this.theGrid = game.theMap.theGrid;
 
         //i,j for cell, x,y for continuous position.
-
         this.myName = "minion";
 
         this.timeBetweenUpdates = 1/speed;
@@ -44,6 +44,7 @@ class Minion {
       }
       var environment = this.whatISee();
       // var myMove = this.findMyMove(0);
+
       var myMove = this.findMyMove(environment);
       this.makeMove(myMove, this.myTile);
 
@@ -76,14 +77,13 @@ class Minion {
         while(newXCord == -1 && newYCord == -1 && maxAttempts > 0) {
           changeX = Math.floor((Math.random() * 3))-1;
           changeY = Math.floor((Math.random() * 3))-1;
-          
+
           if (this.myTile.isOnMap(myX+changeX, myY+changeY)==0){
             newXCord = myX + changeX;
             newYCord = myY + changeY;
           } else {
             maxAttempts -= 1;
           }
-
         }
       } else {
         //otherwise, do this.
@@ -139,6 +139,7 @@ class Minion {
       }
       //set up velocity --> when inside <small distance), be ready for next update.
       //
+
     }
 
     drawMe() {
