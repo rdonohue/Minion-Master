@@ -4,7 +4,7 @@ class Entity(){
 
   }
 
-  updateME(){
+  updateMe(){
 
   }
 }

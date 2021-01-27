@@ -32,40 +32,6 @@ class Animator {
               this.width * scale,
               this.height * scale);
         }
-        // else if (direction == "w") {
-        //   //rotate 90*
-        //   ctx.save();
-        //   ctx.rotate(Math.PI/2);
-        //   ctx.drawImage(this.spritesheet,
-        //       this.xStart + frame * (this.width + this.framePadding), this.yStart, //source from sheet
-        //       this.width, this.height,
-        //       x, y,
-        //       this.width * scale,
-        //       this.height * scale);
-        //   ctx.restore();
-        // } else if (direction == "s") {
-        //   //rotate 180*
-        //   ctx.save();
-        //   ctx.rotate(Math.PI);
-        //   ctx.drawImage(this.spritesheet,
-        //       this.xStart + frame * (this.width + this.framePadding), this.yStart, //source from sheet
-        //       this.width, this.height,
-        //       x, y,
-        //       this.width * scale,
-        //       this.height * scale);
-        //   ctx.restore();
-        // } else if (direction == "e") {
-        //   //rotate 270*
-        //   ctx.save();
-        //   ctx.rotate((3/2)*Math.PI); //rotate 180*
-        //   ctx.drawImage(this.spritesheet,
-        //       this.xStart + frame * (this.width + this.framePadding), this.yStart, //source from sheet
-        //       this.width, this.height,
-        //       x, y,
-        //       this.width * scale,
-        //       this.height * scale);
-        //   ctx.restore();
-        // }
     };
 
 

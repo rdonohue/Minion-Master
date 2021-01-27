@@ -7,12 +7,12 @@ class InteriorGrass {
         this.buildInterior();
     };
 
-    update() {
+    updateMe() {
 
     };
 
     // drawImage(spritesheet, sx, sy, sw, sh, dx, dy, dw, dh)
-    draw(ctx) {
+    drawMe(ctx) {
         // const intGrassX = [46, 110, 174, 110];
         // const intGrassY = [1250, 1250, 1250, 1314];
         // var intGrassSelection = randomInt(4);
@@ -55,12 +55,12 @@ class Grasscorner {
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/ground_sprites.png");
     };
 
-    update() {
+    updateMe() {
 
     };
 
     // drawImage(spritesheet, sx, sy, sw, sh, dx, dy, dw, dh)
-    draw(ctx) {
+    drawMe(ctx) {
         //top left corner
         ctx.drawImage(this.spritesheet, 0, 1216, params.TILE_W_H, params.TILE_W_H, 0, 0, params.TILE_W_H, params.TILE_W_H);
         let yCanvasOrigin = params.CANVAS_HEIGHT - params.TILE_W_H;
@@ -97,12 +97,12 @@ class Vertwall {
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/ground_sprites.png");
     };
 
-    update() {
+    updateMe() {
 
     };
 
     // drawImage(spritesheet, sx, sy, sw, sh, dx, dy, dw, dh)
-    draw(ctx) {
+    drawMe(ctx) {
       for (var i = 0; i < params.VERT_WALL_COUNT; i++) {
           ctx.drawImage(this.spritesheet, 0, 1247, params.TILE_W_H, params.TILE_W_H, this.x, this.y + i * params.TILE_W_H, params.TILE_W_H, params.TILE_W_H);
 
@@ -129,13 +129,13 @@ class Horiwall {
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/ground_sprites.png");
     };
 
-    update() {
+    updateMe() {
 
     };
 
     // drawImage(spritesheet, sx, sy, sw, sh, dx, dy, dw, dh)
     // Top Wall
-    draw(ctx) {
+    drawMe(ctx) {
       for (var i = 0; i < params.HORI_WALL_COUNT; i++) {
         ctx.save();
         ctx.rotate(Math.PI / 2);

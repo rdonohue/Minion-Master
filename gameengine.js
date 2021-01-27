@@ -108,6 +108,5 @@ class GameEngine {
         this.clockTick = this.timer.tick();
         this.updateEntitys();
         this.drawEntitys();
-
     };
 };

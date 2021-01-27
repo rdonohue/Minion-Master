@@ -44,7 +44,7 @@ class Wolf {
          // this.deadAnim = new Animator(this.spritesheet, false, true);
     }
 
-    update() {
+    updateMe() {
 
         // add more code here later about speed and physics
     }
@@ -64,7 +64,7 @@ class Wolf {
           PARAMS.SCALE, PARAMS.SCALE * Math.min(this.size + 1, 2));
     };
 
-    draw(ctx) {
+    drawMe(ctx) {
         this.animations[0][0].drawFrame(this.game.clockTick, ctx, 535, 400, 2);
     }
 
