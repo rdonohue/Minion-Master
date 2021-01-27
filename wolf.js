@@ -50,7 +50,7 @@ class Wolf {
     }
 
     draw(ctx) {
-        this.animations[0][0].drawFrame(this.game.clockTick, ctx, 1, 1, 2);
+        this.animations[0][0].drawFrame(this.game.clockTick, ctx, 535, 400, 2);
     }
 
 }
