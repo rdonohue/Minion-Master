@@ -14,8 +14,9 @@ class Map {
     //   console.log(item, index)
     // })
     //this.populateTiles(xSize, ySize); //, //whatever params we get passed will get pass to this function.
-      // this.numRocks, this.numBush, this.numWolves);
+    // this.numRocks, this.numBush, this.numWolves);
   };
+
   //WARNING: JS might have different pass-by rules then I'm used to!
 
   //This function creates the grid for the map.
@@ -133,7 +134,11 @@ class Tile {
     // console.log("theY < 0: " + (theY < 0) );
     // console.log("this.yMax-1: " + (this.yMax-1))
     // console.log("theY > (this.yMax-1): " + (theY > (this.yMax-1)));
-    return 0
+    return 0;
+
+    //if(array and array[index]) {
+
+    }
   }
 }
 

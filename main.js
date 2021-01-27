@@ -20,26 +20,26 @@ ASSET_MANAGER.downloadAll(function () {
 	let intGrass = new InteriorGrass(gameEngine, params.TILE_W_H, params.TILE_W_H);
 
 
-	gameEngine.init(ctx, 15, 12, 64);
+	gameEngine.init(ctx, 14, 10, 64);
   ctx.imageSmoothingEnabled = false;
-  
+
 	gameEngine.addEntity(corners);
 	gameEngine.addEntity(vertwalls);
 	gameEngine.addEntity(horiwalls);
 	gameEngine.addEntity(intGrass);
 	gameEngine.addEntity(wolf);
 	gameEngine.addEntity(castle);
-  
+
   	//in order:
 	//spawn x,y
 	//intelligence NOT ACTUALLY IMPLEMENTED!
 	//speed
-	gameEngine.createANDSpawnMinion(2,2,0,1); //muuuhhhhhhh
+	gameEngine.createANDSpawnMinion(2,2,0,0.25); //muuuhhhhhhh
+	gameEngine.createANDSpawnMinion(2,2,0,0.5);
+	gameEngine.createANDSpawnMinion(2,2,0,1);
 	gameEngine.createANDSpawnMinion(2,2,0,2);
 	gameEngine.createANDSpawnMinion(2,2,0,4);
-	gameEngine.createANDSpawnMinion(2,2,0,8);
-	gameEngine.createANDSpawnMinion(2,2,0,16);
-	gameEngine.createANDSpawnMinion(2,2,0,1000); //AAAAAAAAAAHHHHHHHHHHHHH
+	gameEngine.createANDSpawnMinion(2,2,0,8); //AAAAAAAAAAHHHHHHHHHHHHH
 
 	gameEngine.start();
 });
