@@ -5,10 +5,7 @@ class Entity(){
   }
 
   updateMe(){
-
   }
 }
 
-class Building() {
-
-}
+class Building

@@ -18,8 +18,6 @@ ASSET_MANAGER.downloadAll(function () {
 	let horiwalls = new Horiwall(gameEngine, params.TILE_W_H, 0);
 	let intGrass = new InteriorGrass(gameEngine, params.TILE_W_H, params.TILE_W_H);
 
-
-
 	gameEngine.init(ctx, 14, 10, 64);
 
   ctx.imageSmoothingEnabled = false;
@@ -28,25 +26,23 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(vertwalls);
 	gameEngine.addEntity(horiwalls);
 	gameEngine.addEntity(intGrass);
-=======
-	gameEngine.addEntity(wolf);
-
 	gameEngine.addEntity(castle);
 
-  	//in order:
+  //in order:
 	//spawn x,y
-	//intelligence NOT ACTUALLY IMPLEMENTED!
 	//speed
+	//type == "wolf" or "minion"
+	var baseSpeed = 0.2;
 
-	gameEngine.createANDSpawnMinion(2,2,0,0.25); //muuuhhhhhhh
-	gameEngine.createANDSpawnMinion(2,2,0,0.5);
-	gameEngine.createANDSpawnMinion(2,2,0,1);
-	gameEngine.createANDSpawnMinion(2,2,0,2);
-	gameEngine.createANDSpawnMinion(2,2,0,4);
-	gameEngine.createANDSpawnMinion(2,2,0,8); //AAAAAAAAAAHHHHHHHHHHHHH
-  
-  gameEngine.createANDSpawnMinion(2,2,0,4,"wolf");
-	gameEngine.createANDSpawnMinion(2,2,0,2,"wolf");
+	gameEngine.createANDSpawnEntity(2,2, baseSpeed/2,"minion");
+	gameEngine.createANDSpawnEntity(2,2, baseSpeed,"minion");
+	gameEngine.createANDSpawnEntity(2,2, baseSpeed*2,"minion");
+	gameEngine.createANDSpawnEntity(2,2, baseSpeed*4,"minion");
+	gameEngine.createANDSpawnEntity(2,2, baseSpeed*8,"minion");
+	gameEngine.createANDSpawnEntity(2,2, baseSpeed*16,"minion");
+
+	gameEngine.createANDSpawnEntity(2,4, baseSpeed*8,"wolf");
+	gameEngine.createANDSpawnEntity(2,4, baseSpeed*32,"wolf");
 
 	gameEngine.start();
 });

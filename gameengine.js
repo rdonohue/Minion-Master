@@ -22,16 +22,16 @@ class GameEngine {
         this.timer = new Timer();
     };
 
-
-    createANDSpawnEntity(theX, theY, theIntelligence, theSpeed, type){
+    createANDSpawnEntity(theX, theY, theSpeed, type){
       if (type == "minion") {
-          let minion = new Minion(this, theIntelligence, theSpeed);
+          let minion = new Minion(this, theSpeed);
           this.addEntity(minion);
           this.theMap.spawnEntity(minion, theX, theY);
       } else if (type == "wolf") {
-          let wolf = new Wolf(this, theIntelligence, theSpeed);
+          let wolf = new Wolf(this, theSpeed);
           this.addEntity(wolf);
           this.theMap.spawnEntity(wolf, theX, theY);
+      }
     }
 
     start() {

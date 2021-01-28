@@ -1,5 +1,5 @@
 class Minion {
-    constructor(game, intelligence, speed) {
+    constructor(game, speed) {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
@@ -7,11 +7,11 @@ class Minion {
         this.myTile = game.theMap.theGrid[1][1];
         //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
         this.myTargetTile = null;
-
         this.theTileSize = params.TILE_W_H;
         this.theGrid = game.theMap.theGrid;
 
         //i,j for cell, x,y for continuous position.
+
         this.myName = "minion";
 
         this.timeBetweenUpdates = 1/speed;
@@ -23,7 +23,6 @@ class Minion {
         this.w = "w";
         this.s = "s";
         // (n, e, s, w) --> (up, right, down, left, diagonals don't exist)
-        this.myIntelligence = intelligence;
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
     };
@@ -44,7 +43,6 @@ class Minion {
       }
       var environment = this.whatISee();
       // var myMove = this.findMyMove(0);
-
       var myMove = this.findMyMove(environment);
       this.makeMove(myMove, this.myTile);
 
@@ -64,60 +62,26 @@ class Minion {
       var newYCord = -1;
       var changeX;
       var changeY;
-      var success = 0;
 
       var myX = this.myTile.myX;
       var myY = this.myTile.myY;
 
-      var r = Math.floor((Math.random() * 2))-1;
-
-      if(true) {
+      if(true ) {
         //if dumb, do this....
         var maxAttempts = 15;
         while(newXCord == -1 && newYCord == -1 && maxAttempts > 0) {
           changeX = Math.floor((Math.random() * 3))-1;
           changeY = Math.floor((Math.random() * 3))-1;
-
           if (this.myTile.isOnMap(myX+changeX, myY+changeY)==0){
             newXCord = myX + changeX;
             newYCord = myY + changeY;
           } else {
             maxAttempts -= 1;
           }
-        }
-      } else {
-        //otherwise, do this.
 
-        // this.myTile.myNeighbors;
+        }
       }
 
-      //randomly decide if we check up/down or left/right first to handle
-      //diagonals by basically choosing between the two directions at random.
-      if (Math.floor((Math.random() * 2))-1){
-        //handle X first
-        if (changeX > 0) {
-          this.myDirection = this.e;
-        } else {
-          this.myDirection = this.w;
-        }
-        if (changeY > 0) {
-          this.myDirection = this.s;
-        } else {
-          this.myDirection = this.n;
-        }
-      } else {
-        //handle Y first
-        if (changeY > 0) {
-          this.myDirection = this.s;
-        } else {
-          this.myDirection = this.n;
-        }
-        if (changeX > 0) {
-          this.myDirection = this.e;
-        } else {
-          this.myDirection = this.w;
-        }
-      }
       // console.log("success: "+success);
       // console.log("newX and newY : "+newXCord+","+newYCord);
       // //we (should) now have a new tile
@@ -139,7 +103,6 @@ class Minion {
       }
       //set up velocity --> when inside <small distance), be ready for next update.
       //
-
     }
 
     drawMe() {
