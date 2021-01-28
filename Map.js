@@ -2,23 +2,18 @@ class Map {
   //can pass in xHome, yHome, numRocks, numBerries, numCaves, numWolves
   //so that the caller can decide the params of this map.
   constructor(xSize, ySize, tileSize) {
-    Object.assign(this, {xSize, ySize, tileSize});
+    Object.assign(this, this.theGrid);
     this.xMax = xSize;
     this.yMax = ySize;
     this.theTileSize = tileSize;
 
     this.theGrid = [];
     this.createGrid(this.theGrid, xSize, ySize, tileSize);
-
     this.initalizeGrid();
-
     // this.theGrid.forEach(function(item, index, array) {
     //   console.log(item, index)
     // })
     //this.populateTiles(xSize, ySize); //, //whatever params we get passed will get pass to this function.
-
-      // this.numRocks, this.numBush, this.numWolves);
-  };
     // this.numRocks, this.numBush, this.numWolves);
   };
 
@@ -59,28 +54,15 @@ class Map {
       }
     }
   }
-
 }
 class Tile {
   constructor(myGrid, myX, myY, xMax, yMax, tileSize){
-    Object.assign(this, {myGrid, myX, myY, xMax, yMax});
     this.myEntitys = [];
+    Object.assign(this, {myGrid, myX, myY, xMax, yMax});
     this.theTileSize = tileSize;
-
-    // this.enemy = True
-
     this.myGrid = myGrid;
     this.xMax = xMax;
     this.yMax = yMax;
-    // this.enemy = True
-    this.friendly = false;
-
-    // this.rock
-
-
-    //not yet implemented
-
-    //this.myNeighbors = [];
 
     this.myNeighbors = [];
   }
@@ -117,17 +99,16 @@ class Tile {
       }
     }
 
-    // //now push each reference into a set as well
-    // this.myNeighbors.push(this.ne);
-    // this.myNeighbors.push(this.n);
-    // this.myNeighbors.push(this.nw);
-    // this.myNeighbors.push(this.e);
-    // this.myNeighbors.push(this.m);
-    // this.myNeighbors.push(this.w);
-    // this.myNeighbors.push(this.se);
-    // this.myNeighbors.push(this.s);
-    // this.myNeighbors.push(this.sw);
-
+    //now push each reference into a set as well
+    this.myNeighbors.push(this.ne);
+    this.myNeighbors.push(this.n);
+    this.myNeighbors.push(this.nw);
+    this.myNeighbors.push(this.e);
+    this.myNeighbors.push(this.m);
+    this.myNeighbors.push(this.w);
+    this.myNeighbors.push(this.se);
+    this.myNeighbors.push(this.s);
+    this.myNeighbors.push(this.sw);
   }
 
   //returns 0 if on map, returns -1 if theX is off and 1 if theY is off.
@@ -147,17 +128,11 @@ class Tile {
     // console.log("theY < 0: " + (theY < 0) );
     // console.log("this.yMax-1: " + (this.yMax-1))
     // console.log("theY > (this.yMax-1): " + (theY > (this.yMax-1)));
-
-    return 0
-
     return 0;
-
     //if(array and array[index]) {
-
     }
-
-  }
 }
+
 
 // killEntity(theEntity) {
 //
@@ -260,22 +235,3 @@ class Tile {
   //     }
   //   }
   // }
-
-
-  // My Neighbors
-  // 0,  1,   2
-  // 3, [ME], 4
-  // 5,  6,   7
-  // using the above diagram, this function gives each tile a reference
-  // each of its neighboring tiles, or a "NULL" string for if its off the map.
-   // giveTileReferences(theGris){
-   //   for(var x = 0; x < this.xSize; x++) {
-   //     for(var y = 0; y < this.ySize; y++) {
-   //       the_target_tile = this.grid[x][y];
-   //       the_target_tile.myNeighbors = getNeighborsOf(the_target_tile);
-   //       //this function should get the 8 neighboring tiles of this tile
-   //       //and put it into a array that it returns.
-   //     }
-   //   }
-   // }
-
