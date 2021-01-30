@@ -13,7 +13,6 @@ ASSET_MANAGER.downloadAll(function () {
 	var ctx = canvas.getContext('2d');
 	ctx.imageSmoothingEnabled = false;
 
-	let wolf = new Wolf(gameEngine, 0, 0);
 	let castle = new HomeBase(gameEngine, 0, 0);
 	let corners = new Grasscorner(gameEngine, 0, 0);
 	let vertwalls = new Vertwall(gameEngine, 0, params.TILE_W_H);
@@ -28,7 +27,6 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(vertwalls);
 	gameEngine.addEntity(horiwalls);
 	gameEngine.addEntity(intGrass);
-	gameEngine.addEntity(wolf);
 	gameEngine.addEntity(castle);
 	gameEngine.addEntity(resources);
 
@@ -36,12 +34,15 @@ ASSET_MANAGER.downloadAll(function () {
 	//spawn x,y
 	//intelligence NOT ACTUALLY IMPLEMENTED!
 	//speed
-	gameEngine.createANDSpawnMinion(2,2,0,0.25); //muuuhhhhhhh
-	gameEngine.createANDSpawnMinion(2,2,0,0.5);
-	gameEngine.createANDSpawnMinion(2,2,0,1);
-	gameEngine.createANDSpawnMinion(2,2,0,2);
-	gameEngine.createANDSpawnMinion(2,2,0,4);
-	gameEngine.createANDSpawnMinion(2,2,0,8); //AAAAAAAAAAHHHHHHHHHHHHH
+	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD/2,"minion");
+	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD,"minion");
+	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*2,"minion");
+	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*4,"minion");
+	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*8,"minion");
+	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*16,"minion");
+
+	gameEngine.createANDSpawnEntity(2,4, params.BASE_SPD*8,"wolf");
+	gameEngine.createANDSpawnEntity(2,4, params.BASE_SPD*32,"wolf");
 
 	gameEngine.start();
 });
