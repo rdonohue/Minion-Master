@@ -2,7 +2,7 @@ class Map {
   //can pass in xHome, yHome, numRocks, numBerries, numCaves, numWolves
   //so that the caller can decide the params of this map.
   constructor(xSize, ySize, tileSize) {
-    Object.assign(this, {xSize, ySize, tileSize});
+    Object.assign(this, this.theGrid);
     this.xMax = xSize;
     this.yMax = ySize;
     this.theTileSize = tileSize;
@@ -14,9 +14,10 @@ class Map {
     //   console.log(item, index)
     // })
     //this.populateTiles(xSize, ySize); //, //whatever params we get passed will get pass to this function.
-      // this.numRocks, this.numBush, this.numWolves);
+    // this.numRocks, this.numBush, this.numWolves);
   };
-  //WARNING: JS might have different pass-by rules than I'm used to!
+
+  //WARNING: JS might have different pass-by rules then I'm used to!
 
   //This function creates the grid for the map.
   createGrid(theGrid, theXSize, theYSize, tileSize) {
@@ -53,22 +54,16 @@ class Map {
       }
     }
   }
-
 }
 class Tile {
   constructor(myGrid, myX, myY, xMax, yMax, tileSize){
-    Object.assign(this, {myGrid, myX, myY, xMax, yMax});
     this.myEntitys = [];
+    Object.assign(this, {myGrid, myX, myY, xMax, yMax});
     this.theTileSize = tileSize;
     this.myGrid = myGrid;
     this.xMax = xMax;
     this.yMax = yMax;
-    // this.enemy = True
-    this.friendly = false;
-    // this.rock
 
-
-    //not yet implemented
     this.myNeighbors = [];
   }
 
@@ -104,16 +99,16 @@ class Tile {
       }
     }
 
-    // //now push each reference into a set as well
-    // this.myNeighbors.push(this.ne);
-    // this.myNeighbors.push(this.n);
-    // this.myNeighbors.push(this.nw);
-    // this.myNeighbors.push(this.e);
-    // this.myNeighbors.push(this.m);
-    // this.myNeighbors.push(this.w);
-    // this.myNeighbors.push(this.se);
-    // this.myNeighbors.push(this.s);
-    // this.myNeighbors.push(this.sw);
+    //now push each reference into a set as well
+    this.myNeighbors.push(this.ne);
+    this.myNeighbors.push(this.n);
+    this.myNeighbors.push(this.nw);
+    this.myNeighbors.push(this.e);
+    this.myNeighbors.push(this.m);
+    this.myNeighbors.push(this.w);
+    this.myNeighbors.push(this.se);
+    this.myNeighbors.push(this.s);
+    this.myNeighbors.push(this.sw);
   }
 
   //returns 0 if on map, returns -1 if theX is off and 1 if theY is off.
@@ -133,9 +128,11 @@ class Tile {
     // console.log("theY < 0: " + (theY < 0) );
     // console.log("this.yMax-1: " + (this.yMax-1))
     // console.log("theY > (this.yMax-1): " + (theY > (this.yMax-1)));
-    return 0
-  }
+    return 0;
+    //if(array and array[index]) {
+    }
 }
+
 
 // killEntity(theEntity) {
 //
