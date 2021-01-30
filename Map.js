@@ -63,6 +63,7 @@ class Tile {
     this.myGrid = myGrid;
     this.xMax = xMax;
     this.yMax = yMax;
+    this.enemy = false;
 
     this.myNeighbors = [];
   }
@@ -131,6 +132,20 @@ class Tile {
     return 0;
     //if(array and array[index]) {
     }
+
+    // checkEnemy() {
+    //     var enemySpotted = false;
+    //     var i = 0;
+    //     while (!enemySpot && i < myEntities.length) {
+    //         if (myEntities[i].status == 1) {
+    //             enemySpot = true;
+    //         } else {
+    //             i++;
+    //         }
+    //     }
+    //
+    //     return enemySpotted;
+    // }
 }
 
 

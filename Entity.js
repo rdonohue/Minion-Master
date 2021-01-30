@@ -1,11 +1,17 @@
 class Entity(){
-  constructor(myX, myY) {
-    myHeath = 1;
+    constructor(myX, myY) {
+        myHealth = 1;
+        myStatus = 0; // 0 = friendly, 1 = enemy
 
-  }
+    }
 
-  updateMe(){
-  }
+    updateMe() {
+
+    }
 }
 
-class Building
+class Building {
+    constructor(myX, myY) {
+        myHealth = 1;
+    }
+}

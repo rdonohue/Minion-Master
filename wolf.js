@@ -3,7 +3,7 @@ class Wolf {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
         this.mySearchingAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.05, 0, false, true);
-        this.myHuntingAnimator = new Animator(this.spritesheet, 320, 55, 64, 41, 4, 0.05, 0, false, true);
+        this.myHuntingAnimator = new Animator(this.spritesheet, 320, 160, 64, 32, 4, 0.05, 0, false, true);
 
         this.myTile = game.theMap.theGrid[1][1];
         //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
