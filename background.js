@@ -13,27 +13,22 @@ class InteriorGrass {
 
     // drawImage(spritesheet, sx, sy, sw, sh, dx, dy, dw, dh)
     drawMe(ctx) {
-        // const intGrassX = [46, 110, 174, 110];
-        // const intGrassY = [1250, 1250, 1250, 1314];
-        // var intGrassSelection = randomInt(4);
-        var sx, sy, dx, dy;
-        for (var i = 0; i < params.VERT_WALL_COUNT; i++) {
-          for (var j = 0; j < params.HORI_WALL_COUNT; j++) {
-            sx = this.interiorX[i][j];
-            sy = this.interiorY[i][j];
-            dx = this.x + j * params.TILE_W_H;
-            dy = this.y + i * params.TILE_W_H;
-            ctx.drawImage(this.spritesheet, sx, sy, params.TILE_W_H, params.TILE_W_H, dx, dy, params.TILE_W_H, params.TILE_W_H);
-            // intGrassSelection = randomInt(4);
-          }
+      var sx, sy, dx, dy;
+      for (var i = 0; i < params.VERT_WALL_COUNT; i++) {
+        for (var j = 0; j < params.HORI_WALL_COUNT; j++) {
+          sx = this.interiorX[i][j];
+          sy = this.interiorY[i][j];
+          dx = this.x + j * params.TILE_W_H;
+          dy = this.y + i * params.TILE_W_H;
+          ctx.drawImage(this.spritesheet, sx, sy, params.TILE_W_H, params.TILE_W_H, dx, dy, params.TILE_W_H, params.TILE_W_H);
         }
+      }
     };
 
     buildInterior() {
       const intGrassX = [46, 110, 174, 110];
       const intGrassY = [1250, 1250, 1250, 1314];
       var intGrassSelection = randomInt(4);
-      var sx, sy, dx, dy;
       for (var i = 0; i < params.VERT_WALL_COUNT; i++) {
         for (var j = 0; j < params.HORI_WALL_COUNT; j++) {
           this.interiorX[i][j] = intGrassX[intGrassSelection];
