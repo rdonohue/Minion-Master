@@ -131,8 +131,8 @@ class Tile {
     // console.log("theY > (this.yMax-1): " + (theY > (this.yMax-1)));
     return 0;
     //if(array and array[index]) {
-<<<<<<< Updated upstream
-    }
+
+    // }
 
     // checkEnemy() {
     //     var enemySpotted = false;
@@ -147,11 +147,9 @@ class Tile {
     //
     //     return enemySpotted;
     // }
-}
-=======
     // }
   };
->>>>>>> Stashed changes
+
 
 
   killEntity(theEntity) {

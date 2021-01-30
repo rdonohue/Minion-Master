@@ -4,6 +4,7 @@ class Wolf {
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
         this.mySearchingAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.05, 0, false, true);
         this.myHuntingAnimator = new Animator(this.spritesheet, 320, 160, 64, 32, 4, 0.05, 0, false, true);
+        // this.myDeadAnimator
 
         this.myTile = game.theMap.theGrid[1][1];
         //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
@@ -12,6 +13,7 @@ class Wolf {
 
         this.health = 100;
         this.defense = 0.0;
+        this.attack = 3;
         this.dead = false;
         this.removeFromWorld = false;
 
@@ -66,10 +68,9 @@ class Wolf {
     findMyMove(tiles){
       //we want wolves to move towards any minions they see around themselves.
       var target = null;
-      var prey = "minion";
 
       function isPrey(theEntity) {
-        return theEntity.myName == "minion";
+        return theEntity instanceof Minion;
       }
       //we want to search every neighboring tile for minions.
       if(tiles) {
@@ -77,6 +78,7 @@ class Wolf {
           if(tile && tile.myEntitys.find(isPrey)) {
             target = tile;
             this.isHunting = true;
+
             //if we found prey, we are going to notate this state
             //by switching directions.
 
@@ -133,11 +135,32 @@ class Wolf {
       }
     }
 
+    // Engaging in combat with minions.
+    fight(enemy) {
+        if (enemy.health != 0 && this.health != 0) {
+            enemy.health -= Math.floor(this.attack - (enemy.defense * this.attack));
+            this.health -= Math.floor(enemy.attack - (this.defense * enemy.attack));
+            if (enemy.health <= 0) {
+                enemy.die();
+            }
+            if (this.health <= 0) {
+                die();
+            }
+        }
+    };
+
+    damage(projectile) {
+        // this.health -= Math.floor(projectile.attack - (this.defense * projectile.attack));
+        // if (this.health <= 0) {
+        //    die();
+        // }
+    };
+
     die() {
         this.dead = true;
         this.removeFromWorld = true;
         this.myTile = NULL;
-    }
+    };
 
     drawMinimap(ctx, mmY, mmX) {
         ctx.fillStyle = "Red";

@@ -12,6 +12,7 @@ class Minion {
 
         this.health = 100;
         this.defense = 0.0;
+        this.attack = 1;
         this.dead = false;
         this.removeFromWorld = false;
 
@@ -107,6 +108,27 @@ class Minion {
       //set up velocity --> when inside <small distance), be ready for next update.
       //
     }
+
+    // Engaging in combat with minions.
+    fight(enemy) {
+        if (enemy.health != 0 && this.health != 0) {
+            enemy.health -= Math.floor(this.attack - (enemy.defense * this.attack));
+            this.health -= Math.floor(enemy.attack - (this.defense * enemy.attack));
+            if (enemy.health <= 0) {
+                enemy.die();
+            }
+            if (this.health <= 0) {
+                die();
+            }
+        }
+    };
+
+    damage(projectile) {
+      // this.health -= Math.floor(projectile.attack - (this.defense * projectile.attack));
+      // if (this.health <= 0) {
+      //    die();
+      // }
+    };
 
     die() {
         this.dead = true;
