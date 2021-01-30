@@ -10,6 +10,11 @@ class Wolf {
         this.theTileSize = game.theMap.tileSize
         this.theGrid = game.theMap.theGrid;
 
+        this.health = 100;
+        this.defense = 0.0;
+        this.dead = false;
+        this.removeFromWorld = false;
+
         this.myName = "wolf";
         Object.assign(this, this.myName);
 
@@ -34,7 +39,7 @@ class Wolf {
       this.timeSinceUpdate += this.timer.tick();
 
       //this is NOT the best implmentation of making this minion not move till its ready.
-      if(this.timeSinceUpdate < this.timeBetweenUpdates) {
+      if (this.timeSinceUpdate < this.timeBetweenUpdates) {
         //if its not been long enough since the last update
         //do nothing.
         return;
@@ -114,24 +119,6 @@ class Wolf {
       return target;
     }
 
-    updateMe() {
-      this.timeSinceUpdate += this.timer.tick();
-
-      //this is NOT the best implmentation of making this minion not move till its ready.
-      if(this.timeSinceUpdate < this.timeBetweenUpdates) {
-        //if its not been long enough since the last update
-        //do nothing.
-        return;
-      } else {
-        //if it HAS, then allow update and reset timeSinceUpdate.
-        this.timeSinceUpdate = 0;
-      }
-      var environment = this.whatISee();
-      // var myMove = this.findMyMove(0);
-      var myMove = this.findMyMove(environment);
-      this.makeMove(myMove, this.myTile);
-    }
-
     makeMove(newMove, oldMove) {
       if(newMove == oldMove) {
         //apparently we chose to do nothing?
@@ -144,6 +131,12 @@ class Wolf {
         //swap this entity's tile from the old one to the new one.
         this.myTile = newMove;
       }
+    }
+
+    die() {
+        this.dead = true;
+        this.removeFromWorld = true;
+        this.myTile = NULL;
     }
 
     drawMinimap(ctx, mmY, mmX) {

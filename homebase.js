@@ -6,8 +6,11 @@ class HomeBase {
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/castle.png");
 
-        this.state = 0;   // 0 = idle, 1 = running, 2 = attacking
+        this.state = 0;  // 0 = idle, 1 = destroyed
+        this.health = 200;
+        this.defense = 0.0;
         this.dead = false;
+        this.removeFromWorld = false;
 
         this.animations = [];
         this.loadAnimations();
@@ -26,6 +29,12 @@ class HomeBase {
     updateMe() {
 
         // add more code here later about speed and physics
+    }
+
+    die() {
+        this.dead = true;
+        this.removeFromWorld = true;
+        this.myTile = NULL;
     }
 
     drawMe(ctx) {

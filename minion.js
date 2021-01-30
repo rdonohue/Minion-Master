@@ -10,6 +10,11 @@ class Minion {
         this.theTileSize = params.TILE_W_H;
         this.theGrid = game.theMap.theGrid;
 
+        this.health = 100;
+        this.defense = 0.0;
+        this.dead = false;
+        this.removeFromWorld = false;
+
         //i,j for cell, x,y for continuous position.
 
         this.myName = "minion";
@@ -66,7 +71,7 @@ class Minion {
       var myX = this.myTile.myX;
       var myY = this.myTile.myY;
 
-      if(true ) {
+      if (true) {
         //if dumb, do this....
         var maxAttempts = 15;
         while(newXCord == -1 && newYCord == -1 && maxAttempts > 0) {
@@ -90,9 +95,7 @@ class Minion {
     }
 
     makeMove(newMove, oldMove) {
-      if(newMove == oldMove) {
-        //apparently we chose to do nothing?
-      }else {
+      if (newMove != oldMove) {
         //before we swap, we want to change our direction.
 
         //swap the old tile's reference to this entity to the new one.
@@ -103,6 +106,12 @@ class Minion {
       }
       //set up velocity --> when inside <small distance), be ready for next update.
       //
+    }
+
+    die() {
+        this.dead = true;
+        this.removeFromWorld = true;
+        this.myTile = NULL;
     }
 
     drawMe() {

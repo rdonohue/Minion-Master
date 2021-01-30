@@ -56,7 +56,7 @@ class Map {
   }
 }
 class Tile {
-  constructor(myGrid, myX, myY, xMax, yMax, tileSize){
+  constructor(myGrid, myX, myY, xMax, yMax, tileSize) {
     this.myEntitys = [];
     Object.assign(this, {myGrid, myX, myY, xMax, yMax});
     this.theTileSize = tileSize;
@@ -66,7 +66,7 @@ class Tile {
     this.enemy = false;
 
     this.myNeighbors = [];
-  }
+  };
 
   //the neighbors are defined as follows:
   // nw, n   ne
@@ -110,7 +110,7 @@ class Tile {
     this.myNeighbors.push(this.se);
     this.myNeighbors.push(this.s);
     this.myNeighbors.push(this.sw);
-  }
+  };
 
   //returns 0 if on map, returns -1 if theX is off and 1 if theY is off.
   isOnMap(theX, theY) {
@@ -131,6 +131,7 @@ class Tile {
     // console.log("theY > (this.yMax-1): " + (theY > (this.yMax-1)));
     return 0;
     //if(array and array[index]) {
+<<<<<<< Updated upstream
     }
 
     // checkEnemy() {
@@ -147,34 +148,23 @@ class Tile {
     //     return enemySpotted;
     // }
 }
+=======
+    // }
+  };
+>>>>>>> Stashed changes
 
 
-// killEntity(theEntity) {
-//
-//   var successfulKill;
-//
-//   if(!(theEntity.myTile instanceof NULL)) {
-//     //if the entity has not already had its Tile removed, remove it.
-//     theEntity.myTile = NULL;
-//     successKill = True;
-//   } else {
-//     //if the entity has however, report this to console for debugging reasons.
-//     console.log("the game tried to remove ["+theEntity+"]'s tile when it was already NULL!");
-//     successKill = False;
-//   }
-//
-//   if(!(theEntity.myTile instanceof NULL)) {
-//     //if the grid has not already had the entity removed, remove it.
-//     successKill = True;
-//     theEntity.myTile = NULL
-//   } else {
-//     //if the grid has however, report this to console for debugging reasons.
-//     console.log("the game tried to remove ["+theEntity+"] from the grid when it already was gone!");
-//     successKill = False;
-//   }
+  killEntity(theEntity) {
+    if (!(theEntity.myTile instanceof NULL)) {
+      theEntity.die();
+    } else {
+    //if the entity has however, report this to console for debugging reasons.
+      // console.log("the game tried to remove ["+theEntity+"]'s tile when it was already NULL!");
+    }
+  };
 //
 //   console.log("The entity ["+theEntity+"] was killed -->"+successKill);
-// }
+};
   //this function is used to populate the tiles of the map.
   // populateTiles(theGrid, numRocks, numBush, numWolves){
   //   var numEmpty = this.xSize * this.ySize;
