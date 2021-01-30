@@ -16,7 +16,7 @@ class Map {
     //this.populateTiles(xSize, ySize); //, //whatever params we get passed will get pass to this function.
       // this.numRocks, this.numBush, this.numWolves);
   };
-  //WARNING: JS might have different pass-by rules then I'm used to!
+  //WARNING: JS might have different pass-by rules than I'm used to!
 
   //This function creates the grid for the map.
   createGrid(theGrid, theXSize, theYSize, tileSize) {
