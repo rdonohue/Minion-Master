@@ -39,54 +39,19 @@ class Resources {
 
     };
 
-    // drawImage(spritesheet, sx, sy, sw, sh, dx, dy, dw, dh)
-
-    /*
-    Going to have to move all the logic of this into the buildResources() method down below
-    we can have the SpriteDemensional class hold an dx and dy. Set by default 0.
-
-    This is because the game engine will keep redrawing, or looking to redraw. Needs to be consistent.
-    */
     drawMe(ctx) {
-      // var resSelect = randomInt(20);
-      // var sx, sy, sw, sh, dx, dy;
-
       for (var i = 0; i < 10; i++) {
         ctx.drawImage(this.spritesheet, this.drawArray[i].sx, this.drawArray[i].sy, this.drawArray[i].sw,
            this.drawArray[i].sh, this.drawArray[i].dx, this.drawArray[i].dy, params.TILE_W_H / 3, params.TILE_W_H / 3);
       }
-      // while (this.berries > 0 || this.stones > 0) {
-      //     dx = this.x + randomInt(params.HORI_WALL_COUNT) * params.TILE_W_H;
-      //     dy = this.y + randomInt(params.VERT_WALL_COUNT) * params.TILE_W_H;
-      //     if (resSelect > 7 || (dx >= 500 && dx <= 930 && dy >= 300 && dy <= 761)) {
-      //       //Do Nothing.
-      //       //Randomizes the area, also prevents resources from being built on the castle.
-      //     } else if (this.stones > 0 && resSelect <= 3) {
-      //       sx = this.resArray[resSelect].sx;
-      //       sy = this.resArray[resSelect].sy;
-      //       sw = this.resArray[resSelect].sw;
-      //       sh = this.resArray[resSelect].sh;
-      //       ctx.drawImage(this.spritesheet, sx, sy, sw, sh, dx, dy, params.TILE_W_H / 3, params.TILE_W_H / 3);
-      //       this.stones--;
-      //     } else if ((this.berries > 0) && (resSelect > 3 && resSelect < 8)) {
-      //       sx = this.resArray[resSelect].sx;
-      //       sy = this.resArray[resSelect].sy;
-      //       sw = this.resArray[resSelect].sw;
-      //       sh = this.resArray[resSelect].sh;
-      //       ctx.drawImage(this.spritesheet, sx, sy, sw, sh, dx, dy, params.TILE_W_H / 4, params.TILE_W_H / 4);
-      //       this.berries--;
-      //     }
-      //     resSelect = randomInt(20);
-      //   }
     };
 
+    //Randomly determines and stores stones and berry locations.
     buildResources() {
       var resSelect = randomInt(20);
-      var sx, sy, sw, sh, dx, dy, i, stonecount, berrycount;
-      // stonecount = this.stones;
-      // berrycount = this.berries;
+      var sx, sy, sw, sh, dx, dy, i;
       i = 0;
-      while (this.berries > 0 || this.stones > 0) {        
+      while (this.berries > 0 || this.stones > 0) {
         dx = this.x + randomInt(params.HORI_WALL_COUNT) * params.TILE_W_H;
         dy = this.y + randomInt(params.VERT_WALL_COUNT) * params.TILE_W_H;
         if (resSelect > 7 || (dx >= 500 && dx <= 930 && dy >= 300 && dy <= 761)) {
@@ -98,7 +63,6 @@ class Resources {
           sw = this.resArray[resSelect].sw;
           sh = this.resArray[resSelect].sh;
           this.drawArray[i] = new SpriteDemensional(sx,sy,sw,sh,dx,dy);
-          //ctx.drawImage(this.spritesheet, sx, sy, sw, sh, dx, dy, params.TILE_W_H / 3, params.TILE_W_H / 3);
           this.stones--;
           i++;
         } else if ((this.berries > 0) && (resSelect > 3 && resSelect < 8)) {
@@ -107,19 +71,16 @@ class Resources {
           sw = this.resArray[resSelect].sw;
           sh = this.resArray[resSelect].sh;
           this.drawArray[i] = new SpriteDemensional(sx,sy,sw,sh,dx,dy);
-          //ctx.drawImage(this.spritesheet, sx, sy, sw, sh, dx, dy, params.TILE_W_H / 4, params.TILE_W_H / 4);
           this.berries--;
           i++;
         }
         resSelect = randomInt(20);
       }
-      // this.stones = stonecount;
-      // this.berries = berrycount;
     };
 };
 
 
-// Class to store sprite sheet locations.
+// Class to store sprite sheet and canvas locations.
 class SpriteDemensional {
   constructor(sx, sy, sw, sh, dx, dy) {
     Object.assign(this, {sx, sy, sw, sh, dx, dy})
