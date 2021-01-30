@@ -1,6 +1,6 @@
 class Entity(){
   constructor(myX, myY) {
-    myHeath = 1;
+    myHealth = 1;
 
   }
 
