@@ -33,7 +33,7 @@ class Map {
       }
       theGrid.push(newRow);
     }
-  }
+  };
 
   spawnEntity(theEntity, theX, theY) {
     //give the entity a reference to its tile.
@@ -42,7 +42,7 @@ class Map {
 
     //give the tile a reference to the entity.
     this.theGrid[theX][theY].myEntitys.push(theEntity);
-  }
+  };
 
   initalizeGrid(){
     var g = this.theGrid;
@@ -53,7 +53,7 @@ class Map {
         g[x][y].meetNeighbors();
       }
     }
-  }
+  };
 }
 class Tile {
   constructor(myGrid, myX, myY, xMax, yMax, tileSize) {

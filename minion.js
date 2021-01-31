@@ -3,6 +3,8 @@ class Minion {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
+        this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.1, 4, false, true);
+        this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
 
         this.myTile = game.theMap.theGrid[1][1];
         //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
@@ -19,6 +21,7 @@ class Minion {
         //i,j for cell, x,y for continuous position.
 
         this.myName = "minion";
+        // Object.assign(this, this.name);
 
         this.timeBetweenUpdates = 1/speed;
         //this gives how long this minion will wait before moving.

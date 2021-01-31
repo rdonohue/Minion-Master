@@ -4,7 +4,7 @@ class Wolf {
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
         this.mySearchingAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.05, 0, false, true);
         this.myHuntingAnimator = new Animator(this.spritesheet, 320, 160, 64, 32, 4, 0.05, 0, false, true);
-        // this.myDeadAnimator
+        this.myDeadAnimator = new Animator(this.spritesheet, 512, 202, 64, 32, 1, 0.05, 0, false, true);
 
         this.myTile = game.theMap.theGrid[1][1];
         //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
@@ -78,7 +78,7 @@ class Wolf {
           if(tile && tile.myEntitys.find(isPrey)) {
             target = tile;
             this.isHunting = true;
-
+            //fight( Put prey entity here );
             //if we found prey, we are going to notate this state
             //by switching directions.
 
@@ -168,21 +168,27 @@ class Wolf {
           PARAMS.SCALE, PARAMS.SCALE * Math.min(this.size + 1, 2));
     };
 
-    drawMe(cts) {
+    drawMe(ctx) {
       // console.log(this.one++);
       //use current "direction" to decide how to draw.
-      if (this.isHunting) {
-        this.myHuntingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
-          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
-          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
-          1, this.myDirection
-        );
+      if (!this.dead) {
+        if (this.isHunting) {
+          this.myHuntingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
+            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
+            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
+            1, this.myDirection);
+        } else {
+          this.mySearchingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
+            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
+            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
+            1, this.myDirection);
+        }
       } else {
-        this.mySearchingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
-          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
-          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
-          1, this.myDirection
-        );
+          this.myDeadAnimator.drawFrame(this.game.clockTick, this.game.ctx,
+            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
+            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
+            1, this.myDirection);
       }
+
     };
 }
