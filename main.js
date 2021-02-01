@@ -13,7 +13,7 @@ ASSET_MANAGER.downloadAll(function () {
 	var ctx = canvas.getContext('2d');
 	ctx.imageSmoothingEnabled = false;
 
-	let castle = new HomeBase(gameEngine, 0, 0);
+	let castle = new HomeBase(gameEngine, 500, 300, 430, 461);
 	let corners = new Grasscorner(gameEngine, 0, 0);
 	let vertwalls = new Vertwall(gameEngine, 0, params.TILE_W_H);
 	let horiwalls = new Horiwall(gameEngine, params.TILE_W_H, 0);
