@@ -9,6 +9,7 @@ class Wolf {
         //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
         this.theTileSize = game.theMap.tileSize
         this.theGrid = game.theMap.theGrid;
+        this.myScale = 1;
 
         this.myName = "wolf";
         Object.assign(this, this.myName);
@@ -159,13 +160,13 @@ class Wolf {
         this.myHuntingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
           params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
           params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
-          1, this.myDirection
+          this.myScale, this.myDirection
         );
       } else {
         this.mySearchingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
           params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
           params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
-          1, this.myDirection
+          this.myScale, this.myDirection
         );
       }
     };

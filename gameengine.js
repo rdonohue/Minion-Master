@@ -50,7 +50,6 @@ class GameEngine {
         var getXandY = function (e) {
             var x = e.clientX - that.ctx.canvas.getBoundingClientRect().left;
             var y = e.clientY - that.ctx.canvas.getBoundingClientRect().top;
-            console.log("x,y: "+x+","+y);
 
             return { x: x, y: y };
         }

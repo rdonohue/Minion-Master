@@ -1,6 +1,6 @@
 class HomeBase {
     constructor(game, x, y, w, h) {
-        Object.assign(this, { game, x, y, w, h });
+        Object.assign(this, {game, x, y, w, h });
 
         this.game.homebase = this;
         this.myName = "HomeBase";

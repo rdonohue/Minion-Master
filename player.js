@@ -5,11 +5,6 @@ class Player{
     this.foodIncome = trickleFood;
     this.rockIncome = trickleRock;
 
-    console.log("startFood: "+startFood);
-    console.log("startRock: "+startRock);
-    console.log("trickleFood: "+trickleFood);
-    console.log("trickleRock: "+trickleRock);
-
     this.timeBetweenUpdates = 1;
     this.timer = new Timer();
     this.timeSinceUpdate = 0;
