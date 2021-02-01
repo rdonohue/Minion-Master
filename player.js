@@ -1,7 +1,6 @@
 class Player{
   constructor(startFood, startRock, trickleFood, trickleRock, posX, posY) {
 
-
     this.myFood = startFood;
     this.myRock = startRock;
     this.foodIncome = trickleFood;
@@ -46,6 +45,13 @@ class Player{
   drawMe(ctx) {
     //this can be where we update the resources displayed
     //make sure to round to integer.
-    console.log("food/rock = "+ this.myFood+"/"+this.myRock);
+    ctx.font = params.TILE_W_H/4 + 'px "test TEXT"';
+    ctx.fillStyle = "White";
+    ctx.fillText(("Food: " + Math.round(this.myFood) + " + "
+      + Math.round(this.foodIncome) + " food/second"), params.TILE_W_H/4, params.TILE_W_H/4);
+    ctx.fillText(("Rock: " + Math.round(this.myRock) + " + "
+      + Math.round(this.rockIncome) + " rock/second"), params.TILE_W_H/4, params.TILE_W_H/4*2);
+
+    ctx.fillText(("Selected: " + this.selected), params.TILE_W_H/4, params.TILE_W_H/4*3);
   }
 }
