@@ -2,19 +2,20 @@ class Minion {
     constructor(game, speed) {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
+        this.myTile = game.theMap.theGrid[1][1];
+
+        //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
+        this.theTileSize = params.TILE_W_H;
+        this.myScale = 2;
+
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
 
-        this.myTile = game.theMap.theGrid[1][1];
-        //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
-        this.myTargetTile = null;
-        this.theTileSize = params.TILE_W_H;
         this.theGrid = game.theMap.theGrid;
         this.myHealth = 5;
 
         //i,j for cell, x,y for continuous position.
 
         this.myName = "minion";
-
         this.timeBetweenUpdates = 1/speed;
         //this gives how long this minion will wait before moving.
         //note that its the inverse of the given speed stat.
@@ -106,13 +107,20 @@ class Minion {
       //
     }
 
-    drawMe() {
+    drawMe(ctx) {
       // console.log(this.one++);
       //use current "direction" to decide how to draw.
       this.myAnimator.drawFrame(this.game.clockTick, this.game.ctx,
         params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
         params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
-        2, this.myDirection
+        this.myScale, this.myDirection
       );
+      if(this.isSelected) {
+        ctx.font = params.TILE_W_H/4 + 'px "test TEXT"';
+        ctx.fillStyle = "White";
+        ctx.fillText(("myName: " + this.myName),
+          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX,
+          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY);
+      }
     };
 }

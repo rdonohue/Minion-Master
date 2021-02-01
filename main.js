@@ -20,7 +20,7 @@ ASSET_MANAGER.downloadAll(function () {
 	let intGrass = new InteriorGrass(gameEngine, params.TILE_W_H, params.TILE_W_H);
 	let resources = new Resources(gameEngine, 0, 0);
 
-	gameEngine.init(ctx, 15, 12, 64);
+	gameEngine.init(ctx, 14, 12, 64);
   ctx.imageSmoothingEnabled = false;
 
 	gameEngine.addEntity(corners);

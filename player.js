@@ -1,15 +1,9 @@
 class Player{
-  constructor(startFood, startRock, trickleFood, trickleRock, posX, posY) {
-
+  constructor(game, theMap, startFood, startRock, trickleFood, trickleRock, posX, posY) {
     this.myFood = startFood;
     this.myRock = startRock;
     this.foodIncome = trickleFood;
     this.rockIncome = trickleRock;
-
-    console.log("startFood: "+startFood);
-    console.log("startRock: "+startRock);
-    console.log("trickleFood: "+trickleFood);
-    console.log("trickleRock: "+trickleRock);
 
     this.timeBetweenUpdates = 1;
     this.timer = new Timer();
@@ -19,6 +13,8 @@ class Player{
     this.camY = posY;
     this.width = 1024;
     this.height = 768;
+    this.theGame = game;
+    this.theMap = theMap;
 
     this.selected = null;
     this.myName = "thePlayer";
@@ -27,10 +23,23 @@ class Player{
   updateMe() {
     this.timeSinceUpdate += this.timer.tick();
 
+    var theClick = this.theGame.click;
+    if(theClick){
+      if (this.theMap.theGrid){
+        var theTile = this.theMap.theGrid[Math.floor(theClick.x/params.TILE_W_H)][Math.floor(theClick.y/params.TILE_W_H)];
+        if (theTile){
+          if(theTile.myEntitys.length > 0) {
+            this.selected = theTile.myEntitys[0].myName;
+          }
+        }
+      }
+    }
+
+
+
     //this is NOT the best implmentation of making the player not increment.
     if(this.timeSinceUpdate < this.timeBetweenUpdates) {
-      //if its not been long enough since the last update
-      //do nothing.
+      //NOTE! we always want to respond to player input!
       return;
     } else {
       //if it HAS, then allow update and reset timeSinceUpdate.
