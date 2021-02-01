@@ -9,6 +9,7 @@ class Minion {
         this.myTargetTile = null;
         this.theTileSize = params.TILE_W_H;
         this.theGrid = game.theMap.theGrid;
+        this.myHealth = 5;
 
         //i,j for cell, x,y for continuous position.
 
