@@ -3,6 +3,7 @@ class HomeBase {
         Object.assign(this, { game });
 
         this.game.homebase = this;
+        this.myName = "HomeBase";
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/castle.png");
 
@@ -11,16 +12,12 @@ class HomeBase {
 
         this.animations = [];
         this.loadAnimations();
-
     };
 
     loadAnimations() {
-
          // idle animation for state = 0
          this.animations[0] = new Animator(this.spritesheet, 0, 0, 430, 461, 1, 1, 0, false, true);
          // this.animations[1] = some other sprite that represents a destroyed home base (wreckage)
-
-
     }
 
     updateMe() {
