@@ -44,6 +44,8 @@ class Player{
   }
 
   drawMe(ctx) {
+    //this can be where we update the resources displayed
+    //make sure to round to integer.
     console.log("food/rock = "+ this.myFood+"/"+this.myRock);
   }
 }
