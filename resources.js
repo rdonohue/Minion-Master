@@ -21,15 +21,15 @@ class Resources {
         }
 
         //Stones
-        this.resArray[0] = new SpriteDemensional(267,102,51,57); //Stone 0
-        this.resArray[1] = new SpriteDemensional(331,108,39,51); //Stone 1
-        this.resArray[2] = new SpriteDemensional(392,102,40,57); //Stone 2
-        this.resArray[3] = new SpriteDemensional(458,102,41,57); //Stone 3
+        this.resArray[0] = new SpriteDimensional(267,102,51,57); //Stone 0
+        this.resArray[1] = new SpriteDimensional(331,108,39,51); //Stone 1
+        this.resArray[2] = new SpriteDimensional(392,102,40,57); //Stone 2
+        this.resArray[3] = new SpriteDimensional(458,102,41,57); //Stone 3
         //Berries
-        this.resArray[4] = new SpriteDemensional(142,800,37,31); //Berry 0
-        this.resArray[5] = new SpriteDemensional(192,808,30,23); //Berry 1
-        this.resArray[6] = new SpriteDemensional(237,805,37,26); //Berry 2
-        this.resArray[7] = new SpriteDemensional(294,818,20,13); //Berry 3
+        this.resArray[4] = new SpriteDimensional(142,800,37,31); //Berry 0
+        this.resArray[5] = new SpriteDimensional(192,808,30,23); //Berry 1
+        this.resArray[6] = new SpriteDimensional(237,805,37,26); //Berry 2
+        this.resArray[7] = new SpriteDimensional(294,818,20,13); //Berry 3
 
 
         this.buildResources();
@@ -63,7 +63,7 @@ class Resources {
           sy = this.resArray[resSelect].sy;
           sw = this.resArray[resSelect].sw;
           sh = this.resArray[resSelect].sh;
-          this.drawArray[i] = new SpriteDemensional(sx,sy,sw,sh,dx,dy);
+          this.drawArray[i] = new SpriteDimensional(sx,sy,sw,sh,dx,dy);
           this.stones--;
           i++;
         } else if ((this.berries > 0) && (resSelect > 3 && resSelect < 8)) {
@@ -71,7 +71,7 @@ class Resources {
           sy = this.resArray[resSelect].sy;
           sw = this.resArray[resSelect].sw;
           sh = this.resArray[resSelect].sh;
-          this.drawArray[i] = new SpriteDemensional(sx,sy,sw,sh,dx,dy);
+          this.drawArray[i] = new SpriteDimensional(sx,sy,sw,sh,dx,dy);
           this.berries--;
           i++;
         }
