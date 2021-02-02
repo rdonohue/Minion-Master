@@ -33,6 +33,7 @@ class Resources {
 
 
         this.buildResources();
+
     };
 
     updateMe() {
@@ -81,7 +82,7 @@ class Resources {
 
 
 // Class to store sprite sheet and canvas locations.
-class SpriteDemensional {
+class SpriteDimensional {
   constructor(sx, sy, sw, sh, dx, dy) {
     Object.assign(this, {sx, sy, sw, sh, dx, dy})
     if (dx == undefined || dy == undefined) {
@@ -90,3 +91,23 @@ class SpriteDemensional {
     }
   }
 };
+
+class bush{
+  constructor(sx, sy, sw, sh, dx, dy) {
+    Object.assign(this, {sx, sy, sw, sh, dx, dy})
+    if (dx == undefined || dy == undefined) {
+      dx = 0;
+      dy = 0;
+    }
+  }
+}
+
+class rock{
+  constructor(sx, sy, sw, sh, dx, dy) {
+    Object.assign(this, {sx, sy, sw, sh, dx, dy})
+    if (dx == undefined || dy == undefined) {
+      dx = 0;
+      dy = 0;
+    }
+  }
+}
