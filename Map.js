@@ -39,6 +39,7 @@ class Map {
     //give the entity a reference to its tile.
     theEntity.myTile = this.theGrid[theX][theY];
     theEntity.theGrid = this.theGrid;
+    theEntity.removeFromWorld = false;
 
     //give the tile a reference to the entity.
     this.theGrid[theX][theY].myEntitys.push(theEntity);
@@ -72,7 +73,7 @@ class Tile {
   // nw, n   ne
   // w,  m,  e
   // sw,  s,  se
-  //where M is THIS tile.
+  //where m is THIS tile.
   meetNeighbors() {
     var g = this.myGrid;
     var x = this.myX;
@@ -105,7 +106,6 @@ class Tile {
     this.myNeighbors.push(this.n);
     this.myNeighbors.push(this.nw);
     this.myNeighbors.push(this.e);
-    this.myNeighbors.push(this.m);
     this.myNeighbors.push(this.w);
     this.myNeighbors.push(this.se);
     this.myNeighbors.push(this.s);

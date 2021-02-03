@@ -1,8 +1,9 @@
 class HomeBase {
-    constructor(game) {
-        Object.assign(this, { game });
+    constructor(game, x, y, w, h) {
+        Object.assign(this, {game, x, y, w, h });
 
         this.game.homebase = this;
+        this.myName = "HomeBase";
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/castle.png");
 
@@ -10,20 +11,23 @@ class HomeBase {
         this.health = 200;
         this.defense = 0.0;
         this.dead = false;
+
         this.removeFromWorld = false;
+
+
+        this.xOriginLoc = x;
+        this.yOriginLoc = y;
+        this.baseWidth = w;
+        this.baseHeight = h;
 
         this.animations = [];
         this.loadAnimations();
-
     };
 
     loadAnimations() {
-
          // idle animation for state = 0
-         this.animations[0] = new Animator(this.spritesheet, 0, 0, 430, 461, 1, 1, 0, false, true);
+         this.animations[0] = new Animator(this.spritesheet, 0, 0, this.baseWidth, this.baseHeight, 1, 1, 0, false, true);
          // this.animations[1] = some other sprite that represents a destroyed home base (wreckage)
-
-
     }
 
     updateMe() {
@@ -38,7 +42,7 @@ class HomeBase {
     }
 
     drawMe(ctx) {
-        this.animations[0].drawFrame(this.game.clockTick, ctx, 500, 300, 0.5);
+        this.animations[0].drawFrame(this.game.clockTick, ctx, this.xOriginLoc, this.yOriginLoc, 0.5);
     }
 
 }

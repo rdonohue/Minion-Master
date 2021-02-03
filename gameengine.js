@@ -18,6 +18,7 @@ class GameEngine {
         this.surfaceWidth = this.ctx.canvas.width;
         this.surfaceHeight = this.ctx.canvas.height;
         this.theMap = new Map(xSize, ySize, 64);
+        this.thePlayer = new Player(this, this.theMap, 100, 150, 10, 5, 0, 0);
         this.startInput();
         this.timer = new Timer();
     };
@@ -35,6 +36,7 @@ class GameEngine {
     }
 
     start() {
+      this.addEntity(this.thePlayer);
       var that = this;
         (function gameLoop() {
             that.loop(); //changed "that" back to "this"
@@ -60,13 +62,6 @@ class GameEngine {
         this.ctx.canvas.addEventListener("click", function (e) {
             //console.log(getXandY(e));
             that.click = getXandY(e);
-        }, false);
-
-        this.ctx.canvas.addEventListener("wheel", function (e) {
-            //console.log(getXandY(e));
-            that.wheel = e;
-            //       console.log(e.wheelDelta);
-            e.preventDefault();
         }, false);
 
         this.ctx.canvas.addEventListener("contextmenu", function (e) {
