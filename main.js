@@ -18,7 +18,7 @@ ASSET_MANAGER.downloadAll(function () {
 	let vertwalls = new Vertwall(gameEngine, 0, params.TILE_W_H);
 	let horiwalls = new Horiwall(gameEngine, params.TILE_W_H, 0);
 	let intGrass = new InteriorGrass(gameEngine, params.TILE_W_H, params.TILE_W_H);
-	let resources = new Resources(gameEngine, 0, 0);
+	let resources = new Resources(gameEngine, params.TILE_W_H, params.TILE_W_H);
 
 	gameEngine.init(ctx, 14, 12, 64);
   ctx.imageSmoothingEnabled = false;
