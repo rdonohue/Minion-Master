@@ -17,8 +17,21 @@
     <script type="text/javascript" src="./main.js"></script>
     <script type="text/javascript" src="./background.js"></script>
     <script type="text/javascript" src="./resources.js"></script>
+
+    <script type="text/javascript" src="./HUD.js"></script>
 </head>
 <body>
-    <canvas id="gameWorld" width="1024" height="768" style="background: white; border: 1px solid black"></canvas>
+  <link rel="stylesheet" type="text/css" href="dropdown.css" />
+
+  <canvas id="gameWorld" width="1024" height="768" style="background: white; border: 1px solid black"></canvas>
+
+  <div class="menudrop">
+    <button onclick="menuFunction()" class="dropbtn">Game Menu</button>
+      <div id="myDropdown" class="dropdown-content">
+        <a href="#debug" id="debug">Debug ON</a>
+        <a href="#info">Unit Info</a>
+      </div>
+  </div>
+
 </body>
 </html>
