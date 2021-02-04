@@ -8,6 +8,11 @@ class Minion {
         this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
 
 
+        // 2:00 PM - 2:
+        // 2/3/21
+        // Discussed with the professor on ideas on how to develop the HUD.
+
+
         this.myTile = game.theMap.theGrid[1][1];
 
         //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
@@ -151,10 +156,19 @@ class Minion {
 
     drawMe() {
 
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "Orange";
+        ctx.fillRect(mmX + this.myTile.myX / params.TILE_W_H, mmY + this.myTile.myY / params.TILE_W_H,
+          params.TILE_W_H / 8, params.TILE_W_H / 8);
+    };
+
     drawMe(ctx) {
 
       // console.log(this.one++);
       //use current "direction" to decide how to draw.
+      this.drawMinimap(ctx, this.myTile.myX, this.myTile.myY);
       this.myAnimator.drawFrame(this.game.clockTick, this.game.ctx,
         params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
         params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.

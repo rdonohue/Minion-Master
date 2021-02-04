@@ -19,6 +19,7 @@ ASSET_MANAGER.downloadAll(function () {
 	let horiwalls = new Horiwall(gameEngine, params.TILE_W_H, 0);
 	let intGrass = new InteriorGrass(gameEngine, params.TILE_W_H, params.TILE_W_H);
 	let resources = new Resources(gameEngine, params.TILE_W_H, params.TILE_W_H);
+	let minimap = new MiniMap(gameEngine, params.TILE_W_H, params.TILE_W_H, 1);
 
 	gameEngine.init(ctx, 14, 12, 64);
   ctx.imageSmoothingEnabled = false;

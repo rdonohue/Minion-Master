@@ -2,7 +2,7 @@
 toggle between hiding and showing the dropdown content */
 function menuFunction() {
   document.getElementById("myDropdown").classList.toggle("show");
-}
+};
 
 // Close the dropdown if the user clicks outside of it
 window.onclick = function(event) {
@@ -16,4 +16,23 @@ window.onclick = function(event) {
       }
     }
   }
-}
+};
+
+class MiniMap {
+    constructor(game, x, y, w) {
+        Object.assign(this, { game, x, y, w });
+    };
+
+    update() {
+
+    };
+
+    draw(ctx) {
+        ctx.strokeStyle = "Black";
+        ctx.strokeRect(this.x, this.y, this.w, PARAMS.BLOCKWIDTH);
+        for (var i = 0; i < this.game.entities.length; i++) {
+            this.game.entities[i].drawMinimap(ctx, this.x, this.y);
+        }
+    };
+
+};
