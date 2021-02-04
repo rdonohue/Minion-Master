@@ -39,10 +39,17 @@ class HomeBase {
         this.dead = true;
         this.removeFromWorld = true;
         this.myTile = NULL;
-    }
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "Red";
+        ctx.fillRect(mmX + this.xOriginLoc / params.TILE_W_H, mmY + this.yOriginLoc / params.TILE_W_H,
+          params.TILE_W_H / 4, params.TILE_W_H / 4);
+    };
 
     drawMe(ctx) {
+        this.drawMinimap(ctx, this.xOriginLoc, this.yOriginLoc);
         this.animations[0].drawFrame(this.game.clockTick, ctx, this.xOriginLoc, this.yOriginLoc, 0.5);
-    }
+    };
 
 }
