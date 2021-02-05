@@ -168,7 +168,7 @@ class Minion {
 
       // console.log(this.one++);
       //use current "direction" to decide how to draw.
-      this.drawMinimap(ctx, this.myTile.myX + 1000, this.myTile.myY + 576);
+      this.drawMinimap(ctx, this.myTile.myX + 1030, this.myTile.myY + 576);
       this.myAnimator.drawFrame(this.game.clockTick, this.game.ctx,
         params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
         params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.

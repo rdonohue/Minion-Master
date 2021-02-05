@@ -26,11 +26,7 @@ class Player{
     var theClick = this.theGame.click;
     if(theClick){
       if (this.theMap.theGrid){
-
-        if (this.theMap.isOnMap(theClick.x, theClick.y) == 0) {
-
         if(this.theMap.isOnMap(theClick.x,theClick.y) == 0){
-
           var theTile = this.theMap.theGrid[Math.floor(theClick.x/params.TILE_W_H)][Math.floor(theClick.y/params.TILE_W_H)];
           if (theTile){
             if(theTile.myEntitys.length > 0) {
@@ -38,7 +34,6 @@ class Player{
             }
           }
         }
-
       }
     }
 
@@ -60,12 +55,12 @@ class Player{
     //this can be where we update the resources displayed
     //make sure to round to integer.
     ctx.font = params.TILE_W_H/4 + 'px "test TEXT"';
-    ctx.fillStyle = "White";
+    ctx.fillStyle = "Black";
     ctx.fillText(("Food: " + Math.round(this.myFood) + " + "
-      + Math.round(this.foodIncome) + " food/second"), params.TILE_W_H/4, params.TILE_W_H/4);
+      + Math.round(this.foodIncome) + " food/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4);
     ctx.fillText(("Rock: " + Math.round(this.myRock) + " + "
-      + Math.round(this.rockIncome) + " rock/second"), params.TILE_W_H/4, params.TILE_W_H/4*2);
+      + Math.round(this.rockIncome) + " rock/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*2);
 
-    ctx.fillText(("Selected: " + this.selected), params.TILE_W_H/4, params.TILE_W_H/4*3);
+    ctx.fillText(("Selected: " + this.selected), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*3);
   }
 }

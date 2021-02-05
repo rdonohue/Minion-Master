@@ -34,11 +34,8 @@ class Map {
     // console.log("this.yMax-1: " + (this.yMax-1))
     // console.log("theY > (this.yMax-1): " + (theY > (this.yMax-1)));
     return 0;
-  };
-
     //if(array and array[index]) {
     }
-
 
 
   //WARNING: JS might have different pass-by rules then I'm used to!
@@ -57,7 +54,7 @@ class Map {
       }
       theGrid.push(newRow);
     }
-  };
+  }
 
   spawnEntity(theEntity, theX, theY) {
     //give the entity a reference to its tile.
@@ -67,7 +64,7 @@ class Map {
 
     //give the tile a reference to the entity.
     this.theGrid[theX][theY].myEntitys.push(theEntity);
-  };
+  }
 
   initalizeGrid(){
     var g = this.theGrid;
@@ -78,20 +75,19 @@ class Map {
         g[x][y].meetNeighbors();
       }
     }
-  };
+  }
 }
 class Tile {
-  constructor(myGrid, myX, myY, xMax, yMax, tileSize) {
+  constructor(myGrid, myX, myY, xMax, yMax, tileSize){
     this.myEntitys = [];
     Object.assign(this, {myGrid, myX, myY, xMax, yMax});
     this.theTileSize = tileSize;
     this.myGrid = myGrid;
     this.xMax = xMax;
     this.yMax = yMax;
-    this.enemy = false;
 
     this.myNeighbors = [];
-  };
+  }
 
   //the neighbors are defined as follows:
   // nw, n   ne
@@ -134,20 +130,16 @@ class Tile {
     this.myNeighbors.push(this.se);
     this.myNeighbors.push(this.s);
     this.myNeighbors.push(this.sw);
-  };
+  }
 
   //returns 0 if on map, returns -1 if theX is off and 1 if theY is off.
   isOnMap(theX, theY) {
 
-    if (theX < 0 || theX > (this.theGrid.length-1)){
-
-
 
     if (theX < 0 || theX > (this.xMax-1)){
-
       return -1;
     }
-    if (theY < 0 || theY > (this.theGrid[0].length-1)){
+    if (theY < 0 || theY > (this.yMax-1)){
       return 1;
     }
     // console.log("this.xMax:"+this.xMax);
@@ -161,38 +153,36 @@ class Tile {
     // console.log("theY > (this.yMax-1): " + (theY > (this.yMax-1)));
     return 0;
     //if(array and array[index]) {
-
-    // }
-
-    // checkEnemy() {
-    //     var enemySpotted = false;
-    //     var i = 0;
-    //     while (!enemySpot && i < myEntities.length) {
-    //         if (myEntities[i].status == 1) {
-    //             enemySpot = true;
-    //         } else {
-    //             i++;
-    //         }
-    //     }
-    //
-    //     return enemySpotted;
-    // }
-    // }
-  };
-
-
-
-  killEntity(theEntity) {
-    if (!(theEntity.myTile instanceof NULL)) {
-      theEntity.die();
-    } else {
-    //if the entity has however, report this to console for debugging reasons.
-      // console.log("the game tried to remove ["+theEntity+"]'s tile when it was already NULL!");
     }
-  };
+}
+
+
+// killEntity(theEntity) {
+//
+//   var successfulKill;
+//
+//   if(!(theEntity.myTile instanceof NULL)) {
+//     //if the entity has not already had its Tile removed, remove it.
+//     theEntity.myTile = NULL;
+//     successKill = True;
+//   } else {
+//     //if the entity has however, report this to console for debugging reasons.
+//     console.log("the game tried to remove ["+theEntity+"]'s tile when it was already NULL!");
+//     successKill = False;
+//   }
+//
+//   if(!(theEntity.myTile instanceof NULL)) {
+//     //if the grid has not already had the entity removed, remove it.
+//     successKill = True;
+//     theEntity.myTile = NULL
+//   } else {
+//     //if the grid has however, report this to console for debugging reasons.
+//     console.log("the game tried to remove ["+theEntity+"] from the grid when it already was gone!");
+//     successKill = False;
+//   }
 //
 //   console.log("The entity ["+theEntity+"] was killed -->"+successKill);
-};
+// }
   //this function is used to populate the tiles of the map.
   // populateTiles(theGrid, numRocks, numBush, numWolves){
   //   var numEmpty = this.xSize * this.ySize;

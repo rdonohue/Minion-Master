@@ -163,8 +163,8 @@ class Wolf {
         this.myTile = NULL;
     };
 
-    drawMinimap(ctx, mmY, mmX) {
-        ctx.fillStyle = "Grey";
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "DimGrey";
         ctx.fillRect(mmX + this.myTile.myX / params.TILE_W_H, mmY + this.myTile.myY / params.TILE_W_H,
           params.TILE_W_H / 8, params.TILE_W_H / 8);
     };
@@ -172,7 +172,7 @@ class Wolf {
     drawMe(ctx) {
       // console.log(this.one++);
       //use current "direction" to decide how to draw.
-      // this.drawMinimap(ctx, this.myTile.myX + 1000, this.myTile.myY + 576);
+      this.drawMinimap(ctx, this.myTile.myX + 1030, this.myTile.myY + 576);
       if (!this.dead) {
         if (this.isHunting) {
           this.myHuntingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
