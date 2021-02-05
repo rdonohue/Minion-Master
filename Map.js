@@ -36,6 +36,11 @@ class Map {
     return 0;
   };
 
+    //if(array and array[index]) {
+    }
+
+
+
   //WARNING: JS might have different pass-by rules then I'm used to!
 
   //This function creates the grid for the map.
@@ -133,7 +138,13 @@ class Tile {
 
   //returns 0 if on map, returns -1 if theX is off and 1 if theY is off.
   isOnMap(theX, theY) {
+
     if (theX < 0 || theX > (this.theGrid.length-1)){
+
+
+
+    if (theX < 0 || theX > (this.xMax-1)){
+
       return -1;
     }
     if (theY < 0 || theY > (this.theGrid[0].length-1)){
