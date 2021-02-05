@@ -17,6 +17,27 @@ class Map {
     // this.numRocks, this.numBush, this.numWolves);
   };
 
+  isOnMap(theX, theY) {
+    if (theX < 0 || theX > (this.theGrid.length-1)){
+      return -1;
+    }
+    if (theY < 0 || theY > (this.theGrid[0].length-1)){
+      return 1;
+    }
+    // console.log("this.xMax:"+this.xMax);
+    // console.log("theX < 0: " + (theX < 0) );
+    // console.log("this.xMax-1: " + (this.xMax-1))
+    // console.log("theX > (this.xMax-1): " + (theX > (this.xMax-1)));
+    //
+    // console.log("this.yMax: "+this.yMax);
+    // console.log("theY < 0: " + (theY < 0) );
+    // console.log("this.yMax-1: " + (this.yMax-1))
+    // console.log("theY > (this.yMax-1): " + (theY > (this.yMax-1)));
+    return 0;
+    //if(array and array[index]) {
+    }
+
+
   //WARNING: JS might have different pass-by rules then I'm used to!
 
   //This function creates the grid for the map.
@@ -113,6 +134,8 @@ class Tile {
 
   //returns 0 if on map, returns -1 if theX is off and 1 if theY is off.
   isOnMap(theX, theY) {
+
+
     if (theX < 0 || theX > (this.xMax-1)){
       return -1;
     }

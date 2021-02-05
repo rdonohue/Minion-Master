@@ -26,16 +26,16 @@ class Player{
     var theClick = this.theGame.click;
     if(theClick){
       if (this.theMap.theGrid){
-        var theTile = this.theMap.theGrid[Math.floor(theClick.x/params.TILE_W_H)][Math.floor(theClick.y/params.TILE_W_H)];
-        if (theTile){
-          if(theTile.myEntitys.length > 0) {
-            this.selected = theTile.myEntitys[0].myName;
+        if(this.theMap.isOnMap(theClick.x,theClick.y) == 0){
+          var theTile = this.theMap.theGrid[Math.floor(theClick.x/params.TILE_W_H)][Math.floor(theClick.y/params.TILE_W_H)];
+          if (theTile){
+            if(theTile.myEntitys.length > 0) {
+              this.selected = theTile.myEntitys[0].myName;
+            }
           }
         }
       }
     }
-
-
 
     //this is NOT the best implmentation of making the player not increment.
     if(this.timeSinceUpdate < this.timeBetweenUpdates) {
