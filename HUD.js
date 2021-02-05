@@ -18,6 +18,7 @@ window.onclick = function(event) {
   }
 };
 
+// Minimap for the game.
 class MiniMap {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w });
@@ -37,3 +38,20 @@ class MiniMap {
     };
 
 };
+
+// Rest of the UI to hold the game menu features.
+class UI {
+    constructor(game, x, y, w) {
+        Object.assign(this, { game, x, y, w });
+    };
+
+    updateMe() {
+
+    };
+
+    drawMe(ctx) {
+        ctx.fillStyle = "SaddleBrown";
+        ctx.fillRect(this.x, this.y, this.w, 576);
+    }
+
+}
