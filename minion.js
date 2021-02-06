@@ -7,12 +7,6 @@ class Minion {
         this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.1, 4, false, true);
         this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
 
-
-        // 2:00 PM - 2:
-        // 2/3/21
-        // Discussed with the professor on ideas on how to develop the HUD.
-
-
         this.myTile = game.theMap.theGrid[1][1];
 
         //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
@@ -22,21 +16,26 @@ class Minion {
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
 
         this.theGrid = game.theMap.theGrid;
-        this.myHealth = 5;
 
+        //Stats
         this.health = 100;
         this.defense = 0.0;
         this.attack = 1;
+        this.agility = 1;
+        this.intelligence = 1;
+
+
         this.dead = false;
         this.removeFromWorld = false;
 
         //i,j for cell, x,y for continuous position.
-
         this.myName = "minion";
 
+        //myType to take the place of "minion" for myName.
+        //For future additions when we will probably give silly names to the minions.
+        this.myType = "minion";
+
         // Object.assign(this, this.name);
-
-
         this.timeBetweenUpdates = 1/speed;
         //this gives how long this minion will wait before moving.
         //note that its the inverse of the given speed stat.
@@ -154,10 +153,6 @@ class Minion {
         this.myTile = NULL;
     }
 
-    drawMe() {
-
-    };
-
     drawMinimap(ctx, mmX, mmY) {
         ctx.fillStyle = "Orange";
         ctx.fillRect(mmX + this.myTile.myX / params.TILE_W_H, mmY + this.myTile.myY / params.TILE_W_H,
@@ -174,7 +169,7 @@ class Minion {
         params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
         this.myScale, this.myDirection
       );
-      if(this.isSelected) {
+      if (this.isSelected) {
         ctx.font = params.TILE_W_H/4 + 'px "test TEXT"';
         ctx.fillStyle = "White";
         ctx.fillText(("myName: " + this.myName),

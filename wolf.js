@@ -2,8 +2,8 @@ class Wolf {
     constructor(game, speed) {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
-        this.mySearchingAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.1, 0, false, true);
-        this.myHuntingAnimator = new Animator(this.spritesheet, 320, 160, 64, 32, 4, 0.1, 0, false, true);
+        this.mySearchingAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.25, 0, false, true);
+        this.myHuntingAnimator = new Animator(this.spritesheet, 320, 160, 64, 32, 4, 0.25, 0, false, true);
         this.myDeadAnimator = new Animator(this.spritesheet, 512, 202, 64, 32, 1, 0.1, 0, false, true);
 
         this.myTile = game.theMap.theGrid[1][1];
@@ -18,7 +18,9 @@ class Wolf {
         this.dead = false;
         this.removeFromWorld = false;
 
-        this.myName = "wolf";
+        //To differentiate the HUD when selected by the player.
+        //See player.js.drawMe
+        this.myType = "wolf";
         Object.assign(this, this.myName);
 
         this.timeBetweenUpdates = 1/speed;
