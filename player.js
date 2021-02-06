@@ -79,7 +79,7 @@ class Player{
       ctx.fillText(this.targetType + "'s", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2);
       ctx.fillText("STATS: ", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5);
 
-      ctx.font =  params.TILE_W_H/8 + 'px "Press Start 2P"';
+      ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';
 
       ctx.fillText("HEALTH: " + 100, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.2);
       ctx.fillText("DEF: " + 0, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.0);
