@@ -2,8 +2,8 @@ class Resources {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/trees_stones_bushes.png");
-        this.interiorX = Create2DArray(params.VERT_WALL_COUNT + 2);
-        this.interiorY = Create2DArray(params.VERT_WALL_COUNT + 2);
+        this.interiorX = Create2DArray(params.VERT_WALL_COUNT);
+        this.interiorY = Create2DArray(params.VERT_WALL_COUNT);
         this.resArray = [];
         this.drawArray = [];
         this.stones = randomInt(10) + 1
