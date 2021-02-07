@@ -1,5 +1,5 @@
 class Wolf {
-    constructor(game, speed) {
+    constructor(game) {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
         this.mySearchingAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.25, 0, false, true);
@@ -14,16 +14,18 @@ class Wolf {
 
         this.health = 100;
         this.defense = 0.0;
-        this.attack = 3;
+        this.agility = 2;
+        this.attack = 5;
         this.dead = false;
         this.removeFromWorld = false;
+        this.speed = 1;
 
         //To differentiate the HUD when selected by the player.
         //See player.js.drawMe
         this.myType = "wolf";
         Object.assign(this, this.myName);
 
-        this.timeBetweenUpdates = 1/speed;
+        this.timeBetweenUpdates = 1/this.agility;
         //this gives how long this minion will wait before moving.
         //note that its the inverse of the given speed stat.
 
@@ -113,7 +115,7 @@ class Wolf {
         while(newXCord == -1 && newYCord == -1 && maxAttempts > 0) {
           changeX = Math.floor((Math.random() * 3))-1;
           changeY = Math.floor((Math.random() * 3))-1;
-          if (this.myTile.isOnMap(myX+changeX, myY+changeY)==0){
+          if (this.theGrid[myX+changeX] && this.theGrid[myX+changeX][myY+changeY]){
             target = this.theGrid[myX+changeX][myY+changeY];
             break;
           } else {
@@ -178,14 +180,17 @@ class Wolf {
       if (!this.dead) {
         if (this.isHunting) {
           this.myHuntingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
-            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
-            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
-            1, this.myDirection);
+            params.TILE_W_H+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
+            params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
+            this.myScale, this.myDirection
+          );
         } else {
           this.mySearchingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
-            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
-            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
-            1, this.myDirection);
+            params.TILE_W_H+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
+            params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
+            this.myScale, this.myDirection
+          );
+
         }
       } else {
           this.myDeadAnimator.drawFrame(this.game.clockTick, this.game.ctx,
@@ -193,20 +198,5 @@ class Wolf {
             params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
             1, this.myDirection);
       }
-      if (this.isHunting) {
-        this.myHuntingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
-          params.TILE_W_H+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
-          params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
-          this.myScale, this.myDirection
-        );
-      } else {
-        this.mySearchingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
-          params.TILE_W_H+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
-          params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
-          this.myScale, this.myDirection
-        );
-
-      }
-
     };
 }

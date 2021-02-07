@@ -1,5 +1,5 @@
 class Minion {
-    constructor(game, speed) {
+    constructor(game) {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
 
@@ -8,6 +8,8 @@ class Minion {
         this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
 
         this.myTile = game.theMap.theGrid[1][1];
+        //this is not a good idea, but I'm doing it for now cas I'm lazy.
+        //should not be initalized like this.
 
         //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
         this.theTileSize = params.TILE_W_H;
@@ -18,12 +20,12 @@ class Minion {
         this.theGrid = game.theMap.theGrid;
 
         //Stats
-        this.health = 100;
-        this.defense = 0.0;
-        this.attack = 1;
-        this.agility = 1;
-        this.intelligence = 1;
-
+        this.health = minionStats.health;
+        this.defense = minionStats.defense;
+        this.attack = minionStats.attack;
+        this.agility = minionStats.agility;
+        this.intelligence = minionStats.intelligence;
+        this.me = this;
 
         this.dead = false;
         this.removeFromWorld = false;
@@ -67,7 +69,6 @@ class Minion {
       // var myMove = this.findMyMove(0);
       var myMove = this.findMyMove(environment);
       this.makeMove(myMove, this.myTile);
-
     };
 
     //this function determines what this entity "sees"
@@ -94,7 +95,7 @@ class Minion {
         while(newXCord == -1 && newYCord == -1 && maxAttempts > 0) {
           changeX = Math.floor((Math.random() * 3))-1;
           changeY = Math.floor((Math.random() * 3))-1;
-          if (this.myTile.isOnMap(myX+changeX, myY+changeY)==0){
+          if (this.theGrid[myX+changeX] && this.theGrid[myX+changeX][myY+changeY]){
             newXCord = myX + changeX;
             newYCord = myY + changeY;
           } else {
@@ -126,9 +127,10 @@ class Minion {
     }
 
 
-    // Engaging in combat with minions.
+    // Engaging in combat with enemy.
     fight(enemy) {
-        if (enemy.health != 0 && this.health != 0) {
+        if (enemy.health > 0 && this.health > 0) {
+          //don't check that its not equal, check that its greater then 0.
             enemy.health -= Math.floor(this.attack - (enemy.defense * this.attack));
             this.health -= Math.floor(enemy.attack - (this.defense * enemy.attack));
             if (enemy.health <= 0) {

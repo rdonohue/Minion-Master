@@ -35,7 +35,7 @@ class Map {
     // console.log("theY > (this.yMax-1): " + (theY > (this.yMax-1)));
     return 0;
     //if(array and array[index]) {
-    }
+  };
 
 
   //WARNING: JS might have different pass-by rules then I'm used to!
@@ -87,6 +87,11 @@ class Tile {
     this.yMax = yMax;
 
     this.myNeighbors = [];
+  }
+
+  removeEntity(entity) {
+    this.myEntitys.splice(this.indexOf(entity),1)
+    //this is an abomination.
   }
 
   //the neighbors are defined as follows:

@@ -46,14 +46,14 @@ ASSET_MANAGER.downloadAll(function () {
 	//spawn x,y
 	//intelligence NOT ACTUALLY IMPLEMENTED!
 	//speed
-	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD/2,"minion");
-	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD,"minion");
-	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*2,"minion");
+	gameEngine.createANDSpawnEntity(2, 2, "minion");
+	gameEngine.createANDSpawnEntity(3, 3, "minion");
+	gameEngine.createANDSpawnEntity(5, 4, "minion");
 	// gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*4,"minion");
 	// gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*8,"minion");
 	// gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*16,"minion");
 
-	gameEngine.createANDSpawnEntity(2,4, params.BASE_SPD,"wolf");
+	gameEngine.createANDSpawnEntity(2, 4, "wolf");
 	// gameEngine.createANDSpawnEntity(2,4, params.BASE_SPD*32,"wolf");
 
 	gameEngine.start();

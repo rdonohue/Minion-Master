@@ -36,6 +36,13 @@ window.requestAnimFrame = (function () {
 })();
 
 // add global parameters here
+var minionStats = {
+  HEALTH : 100,
+  DEFENSE : 0.0,
+  ATTACK : 1,
+  AGILITY : 1,
+  INTELLIGENCE : 1,
+}
 
 var params = {
   //Tile width and height
@@ -44,5 +51,5 @@ var params = {
   HORI_WALL_COUNT : 14,
   CANVAS_WIDTH : 1024,
   CANVAS_HEIGHT : 768,
-  BASE_SPD : 0.05,
+  BASE_SPD : 0.25,
 };
