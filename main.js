@@ -27,7 +27,6 @@ ASSET_MANAGER.downloadAll(function () {
 
 	let minimap = new MiniMap(gameEngine, 1024, 576, 256);
 	let ui = new UI(gameEngine, 1024, 0, 256);
-	let hud = new HUD(gameEngine);
 
 	gameEngine.init(ctx, params.CANVAS_WIDTH / 128,
 		 							params.CANVAS_HEIGHT / 128,
