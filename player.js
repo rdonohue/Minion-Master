@@ -29,18 +29,25 @@ class Player{
 
   updateMe() {
     this.timeSinceUpdate += this.timer.tick();
+    //this is NOT the best implmentation of making the player not increment.
+    if(this.theGame.click) {
+      var clicky = this.theGame.click;
+      const length = params.TILE_W_H;
+      const g = this.theMap.theGrid;
 
-    var theClick = this.theGame.click;
-
-    if(theClick && this.theMap.isOnMap(theClick.x,theClick.y) == 0){
-      var theTile = this.theMap.theGrid[Math.floor(theClick.x/params.TILE_W_H)][Math.floor(theClick.y/params.TILE_W_H)];
-      if (theTile && theTile.myEntitys.length > 0){
-        this.selected = theTile.myEntitys[theTile.myEntitys.length-1].myName;
-        //switched from 0 to length - 1 so that it grabs the entity that most recently entered that tile.
+      //we want to shift over one tile and then convert to cell number.
+      var cellX = Math.floor((clicky.x-length)/length);
+      var cellY = Math.floor((clicky.y-length)/length);
+      if(g && g[cellX] && g[cellX][cellY]) {
+        var selectedTile = g[cellX][cellY];
+        if(selectedTile.myEntitys.length > 0) {
+          this.selected = selectedTile.myEntitys[0];
+        } else {
+          this.selected = null;
+        }
       }
     }
 
-    //this is NOT the best implmentation of making the player not increment.
     if(this.timeSinceUpdate < this.timeBetweenUpdates) {
       //NOTE! we always want to respond to player input!
       return;
@@ -70,7 +77,8 @@ class Player{
     ctx.font = params.TILE_W_H/4 + 'px "Press Start 2P"';
     //Bottom Left HUD
     //if (this.selected = "minion") {
-      ctx.fillText(this.targetType + "'s", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2);
+    if(this.selected && this.selected.myName == "minion"){
+      ctx.fillText(this.selected.myName + "'s", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2);
       ctx.fillText("STATS: ", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5);
 
       ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';
@@ -101,8 +109,34 @@ class Player{
       ctx.stroke();
       // ctx.arc(params.TILE_W_H * 2.75, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, 12, 0, 2*Math.PI);
       // ctx.stroke();
+    } else if (this.selected && this.selected.myName == "wolf") {
+      ctx.fillText(this.selected.myName + "'s", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2);
+      ctx.fillText("STATS: ", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5);
 
-    //}
+      ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';
 
+      ctx.fillText("HEALTH: " + 100, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.2);
+      ctx.fillText("DEF: " + 0, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.0);
+      ctx.fillText("ATK: " + 1, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.8);
+      ctx.fillText("AGI: " + 1, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.6);
+      ctx.fillText("INT: " + 1, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.4);
+
+      ctx.font =  params.TILE_W_H/6 + 'px "Press Start 2P"';
+
+      ctx.strokeStyle = "Goldenrod";
+      ctx.beginPath();
+      ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
+      ctx.stroke();
+      ctx.strokeStyle = "Pink";
+      ctx.beginPath();
+      ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
+      ctx.stroke();
+      ctx.strokeStyle = "Goldenrod";
+      ctx.beginPath();
+      ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
+      ctx.stroke();
+      // ctx.arc(params.TILE_W_H * 2.75, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, 12, 0, 2*Math.PI);
+      // ctx.stroke();
+    }
   }
 }
