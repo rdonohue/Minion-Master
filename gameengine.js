@@ -17,19 +17,19 @@ class GameEngine {
         this.ctx = ctx;
         this.surfaceWidth = this.ctx.canvas.width;
         this.surfaceHeight = this.ctx.canvas.height;
-        this.theMap = new Map(xSize, ySize, 64);
+        this.theMap = new Map(xSize, ySize, tileSize);
         this.thePlayer = new Player(this, this.theMap, 100, 150, 10, 5, 0, 0);
         this.startInput();
         this.timer = new Timer();
     };
 
-    createANDSpawnEntity(theX, theY, theSpeed, type){
+    createANDSpawnEntity(theX, theY, type){
       if (type == "minion") {
-          let minion = new Minion(this, theSpeed);
+          let minion = new Minion(this);
           this.addEntity(minion);
           this.theMap.spawnEntity(minion, theX, theY);
       } else if (type == "wolf") {
-          let wolf = new Wolf(this, theSpeed);
+          let wolf = new Wolf(this);
           this.addEntity(wolf);
           this.theMap.spawnEntity(wolf, theX, theY);
       }
@@ -60,7 +60,7 @@ class GameEngine {
         }, false);
 
         this.ctx.canvas.addEventListener("click", function (e) {
-            //console.log(getXandY(e));
+
             that.click = getXandY(e);
         }, false);
 
@@ -74,6 +74,12 @@ class GameEngine {
     addEntity(entity) {
         this.entities.push(entity);
     };
+
+    removeEntity(entity){
+      entity.myTile.removeEntity(entity); //remove the entity from the tile.
+      entity.myTile = null; //this should be redundent already, but whatever.
+      this.entities.splice(i, 1); //remove the entity from gameengines own list.
+    }
 
     drawEntitys() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -95,7 +101,7 @@ class GameEngine {
 
         for (var i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
-                this.entities.splice(i, 1);
+                this.removeEntity(this.entities[i]);
             }
         }
     };

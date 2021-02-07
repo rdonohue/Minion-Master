@@ -1,5 +1,5 @@
 class Minion {
-    constructor(game, speed) {
+    constructor(game) {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
 
@@ -7,13 +7,9 @@ class Minion {
         this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.1, 4, false, true);
         this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
 
-
-        // 2:00 PM - 2:
-        // 2/3/21
-        // Discussed with the professor on ideas on how to develop the HUD.
-
-
         this.myTile = game.theMap.theGrid[1][1];
+        //this is not a good idea, but I'm doing it for now cas I'm lazy.
+        //should not be initalized like this.
 
         //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
         this.theTileSize = params.TILE_W_H;
@@ -22,22 +18,27 @@ class Minion {
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
 
         this.theGrid = game.theMap.theGrid;
-        this.myHealth = 5;
 
-        this.health = 100;
-        this.defense = 0.0;
-        this.attack = 1;
+        //Stats
+        this.health = minionStats.HEALTH;
+        this.defense = minionStats.DEFENSE;
+        this.attack = minionStats.ATTACK;
+        this.agility = minionStats.AGILITY;
+        this.intelligence = minionStats.INTELLIGENCE;
+        this.me = this;
+
         this.dead = false;
         this.removeFromWorld = false;
 
         //i,j for cell, x,y for continuous position.
-
         this.myName = "minion";
 
+        //myType to take the place of "minion" for myName.
+        //For future additions when we will probably give silly names to the minions.
+        this.myType = "minion";
+
         // Object.assign(this, this.name);
-
-
-        this.timeBetweenUpdates = 1/speed;
+        this.timeBetweenUpdates = 1/this.agility;
         //this gives how long this minion will wait before moving.
         //note that its the inverse of the given speed stat.
 
@@ -68,7 +69,6 @@ class Minion {
       // var myMove = this.findMyMove(0);
       var myMove = this.findMyMove(environment);
       this.makeMove(myMove, this.myTile);
-
     };
 
     //this function determines what this entity "sees"
@@ -95,7 +95,7 @@ class Minion {
         while(newXCord == -1 && newYCord == -1 && maxAttempts > 0) {
           changeX = Math.floor((Math.random() * 3))-1;
           changeY = Math.floor((Math.random() * 3))-1;
-          if (this.myTile.isOnMap(myX+changeX, myY+changeY)==0){
+          if (this.theGrid[myX+changeX] && this.theGrid[myX+changeX][myY+changeY]){
             newXCord = myX + changeX;
             newYCord = myY + changeY;
           } else {
@@ -127,9 +127,10 @@ class Minion {
     }
 
 
-    // Engaging in combat with minions.
+    // Engaging in combat with enemy.
     fight(enemy) {
-        if (enemy.health != 0 && this.health != 0) {
+        if (enemy.health > 0 && this.health > 0) {
+          //don't check that its not equal, check that its greater then 0.
             enemy.health -= Math.floor(this.attack - (enemy.defense * this.attack));
             this.health -= Math.floor(enemy.attack - (this.defense * enemy.attack));
             if (enemy.health <= 0) {
@@ -154,10 +155,6 @@ class Minion {
         this.myTile = NULL;
     }
 
-    drawMe() {
-
-    };
-
     drawMinimap(ctx, mmX, mmY) {
         ctx.fillStyle = "Orange";
         ctx.fillRect(mmX + this.myTile.myX / params.TILE_W_H, mmY + this.myTile.myY / params.TILE_W_H,
@@ -170,16 +167,16 @@ class Minion {
       //use current "direction" to decide how to draw.
       this.drawMinimap(ctx, this.myTile.myX + 1050, this.myTile.myY + 576);
       this.myAnimator.drawFrame(this.game.clockTick, this.game.ctx,
-        params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
-        params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
+        params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
+        params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
         this.myScale, this.myDirection
       );
-      if(this.isSelected) {
+      if (this.isSelected) {
         ctx.font = params.TILE_W_H/4 + 'px "test TEXT"';
         ctx.fillStyle = "White";
         ctx.fillText(("myName: " + this.myName),
-          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX,
-          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY);
+          params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myX,
+          params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myY);
       }
     };
 }

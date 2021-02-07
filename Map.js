@@ -35,7 +35,7 @@ class Map {
     // console.log("theY > (this.yMax-1): " + (theY > (this.yMax-1)));
     return 0;
     //if(array and array[index]) {
-    }
+  };
 
 
   //WARNING: JS might have different pass-by rules then I'm used to!
@@ -89,6 +89,11 @@ class Tile {
     this.myNeighbors = [];
   }
 
+  removeEntity(entity) {
+    this.myEntitys.splice(this.indexOf(entity),1)
+    //this is an abomination.
+  }
+
   //the neighbors are defined as follows:
   // nw, n   ne
   // w,  m,  e
@@ -131,29 +136,6 @@ class Tile {
     this.myNeighbors.push(this.s);
     this.myNeighbors.push(this.sw);
   }
-
-  //returns 0 if on map, returns -1 if theX is off and 1 if theY is off.
-  isOnMap(theX, theY) {
-
-
-    if (theX < 0 || theX > (this.xMax-1)){
-      return -1;
-    }
-    if (theY < 0 || theY > (this.yMax-1)){
-      return 1;
-    }
-    // console.log("this.xMax:"+this.xMax);
-    // console.log("theX < 0: " + (theX < 0) );
-    // console.log("this.xMax-1: " + (this.xMax-1))
-    // console.log("theX > (this.xMax-1): " + (theX > (this.xMax-1)));
-    //
-    // console.log("this.yMax: "+this.yMax);
-    // console.log("theY < 0: " + (theY < 0) );
-    // console.log("this.yMax-1: " + (this.yMax-1))
-    // console.log("theY > (this.yMax-1): " + (theY > (this.yMax-1)));
-    return 0;
-    //if(array and array[index]) {
-    }
 }
 
 
