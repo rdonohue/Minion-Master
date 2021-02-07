@@ -1,4 +1,18 @@
-/* When the user clicks on the button,
+class HUD {
+    constructor(game) {
+        Object.assign(this, { game });
+    };
+
+    updateMe() {
+
+    };
+
+    drawMe(ctx) {
+
+    };
+
+};
+ /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
 function menuFunction() {
   document.getElementById("myDropdown").classList.toggle("show");
@@ -54,4 +68,4 @@ class UI {
         ctx.fillRect(this.x, this.y, this.w, 576);
     }
 
-}
+};
