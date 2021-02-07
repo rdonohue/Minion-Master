@@ -17,7 +17,7 @@ class GameEngine {
         this.ctx = ctx;
         this.surfaceWidth = this.ctx.canvas.width;
         this.surfaceHeight = this.ctx.canvas.height;
-        this.theMap = new Map(xSize, ySize, 64);
+        this.theMap = new Map(xSize, ySize, tileSize);
         this.thePlayer = new Player(this, this.theMap, 100, 150, 10, 5, 0, 0);
         this.startInput();
         this.timer = new Timer();

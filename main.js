@@ -29,7 +29,7 @@ ASSET_MANAGER.downloadAll(function () {
 
 	gameEngine.init(ctx, params.CANVAS_WIDTH / params.TILE_W_H,
 		 							params.CANVAS_HEIGHT / params.TILE_W_H,
-									params.TILE_W_H);
+									params.TILE_W_H / 4);
   ctx.imageSmoothingEnabled = false;
 
 	gameEngine.addEntity(corners);
