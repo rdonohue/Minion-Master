@@ -38,7 +38,7 @@ class Minion {
         this.myType = "minion";
 
         // Object.assign(this, this.name);
-        this.timeBetweenUpdates = 1/speed;
+        this.timeBetweenUpdates = 1/this.agility;
         //this gives how long this minion will wait before moving.
         //note that its the inverse of the given speed stat.
 

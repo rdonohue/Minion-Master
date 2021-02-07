@@ -28,9 +28,9 @@ ASSET_MANAGER.downloadAll(function () {
 	let minimap = new MiniMap(gameEngine, 1024, 576, 256);
 	let ui = new UI(gameEngine, 1024, 0, 256);
 
-	gameEngine.init(ctx, params.CANVAS_WIDTH / params.TILE_W_H,
-		 							params.CANVAS_HEIGHT / params.TILE_W_H,
-									params.TILE_W_H / 4);
+	gameEngine.init(ctx, params.CANVAS_WIDTH / 128,
+		 							params.CANVAS_HEIGHT / 128,
+									params.TILE_W_H * 2);
   ctx.imageSmoothingEnabled = false;
 
 	gameEngine.addEntity(corners);
