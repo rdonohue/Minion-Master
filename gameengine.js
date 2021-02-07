@@ -60,7 +60,7 @@ class GameEngine {
         }, false);
 
         this.ctx.canvas.addEventListener("click", function (e) {
-            //console.log(getXandY(e));
+            console.log(getXandY(e));
             that.click = getXandY(e);
         }, false);
 
@@ -76,7 +76,6 @@ class GameEngine {
     };
 
     drawEntitys() {
-
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].drawMe(this.ctx);

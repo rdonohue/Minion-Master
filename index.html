@@ -4,6 +4,15 @@
 <head>
     <meta charset="utf-8">
     <title>Minion Master</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display+SC&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+          font-family: 'Playfair Display SC', serif;
+          font-family: 'Press Start 2P', cursive;
+          font-size: 24px;
+        }
+    </style>
     <script type="text/javascript" src="./assetmanager.js"></script>
     <script type="text/javascript" src="./timer.js"></script>
     <script type="text/javascript" src="./player.js"></script>
@@ -17,12 +26,15 @@
     <script type="text/javascript" src="./main.js"></script>
     <script type="text/javascript" src="./background.js"></script>
     <script type="text/javascript" src="./resources.js"></script>
+
     <script type="text/javascript" src="./HUD.js"></script>
 </head>
 <body>
+
+
   <link rel="stylesheet" type="text/css" href="dropdown.css" />
 
-  <canvas id="gameWorld" width="1024" height="768" style="background: white; border: 1px solid black"></canvas>
+  <canvas id="gameWorld" width="1280" height="768" style="background: white; border: 1px solid black"></canvas>
 
   <div class="menudrop">
     <button onclick="menuFunction()" class="dropbtn">Game Menu</button>
@@ -33,7 +45,5 @@
   </div>
 
 </body>
-<div>
-    Click on a wolf or minion to select it. <br />
-</div>
+
 </html>

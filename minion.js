@@ -2,6 +2,11 @@ class Minion {
     constructor(game, speed) {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
+
+        this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
+        this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.1, 4, false, true);
+        this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
+
         this.myTile = game.theMap.theGrid[1][1];
 
         //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
@@ -11,11 +16,26 @@ class Minion {
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
 
         this.theGrid = game.theMap.theGrid;
-        this.myHealth = 5;
+
+        //Stats
+        this.health = 100;
+        this.defense = 0.0;
+        this.attack = 1;
+        this.agility = 1;
+        this.intelligence = 1;
+
+
+        this.dead = false;
+        this.removeFromWorld = false;
 
         //i,j for cell, x,y for continuous position.
-
         this.myName = "minion";
+
+        //myType to take the place of "minion" for myName.
+        //For future additions when we will probably give silly names to the minions.
+        this.myType = "minion";
+
+        // Object.assign(this, this.name);
         this.timeBetweenUpdates = 1/speed;
         //this gives how long this minion will wait before moving.
         //note that its the inverse of the given speed stat.
@@ -68,7 +88,7 @@ class Minion {
       var myX = this.myTile.myX;
       var myY = this.myTile.myY;
 
-      if(true ) {
+      if (true) {
         //if dumb, do this....
         var maxAttempts = 15;
         while(newXCord == -1 && newYCord == -1 && maxAttempts > 0) {
@@ -92,9 +112,7 @@ class Minion {
     }
 
     makeMove(newMove, oldMove) {
-      if(newMove == oldMove) {
-        //apparently we chose to do nothing?
-      }else {
+      if (newMove != oldMove) {
         //before we swap, we want to change our direction.
 
         //swap the old tile's reference to this entity to the new one.
@@ -107,15 +125,51 @@ class Minion {
       //
     }
 
+
+    // Engaging in combat with minions.
+    fight(enemy) {
+        if (enemy.health != 0 && this.health != 0) {
+            enemy.health -= Math.floor(this.attack - (enemy.defense * this.attack));
+            this.health -= Math.floor(enemy.attack - (this.defense * enemy.attack));
+            if (enemy.health <= 0) {
+                enemy.die();
+            }
+            if (this.health <= 0) {
+                die();
+            }
+        }
+    };
+
+    damage(projectile) {
+      // this.health -= Math.floor(projectile.attack - (this.defense * projectile.attack));
+      // if (this.health <= 0) {
+      //    die();
+      // }
+    };
+
+    die() {
+        this.dead = true;
+        this.removeFromWorld = true;
+        this.myTile = NULL;
+    }
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "Orange";
+        ctx.fillRect(mmX + this.myTile.myX / params.TILE_W_H, mmY + this.myTile.myY / params.TILE_W_H,
+          params.TILE_W_H / 8, params.TILE_W_H / 8);
+    };
+
     drawMe(ctx) {
+
       // console.log(this.one++);
       //use current "direction" to decide how to draw.
+      this.drawMinimap(ctx, this.myTile.myX + 1050, this.myTile.myY + 576);
       this.myAnimator.drawFrame(this.game.clockTick, this.game.ctx,
         params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
         params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
         this.myScale, this.myDirection
       );
-      if(this.isSelected) {
+      if (this.isSelected) {
         ctx.font = params.TILE_W_H/4 + 'px "test TEXT"';
         ctx.fillStyle = "White";
         ctx.fillText(("myName: " + this.myName),

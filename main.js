@@ -5,6 +5,11 @@ ASSET_MANAGER.queueDownload("./sprites/wolfsheet1.png");
 ASSET_MANAGER.queueDownload("./sprites/castle.png");
 ASSET_MANAGER.queueDownload("./sprites/ground_sprites.png");
 ASSET_MANAGER.queueDownload("./sprites/trees_stones_bushes.png");
+ASSET_MANAGER.queueDownload("./sprites/button_Attack.png");
+ASSET_MANAGER.queueDownload("./sprites/button_Agi.png");
+ASSET_MANAGER.queueDownload("./sprites/button_Def.png");
+ASSET_MANAGER.queueDownload("./sprites/button_Health.png");
+ASSET_MANAGER.queueDownload("./sprites/button_Int.png");
 
 ASSET_MANAGER.downloadAll(function () {
 	var gameEngine = new GameEngine();
@@ -20,7 +25,12 @@ ASSET_MANAGER.downloadAll(function () {
 	let intGrass = new InteriorGrass(gameEngine, params.TILE_W_H, params.TILE_W_H);
 	let resources = new Resources(gameEngine, params.TILE_W_H, params.TILE_W_H);
 
-	gameEngine.init(ctx, 14, 12, 64);
+	let minimap = new MiniMap(gameEngine, 1024, 576, 256);
+	let ui = new UI(gameEngine, 1024, 0, 256);
+
+	gameEngine.init(ctx, params.CANVAS_WIDTH / params.TILE_W_H,
+		 							params.CANVAS_HEIGHT / params.TILE_W_H,
+									params.TILE_W_H);
   ctx.imageSmoothingEnabled = false;
 
 	gameEngine.addEntity(corners);
@@ -29,20 +39,22 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(intGrass);
 	gameEngine.addEntity(castle);
 	gameEngine.addEntity(resources);
+	gameEngine.addEntity(minimap);
+	gameEngine.addEntity(ui);
 
-  	//in order:
+  //in order:
 	//spawn x,y
 	//intelligence NOT ACTUALLY IMPLEMENTED!
 	//speed
 	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD/2,"minion");
 	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD,"minion");
 	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*2,"minion");
-	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*4,"minion");
-	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*8,"minion");
-	gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*16,"minion");
+	// gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*4,"minion");
+	// gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*8,"minion");
+	// gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*16,"minion");
 
-	gameEngine.createANDSpawnEntity(2,4, params.BASE_SPD*8,"wolf");
-	gameEngine.createANDSpawnEntity(2,4, params.BASE_SPD*32,"wolf");
+	gameEngine.createANDSpawnEntity(2,4, params.BASE_SPD,"wolf");
+	// gameEngine.createANDSpawnEntity(2,4, params.BASE_SPD*32,"wolf");
 
 	gameEngine.start();
 });

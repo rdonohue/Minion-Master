@@ -2,8 +2,9 @@ class Wolf {
     constructor(game, speed) {
         Object.assign(this, {game});
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
-        this.mySearchingAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.05, 0, false, true);
-        this.myHuntingAnimator = new Animator(this.spritesheet, 320, 55, 64, 41, 4, 0.05, 0, false, true);
+        this.mySearchingAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.25, 0, false, true);
+        this.myHuntingAnimator = new Animator(this.spritesheet, 320, 160, 64, 32, 4, 0.25, 0, false, true);
+        this.myDeadAnimator = new Animator(this.spritesheet, 512, 202, 64, 32, 1, 0.1, 0, false, true);
 
         this.myTile = game.theMap.theGrid[1][1];
         //I could just make it so that this creature is only "initalized" when it has a tile....but I'm lazy
@@ -11,7 +12,15 @@ class Wolf {
         this.theGrid = game.theMap.theGrid;
         this.myScale = 1;
 
-        this.myName = "wolf";
+        this.health = 100;
+        this.defense = 0.0;
+        this.attack = 3;
+        this.dead = false;
+        this.removeFromWorld = false;
+
+        //To differentiate the HUD when selected by the player.
+        //See player.js.drawMe
+        this.myType = "wolf";
         Object.assign(this, this.myName);
 
         this.timeBetweenUpdates = 1/speed;
@@ -35,7 +44,7 @@ class Wolf {
       this.timeSinceUpdate += this.timer.tick();
 
       //this is NOT the best implmentation of making this minion not move till its ready.
-      if(this.timeSinceUpdate < this.timeBetweenUpdates) {
+      if (this.timeSinceUpdate < this.timeBetweenUpdates) {
         //if its not been long enough since the last update
         //do nothing.
         return;
@@ -62,10 +71,9 @@ class Wolf {
     findMyMove(tiles){
       //we want wolves to move towards any minions they see around themselves.
       var target = null;
-      var prey = "minion";
 
       function isPrey(theEntity) {
-        return theEntity.myName == "minion";
+        return theEntity instanceof Minion;
       }
       //we want to search every neighboring tile for minions.
       if(tiles) {
@@ -73,6 +81,7 @@ class Wolf {
           if(tile && tile.myEntitys.find(isPrey)) {
             target = tile;
             this.isHunting = true;
+            //fight( Put prey entity here );
             //if we found prey, we are going to notate this state
             //by switching directions.
 
@@ -113,25 +122,7 @@ class Wolf {
         }
       }
       return target;
-    }
-
-    updateMe() {
-      this.timeSinceUpdate += this.timer.tick();
-
-      //this is NOT the best implmentation of making this minion not move till its ready.
-      if(this.timeSinceUpdate < this.timeBetweenUpdates) {
-        //if its not been long enough since the last update
-        //do nothing.
-        return;
-      } else {
-        //if it HAS, then allow update and reset timeSinceUpdate.
-        this.timeSinceUpdate = 0;
-      }
-      var environment = this.whatISee();
-      // var myMove = this.findMyMove(0);
-      var myMove = this.findMyMove(environment);
-      this.makeMove(myMove, this.myTile);
-    }
+    };
 
     makeMove(newMove, oldMove) {
       if(newMove == oldMove) {
@@ -147,15 +138,61 @@ class Wolf {
       }
     }
 
-    drawMinimap(ctx, mmY, mmX) {
-        ctx.fillStyle = "Red";
-        ctx.fillRect(mmX + this.x / PARAMS.BITWIDTH, mmY + this.y / PARAMS.BITWIDTH,
-          PARAMS.SCALE, PARAMS.SCALE * Math.min(this.size + 1, 2));
+    // Engaging in combat with minions.
+    fight(enemy) {
+        if (enemy.health != 0 && this.health != 0) {
+            enemy.health -= Math.floor(this.attack - (enemy.defense * this.attack));
+            this.health -= Math.floor(enemy.attack - (this.defense * enemy.attack));
+            if (enemy.health <= 0) {
+                enemy.die();
+            }
+            if (this.health <= 0) {
+                die();
+            }
+        }
     };
 
-    drawMe(cts) {
+    damage(projectile) {
+        // this.health -= Math.floor(projectile.attack - (this.defense * projectile.attack));
+        // if (this.health <= 0) {
+        //    die();
+        // }
+    };
+
+    die() {
+        this.dead = true;
+        this.removeFromWorld = true;
+        this.myTile = NULL;
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+        ctx.fillStyle = "DimGrey";
+        ctx.fillRect(mmX + this.myTile.myX / params.TILE_W_H, mmY + this.myTile.myY / params.TILE_W_H,
+          params.TILE_W_H / 8, params.TILE_W_H / 8);
+    };
+
+    drawMe(ctx) {
       // console.log(this.one++);
       //use current "direction" to decide how to draw.
+      this.drawMinimap(ctx, this.myTile.myX + 1050, this.myTile.myY + 576);
+      if (!this.dead) {
+        if (this.isHunting) {
+          this.myHuntingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
+            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
+            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
+            1, this.myDirection);
+        } else {
+          this.mySearchingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
+            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
+            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
+            1, this.myDirection);
+        }
+      } else {
+          this.myDeadAnimator.drawFrame(this.game.clockTick, this.game.ctx,
+            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
+            params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
+            1, this.myDirection);
+      }
       if (this.isHunting) {
         this.myHuntingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
           params.TILE_W_H+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
@@ -168,6 +205,8 @@ class Wolf {
           params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
           this.myScale, this.myDirection
         );
+
       }
+
     };
 }
