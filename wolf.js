@@ -195,14 +195,14 @@ class Wolf {
       }
       if (this.isHunting) {
         this.myHuntingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
-          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
-          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
+          params.TILE_W_H+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
+          params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
           this.myScale, this.myDirection
         );
       } else {
         this.mySearchingAnimator.drawFrame(this.game.clockTick, this.game.ctx,
-          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
-          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
+          params.TILE_W_H+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
+          params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
           this.myScale, this.myDirection
         );
 

@@ -31,18 +31,12 @@ class Player{
     this.timeSinceUpdate += this.timer.tick();
 
     var theClick = this.theGame.click;
-    if(theClick){
-      if (this.theMap.theGrid){
-        if(this.theMap.isOnMap(theClick.x,theClick.y) == 0) {
-          var theTile = this.theMap.theGrid[Math.floor(theClick.x/params.TILE_W_H)][Math.floor(theClick.y/params.TILE_W_H)];
-          console.log(theTile);
-          if (theTile){
-            if(theTile.myEntitys.length > 0) {
-              this.selected = theTile.myEntitys[0];
-              this.targetType = theTile.myEntitys[0].myType;
-            }
-          }
-        }
+
+    if(theClick && this.theMap.isOnMap(theClick.x,theClick.y) == 0){
+      var theTile = this.theMap.theGrid[Math.floor(theClick.x/params.TILE_W_H)][Math.floor(theClick.y/params.TILE_W_H)];
+      if (theTile && theTile.myEntitys.length > 0){
+        this.selected = theTile.myEntitys[theTile.myEntitys.length-1].myName;
+        //switched from 0 to length - 1 so that it grabs the entity that most recently entered that tile.
       }
     }
 

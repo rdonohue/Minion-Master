@@ -165,16 +165,16 @@ class Minion {
       //use current "direction" to decide how to draw.
       this.drawMinimap(ctx, this.myTile.myX + 1050, this.myTile.myY + 576);
       this.myAnimator.drawFrame(this.game.clockTick, this.game.ctx,
-        params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
-        params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
+        params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myX, //draw myX many Tiles right
+        params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myY, //draw myY tiles down.
         this.myScale, this.myDirection
       );
       if (this.isSelected) {
         ctx.font = params.TILE_W_H/4 + 'px "test TEXT"';
         ctx.fillStyle = "White";
         ctx.fillText(("myName: " + this.myName),
-          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myX,
-          params.TILE_W_H*(3/2)+params.TILE_W_H*this.myTile.myY);
+          params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myX,
+          params.TILE_W_H*(4/3)+params.TILE_W_H*this.myTile.myY);
       }
     };
 }
