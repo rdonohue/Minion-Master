@@ -1,4 +1,4 @@
-class Player{
+class Player {
   constructor(game, theMap, startFood, startRock, trickleFood, trickleRock, posX, posY) {
     this.myFood = startFood;
     this.myRock = startRock;
@@ -57,21 +57,13 @@ class Player{
   drawMe(ctx) {
     //this can be where we update the resources displayed
     //make sure to round to integer.
-
-    ctx.font = params.TILE_W_H/4 + 'px "test TEXT"';
-    ctx.fillStyle = "White";
-
     ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
     ctx.fillStyle = "White";
 
     //Upper Right HUD
-
     ctx.fillText(("Food: " + Math.round(this.myFood) + " + "
-      + Math.round(this.foodIncome) + " food/second"), params.TILE_W_H/4, params.TILE_W_H/4);
+      + Math.round(this.foodIncome) + " food/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4);
     ctx.fillText(("Rock: " + Math.round(this.myRock) + " + "
-      + Math.round(this.rockIncome) + " rock/second"), params.TILE_W_H/4, params.TILE_W_H/4*2);
-
-    ctx.fillText(("Selected: " + this.selected), params.TILE_W_H/4, params.TILE_W_H/4*3);
       + Math.round(this.rockIncome) + " rock/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*2);
     ctx.fillText(("Selected: " + this.targetType), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*3);
 
