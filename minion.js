@@ -20,11 +20,11 @@ class Minion {
         this.theGrid = game.theMap.theGrid;
 
         //Stats
-        this.health = minionStats.health;
-        this.defense = minionStats.defense;
-        this.attack = minionStats.attack;
-        this.agility = minionStats.agility;
-        this.intelligence = minionStats.intelligence;
+        this.health = minionStats.HEALTH;
+        this.defense = minionStats.DEFENSE;
+        this.attack = minionStats.ATTACK;
+        this.agility = minionStats.AGILITY;
+        this.intelligence = minionStats.INTELLIGENCE;
         this.me = this;
 
         this.dead = false;

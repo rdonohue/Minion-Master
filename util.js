@@ -51,5 +51,5 @@ var params = {
   HORI_WALL_COUNT : 14,
   CANVAS_WIDTH : 1024,
   CANVAS_HEIGHT : 768,
-  BASE_SPD : 0.25,
+  BASE_SPD : 0.25,  
 };
