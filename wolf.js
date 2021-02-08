@@ -23,7 +23,6 @@ class Wolf {
         //To differentiate the HUD when selected by the player.
         //See player.js.drawMe
         this.myType = "wolf";
-        Object.assign(this, this.myName);
 
         this.timeBetweenUpdates = 1/this.agility;
         //this gives how long this minion will wait before moving.
