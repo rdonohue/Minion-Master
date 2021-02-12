@@ -107,4 +107,4 @@ class Minion {
     drawMe(ctx) {
         this.myAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
     };
-}
+};
