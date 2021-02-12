@@ -3,15 +3,12 @@ class Minion {
         Object.assign(this, { game, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
 
-        this.game.minion = this;
+        //this.game.minion = this;
 
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
         this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.1, 4, false, true);
         this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
         this.myScale = 2;
-
-        this.x = x;
-        this.y = y;
 
         this.path = [{ x: 100, y: 100 },
           { x: 200, y: 200 },
@@ -20,13 +17,12 @@ class Minion {
 
         this.targetID = 0;
         if (this.path && this.path[0]) {
-            this.target = this.path[this.targetID];
+          this.target = this.path[this.targetID];
         }
 
         this.maxSpeed = 100;
         var dist = distance(this, this.target);
-        var velocity = { x: (this.target.x - this.x)/dist,
-          (y: this.target.y - this.y)/dist * this.maxSpeed};
+        this.velocity = { x: (this.target.x - this.x)/dist, y: (this.target.y - this.y) / dist * this.maxSpeed};
 
         //Stats
         this.health = minionStats.HEALTH;
@@ -37,7 +33,7 @@ class Minion {
 
         this.dead = false;
         this.removeFromWorld = false;
-        this.facing = 0;
+        //this.facing = 0;
 
         //i,j for cell, x,y for continuous position.
         this.myType = "minion";
