@@ -43,13 +43,11 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(minimap);
 	gameEngine.addEntity(ui);
 
-	let minion = new Minion(gameEngine);
-
   //in order:
 	//spawn x,y
 	//intelligence NOT ACTUALLY IMPLEMENTED!
 	//speed
-	//gameEngine.createANDSpawnEntity("minion");
+	gameEngine.createANDSpawnEntity("minion");
 	//gameEngine.createANDSpawnEntity(3, 3, "minion");
 	//gameEngine.createANDSpawnEntity(5, 4, "minion");
 	// gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*4,"minion");

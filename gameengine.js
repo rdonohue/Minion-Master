@@ -22,9 +22,9 @@ class GameEngine {
         this.timer = new Timer();
     };
 
-    createANDSpawnEntity(type){
+    createANDSpawnEntity(type, x, y){
       if (type == "minion") {
-          let minion = new Minion(this);
+          let minion = new Minion(this, x, y);
           this.addEntity(minion);
       } else if (type == "wolf") {
           //let wolf = new Wolf(this);

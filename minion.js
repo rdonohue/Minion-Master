@@ -1,6 +1,6 @@
 class Minion {
-    constructor(game) {
-        Object.assign(this, { game });
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
 
         this.game.minion = this;
@@ -10,8 +10,8 @@ class Minion {
         this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
         this.myScale = 2;
 
-        this.x = 0;
-        this.y = 0;
+        this.x = x;
+        this.y = y;
 
         this.path = [{ x: 100, y: 100 },
           { x: 200, y: 200 },
