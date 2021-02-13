@@ -18,7 +18,13 @@ class GameEngine {
         this.surfaceWidth = this.ctx.canvas.width;
         this.surfaceHeight = this.ctx.canvas.height;
         this.theMap = new Map(xSize, ySize, tileSize);
-        this.thePlayer = new Player(this, this.theMap, 100, 150, 10, 5, 0, 0);
+
+        let rez = [0, 0, 6, 5];
+        this.theHUD = new HUD(this,
+        		params.CANVAS_WIDTH, params.CANVAS_HEIGHT,
+        		256,
+        		rez);
+
         this.startInput();
         this.timer = new Timer();
     };
@@ -36,7 +42,8 @@ class GameEngine {
     }
 
     start() {
-      this.addEntity(this.thePlayer);
+      this.addEntity(this.theHUD);
+      this.theHUD.makeButtons(this);
       var that = this;
         (function gameLoop() {
             that.loop(); //changed "that" back to "this"
@@ -110,5 +117,6 @@ class GameEngine {
         this.clockTick = this.timer.tick();
         this.updateEntitys();
         this.drawEntitys();
+        this.click = null;
     };
 };
