@@ -1,6 +1,6 @@
 class Cave {
-    constructor(game, x, y, w, h) {
-      Object.assign(this, {game, x, y, w, h });
+    constructor(game, x, y) {
+      Object.assign(this, {game, x, y });
 
       this.game.cave = this;
       this.myName = "cave";
@@ -19,8 +19,8 @@ class Cave {
       this.removeFromWorld = false;
       this.xOriginLoc = x;
       this.yOriginLoc = y;
-      this.baseWidth = w;
-      this.baseHeight = h;
+      this.baseWidth = 1;
+      this.baseHeight = 1;
 
     };
 
@@ -45,8 +45,8 @@ class Cave {
 };
 
 class GuardTower {
-  constructor(game, x, y, w, h) {
-      Object.assign(this, {game, x, y, w, h });
+  constructor(game, x, y) {
+      Object.assign(this, {game, x, y });
 
       this.game.tower = this;
       this.myName = "cave";
@@ -65,8 +65,8 @@ class GuardTower {
       this.removeFromWorld = false;
       this.xOriginLoc = x;
       this.yOriginLoc = y;
-      this.baseWidth = w;
-      this.baseHeight = h;
+      this.baseWidth = 1;
+      this.baseHeight = 1;
 
   };
 

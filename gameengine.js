@@ -22,13 +22,40 @@ class GameEngine {
         this.timer = new Timer();
     };
 
-    createANDSpawnEntity(type, x, y){
-      if (type == "minion") {
-          let myMinion = new Minion(this, x, y);
-          this.addEntity(myMinion);
-      } else if (type == "wolf") {
-          let myWolf = new Wolf(this, x, y);
-          this.addEntity(myWolf);
+    spawnMe(type, x, y){
+      switch (type) {
+          case "minion":
+            let minion = new Minion(this, x, y);
+            this.addEntity(minion);
+            break;
+          case "wolf":
+            let wolf = new Wolf(this, x, y);
+            this.addEntity(wolf);
+            break;
+          case "ogre":
+            let ogre = new Ogre(this, x, y);
+            this.addEntity(ogre);
+            break;
+          case "castle":
+            let castle = new HomeBase(this, x, y);
+            this.addEntity(castle);
+            break;
+          case "tower":
+            let tower = new GuardTower(this, x, y);
+            this.addEntity(tower);
+            break;
+          case "cave":
+            let cave = new Cave(this, x, y);
+            this.addEntity(cave);
+            break;
+          //case "rock":
+          //  let rock = new Rock(this, x, y);
+          //  this.addEntity(rock);
+          //  break;
+          //case "berry":
+          //  let berry = new BerryBush(this, x, y);
+          //  this.addEntity(berry);
+          //  break;
       }
     };
 

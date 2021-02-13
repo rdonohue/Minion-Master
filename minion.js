@@ -8,7 +8,9 @@ class Minion {
         this.myRightAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
         this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.1, 4, false, true);
         this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
+
         this.myScale = 2;
+        this.myDirection = 0; // 0 = left, 1 = right
 
         this.path = [{ x: 100, y: 0 },
           { x: 300, y: 500 },

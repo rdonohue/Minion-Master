@@ -1,6 +1,6 @@
 class Ogre {
-    constructor(game) {
-        Object.assign(this, {game});
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
         // this.spritesheet = ASSETMANAGER.getAsset("/sprites/ogres.png");
         // this.mySearchingAnimator = new Animator(values go here);
         // this.myHuntingAnimator = new Animator(values go here);

@@ -1,6 +1,6 @@
 class HomeBase {
-    constructor(game, x, y, w, h) {
-        Object.assign(this, {game, x, y, w, h });
+    constructor(game, x, y) {
+        Object.assign(this, {game, x, y });
 
         this.game.homebase = this;
         this.myName = "HomeBase";
@@ -20,8 +20,8 @@ class HomeBase {
         this.removeFromWorld = false;
         this.xOriginLoc = x;
         this.yOriginLoc = y;
-        this.baseWidth = w;
-        this.baseHeight = h;
+        this.baseWidth = 400;
+        this.baseHeight = 400;
 
         this.animations = [];
         this.loadAnimations();
