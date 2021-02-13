@@ -24,16 +24,13 @@ class GameEngine {
 
     createANDSpawnEntity(type, x, y){
       if (type == "minion") {
-          console.log("Entering");
-          console.log(this == null);
           let myMinion = new Minion(this, x, y);
           this.addEntity(myMinion);
       } else if (type == "wolf") {
-          //let wolf = new Wolf(this);
-          //this.addEntity(wolf);
-          //minion.drawMe(this.ctx);
+          let myWolf = new Wolf(this, x, y);
+          this.addEntity(myWolf);
       }
-    }
+    };
 
     start() {
       this.addEntity(this.thePlayer);

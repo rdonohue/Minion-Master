@@ -3,16 +3,16 @@ class Minion {
         Object.assign(this, { game, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
 
-        //this.game.minion = this;
-
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
+        this.myLeftAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
+        this.myRightAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
         this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.1, 4, false, true);
         this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
         this.myScale = 2;
 
-        this.path = [{ x: 100, y: 100 },
-          { x: 200, y: 200 },
-          { x: 300, y: 300 },
+        this.path = [{ x: 100, y: 0 },
+          { x: 300, y: 500 },
+          { x: 0, y: 50 },
           { x: 0, y: 0 }];
 
         this.targetID = 0;
@@ -22,7 +22,8 @@ class Minion {
 
         this.maxSpeed = 100;
         var dist = distance(this, this.target);
-        this.velocity = { x: (this.target.x - this.x)/dist, y: (this.target.y - this.y) / dist * this.maxSpeed};
+        this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
+          y: (this.target.y - this.y) / dist * this.maxSpeed};
 
         //Stats
         this.health = minionStats.HEALTH;
@@ -43,11 +44,6 @@ class Minion {
         //this gives how long this minion will wait before moving.
         //note that its the inverse of the given speed stat.
 
-        this.n = "n";
-        this.e = "e";
-        this.w = "w";
-        this.s = "s";
-        // (n, e, s, w) --> (up, right, down, left, diagonals don't exist)
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
     };
@@ -55,6 +51,16 @@ class Minion {
 //the move-speed is still staggered a bit, that might be because of async
 //with the draw-method being called...may need to make the minion handle its own draw-update.
     updateMe() {
+        var dist = distance(this, this.target);
+        if (dist < 5) {
+            if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
+                this.targetID++;
+            }
+            this.target = this.path[this.targetID];
+            dist = distance(this, this.target);
+        }
+        this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
+          y: (this.target.y - this.y) / dist * this.maxSpeed};
         this.x += this.velocity.x * this.game.clockTick;
         this.y += this.velocity.y * this.game.clockTick;
         this.facing = getFacing(this.velocity);
