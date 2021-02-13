@@ -6,11 +6,15 @@ class Minion {
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
         this.myLeftAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
         this.myRightAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
-        this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.1, 4, false, true);
+        this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.05, 4, false, true);
         this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
 
         this.myScale = 2;
         this.myDirection = 0; // 0 = left, 1 = right
+        this.state = 0;
+
+        this.radius = 20;
+        this.visualRadius = 200;
 
         this.path = [{ x: 100, y: 0 },
           { x: 300, y: 500 },
@@ -59,8 +63,19 @@ class Minion {
                 this.targetID++;
             }
             this.target = this.path[this.targetID];
-            dist = distance(this, this.target);
         }
+
+        for (var i = 0; i < this.game.entities.length; i++) {
+            var ent = this.game.entities[i];
+            if (ent instanceof Wolf && canSee(this, ent)) {
+                this.target = ent;
+            }
+            if (ent instanceof Wolf && collide(this, ent)) {
+                this.state = 1;
+            }
+        }
+
+        dist = distance(this, this.target);
         this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
           y: (this.target.y - this.y) / dist * this.maxSpeed};
         this.x += this.velocity.x * this.game.clockTick;
@@ -75,28 +90,6 @@ class Minion {
     //and picks that as its move.
 
 
-    // Engaging in combat with enemy.
-    fight(enemy) {
-        if (enemy.health > 0 && this.health > 0) {
-          //don't check that its not equal, check that its greater then 0.
-            enemy.health -= Math.floor(this.attack - (enemy.defense * this.attack));
-            this.health -= Math.floor(enemy.attack - (this.defense * enemy.attack));
-            if (enemy.health <= 0) {
-                enemy.die();
-            }
-            if (this.health <= 0) {
-                die();
-            }
-        }
-    };
-
-    damage(projectile) {
-      // this.health -= Math.floor(projectile.attack - (this.defense * projectile.attack));
-      // if (this.health <= 0) {
-      //    die();
-      // }
-    };
-
     die() {
         this.dead = true;
         this.removeFromWorld = true;
@@ -109,6 +102,13 @@ class Minion {
     };
 
     drawMe(ctx) {
-        this.myAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+        if (this.state == 0) {
+            this.myAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+        } else if (this.state == 1) {
+            this.myBattleAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+        } else {
+            this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+            die();
+        }
     };
 };

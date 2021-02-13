@@ -8,10 +8,14 @@ class Wolf {
         this.myRightAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.15, 0, false, true);
         this.myNorthAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.15, 0, false, true);
         this.mySouthAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.15, 0, false, true);
-        this.myHuntingAnimator = new Animator(this.spritesheet, 320, 160, 64, 32, 4, 0.25, 0, false, true);
+        this.myHuntingAnimator = new Animator(this.spritesheet, 320, 160, 64, 32, 4, 0.05, 0, false, true);
         this.myDeadAnimator = new Animator(this.spritesheet, 512, 202, 64, 32, 1, 0.1, 0, false, true);
         this.myScale = 1;
         this.myDirection = 0; // 0 = left, 1 = right, 2 = up, 3 = down
+
+        this.radius = 20;
+        this.visualRadius = 200;
+        this.state = 0;
 
         this.path = [{ x: 500, y: 0 },
           { x: 500, y: 500 },
@@ -60,12 +64,25 @@ class Wolf {
                 this.targetID++;
             }
             this.target = this.path[this.targetID];
-            dist = distance(this, this.target);
         }
+
+        for (var i = 0; i < this.game.entities.length; i++) {
+            var ent = this.game.entities[i];
+            if (ent instanceof Minion && canSee(this, ent)) {
+                this.target = ent;
+            }
+            if (ent instanceof Wolf && collide(this, ent)) {
+                this.state = 1;
+            }
+        }
+
+        dist = distance(this, this.target);
         this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
           y: (this.target.y - this.y) / dist * this.maxSpeed};
+
         this.x += this.velocity.x * this.game.clockTick;
         this.y += this.velocity.y * this.game.clockTick;
+
         this.facing = getFacing(this.velocity);
     };
 
@@ -74,29 +91,6 @@ class Wolf {
     //this function determines what this entity does based on what it sees.
     //currently just gets a random Tilefrom the 9 tiles around it including its own.
     //and picks that as its move.
-
-
-    // Engaging in combat with enemy.
-    fight(enemy) {
-        if (enemy.health > 0 && this.health > 0) {
-          //don't check that its not equal, check that its greater then 0.
-            enemy.health -= Math.floor(this.attack - (enemy.defense * this.attack));
-            this.health -= Math.floor(enemy.attack - (this.defense * enemy.attack));
-            if (enemy.health <= 0) {
-                enemy.die();
-            }
-            if (this.health <= 0) {
-                die();
-            }
-        }
-    };
-
-    damage(projectile) {
-      // this.health -= Math.floor(projectile.attack - (this.defense * projectile.attack));
-      // if (this.health <= 0) {
-      //    die();
-      // }
-    };
 
     die() {
         this.dead = true;
@@ -108,6 +102,13 @@ class Wolf {
     };
 
     drawMe(ctx) {
-        this.mySearchingAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+      if (this.state == 0) {
+          this.mySearchingAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+      } else if (this.state == 1) {
+          this.myHuntingAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+      } else {
+          this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+          die();
+      }
     };
 };
