@@ -99,10 +99,6 @@ class GameEngine {
         this.entities.push(entity);
     };
 
-    removeEntity(entity){
-        this.entities.splice(i, 1); //remove the entity from gameengines own list.
-    }
-
     drawEntitys() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         for (var i = 0; i < this.entities.length; i++) {
@@ -123,7 +119,7 @@ class GameEngine {
 
         for (var i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
-                this.removeEntity(this.entities[i]);
+                this.entities.splice(i, 1);
             }
         }
     };

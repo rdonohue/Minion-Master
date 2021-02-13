@@ -33,6 +33,7 @@ class Minion {
 
         //Stats
         this.health = minionStats.HEALTH;
+        this.maxHealth = minionStats.HEALTH;
         this.defense = minionStats.DEFENSE;
         this.attack = minionStats.ATTACK;
         this.agility = minionStats.AGILITY;
@@ -52,11 +53,14 @@ class Minion {
 
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
+
+        this.elapsedTime = 0;
     };
 
 //the move-speed is still staggered a bit, that might be because of async
 //with the draw-method being called...may need to make the minion handle its own draw-update.
     updateMe() {
+        this.elapsedTime += this.game.clockTick;
         var dist = distance(this, this.target);
         if (dist < 5) {
             if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
@@ -67,11 +71,17 @@ class Minion {
 
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
-            if (ent instanceof Wolf && canSee(this, ent)) {
+            if (ent instanceof Wolf && canSee(this, ent) && ent.state != 2) {
                 this.target = ent;
             }
             if (ent instanceof Wolf && collide(this, ent)) {
-                this.state = 1;
+                if (this.state === 0) {
+                    this.state = 1;
+                    this.elapsedTime = 0;
+                } else if (this.elapsedTime > 0.8) {
+                    ent.health -= 8;
+                    this.elapsedTime = 0;
+                }
             }
         }
 
@@ -81,18 +91,12 @@ class Minion {
         this.x += this.velocity.x * this.game.clockTick;
         this.y += this.velocity.y * this.game.clockTick;
         this.facing = getFacing(this.velocity);
-    };
 
-    //this function determines what this entity "sees"
-
-    //this function determines what this entity does based on what it sees.
-    //currently just gets a random Tilefrom the 9 tiles around it including its own.
-    //and picks that as its move.
-
-
-    die() {
-        this.dead = true;
-        this.removeFromWorld = true;
+        if (this.health <= 0) {
+            this.state = 2;
+            this.dead = true;
+            this.removeFromWorld = true;
+        }
     };
 
     drawMinimap(ctx, mmX, mmY) {
