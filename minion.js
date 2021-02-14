@@ -16,10 +16,10 @@ class Minion {
         this.radius = 20;
         this.visualRadius = 200;
 
-        this.path = [{ x: 100, y: 0 },
-          { x: 300, y: 500 },
-          { x: 0, y: 50 },
-          { x: 0, y: 0 }];
+        this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
 
         this.targetID = 0;
         if (this.path && this.path[0]) {

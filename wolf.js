@@ -23,10 +23,10 @@ class Wolf {
         this.visualRadius = 200;
         this.state = 0;
 
-        this.path = [{ x: 500, y: 0 },
-          { x: 500, y: 500 },
-          { x: 0, y: 250 },
-          { x: 700, y: 0 }];
+        this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
 
         this.targetID = 0;
         if (this.path && this.path[0]) {
