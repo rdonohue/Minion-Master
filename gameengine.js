@@ -29,17 +29,42 @@ class GameEngine {
         this.timer = new Timer();
     };
 
-    createANDSpawnEntity(theX, theY, type){
-      if (type == "minion") {
-          let minion = new Minion(this);
-          this.addEntity(minion);
-          this.theMap.spawnEntity(minion, theX, theY);
-      } else if (type == "wolf") {
-          let wolf = new Wolf(this);
-          this.addEntity(wolf);
-          this.theMap.spawnEntity(wolf, theX, theY);
+    spawnMe(type, x, y){
+      switch (type) {
+          case "minion":
+            let minion = new Minion(this, x, y);
+            this.addEntity(minion);
+            break;
+          case "wolf":
+            let wolf = new Wolf(this, x, y);
+            this.addEntity(wolf);
+            break;
+          case "ogre":
+            let ogre = new Ogre(this, x, y);
+            this.addEntity(ogre);
+            break;
+          case "castle":
+            let castle = new HomeBase(this, x, y);
+            this.addEntity(castle);
+            break;
+          case "tower":
+            let tower = new GuardTower(this, x, y);
+            this.addEntity(tower);
+            break;
+          case "cave":
+            let cave = new Cave(this, x, y);
+            this.addEntity(cave);
+            break;
+          //case "rock":
+          //  let rock = new Rock(this, x, y);
+          //  this.addEntity(rock);
+          //  break;
+          //case "berry":
+          //  let berry = new BerryBush(this, x, y);
+          //  this.addEntity(berry);
+          //  break;
       }
-    }
+    };
 
     start() {
       this.addEntity(this.theHUD);
@@ -82,12 +107,6 @@ class GameEngine {
         this.entities.push(entity);
     };
 
-    removeEntity(entity){
-      entity.myTile.removeEntity(entity); //remove the entity from the tile.
-      entity.myTile = null; //this should be redundent already, but whatever.
-      this.entities.splice(i, 1); //remove the entity from gameengines own list.
-    }
-
     drawEntitys() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         for (var i = 0; i < this.entities.length; i++) {
@@ -108,7 +127,7 @@ class GameEngine {
 
         for (var i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
-                this.removeEntity(this.entities[i]);
+                this.entities.splice(i, 1);
             }
         }
     };

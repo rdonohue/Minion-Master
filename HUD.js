@@ -202,6 +202,7 @@ class HUD {
 }
 
 /* When the user clicks on the button,
+
 toggle between hiding and showing the dropdown content */
 function menuFunction() {
   document.getElementById("myDropdown").classList.toggle("show");
@@ -243,3 +244,21 @@ class MiniMap {
     };
 
 };
+
+
+    updateMe() {
+
+    };
+
+    drawMe(ctx) {
+        ctx.fillStyle = "SaddleBrown";
+        ctx.fillRect(this.x, this.y, this.w, 576);
+        ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
+        ctx.fillStyle = "White";
+        ctx.fillText("MiniMap", this.x + 88, 568);
+        ctx.strokeStyle = "White"
+        ctx.strokeRect(this.x + 84, 552, 76, 22);
+    }
+
+};
+
