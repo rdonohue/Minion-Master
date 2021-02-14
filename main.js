@@ -25,9 +25,7 @@ ASSET_MANAGER.downloadAll(function () {
 	let intGrass = new InteriorGrass(gameEngine, params.TILE_W_H, params.TILE_W_H);
 	let resources = new Resources(gameEngine, params.TILE_W_H, params.TILE_W_H);
 
-	let minimap = new MiniMap(gameEngine, 1024, 576, 256);
-	let ui = new UI(gameEngine, 1024, 0, 256);
-	let hud = new HUD(gameEngine);
+	// let minimap = new MiniMap(gameEngine, 1024, 576, 256);
 
 	gameEngine.init(ctx, params.CANVAS_WIDTH / 128,
 		 							params.CANVAS_HEIGHT / 128,
@@ -39,8 +37,6 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(horiwalls);
 	gameEngine.addEntity(intGrass);
 	gameEngine.addEntity(resources);
-	gameEngine.addEntity(minimap);
-	gameEngine.addEntity(ui);
 
   //in order:
 	//spawn x,y
@@ -56,6 +52,5 @@ ASSET_MANAGER.downloadAll(function () {
 
 	//gameEngine.createANDSpawnEntity(2, 4, "wolf");
 	// gameEngine.createANDSpawnEntity(2,4, params.BASE_SPD*32,"wolf");
-
 	gameEngine.start();
 });
