@@ -48,10 +48,6 @@ class GameEngine {
             let cave = new Cave(this, x, y);
             this.addEntity(cave);
             break;
-          //case "rock":
-          //  let rock = new Rock(this, x, y);
-          //  this.addEntity(rock);
-          //  break;
           //case "berry":
           //  let berry = new BerryBush(this, x, y);
           //  this.addEntity(berry);

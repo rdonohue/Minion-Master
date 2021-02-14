@@ -92,7 +92,7 @@ class SpriteDimensional {
   }
 };
 
-class bush{
+class Bush {
   constructor(sx, sy, sw, sh, dx, dy) {
     Object.assign(this, {sx, sy, sw, sh, dx, dy})
     if (dx == undefined || dy == undefined) {
@@ -102,7 +102,7 @@ class bush{
   }
 }
 
-class rock{
+class Rock {
   constructor(sx, sy, sw, sh, dx, dy) {
     Object.assign(this, {sx, sy, sw, sh, dx, dy})
     if (dx == undefined || dy == undefined) {
