@@ -25,7 +25,9 @@ ASSET_MANAGER.downloadAll(function () {
 	let intGrass = new InteriorGrass(gameEngine, params.TILE_W_H, params.TILE_W_H);
 	let resources = new Resources(gameEngine, params.TILE_W_H, params.TILE_W_H);
 
-	// let minimap = new MiniMap(gameEngine, 1024, 576, 256);
+	let minimap = new MiniMap(gameEngine, 1024, 576, 256);
+	let ui = new UI(gameEngine, 1024, 0, 256);
+	let hud = new HUD(gameEngine);
 
 	gameEngine.init(ctx, params.CANVAS_WIDTH / 128,
 		 							params.CANVAS_HEIGHT / 128,
@@ -37,7 +39,6 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(horiwalls);
 	gameEngine.addEntity(intGrass);
 	gameEngine.addEntity(resources);
-
 	gameEngine.addEntity(minimap);
 	gameEngine.addEntity(ui);
 	gameEngine.addEntity(castle);
@@ -47,17 +48,8 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.spawnMe("minion", 10, 300);
 	gameEngine.spawnMe("minion", 50, 550);
 	gameEngine.spawnMe("wolf", 800, 0);
-
 	gameEngine.spawnMe("wolf", 800, 100);
 	gameEngine.spawnMe("wolf", 500, 700);
 
-	//gameEngine.createANDSpawnEntity(3, 3, "minion");
-	//gameEngine.createANDSpawnEntity(5, 4, "minion");
-	// gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*4,"minion");
-	// gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*8,"minion");
-	// gameEngine.createANDSpawnEntity(2,2, params.BASE_SPD*16,"minion");
-
-	//gameEngine.createANDSpawnEntity(2, 4, "wolf");
-	// gameEngine.createANDSpawnEntity(2,4, params.BASE_SPD*32,"wolf");
 	gameEngine.start();
 });
