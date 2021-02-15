@@ -134,7 +134,10 @@ class Horiwall {
       for (var i = 0; i < params.HORI_WALL_COUNT; i++) {
         ctx.save();
         ctx.rotate(Math.PI / 2);
-        ctx.drawImage(this.spritesheet, 0, 1247, params.TILE_W_H, params.TILE_W_H, this.x - params.TILE_W_H + this.game.camera.x, (this.y - params.TILE_W_H * 2) - i * params.TILE_W_H - this.game.camera.y, params.TILE_W_H, params.TILE_W_H);
+        ctx.drawImage(this.spritesheet, 0, 1247, params.TILE_W_H, params.TILE_W_H,
+                      this.x - params.TILE_W_H - this.game.camera.y, //dx
+                      (this.y - params.TILE_W_H * 2) - i * params.TILE_W_H + this.game.camera.x, //dy
+                      params.TILE_W_H, params.TILE_W_H);
 
         // The dx here is a copy of the one in Grasscorner above.
         // -(this.x + (params.CANVAS_WIDTH - params.TILE_W_H)) = -(0 + (1024 - 64)) - 64
@@ -148,7 +151,7 @@ class Horiwall {
         ctx.save();
         ctx.translate(params.TILE_W_H, params.CANVAS_HEIGHT - params.TILE_W_H);
         ctx.rotate(3 * (Math.PI / 2));
-        ctx.drawImage(this.spritesheet, 0, 1247, params.TILE_W_H, params.TILE_W_H, 0 - 64 + this.game.camera.x, 0 + i * params.TILE_W_H - this.game.camera.y, params.TILE_W_H, params.TILE_W_H);
+        ctx.drawImage(this.spritesheet, 0, 1247, params.TILE_W_H, params.TILE_W_H, 0 - 64 + this.game.camera.y, 0 + i * params.TILE_W_H - this.game.camera.x, params.TILE_W_H, params.TILE_W_H);
         ctx.restore();
       }
     };
