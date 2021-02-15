@@ -17,7 +17,7 @@ class GameEngine {
         this.ctx = ctx;
         this.surfaceWidth = this.ctx.canvas.width;
         this.surfaceHeight = this.ctx.canvas.height;
-        this.theMap = new Map(xSize, ySize, tileSize);
+        // this.theMap = new Map(xSize, ySize, tileSize);
 
         let rez = [0, 0, 6, 5];
         this.theHUD = new HUD(this,
@@ -68,7 +68,7 @@ class GameEngine {
 
     start() {
       this.addEntity(this.theHUD);
-      this.theHUD.makeButtons(this);
+      // this.theHUD.makeButtons(this);
       var that = this;
         (function gameLoop() {
             that.loop(); //changed "that" back to "this"

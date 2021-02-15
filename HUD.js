@@ -45,21 +45,75 @@ class HUD {
         this.agilInc = 0.5;
         this.attackInc = 2.5;
         this.intelInc = 1;
+
+        this.debugMode = params.DEBUG_ON;
+        this.myButtons = [];
+        this.createButtons();
     };
+
+    createButtons() {
+      var debugButton = new Button(
+        this, this.theGame,
+        15, 15,
+        25, 25,
+        (function(){
+          params.DEBUG_ON = !params.DEBUG_ON;
+        }),
+        "debug mode",
+        null,
+        false, //debug button should always be visable.
+      );
+      debugButton.myColor = "white";
+
+      var minionButton = new Button(
+        this, this.theGame,
+        15, 55,
+        25, 25,
+        (function() {
+          var x = randomInt(150);
+          var y = randomInt(150);
+          this.theGame.spawnMe("minion", x, y);
+        }),
+        "spawn minion",
+        null, //has to be null if we don't want to add a spritesheet, cas I'm lazy.
+        false,
+      );
+      minionButton.myColor = "blue";
+
+      var wolfButton = new Button(
+        this, this.theGame,
+        15, 95,
+        25, 25,
+        (function() {
+          var x = randomInt(150);
+          var y = randomInt(150);
+          console.log("spawning wolf at: (" + x + "," + y+")");
+          this.theGame.spawnMe("wolf", x, y);
+        }),
+        "spawn wolf",
+        null, //has to be null if we don't want to add a spritesheet, cas I'm lazy.
+        true,
+      );
+      wolfButton.myColor = "SaddleBrown";
+
+      this.createStatButtons()
+    }
 
     updateMe() {
       this.timeSinceUpdate += this.timer.tick();
 
-      // var theClick = this.theGame.click;
-      // if(theClick){
-      //   console.log("hud click!");
-      // }
+      if(this.theGame.click) {
+        //if there is a click, we need to let all of the buttons check if its for them.
+        this.myButtons.forEach((button) => {
+          button.updateMe();
+        });
+
+        //check to see if the player clicked on a entity.
+
+      }
 
       //this is NOT the best implmentation of making the player not increment.
-      if(this.timeSinceUpdate < this.timeBetweenUpdates) {
-        //NOTE! we always want to respond to player input!
-        return;
-      } else {
+      if(!(this.timeSinceUpdate < this.timeBetweenUpdates)) {
         //if it HAS, then allow update and reset timeSinceUpdate.
         this.myFood += this.foodIncome * (this.timeSinceUpdate/this.timeBetweenUpdates);
         this.myRock += this.rockIncome * (this.timeSinceUpdate/this.timeBetweenUpdates);
@@ -71,8 +125,29 @@ class HUD {
 
     drawMe(ctx) {
       this.drawHud(ctx);
-      this.drawSelectedInfo(ctx);
+      this.createStatButtons(ctx);
       this.drawPlayerResources(ctx);
+
+      ctx.font = params.TILE_W_H/4 + 'px "Press Start 2P"';
+      ctx.fillStyle = "White";
+      //Bottom Left HUD
+      //if (this.selected = "minion") {
+      ctx.fillText(this.targetType + "'s", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2);
+      ctx.fillText("STATS: ", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5);
+
+      ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';
+
+      ctx.fillText("HEALTH: " + minionStats.HEALTH, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.2);
+      ctx.fillText("DEF: " + minionStats.DEFENSE, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.0);
+      ctx.fillText("ATK: " + minionStats.ATTACK, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.8);
+      ctx.fillText("AGI: " + minionStats.AGILITY, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.6);
+      ctx.fillText("INT: " + minionStats.INTELLIGENCE, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.4);
+
+
+      //draw the buttons
+      this.myButtons.forEach((button) => {
+        button.drawMe(ctx);
+      });
     }
 
     drawPlayerResources(ctx) {
@@ -89,101 +164,26 @@ class HUD {
       ctx.fillText(("Selected: " + this.targetType), resourceX, params.TILE_W_H/4*3);
     }
 
-    drawSelectedInfo(ctx) {
-      ctx.font = params.TILE_W_H/4 + 'px "Press Start 2P"';
-      ctx.fillStyle = "White";
-      //Bottom Left HUD
-      //if (this.selected = "minion") {
-      ctx.fillText(this.targetType + "'s", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2);
-      ctx.fillText("STATS: ", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5);
+    createStatButtons(ctx) {
 
-      ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';
+      var newHealthButton = new Button(
+        this, this.theGame,
+        100, 100, //location of top left corner
+        40, 40, //size of button hitbox
+        this.incrementStat, //the function to be called on it.
+        "increase Health", //text box
+        this.HealthButt, //the spritesheet to use.
+        false
+      );
+      newHealthButton.myFunction.args = ["incrementStat", "HEALTH" , this.healthInc];
+      this.healthButton = newHealthButton;
+      this.theGame.addEntity(this.healthButton);
 
-      ctx.fillText("HEALTH: " + minionStats.HEALTH, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.2);
-      ctx.fillText("DEF: " + 0, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.0);
-      ctx.fillText("ATK: " + 1, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.8);
-      ctx.fillText("AGI: " + 1, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.6);
-      ctx.fillText("INT: " + 1, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.4);
+      // ctx.fillText("DEF", params.TILE_W_H * 4.30, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
+      // ctx.drawImage(this.DefButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 4.25,
+      //               params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
+      // ctx.fillText("UPGRADE!", params.TILE_W_H * 4.0, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
 
-      //Health Stat UI
-      ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';
-
-
-      //Defense Stat UI
-      ctx.strokeStyle = "Goldenrod";
-      ctx.beginPath();
-      ctx.arc(params.TILE_W_H * 4.25 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
-      ctx.stroke();
-      ctx.strokeStyle = "Pink";
-      ctx.beginPath();
-      ctx.arc(params.TILE_W_H * 4.25 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
-      ctx.stroke();
-      ctx.strokeStyle = "Goldenrod";
-      ctx.beginPath();
-      ctx.arc(params.TILE_W_H * 4.25 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
-      ctx.stroke();
-
-      ctx.fillText("DEF", params.TILE_W_H * 4.30, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
-      ctx.drawImage(this.DefButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 4.25,
-                    params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
-      ctx.fillText("UPGRADE!", params.TILE_W_H * 4.0, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
-
-      //Attack Stat UI
-      ctx.strokeStyle = "Goldenrod";
-      ctx.beginPath();
-      ctx.arc(params.TILE_W_H * 5.7 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
-      ctx.stroke();
-      ctx.strokeStyle = "Pink";
-      ctx.beginPath();
-      ctx.arc(params.TILE_W_H * 5.7 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
-      ctx.stroke();
-      ctx.strokeStyle = "Goldenrod";
-      ctx.beginPath();
-      ctx.arc(params.TILE_W_H * 5.7 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
-      ctx.stroke();
-
-      ctx.fillText("ATK", params.TILE_W_H * 5.7, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
-      ctx.drawImage(this.AtkButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 5.7,
-                    params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
-      ctx.fillText("UPGRADE!", params.TILE_W_H * 5.4, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
-
-      //Agility Stat UI
-      ctx.strokeStyle = "Goldenrod";
-      ctx.beginPath();
-      ctx.arc(params.TILE_W_H * 7.1 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
-      ctx.stroke();
-      ctx.strokeStyle = "Pink";
-      ctx.beginPath();
-      ctx.arc(params.TILE_W_H * 7.1 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
-      ctx.stroke();
-      ctx.strokeStyle = "Goldenrod";
-      ctx.beginPath();
-      ctx.arc(params.TILE_W_H * 7.1 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
-      ctx.stroke();
-
-      ctx.fillText("AGI", params.TILE_W_H * 7.1, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
-      ctx.drawImage(this.AgiButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 7.1,
-                    params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
-      ctx.fillText("UPGRADE!", params.TILE_W_H * 6.8, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
-
-      //Intellect Stat UI
-      ctx.strokeStyle = "Goldenrod";
-      ctx.beginPath();
-      ctx.arc(params.TILE_W_H * 8.5 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
-      ctx.stroke();
-      ctx.strokeStyle = "Pink";
-      ctx.beginPath();
-      ctx.arc(params.TILE_W_H * 8.5 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
-      ctx.stroke();
-      ctx.strokeStyle = "Goldenrod";
-      ctx.beginPath();
-      ctx.arc(params.TILE_W_H * 8.5 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
-      ctx.stroke();
-
-      ctx.fillText("INT", params.TILE_W_H * 8.5, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
-      ctx.drawImage(this.IntButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 8.5,
-                    params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
-      ctx.fillText("UPGRADE!", params.TILE_W_H * 8.2, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
     }
 
     drawHud(ctx) {
@@ -195,9 +195,16 @@ class HUD {
         this.hudPosX, this.hudPosY,
         250, 50);
 
-
-
       this.theMiniMap.drawMe(ctx);
+    }
+
+    incrementStat(theArgs) {
+      if(theArgs[0] == "incrementStat") {
+        if(theArgs[1] == "HEALTH") {
+          minionStats.HEALTH += theArgs[2];
+          console.log("minionStats.HEALTH: "+minionStats.HEALTH)
+        }
+      }
     }
 }
 
@@ -233,24 +240,6 @@ class MiniMap {
     };
 
     drawMe(ctx) {
-      ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
-      ctx.fillStyle = "White";
-      ctx.fillText("MiniMap", this.miniMapX + 88, this.miniMapY);
-      ctx.strokeStyle = "White"
-      ctx.strokeRect(this.x + 84, 552, 76, 22);
-
-      ctx.fillStyle = "green";
-      ctx.fillRect(this.x, this.y, this.w, 192);
-    };
-
-};
-
-
-    updateMe() {
-
-    };
-
-    drawMe(ctx) {
         ctx.fillStyle = "SaddleBrown";
         ctx.fillRect(this.x, this.y, this.w, 576);
         ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
@@ -259,6 +248,4 @@ class MiniMap {
         ctx.strokeStyle = "White"
         ctx.strokeRect(this.x + 84, 552, 76, 22);
     }
-
 };
-

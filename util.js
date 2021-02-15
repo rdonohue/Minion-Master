@@ -24,7 +24,12 @@ function Create2DArray(rows) {
 };
 
 function distance(A, B) {
-    return Math.sqrt((B.x - A.x) * (B.x - A.x) + (B.y - A.y)*(B.y - A.y));
+    return Math.sqrt(
+      Math.abs(
+        (B.x - A.x) * (B.x - A.x) +
+        (B.y - A.y) * (B.y - A.y)
+      )
+    );
 };
 
 function collide(A, B) {
@@ -78,4 +83,5 @@ var params = {
   CANVAS_WIDTH : 1024,
   CANVAS_HEIGHT : 768,
   BASE_SPD : 0.25,
+  DEBUG_ON: true,
 };

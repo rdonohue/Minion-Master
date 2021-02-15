@@ -32,8 +32,8 @@ class Minion {
           y: (this.target.y - this.y) / dist * this.maxSpeed};
 
         //Stats
-        this.health = minionStats.HEALTH;
         this.maxHealth = minionStats.HEALTH;
+        this.health = this.maxHealth;
         this.defense = minionStats.DEFENSE;
         this.attack = minionStats.ATTACK;
         this.agility = minionStats.AGILITY;
