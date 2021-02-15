@@ -43,7 +43,7 @@ class Resources {
     drawMe(ctx) {
       for (var i = 0; i < 10; i++) {
         ctx.drawImage(this.spritesheet, this.drawArray[i].sx, this.drawArray[i].sy, this.drawArray[i].sw,
-           this.drawArray[i].sh, this.drawArray[i].dx, this.drawArray[i].dy, params.TILE_W_H / 3, params.TILE_W_H / 3);
+           this.drawArray[i].sh, this.drawArray[i].dx - this.game.camera.x, this.drawArray[i].dy - this.game.camera.y, params.TILE_W_H / 3, params.TILE_W_H / 3);
       }
     };
 

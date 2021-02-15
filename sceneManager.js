@@ -5,94 +5,67 @@ class SceneManager {
         this.x = 0;
         this.y = 0;
 
+        this.minimap = new MiniMap(this.game, 1024, 576, 256);
+        this.ui = new UI(this.game, 1024, 0, 256);
+        this.hud = new HUD(this.game);
+        this.thePlayer = new Player(this.game, 100, 150, 10, 5, 0, 0);
 
-        this.minimap = new Minimap(this.game, 1.5 * PARAMS.BLOCKWIDTH, 3.5 * PARAMS.BLOCKWIDTH, 224 * PARAMS.SCALE);
+        // These are dummy values for keeping track of variables --Ryan
+        // It's probably okay to delete these later.
+        var theX = 0;
+        var theY = 0;
 
-        this.loadLevel(levelOne, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH);
+        this.loadLevel(theX, theY);
     };
 
-    loadLevel(level, x, y) {
+    loadLevel(x, y) {
         this.game.entities = [];
         this.x = 0;
 
-        if (level.bighills) {
-            for (var i = 0; i < level.bighills.length; i++) {
-                let hill = level.bighills[i];
-                this.game.addEntity(new BigHill(this.game, hill.x * PARAMS.BLOCKWIDTH, hill.y * PARAMS.BLOCKWIDTH));
-            }
-        }
-        if (level.hills) {
-            for (var i = 0; i < level.hills.length; i++) {
-                let hill = level.hills[i];
-                this.game.addEntity(new Hill(this.game, hill.x * PARAMS.BLOCKWIDTH, hill.y * PARAMS.BLOCKWIDTH));
-            }
-        }
-        if (level.bushes) {
-            for (var i = 0; i < level.bushes.length; i++) {
-                let bush = level.bushes[i];
-                this.game.addEntity(new Bush(this.game, bush.x * PARAMS.BLOCKWIDTH, bush.y * PARAMS.BLOCKWIDTH, bush.size));
-            }
-        }
-        if (level.clouds) {
-            for (var i = 0; i < level.clouds.length; i++) {
-                let cloud = level.clouds[i];
-                this.game.addEntity(new Cloud(this.game, cloud.x * PARAMS.BLOCKWIDTH, cloud.y * PARAMS.BLOCKWIDTH, cloud.size));
-            }
-        }
-        if (level.ground) {
-            for (var i = 0; i < level.ground.length; i++) {
-                let ground = level.ground[i];
-                this.game.addEntity(new Ground(this.game, ground.x * PARAMS.BLOCKWIDTH, ground.y * PARAMS.BLOCKWIDTH, ground.size * PARAMS.BLOCKWIDTH));
-            }
-        }
-        if (level.bricks) {
-            for (var i = 0; i < level.bricks.length; i++) {
-                let brick = level.bricks[i];
-                this.game.addEntity(new Brick(this.game, brick.x * PARAMS.BLOCKWIDTH, brick.y * PARAMS.BLOCKWIDTH, brick.type, brick.prize));
-            }
-        }
-        if (level.blocks) {
-            for (var i = 0; i < level.blocks.length; i++) {
-                let block = level.blocks[i];
-                this.game.addEntity(new Block(this.game, block.x * PARAMS.BLOCKWIDTH, block.y * PARAMS.BLOCKWIDTH, block.size * PARAMS.BLOCKWIDTH));
-            }
-        }
-        if (level.tubes) {
-            for (var i = 0; i < level.tubes.length; i++) {
-                let tube = level.tubes[i];
-                if (!tube.side) {
-                    this.game.addEntity(new Tube(this.game, tube.x * PARAMS.BLOCKWIDTH, tube.y * PARAMS.BLOCKWIDTH, tube.size, tube.destination));
-                } else {
-                    this.game.addEntity(new SideTube(this.game, tube.x * PARAMS.BLOCKWIDTH, tube.y * PARAMS.BLOCKWIDTH));
-                }
-            }
-        }
-        if (level.goombas) {
-            for (var i = 0; i < level.goombas.length; i++) {
-                let goomba = level.goombas[i];
-                this.game.addEntity(new Goomba(this.game, goomba.x * PARAMS.BLOCKWIDTH, goomba.y * PARAMS.BLOCKWIDTH));
-            }
-        }
-        if (level.koopas) {
-            for (var i = 0; i < level.koopas.length; i++) {
-                let koopa = level.koopas[i];
-                this.game.addEntity(new Koopa(this.game, koopa.x * PARAMS.BLOCKWIDTH, koopa.y * PARAMS.BLOCKWIDTH, koopa.facing));
-            }
-        }
-        if (level.coins) {
-            for (var i = 0; i < level.coins.length; i++) {
-                let coin = level.coins[i];
-                this.game.addEntity(new Coin(this.game, coin.x * PARAMS.BLOCKWIDTH, coin.y * PARAMS.BLOCKWIDTH));
-            }
-        }
 
-        this.game.addEntity(this.mario);
+        //let castle = new HomeBase(gameEngine, 500, 300, 430, 461);
+      	let corners = new Grasscorner(this.game, 0, 0);
+      	let vertwalls = new Vertwall(this.game, 0, params.TILE_W_H);
+      	let horiwalls = new Horiwall(this.game, params.TILE_W_H, 0);
+      	let intGrass = new InteriorGrass(this.game, params.TILE_W_H, params.TILE_W_H);
+      	let resources = new Resources(this.game, params.TILE_W_H, params.TILE_W_H);
+
+        // if (level.coins) {
+        //     for (var i = 0; i < level.coins.length; i++) {
+        //         let coin = level.coins[i];
+        //         this.game.addEntity(new Coin(this.game, coin.x * PARAMS.BLOCKWIDTH, coin.y * PARAMS.BLOCKWIDTH));
+        //     }
+        // }
+
+        this.game.addEntity(corners);
+        this.game.addEntity(vertwalls);
+        this.game.addEntity(horiwalls);
+        this.game.addEntity(intGrass);
+        this.game.addEntity(resources);
+        this.game.spawnMe("minion", 0, 0);
+      	this.game.spawnMe("wolf", 800, 0);
     };
 
     update() {
-        PARAMS.DEBUG = document.getElementById("debug").checked;
+        params.DEBUG = document.getElementById("debug").checked;
 
-        let midpoint = PARAMS.CANVAS_WIDTH/2
+        const TICK = this.game.clockTick;
+
+        let midpoint = params.CANVAS_WIDTH / 2;
+
+        //Check for play area edge
+        if (this.game.left) {
+            this.x -= 5;
+        }
+        if (this.game.right) {
+            this.x += 5;
+        }
+        if (this.game.up) {
+            this.y -= 5;
+        }
+        if (this.game.down) {
+            this.y += 5;
+        }
 
         // This logic would be good for a lose condition. If (base.dead) display loss screen.
 
@@ -106,12 +79,7 @@ class SceneManager {
         ctx.font = ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';
         ctx.fillStyle = "White";
 
-        if (PARAMS.DEBUG) {
-            let xV = "xV=" + Math.floor(this.game.mario.velocity.x);
-            let yV = "yV=" + Math.floor(this.game.mario.velocity.y);
-            ctx.fillText(xV, 1.5 * PARAMS.BLOCKWIDTH, 2.5 * PARAMS.BLOCKWIDTH);
-            ctx.fillText(yV, 1.5 * PARAMS.BLOCKWIDTH, 3 * PARAMS.BLOCKWIDTH);
-
+        if (params.DEBUG) {
             ctx.translate(0, -10); // hack to move elements up by 10 pixels instead of adding -10 to all y coordinates below
             ctx.strokeStyle = "White";
             ctx.lineWidth = 2;
@@ -150,6 +118,9 @@ class SceneManager {
             ctx.fillStyle = ctx.strokeStyle;
 
             this.minimap.draw(ctx);
+            this.ui.draw(ctx);
+            this.hud.draw(ctx);
+            this.player.draw(ctx);
         }
     };
 };

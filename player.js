@@ -1,5 +1,5 @@
 class Player {
-  constructor(game, theMap, startFood, startRock, trickleFood, trickleRock, posX, posY) {
+  constructor(game, startFood, startRock, trickleFood, trickleRock, posX, posY) {
     this.myFood = startFood;
     this.myRock = startRock;
     this.foodIncome = trickleFood;
@@ -14,7 +14,6 @@ class Player {
     this.width = 1024;
     this.height = 768;
     this.theGame = game;
-    //this.theMap = theMap;
 
     this.AgiButt = ASSET_MANAGER.getAsset("./sprites/button_Agi.png");
     this.AtkButt = ASSET_MANAGER.getAsset("./sprites/button_Attack.png");
@@ -29,16 +28,6 @@ class Player {
 
   updateMe() {
     this.timeSinceUpdate += this.timer.tick();
-
-    //var theClick = this.theGame.click;
-
-    //if(theClick && this.theMap.isOnMap(theClick.x,theClick.y) == 0){
-      //var theTile = this.theMap.theGrid[Math.floor(theClick.x/params.TILE_W_H)][Math.floor(theClick.y/params.TILE_W_H)];
-      //if (theTile && theTile.myEntitys.length > 0){
-        //this.selected = theTile.myEntitys[theTile.myEntitys.length-1].myName;
-        //switched from 0 to length - 1 so that it grabs the entity that most recently entered that tile.
-      //}
-    //}
 
     //this is NOT the best implmentation of making the player not increment.
     if(this.timeSinceUpdate < this.timeBetweenUpdates) {

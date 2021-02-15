@@ -17,11 +17,10 @@ class GameEngine {
         this.tickDuration = 0.1;
     };
 
-    init(ctx, xSize, ySize, tileSize) {
+    init(ctx) {
         this.ctx = ctx;
         this.surfaceWidth = this.ctx.canvas.width;
         this.surfaceHeight = this.ctx.canvas.height;
-        this.thePlayer = new Player(this, this.theMap, 100, 150, 10, 5, 0, 0);
         this.startInput();
         this.timer = new Timer();
     };
@@ -64,10 +63,9 @@ class GameEngine {
     };
 
     start() {
-      this.addEntity(this.thePlayer);
       var that = this;
         (function gameLoop() {
-            that.loop(); //changed "that" back to "this"
+            that.loop();
             requestAnimFrame(gameLoop, that.ctx.canvas);
         })();
     };
@@ -145,14 +143,15 @@ class GameEngine {
         this.entities.push(entity);
     };
 
-    drawEntitys() {
+    draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].drawMe(this.ctx);
         }
-    };
+        this.camera.draw(this.ctx);
+    }
 
-    updateEntitys() {
+    update() {
         var entitiesCount = this.entities.length;
 
         for (var i = 0; i < entitiesCount; i++) {
@@ -162,6 +161,7 @@ class GameEngine {
               entity.updateMe();
             }
         }
+        this.camera.update();
 
         for (var i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].removeFromWorld) {
@@ -172,7 +172,7 @@ class GameEngine {
 
     loop() {
         this.clockTick = this.timer.tick();
-        this.updateEntitys();
-        this.drawEntitys();
+        this.update();
+        this.draw();
     };
 };

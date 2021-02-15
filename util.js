@@ -72,11 +72,12 @@ var minionStats = {
 
 var params = {
   //Tile width and height
+  DEBUG: true,
   TILE_W_H : 64,
   VERT_WALL_COUNT : 10,
   HORI_WALL_COUNT : 14,
   CANVAS_WIDTH : 1024,
   CANVAS_HEIGHT : 768,
   BASE_SPD : 0.25,
-  BLOCKWIDTH : 48
+  BLOCKWIDTH : 48  //temporary
 };
