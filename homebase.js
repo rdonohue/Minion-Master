@@ -45,7 +45,7 @@ class HomeBase {
     };
 
     drawMe(ctx) {
-        this.animations[0].drawFrame(this.game.clockTick, ctx, this.xOriginLoc, this.yOriginLoc, 0.5);
+        this.animations[0].drawFrame(this.game.clockTick, ctx, this.xOriginLoc - this.game.camera.x, this.yOriginLoc - this.game.camera.y, 0.5);
     };
 
 }

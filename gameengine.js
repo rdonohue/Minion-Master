@@ -8,6 +8,10 @@ class GameEngine {
         this.click = null;
         this.mouse = null;
         this.wheel = null;
+        this.left = false;
+        this.right = false;
+        this.up = false;
+        this.down = false;
         this.surfaceWidth = null;
         this.surfaceHeight = null;
         this.tickDuration = 0.1;
@@ -92,6 +96,48 @@ class GameEngine {
             //console.log(getXandY(e));
             that.rightclick = getXandY(e);
             e.preventDefault();
+        }, false);
+
+        this.ctx.canvas.addEventListener("keydown", function (e) {
+            switch (e.code) {
+                case "ArrowLeft":
+                case "KeyA":
+                    that.left = true;
+                    break;
+                case "ArrowRight":
+                case "KeyD":
+                    that.right = true;
+                    break;
+                case "ArrowUp":
+                case "KeyW":
+                    that.up = true;
+                    break;
+                case "ArrowDown":
+                case "KeyS":
+                    that.down = true;
+                    break;
+            }
+        }, false);
+
+        this.ctx.canvas.addEventListener("keyup", function (e) {
+            switch (e.code) {
+                case "ArrowLeft":
+                case "KeyA":
+                    that.left = false;
+                    break;
+                case "ArrowRight":
+                case "KeyD":
+                    that.right = false;
+                    break;
+                case "ArrowUp":
+                case "KeyW":
+                    that.up = false;
+                    break;
+                case "ArrowDown":
+                case "KeyS":
+                    that.down = false;
+                    break;
+            }
         }, false);
     };
 

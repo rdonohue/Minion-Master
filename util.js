@@ -78,4 +78,5 @@ var params = {
   CANVAS_WIDTH : 1024,
   CANVAS_HEIGHT : 768,
   BASE_SPD : 0.25,
+  BLOCKWIDTH : 48
 };
