@@ -94,6 +94,15 @@ class Wolf {
     updateMe() {
         this.elapsedTime += this.game.clockTick;
         var dist = distance(this, this.target);
+
+        if (this.targetID >= this.path.length - 1) {
+            this.targetID = 0;
+            this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+              { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+              { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+              { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+        }
+
         if (dist < 5) {
             if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
                 this.targetID++;
@@ -101,10 +110,12 @@ class Wolf {
             this.target = this.path[this.targetID];
         }
 
+        var combat = false;
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
             if (ent instanceof Minion && canSee(this, ent) && ent.state != 2) {
                 this.target = ent;
+                combat = true;
             }
             if (ent instanceof Minion && collide(this, ent)) {
                 if (this.state === 0) {
@@ -115,6 +126,10 @@ class Wolf {
                     this.elapsedTime = 0;
                 }
             }
+        }
+
+        if (!combat) {
+            this.state = 0;
         }
 
         dist = distance(this, this.target);
