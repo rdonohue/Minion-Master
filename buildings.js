@@ -9,6 +9,7 @@ class Cave {
 
       this.state = 0;  // 0 = idle, 1 = destroyed
       this.scale = 0.07;
+      this.radius = 20;
 
       //Stats
       this.health = 200;
