@@ -27,9 +27,7 @@ class HomeBase {
   };
 
   loadAnimations() {
-       // idle animation for state = 0
        this.animations[0] = new Animator(this.spritesheet, 0, 0, this.baseWidth, this.baseHeight, 1, 1, 0, false, true);
-       // this.animations[1] = some other sprite that represents a destroyed home base (wreckage)
   }
 
   updateMe() {

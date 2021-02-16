@@ -98,7 +98,7 @@ class Minion {
                     this.state = 1;
                     this.elapsedTime = 0;
                 } else if (this.elapsedTime > 0.8) {
-                    ent.health -= 15;
+                    ent.health -= (this.attack - ent.defense);
                     this.elapsedTime = 0;
                 }
             }

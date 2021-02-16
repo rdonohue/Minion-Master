@@ -128,7 +128,7 @@ class Wolf {
                     this.state = 1;
                     this.elapsedTime = 0;
                 } else if (this.elapsedTime > 0.8) {
-                    ent.health -= 2;
+                    ent.health -= (this.attack - ent.defense);
                     this.elapsedTime = 0;
                 }
             }

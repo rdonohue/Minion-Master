@@ -51,7 +51,7 @@ class GuardTower {
 
       this.myName = "cave";
 
-    //this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tower.png");
+      this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tower.png");
 
       this.state = 0;  // 0 = idle, 1 = destroyed
 
@@ -76,7 +76,6 @@ class GuardTower {
         this.removeFromWorld = true;
       }
   };
-
 
   drawMe(ctx) {
 
