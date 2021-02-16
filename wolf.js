@@ -18,6 +18,7 @@ class Wolf {
 
         this.myScale = 1;
         this.myDirection = 0; // 0 = left, 1 = right, 2 = up, 3 = down
+        this.priority = 1;
 
         this.radius = 20;
         this.visualRadius = 200;
@@ -49,7 +50,7 @@ class Wolf {
         this.dead = false;
         this.removeFromWorld = false;
 
-        this.myType = "minion";
+        this.myType = "wolf";
 
         this.timeBetweenUpdates = 1/this.agility;
         //this gives how long this minion will wait before moving.

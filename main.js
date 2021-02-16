@@ -3,6 +3,7 @@ var ASSET_MANAGER = new AssetManager();
 ASSET_MANAGER.queueDownload("./sprites/human_regular.png");
 ASSET_MANAGER.queueDownload("./sprites/wolfsheet1.png");
 ASSET_MANAGER.queueDownload("./sprites/castle.png");
+ASSET_MANAGER.queueDownload("./sprites/ogres.png");
 ASSET_MANAGER.queueDownload("./sprites/ground_sprites.png");
 ASSET_MANAGER.queueDownload("./sprites/trees_stones_bushes.png");
 ASSET_MANAGER.queueDownload("./sprites/button_Attack.png");
@@ -18,7 +19,7 @@ ASSET_MANAGER.downloadAll(function () {
 	var ctx = canvas.getContext('2d');
 	ctx.imageSmoothingEnabled = false;
 
-	let castle = new HomeBase(gameEngine, 500, 300, 430, 461);
+	let castle = new HomeBase(gameEngine, 400, 525, 430, 461);
 	let corners = new Grasscorner(gameEngine, 0, 0);
 	let vertwalls = new Vertwall(gameEngine, 0, params.TILE_W_H);
 	let horiwalls = new Horiwall(gameEngine, params.TILE_W_H, 0);
@@ -50,6 +51,8 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.spawnMe("wolf", 800, 0);
 	gameEngine.spawnMe("wolf", 800, 100);
 	gameEngine.spawnMe("wolf", 500, 700);
+	gameEngine.spawnMe("ogre", 900, 50);
+	gameEngine.spawnMe("ogre", 700, 25);
 
 	gameEngine.start();
 });

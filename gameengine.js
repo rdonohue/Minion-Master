@@ -120,6 +120,16 @@ class GameEngine {
         }
     };
 
+    entityPriority() {
+        var priority = 0;
+        for (var i = 0; i < this.entities.length; i++) {
+            if (this.entities[i].priority > priority) {
+                priority = this.entities[i].priority;
+            }
+        }
+        return priority;
+    }
+
     loop() {
         this.clockTick = this.timer.tick();
         this.updateEntitys();

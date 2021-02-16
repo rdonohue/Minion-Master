@@ -12,6 +12,7 @@ class Minion {
         this.myScale = 2;
         this.myDirection = 0; // 0 = left, 1 = right
         this.state = 0;
+        this.priority = 0;
 
         this.radius = 20;
         this.visualRadius = 200;
@@ -71,10 +72,10 @@ class Minion {
 
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
-            if (ent instanceof Wolf && canSee(this, ent) && ent.state != 2) {
+            if (!(ent instanceof Minion) && canSee(this, ent) && ent.state != 2 && ent.priority == this.game.entityPriority()) {
                 this.target = ent;
             }
-            if (ent instanceof Wolf && collide(this, ent)) {
+            if (!(ent instanceof Minion) && collide(this, ent)) {
                 if (this.state === 0) {
                     this.state = 1;
                     this.elapsedTime = 0;
@@ -112,7 +113,6 @@ class Minion {
             this.myBattleAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
         } else {
             this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
-            die();
         }
     };
 };

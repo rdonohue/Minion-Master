@@ -1,8 +1,6 @@
 class HomeBase {
   constructor(game, x, y, w, h) {
       Object.assign(this, {game, x, y, w, h });
-
-      this.game.homebase = this;
       this.myName = "HomeBase";
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/castle.png");
@@ -36,7 +34,7 @@ class HomeBase {
   updateMe() {
 
       // add more code here later about speed and physics
-  }
+  };
 
   die() {
       this.dead = true;
@@ -45,7 +43,7 @@ class HomeBase {
   };
 
   drawMe(ctx) {
-      this.animations[0].drawFrame(this.game.clockTick, ctx, this.xOriginLoc, this.yOriginLoc, 0.5);
+      this.animations[0].drawFrame(this.game.clockTick, ctx, this.xOriginLoc, this.yOriginLoc, 0.4);
   };
 
 }
