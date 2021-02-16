@@ -4,6 +4,7 @@ ASSET_MANAGER.queueDownload("./sprites/human_regular.png");
 ASSET_MANAGER.queueDownload("./sprites/wolfsheet1.png");
 ASSET_MANAGER.queueDownload("./sprites/castle.png");
 ASSET_MANAGER.queueDownload("./sprites/ogres.png");
+ASSET_MANAGER.queueDownload("./sprites/cave.png");
 ASSET_MANAGER.queueDownload("./sprites/ground_sprites.png");
 ASSET_MANAGER.queueDownload("./sprites/trees_stones_bushes.png");
 ASSET_MANAGER.queueDownload("./sprites/button_Attack.png");
@@ -30,6 +31,8 @@ ASSET_MANAGER.downloadAll(function () {
 	let ui = new UI(gameEngine, 1024, 0, 256);
 	let hud = new HUD(gameEngine);
 
+	let cave = new Cave(gameEngine, 700, 50);
+
 	gameEngine.init(ctx, params.CANVAS_WIDTH / 128,
 		 							params.CANVAS_HEIGHT / 128,
 									params.TILE_W_H * 2);
@@ -43,16 +46,17 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(minimap);
 	gameEngine.addEntity(ui);
 	gameEngine.addEntity(castle);
+	gameEngine.addEntity(cave);
 
 	//gameEngine.spawnMe("castle", 500, 300);
 	gameEngine.spawnMe("minion", 0, 0);
 	gameEngine.spawnMe("minion", 10, 300);
 	gameEngine.spawnMe("minion", 50, 550);
-	gameEngine.spawnMe("wolf", 800, 0);
-	gameEngine.spawnMe("wolf", 800, 100);
-	gameEngine.spawnMe("wolf", 500, 700);
-	gameEngine.spawnMe("ogre", 900, 50);
-	gameEngine.spawnMe("ogre", 700, 25);
+	//gameEngine.spawnMe("wolf", 800, 0);
+	//gameEngine.spawnMe("wolf", 800, 100);
+	//gameEngine.spawnMe("wolf", 500, 700);
+	//gameEngine.spawnMe("ogre", 900, 50);
+	//gameEngine.spawnMe("ogre", 700, 25);
 
 	gameEngine.start();
 });

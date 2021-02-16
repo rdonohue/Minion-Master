@@ -103,6 +103,12 @@ class Wolf {
               { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
         }
 
+        if (this.health <= 0) {
+            this.state = 2;
+            this.dead = true;
+            this.removeFromWorld = true;
+        }
+
         if (dist < 5) {
             if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
                 this.targetID++;
@@ -132,19 +138,13 @@ class Wolf {
             this.state = 0;
         }
 
-        dist = distance(this, this.target);
-        this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
-          y: (this.target.y - this.y) / dist * this.maxSpeed};
-
-        this.x += this.velocity.x * this.game.clockTick;
-        this.y += this.velocity.y * this.game.clockTick;
-
-        this.facing = getFacing(this.velocity);
-
-        if (this.health <= 0) {
-            this.state = 2;
-            this.dead = true;
-            this.removeFromWorld = true;
+        if (this.state !== 1) {
+          dist = distance(this, this.target);
+          this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
+            y: (this.target.y - this.y) / dist * this.maxSpeed};
+          this.x += this.velocity.x * this.game.clockTick;
+          this.y += this.velocity.y * this.game.clockTick;
+          this.facing = getFacing(this.velocity);
         }
 
     };

@@ -32,14 +32,11 @@ class HomeBase {
   }
 
   updateMe() {
-
+      if (this.health <= 0) {
+          this.dead = true;
+          this.removeFromWorld = true;
+      }
       // add more code here later about speed and physics
-  };
-
-  die() {
-      this.dead = true;
-      this.removeFromWorld = true;
-      this.myTile = NULL;
   };
 
   drawMe(ctx) {

@@ -72,6 +72,7 @@ class Minion {
               { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
         }
 
+        // If its health is 0, it is dead.
         if (this.health <= 0) {
             this.state = 2;
             this.dead = true;
@@ -88,11 +89,11 @@ class Minion {
         var combat = false;
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
-            if ((ent instanceof Wolf || ent instanceof Ogre) && canSee(this, ent)) {
+            if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave) && canSee(this, ent)) {
                 this.target = ent;
                 combat = true;
             }
-            if ((ent instanceof Wolf || ent instanceof Ogre) && collide(this, ent)) {
+            if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave) && collide(this, ent)) {
                 if (this.state === 0) {
                     this.state = 1;
                     this.elapsedTime = 0;
@@ -104,6 +105,7 @@ class Minion {
 
         }
 
+        // If it never detected an enemy, make sure it is back to walking.
         if (!combat) {
             this.state = 0;
         }
