@@ -1,5 +1,5 @@
 // Rest of the UI to hold the game menu features.
-class HUD {
+class HUD{
     constructor(game, gameLength, gameHeight, hudLength, startingRes) {
         Object.assign(this, {game, gameLength, gameHeight, hudLength});
 

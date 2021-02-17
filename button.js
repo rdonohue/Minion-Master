@@ -6,9 +6,12 @@ class Button{
     myFunction, myText, mySpriteSheet,
     isDebugger, isSeeThrough) {
 
-    Object.assign(this, {theHud, theGame, x,y});
     this.theHud = theHud;
     this.theHud.myButtons.push(this);
+    Object.assign(this, {theHud, theGame, x,y});
+
+    //we might need to make the minion's handle their
+    //own button updates btw.
     this.theGame = theGame;
     this.x = x; //x coord of top-left
     this.y = y;

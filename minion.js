@@ -1,5 +1,4 @@
 class Minion {
-  //
     constructor(game, x, y) {
         Object.assign(this, {game, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
@@ -10,6 +9,11 @@ class Minion {
         this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.05, 4, false, true);
         this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
 
+        this.theGame = game;
+        this.theHud = this.theGame.theHud;
+        this.x = x;
+        this.y = y;
+
         this.myScale = 2;
         this.myDirection = 0; // 0 = left, 1 = right
         this.state = 0;
@@ -18,10 +22,12 @@ class Minion {
         this.radius = 8;
         this.visualRadius = 200;
 
-        this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+        this.path = [
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }
+        ];
 
         this.targetID = 0;
         if (this.path && this.path[0]) {
@@ -30,8 +36,10 @@ class Minion {
 
         this.maxSpeed = 100;
         var dist = distance(this, this.target);
-        this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
-          y: (this.target.y - this.y) / dist * this.maxSpeed};
+        this.velocity = {
+          x: (this.target.x - this.x)/dist * this.maxSpeed,
+          y: (this.target.y - this.y)/dist * this.maxSpeed
+        };
 
         //Stats
         this.maxHealth = minionStats.HEALTH;
@@ -49,9 +57,12 @@ class Minion {
         //i,j for cell, x,y for continuous position.
         this.myType = "minion";
         this.mySelectionButton = new Button(
-          this.theGame.theHud, this.theGame,
-          this.x, this.y
-        this.radius, this.radius);
+          this.theHud, this.theGame,
+          this.x, this.y,
+          this.radius, this.radius,
+          this.selectMe(), this.myType, this.spritesheet,
+          false, true);
+        this.mySelectionButton.myFunction.args.push(this.theGame.theHud.selected = null);
 
         // Object.assign(this, this.name);
         this.timeBetweenUpdates = 1/this.agility;
@@ -64,8 +75,12 @@ class Minion {
         this.elapsedTime = 0;
     };
 
-//the move-speed is still staggered a bit, that might be because of async
-//with the draw-method being called...may need to make the minion handle its own draw-update.
+    selectMe(){
+
+    }
+
+    //the move-speed is still staggered a bit, that might be because of async
+    //with the draw-method being called...may need to make the minion handle its own draw-update.
     updateMe() {
       this.elapsedTime += this.game.clockTick;
 

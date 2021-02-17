@@ -11,6 +11,13 @@ class GameEngine {
         this.surfaceWidth = null;
         this.surfaceHeight = null;
         this.tickDuration = 0.1;
+
+        this.theHud = new HUD(
+          this,
+        	params.CANVAS_WIDTH, params.CANVAS_HEIGHT,
+        	100, //width of hud
+        	[0, 0, 6, 5] //starting rez
+        );
     };
 
     init(ctx, xSize, ySize, tileSize) {
@@ -18,12 +25,6 @@ class GameEngine {
         this.surfaceWidth = this.ctx.canvas.width;
         this.surfaceHeight = this.ctx.canvas.height;
         // this.theMap = new Map(xSize, ySize, tileSize);
-
-        let rez = [0, 0, 6, 5];
-        this.theHUD = new HUD(this,
-        		params.CANVAS_WIDTH, params.CANVAS_HEIGHT,
-        		256,
-        		rez);
 
         this.startInput();
         this.timer = new Timer();

@@ -29,10 +29,6 @@ ASSET_MANAGER.downloadAll(function () {
 	let intGrass = new InteriorGrass(gameEngine, params.TILE_W_H, params.TILE_W_H);
 	let resources = new Resources(gameEngine, params.TILE_W_H, params.TILE_W_H);
 
-	let minimap = new MiniMap(gameEngine, 1024, 576, 256);
-	let ui = new UI(gameEngine, 1024, 0, 256);
-	let hud = new HUD(gameEngine);
-
 	let cave = new Cave(gameEngine, 700, 50);
 
 	gameEngine.init(ctx, params.CANVAS_WIDTH / 128,
@@ -45,8 +41,6 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(horiwalls);
 	gameEngine.addEntity(intGrass);
 	gameEngine.addEntity(resources);
-	gameEngine.addEntity(minimap);
-	gameEngine.addEntity(ui);
 	gameEngine.addEntity(castle);
 	gameEngine.addEntity(cave);
 
