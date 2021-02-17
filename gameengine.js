@@ -86,8 +86,8 @@ class GameEngine {
         }, false);
 
         this.ctx.canvas.addEventListener("click", function (e) {
-
-            that.click = getXandY(e);
+          console.log(getXandY(e));
+          that.click = getXandY(e);
         }, false);
 
         this.ctx.canvas.addEventListener("contextmenu", function (e) {

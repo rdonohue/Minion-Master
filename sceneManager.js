@@ -59,16 +59,16 @@ class SceneManager {
 
         //Check for play area edge
         if (this.game.left && this.x > 0) {
-            this.x -= 5;
+            this.x -= 10;
         }
-        if (this.game.right && this.x < params.PLAY_WIDTH) {
-            this.x += 5;
+        if (this.game.right && this.x < params.CANVAS_WIDTH - 10) {
+            this.x += 10;
         }
-        if (this.game.up && this.y > 0) {
-            this.y -= 5;
+        if (this.game.up && this.y > 3) {
+            this.y -= 10;
         }
-        if (this.game.down && this.y < params.PLAY_HEIGHT) {
-            this.y += 5;
+        if (this.game.down && this.y < params.CANVAS_HEIGHT - 10) {
+            this.y += 10;
         }
 
         // This logic would be good for a lose condition. If (base.dead) display loss screen.
