@@ -78,6 +78,8 @@ var params = {
   HORI_WALL_COUNT : 14,
   CANVAS_WIDTH : 1024,
   CANVAS_HEIGHT : 768,
+  PLAY_WIDTH : 2048,
+  PLAY_HEIGHT : 1536,
   BASE_SPD : 0.25,
   BLOCKWIDTH : 48  //temporary
 };

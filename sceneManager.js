@@ -33,7 +33,7 @@ class SceneManager {
         // if (level.coins) {
         //     for (var i = 0; i < level.coins.length; i++) {
         //         let coin = level.coins[i];
-        //         this.game.addEntity(new Coin(this.game, coin.x * PARAMS.BLOCKWIDTH, coin.y * PARAMS.BLOCKWIDTH));
+        //         this.game.addEntity(new Coin(this.game, coin.x * params.BLOCKWIDTH, coin.y * params.BLOCKWIDTH));
         //     }
         // }
 
@@ -42,6 +42,10 @@ class SceneManager {
         this.game.addEntity(horiwalls);
         this.game.addEntity(intGrass);
         this.game.addEntity(resources);
+        this.game.addEntity(this.minimap);
+        this.game.addEntity(this.ui);
+        this.game.addEntity(this.hud);
+        this.game.addEntity(this.thePlayer);
         this.game.spawnMe("minion", 0, 0);
       	this.game.spawnMe("wolf", 800, 0);
     };
@@ -54,73 +58,32 @@ class SceneManager {
         let midpoint = params.CANVAS_WIDTH / 2;
 
         //Check for play area edge
-        if (this.game.left) {
+        if (this.game.left && this.x > 0) {
             this.x -= 5;
         }
-        if (this.game.right) {
+        if (this.game.right && this.x < params.PLAY_WIDTH) {
             this.x += 5;
         }
-        if (this.game.up) {
+        if (this.game.up && this.y > 0) {
             this.y -= 5;
         }
-        if (this.game.down) {
+        if (this.game.down && this.y < params.PLAY_HEIGHT) {
             this.y += 5;
         }
 
         // This logic would be good for a lose condition. If (base.dead) display loss screen.
 
-        // if (this.mario.dead && this.mario.y > PARAMS.BLOCKWIDTH * 16) {
+        // if (this.mario.dead && this.mario.y > params.BLOCKWIDTH * 16) {
         //     this.mario.dead = false;
-        //     this.loadLevel(levelOne, 2.5 * PARAMS.BLOCKWIDTH, 0 * PARAMS.BLOCKWIDTH);
+        //     this.loadLevel(levelOne, 2.5 * params.BLOCKWIDTH, 0 * params.BLOCKWIDTH);
         // };
     };
 
     draw(ctx) {
-        ctx.font = ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';
-        ctx.fillStyle = "White";
+            this.minimap.drawMe(ctx);
+            this.ui.drawMe(ctx);
+            this.hud.drawMe(ctx);
+            this.thePlayer.drawMe(ctx);
 
-        if (params.DEBUG) {
-            ctx.translate(0, -10); // hack to move elements up by 10 pixels instead of adding -10 to all y coordinates below
-            ctx.strokeStyle = "White";
-            ctx.lineWidth = 2;
-            ctx.strokeStyle = this.game.left ? "White" : "Grey";
-            ctx.fillStyle = ctx.strokeStyle;
-            ctx.strokeRect(6 * PARAMS.BLOCKWIDTH - 2, 2.5 * PARAMS.BLOCKWIDTH - 2, 0.5 * PARAMS.BLOCKWIDTH + 2, 0.5 * PARAMS.BLOCKWIDTH + 2);
-            ctx.fillText("L", 6 * PARAMS.BLOCKWIDTH, 3 * PARAMS.BLOCKWIDTH);
-            ctx.strokeStyle = this.game.down ? "White" : "Grey";
-            ctx.fillStyle = ctx.strokeStyle;
-            ctx.strokeRect(6.5 * PARAMS.BLOCKWIDTH, 3 * PARAMS.BLOCKWIDTH, 0.5 * PARAMS.BLOCKWIDTH + 2, 0.5 * PARAMS.BLOCKWIDTH + 2);
-            ctx.fillText("D", 6.5 * PARAMS.BLOCKWIDTH + 2, 3.5 * PARAMS.BLOCKWIDTH + 2);
-            ctx.strokeStyle = this.game.up ? "White" : "Grey";
-            ctx.fillStyle = ctx.strokeStyle;
-            ctx.strokeRect(6.5 * PARAMS.BLOCKWIDTH, 2 * PARAMS.BLOCKWIDTH - 4, 0.5 * PARAMS.BLOCKWIDTH + 2, 0.5 * PARAMS.BLOCKWIDTH + 2);
-            ctx.fillText("U", 6.5 * PARAMS.BLOCKWIDTH + 2, 2.5 * PARAMS.BLOCKWIDTH - 2);
-            ctx.strokeStyle = this.game.right ? "White" : "Grey";
-            ctx.fillStyle = ctx.strokeStyle;
-            ctx.strokeRect(7 * PARAMS.BLOCKWIDTH + 2, 2.5 * PARAMS.BLOCKWIDTH - 2, 0.5 * PARAMS.BLOCKWIDTH + 2, 0.5 * PARAMS.BLOCKWIDTH + 2);
-            ctx.fillText("R", 7 * PARAMS.BLOCKWIDTH + 4, 3 * PARAMS.BLOCKWIDTH);
-
-            ctx.strokeStyle = this.game.A ? "White" : "Grey";
-            ctx.fillStyle = ctx.strokeStyle;
-            ctx.beginPath();
-            ctx.arc(8.25 * PARAMS.BLOCKWIDTH + 2, 2.75 * PARAMS.BLOCKWIDTH, 0.25 * PARAMS.BLOCKWIDTH + 4, 0, 2 * Math.PI);
-            ctx.stroke();
-            ctx.fillText("A", 8 * PARAMS.BLOCKWIDTH + 4, 3 * PARAMS.BLOCKWIDTH);
-            ctx.strokeStyle = this.game.B ? "White" : "Grey";
-            ctx.fillStyle = ctx.strokeStyle;
-            ctx.beginPath();
-            ctx.arc(9 * PARAMS.BLOCKWIDTH + 2, 2.75 * PARAMS.BLOCKWIDTH, 0.25 * PARAMS.BLOCKWIDTH + 4, 0, 2 * Math.PI);
-            ctx.stroke();
-            ctx.fillText("B", 8.75 * PARAMS.BLOCKWIDTH + 4, 3 * PARAMS.BLOCKWIDTH);
-
-            ctx.translate(0, 10);
-            ctx.strokeStyle = "White";
-            ctx.fillStyle = ctx.strokeStyle;
-
-            this.minimap.draw(ctx);
-            this.ui.draw(ctx);
-            this.hud.draw(ctx);
-            this.player.draw(ctx);
-        }
     };
 };
