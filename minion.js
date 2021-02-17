@@ -13,14 +13,15 @@ class Minion {
         this.myScale = 2;
         this.myDirection = 0; // 0 = left, 1 = right
         this.state = 0;
+        this.priority = 0;
 
         this.radius = 8;
         this.visualRadius = 200;
 
-        this.path = [{ x: 100, y: 0 },
-          { x: 300, y: 500 },
-          { x: 0, y: 50 },
-          { x: 0, y: 0 }];
+        this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
 
         this.targetID = 0;
         if (this.path && this.path[0]) {
@@ -39,6 +40,7 @@ class Minion {
         this.attack = minionStats.ATTACK;
         this.agility = minionStats.AGILITY;
         this.intelligence = minionStats.INTELLIGENCE;
+        this.combat = false;
 
         this.dead = false;
         this.removeFromWorld = false;
@@ -120,7 +122,6 @@ class Minion {
             this.myBattleAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
         } else {
             this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
-            die();
         }
     };
 };

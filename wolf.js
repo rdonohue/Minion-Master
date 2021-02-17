@@ -18,15 +18,16 @@ class Wolf {
 
         this.myScale = 1;
         this.myDirection = 0; // 0 = left, 1 = right, 2 = up, 3 = down
+        this.priority = 1;
 
         this.radius = 20;
         this.visualRadius = 200;
         this.state = 0;
 
-        this.path = [{ x: 500, y: 0 },
-          { x: 500, y: 500 },
-          { x: 0, y: 250 },
-          { x: 700, y: 0 }];
+        this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
 
         this.targetID = 0;
         if (this.path && this.path[0]) {
@@ -49,7 +50,7 @@ class Wolf {
         this.dead = false;
         this.removeFromWorld = false;
 
-        this.myType = "minion";
+        this.myType = "wolf";
 
         this.timeBetweenUpdates = 1/this.agility;
         //this gives how long this minion will wait before moving.
@@ -93,6 +94,21 @@ class Wolf {
     updateMe() {
         this.elapsedTime += this.game.clockTick;
         var dist = distance(this, this.target);
+
+        if (this.targetID >= this.path.length - 1) {
+            this.targetID = 0;
+            this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+              { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+              { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+              { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+        }
+
+        if (this.health <= 0) {
+            this.state = 2;
+            this.dead = true;
+            this.removeFromWorld = true;
+        }
+
         if (dist < 5) {
             if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
                 this.targetID++;
@@ -100,35 +116,35 @@ class Wolf {
             this.target = this.path[this.targetID];
         }
 
+        var combat = false;
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
             if (ent instanceof Minion && canSee(this, ent) && ent.state != 2) {
                 this.target = ent;
+                combat = true;
             }
             if (ent instanceof Minion && collide(this, ent)) {
                 if (this.state === 0) {
                     this.state = 1;
                     this.elapsedTime = 0;
                 } else if (this.elapsedTime > 0.8) {
-                    ent.health -= 2;
+                    ent.health -= (this.attack - ent.defense);
                     this.elapsedTime = 0;
                 }
             }
         }
 
-        dist = distance(this, this.target);
-        this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
-          y: (this.target.y - this.y) / dist * this.maxSpeed};
+        if (!combat) {
+            this.state = 0;
+        }
 
-        this.x += this.velocity.x * this.game.clockTick;
-        this.y += this.velocity.y * this.game.clockTick;
-
-        this.facing = getFacing(this.velocity);
-
-        if (this.health <= 0) {
-            this.state = 2;
-            this.dead = true;
-            this.removeFromWorld = true;
+        if (this.state !== 1) {
+          dist = distance(this, this.target);
+          this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
+            y: (this.target.y - this.y) / dist * this.maxSpeed};
+          this.x += this.velocity.x * this.game.clockTick;
+          this.y += this.velocity.y * this.game.clockTick;
+          this.facing = getFacing(this.velocity);
         }
 
     };

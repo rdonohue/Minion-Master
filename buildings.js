@@ -1,13 +1,15 @@
 class Cave {
     constructor(game, x, y) {
-      Object.assign(this, {game, x, y });
+      Object.assign(this, { game, x, y });
 
-      this.game.cave = this;
       this.myName = "cave";
 
-      //this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cave.png");
+      this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cave.png");
+      this.caveAnim = new Animator(this.spritesheet, 0, 0, 2714, 1762, 1, 1, 0, false, true);
 
       this.state = 0;  // 0 = idle, 1 = destroyed
+      this.scale = 0.07;
+      this.radius = 20;
 
       //Stats
       this.health = 200;
@@ -17,29 +19,28 @@ class Cave {
 
       this.dead = false;
       this.removeFromWorld = false;
-      this.xOriginLoc = x;
-      this.yOriginLoc = y;
-      this.baseWidth = 1;
-      this.baseHeight = 1;
+
+      this.elapsedTime = 0;
 
     };
 
     updateMe() {
+        this.elapsedTime += this.game.clockTick;
 
+        if (this.health <= 0) {
+            this.dead = true;
+            this.removeFromWorld = true;
+        }
+
+        if (this.elapsedTime >= 10) {
+            this.game.spawnMe("ogre", this.x+50, this.y+50);
+            this.elapsedTime = 0;
+        }
     };
 
-    loadAnimations() {
-
-    };
-
-    die() {
-        this.dead = true;
-        this.removeFromWorld = true;
-        this.myTile = NULL;
-    };
 
     drawMe(ctx) {
-
+        this.caveAnim.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
     };
 
 };
@@ -48,15 +49,14 @@ class GuardTower {
   constructor(game, x, y) {
       Object.assign(this, {game, x, y });
 
-      this.game.tower = this;
       this.myName = "cave";
 
-    //this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tower.png");
+      this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tower.png");
 
       this.state = 0;  // 0 = idle, 1 = destroyed
 
     //Stats
-      this.health = 200;
+      this.health = 90;
       this.defense = 0.0;
       this.attack = 0;
       this.agility = 0;
@@ -71,17 +71,10 @@ class GuardTower {
   };
 
   updateMe() {
-
-  };
-
-  loadAnimations() {
-
-  };
-
-  die() {
-      this.dead = true;
-      this.removeFromWorld = true;
-      this.myTile = NULL;
+      if (this.health <= 0) {
+        this.dead = true;
+        this.removeFromWorld = true;
+      }
   };
 
   drawMe(ctx) {
