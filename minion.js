@@ -1,6 +1,7 @@
 class Minion {
+  //
     constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+        Object.assign(this, {game, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
 
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
@@ -13,7 +14,7 @@ class Minion {
         this.myDirection = 0; // 0 = left, 1 = right
         this.state = 0;
 
-        this.radius = 20;
+        this.radius = 8;
         this.visualRadius = 200;
 
         this.path = [{ x: 100, y: 0 },
@@ -45,6 +46,10 @@ class Minion {
 
         //i,j for cell, x,y for continuous position.
         this.myType = "minion";
+        this.mySelectionButton = new Button(
+          this.theGame.theHud, this.theGame,
+          this.x, this.y
+        this.radius, this.radius);
 
         // Object.assign(this, this.name);
         this.timeBetweenUpdates = 1/this.agility;
@@ -60,43 +65,46 @@ class Minion {
 //the move-speed is still staggered a bit, that might be because of async
 //with the draw-method being called...may need to make the minion handle its own draw-update.
     updateMe() {
-        this.elapsedTime += this.game.clockTick;
-        var dist = distance(this, this.target);
-        if (dist < 5) {
-            if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
-                this.targetID++;
-            }
-            this.target = this.path[this.targetID];
-        }
+      this.elapsedTime += this.game.clockTick;
 
-        for (var i = 0; i < this.game.entities.length; i++) {
-            var ent = this.game.entities[i];
-            if (ent instanceof Wolf && canSee(this, ent) && ent.state != 2) {
-                this.target = ent;
-            }
-            if (ent instanceof Wolf && collide(this, ent)) {
-                if (this.state === 0) {
-                    this.state = 1;
-                    this.elapsedTime = 0;
-                } else if (this.elapsedTime > 0.8) {
-                    ent.health -= 8;
-                    this.elapsedTime = 0;
-                }
-            }
-        }
+      this.mySelectButton.updateMe();
 
-        dist = distance(this, this.target);
-        this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
-          y: (this.target.y - this.y) / dist * this.maxSpeed};
-        this.x += this.velocity.x * this.game.clockTick;
-        this.y += this.velocity.y * this.game.clockTick;
-        this.facing = getFacing(this.velocity);
+      var dist = distance(this, this.target);
+      if (dist < 5) {
+          if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
+              this.targetID++;
+          }
+          this.target = this.path[this.targetID];
+      }
 
-        if (this.health <= 0) {
-            this.state = 2;
-            this.dead = true;
-            this.removeFromWorld = true;
-        }
+      for (var i = 0; i < this.game.entities.length; i++) {
+          var ent = this.game.entities[i];
+          if (ent instanceof Wolf && canSee(this, ent) && ent.state != 2) {
+              this.target = ent;
+          }
+          if (ent instanceof Wolf && collide(this, ent)) {
+              if (this.state === 0) {
+                  this.state = 1;
+                  this.elapsedTime = 0;
+              } else if (this.elapsedTime > 0.8) {
+                  ent.health -= 8;
+                  this.elapsedTime = 0;
+              }
+          }
+      }
+
+      dist = distance(this, this.target);
+      this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
+        y: (this.target.y - this.y) / dist * this.maxSpeed};
+      this.x += this.velocity.x * this.game.clockTick;
+      this.y += this.velocity.y * this.game.clockTick;
+      this.facing = getFacing(this.velocity);
+
+      if (this.health <= 0) {
+          this.state = 2;
+          this.dead = true;
+          this.removeFromWorld = true;
+      }
     };
 
     drawMinimap(ctx, mmX, mmY) {

@@ -4,7 +4,7 @@ class Button{
     x, y,
     w, h,
     myFunction, myText, mySpriteSheet,
-    isDebugger) {
+    isDebugger, isSeeThrough) {
 
     Object.assign(this, {theHud, theGame, x,y});
     this.theHud = theHud;
@@ -23,6 +23,7 @@ class Button{
 
     //can use this to "turn off" this button.
     this.isVisable = !isDebugger || params.DEBUG_ON;
+    this.isSeeThrough = isSeeThrough;
   };
 
   updateMe() {
@@ -47,7 +48,7 @@ class Button{
   drawMe(ctx) {
     //note that this button should be drawn AFTER any HUD elements are drawn
     //when it should be visable, otherwise the call-order might cover it.
-    if(this.isVisable) {
+    if(this.isVisable && !this.isSeeThrough) {
       //we want to only draw ourselves if we are visable.
       ctx.font = params.TILE_W_H/5 + 'px "Playfair Display SC"';
       ctx.fillStyle = "white";
