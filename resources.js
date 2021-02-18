@@ -53,8 +53,8 @@ class Resources {
       var sx, sy, sw, sh, dx, dy, i;
       i = 0;
       while (this.berries > 0 || this.stones > 0) {
-        dx = this.x + randomInt(params.PLAY_WIDTH/ params.TILE_W_H - 2) * params.TILE_W_H;
-        dy = this.y + randomInt(params.PLAY_HEIGHT / params.TILE_W_H - 2) * params.TILE_W_H;
+        dx = this.x + randomInt(params.PLAY_WIDTH / params.TILE_W_H - 2) * params.TILE_W_H + (16 + randomInt(16) - 8);
+        dy = this.y + randomInt(params.PLAY_HEIGHT / params.TILE_W_H - 2) * params.TILE_W_H + (16 + randomInt(16) - 8);
         if (resSelect > 7 || (dx >= 500 && dx <= 930 && dy >= 300 && dy <= 761)) {
           //Do Nothing.
           //Randomizes the area, also prevents resources from being built on the castle.

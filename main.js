@@ -11,13 +11,14 @@ ASSET_MANAGER.queueDownload("./sprites/button_Def.png");
 ASSET_MANAGER.queueDownload("./sprites/button_Health.png");
 ASSET_MANAGER.queueDownload("./sprites/button_Int.png");
 
+ASSET_MANAGER.queueDownload("./sprites/tower.png");
+
 ASSET_MANAGER.downloadAll(function () {
 	var gameEngine = new GameEngine();
 
 	var canvas = document.getElementById('gameWorld');
 	var ctx = canvas.getContext('2d');
 	ctx.imageSmoothingEnabled = false;
-
 	gameEngine.init(ctx);
 
 	new SceneManager(gameEngine);
