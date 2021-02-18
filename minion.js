@@ -17,6 +17,8 @@ class Minion {
         this.radius = 20;
         this.visualRadius = 200;
 
+        this.healthbar = new HealthBar(this);
+
         this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
@@ -93,12 +95,14 @@ class Minion {
                 this.target = ent;
                 combat = true;
             }
-            if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave) && collide(this, ent)) {
+            if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave) && collide(this, ent) && !ent.dead) {
                 if (this.state === 0) {
                     this.state = 1;
                     this.elapsedTime = 0;
                 } else if (this.elapsedTime > 0.8) {
-                    ent.health -= (this.attack - ent.defense);
+                    var damage = (5 + randomInt(5)) - ent.defense;
+                    ent.health -= damage;
+                    this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage))
                     this.elapsedTime = 0;
                 }
             }
@@ -135,5 +139,7 @@ class Minion {
         } else {
             this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
         }
+
+        this.healthbar.drawMe(ctx);
     };
 };

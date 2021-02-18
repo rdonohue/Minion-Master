@@ -24,6 +24,8 @@ class Wolf {
         this.visualRadius = 200;
         this.state = 0;
 
+        this.healthbar = new HealthBar(this);
+
         this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
@@ -119,18 +121,20 @@ class Wolf {
         var combat = false;
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
-            if (ent instanceof Minion && canSee(this, ent) && ent.state != 2) {
+            if (ent instanceof Minion && canSee(this, ent)) {
                 this.target = ent;
                 combat = true;
             }
-            if (ent instanceof Minion && collide(this, ent)) {
-                if (this.state === 0) {
-                    this.state = 1;
-                    this.elapsedTime = 0;
-                } else if (this.elapsedTime > 0.8) {
-                    ent.health -= (this.attack - ent.defense);
-                    this.elapsedTime = 0;
-                }
+            if (ent instanceof Minion && collide(this, ent) && !ent.dead) {
+              if (this.state === 0) {
+                  this.state = 1;
+                  this.elapsedTime = 0;
+              } else if (this.elapsedTime > 0.8) {
+                  var damage = (6 + randomInt(5)) - ent.defense;
+                  ent.health -= damage;
+                  this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage))
+                  this.elapsedTime = 0;
+              }
             }
         }
 
@@ -162,5 +166,7 @@ class Wolf {
       } else {
           this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
       }
+
+      this.healthbar.drawMe(ctx);
     };
 };
