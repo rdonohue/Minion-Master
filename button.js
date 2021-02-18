@@ -1,9 +1,11 @@
 class Button{
   constructor(
-    theHud, theGame,
-    x, y,
-    w, h,
-    myFunction, myText, mySpriteSheet,
+    theHud, theGame, //owning objects
+    x, y, //position of top
+    w, h, //size of click-box.
+    sw, sh, //size of sprite, no offset currently implemented!
+    myFunction, myArguments,
+    myText, mySpriteSheet,
     isDebugger, isSeeThrough) {
 
     this.theHud = theHud;
@@ -17,7 +19,10 @@ class Button{
     this.y = y;
     this.w = w; //width and height
     this.h = h;
+    this.sw = sw;
+    this.sh = sh;
     this.myFunction = myFunction; //the function that is to be performed
+    this.myArguments = [];
     this.myText = myText;
     this.myImage = mySpriteSheet; //since this is "optional", it has to be last I think.
 
@@ -44,7 +49,7 @@ class Button{
     var isInYCoord = theClick.y > this.y && theClick.y < this.y + this.h;
 
     if(isInXCoord && isInYCoord){ //check y-axis
-      this.myFunction(this.myFunction.args);
+      this.myFunction(this.myArguments);
     }
   }
 
@@ -58,7 +63,7 @@ class Button{
       ctx.fillText(this.myText,
         this.x, this.y-2);
       if(this.myImage) {
-        ctx.drawImage(this.myImage, this.x, this.y, this.w, this.h);
+        ctx.drawImage(this.myImage, this.x, this.y, this.sw, this.sh);
       } else {
         ctx.fillStyle = this.myColor;
         ctx.fillRect(

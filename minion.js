@@ -44,6 +44,8 @@ class Minion {
         //Stats
         this.maxHealth = minionStats.HEALTH;
         this.health = this.maxHealth;
+        this.regen = this.maxHealth/20;
+        //how much health to regen per second.
         this.defense = minionStats.DEFENSE;
         this.attack = minionStats.ATTACK;
         this.agility = minionStats.AGILITY;
@@ -60,9 +62,10 @@ class Minion {
           this.theHud, this.theGame,
           this.x, this.y,
           this.radius, this.radius,
-          this.selectMe(), this.myType, this.spritesheet,
+          this.radius, this.radius,
+          this.selectMe, null,
+          this.myType, this.spritesheet,
           false, true);
-        this.mySelectionButton.myFunction.args.push(this.theGame.theHud.selected = null);
 
         // Object.assign(this, this.name);
         this.timeBetweenUpdates = 1/this.agility;
@@ -76,7 +79,7 @@ class Minion {
     };
 
     selectMe(){
-
+      this.theHud.selected = this;
     }
 
     //the move-speed is still staggered a bit, that might be because of async
@@ -84,7 +87,7 @@ class Minion {
     updateMe() {
       this.elapsedTime += this.game.clockTick;
 
-      this.mySelectButton.updateMe();
+      this.mySelectionButton.updateMe();
 
       var dist = distance(this, this.target);
       if (dist < 5) {

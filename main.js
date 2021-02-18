@@ -45,9 +45,9 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(cave);
 
 	//gameEngine.spawnMe("castle", 500, 300);
-	gameEngine.spawnMe("minion", 0, 0);
-	gameEngine.spawnMe("minion", 10, 300);
-	gameEngine.spawnMe("minion", 50, 550);
+	// gameEngine.spawnMe("minion", 0, 0);
+	// gameEngine.spawnMe("minion", 10, 300);
+	// gameEngine.spawnMe("minion", 50, 550);
 	//gameEngine.spawnMe("wolf", 800, 0);
 	//gameEngine.spawnMe("wolf", 800, 100);
 	//gameEngine.spawnMe("wolf", 500, 700);

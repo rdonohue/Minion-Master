@@ -12,8 +12,6 @@ class HUD{
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
 
-        this.camX = 0;
-        this.camY = 0;
         this.gamePosX = 0; // not really needed
         this.gamePosY = 0;
         this.gameLength= gameLength;
@@ -56,12 +54,12 @@ class HUD{
         this, this.theGame,
         15, 15,
         25, 25,
+        25, 25,
         (function(){
           params.DEBUG_ON = !params.DEBUG_ON;
-        }),
-        "debug mode",
-        null,
-        false, //debug button should always be visable.
+        }), [],
+        "debug mode", null,
+        false, false //debug button should always be visable.
       );
       debugButton.myColor = "white";
 
@@ -69,14 +67,14 @@ class HUD{
         this, this.theGame,
         15, 55,
         25, 25,
+        25, 25,
         (function() {
           var x = randomInt(150);
           var y = randomInt(150);
           this.theGame.spawnMe("minion", x, y);
-        }),
-        "spawn minion",
-        null, //has to be null if we don't want to add a spritesheet, cas I'm lazy.
-        false,
+        }), [],
+        "spawn minion", null, //has to be null if we don't want to add a spritesheet, cas I'm lazy.
+        false, false
       );
       minionButton.myColor = "blue";
 
@@ -84,15 +82,15 @@ class HUD{
         this, this.theGame,
         15, 95,
         25, 25,
+        25, 25,
         (function() {
           var x = randomInt(150);
           var y = randomInt(150);
           console.log("spawning wolf at: (" + x + "," + y+")");
           this.theGame.spawnMe("wolf", x, y);
-        }),
-        "spawn wolf",
-        null, //has to be null if we don't want to add a spritesheet, cas I'm lazy.
-        true,
+        }), [],
+        "spawn wolf", null, //has to be null if we don't want to add a spritesheet, cas I'm lazy.
+        true, false
       );
       wolfButton.myColor = "SaddleBrown";
 
@@ -105,6 +103,7 @@ class HUD{
       if(this.theGame.click) {
         //if there is a click, we need to let all of the buttons check if its for them.
         this.myButtons.forEach((button) => {
+          // console.log("b"+button);
           button.updateMe();
         });
 
@@ -165,17 +164,15 @@ class HUD{
     }
 
     createStatButtons(ctx) {
-
       var newHealthButton = new Button(
         this, this.theGame,
-        100, 100, //location of top left corner
-        40, 40, //size of button hitbox
-        this.incrementStat, //the function to be called on it.
-        "increase Health", //text box
-        this.HealthButt, //the spritesheet to use.
-        false
+        150, 600, //location of top left corner
+        25, 25, //size of button hitbox
+        45, 45, //size of button sprite
+        this.incrementStat, ["incrementStat", "HEALTH" , this.healthInc], //the function to be called on it.
+        "increase Health", this.HealthButt, //the text and spritesheet to use.
+        false, false
       );
-      newHealthButton.myFunction.args = ["incrementStat", "HEALTH" , this.healthInc];
       this.healthButton = newHealthButton;
       this.theGame.addEntity(this.healthButton);
 
