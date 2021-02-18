@@ -7,8 +7,8 @@ class SceneManager {
 
         this.minimap = new MiniMap(this.game, 1024, 576, 256);
         this.ui = new UI(this.game, 1024, 0, 256);
-        this.hud = new HUD(this.game);
-        this.thePlayer = new Player(this.game, 100, 150, 10, 5, 0, 0);
+        this.theHud = this.game.theHud;
+        // this.thePlayer = new Player(this.game, 100, 150, 10, 5, 0, 0);
 
         // These are dummy values for keeping track of variables --Ryan
         // It's probably okay to delete these later.
@@ -16,6 +16,7 @@ class SceneManager {
         var theY = 0;
 
         this.loadLevel(theX, theY);
+        this.notDead = true;
     };
 
     loadLevel(x, y) {
@@ -23,7 +24,7 @@ class SceneManager {
         this.x = 0;
 
 
-        //let castle = new HomeBase(gameEngine, 500, 300, 430, 461);
+        let castle = new HomeBase(this.game, 500, 300, 430, 461);
       	let corners = new Grasscorner(this.game, 0, 0);
       	let vertwalls = new Vertwall(this.game, 0, params.TILE_W_H);
       	let horiwalls = new Horiwall(this.game, params.TILE_W_H, 0);
@@ -37,6 +38,7 @@ class SceneManager {
         //     }
         // }
 
+        this.game.addEntity(castle);
         this.game.addEntity(corners);
         this.game.addEntity(vertwalls);
         this.game.addEntity(horiwalls);
@@ -44,14 +46,15 @@ class SceneManager {
         this.game.addEntity(resources);
         this.game.addEntity(this.minimap);
         this.game.addEntity(this.ui);
-        this.game.addEntity(this.hud);
-        this.game.addEntity(this.thePlayer);
+        // this.game.addEntity(this.thePlayer);
         this.game.spawnMe("minion", 0, 0);
       	this.game.spawnMe("wolf", 800, 0);
     };
 
     update() {
-        params.DEBUG = document.getElementById("debug").checked;
+        // params.DEBUG = document.getElementById("debug").checked;
+        //I do like debug being outside the game itself instead of how I have it.
+        //, but for now I'm removing this.
 
         const TICK = this.game.clockTick;
 
@@ -71,19 +74,20 @@ class SceneManager {
             this.y += 10;
         }
 
-        // This logic would be good for a lose condition. If (base.dead) display loss screen.
+        if(this.game.entities.find(element => element.myType == "HomeBase") == undefined){
 
-        // if (this.mario.dead && this.mario.y > params.BLOCKWIDTH * 16) {
-        //     this.mario.dead = false;
-        //     this.loadLevel(levelOne, 2.5 * params.BLOCKWIDTH, 0 * params.BLOCKWIDTH);
-        // };
+        }
     };
 
     draw(ctx) {
-            this.minimap.drawMe(ctx);
-            this.ui.drawMe(ctx);
-            this.hud.drawMe(ctx);
-            this.thePlayer.drawMe(ctx);
-
+      if(this.notDead) {
+        this.minimap.drawMe(ctx);
+        this.ui.drawMe(ctx);
+        this.theHud.drawMe(ctx);
+        // this.thePlayer.drawMe(ctx);
+      } else {
+        ctx.clearRect(0,0,params.CANVAS_WIDTH,params.CANVAS_HEIGHT)
+        ctx.fillText("YOU DIED", 150, 50);
+      }
     };
 };

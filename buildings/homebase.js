@@ -2,6 +2,8 @@ class HomeBase {
   constructor(game, x, y, w, h) {
       Object.assign(this, {game, x, y, w, h });
       this.myName = "HomeBase";
+      this.myType = "HomeBase"; //we need to not have this redundency. I know they
+      //eventually will be different but for now we should reduce to one I think.
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/castle.png");
 
@@ -39,7 +41,7 @@ class HomeBase {
   };
 
   drawMe(ctx) {
-      this.animations[0].drawFrame(this.game.clockTick, ctx, this.xOriginLoc, this.yOriginLoc, 0.4);
+    this.animations[0].drawFrame(this.game.clockTick, ctx, this.xOriginLoc, this.yOriginLoc, 0.4);
   };
 
 }

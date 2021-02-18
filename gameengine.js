@@ -16,11 +16,9 @@ class GameEngine {
         this.surfaceHeight = null;
         this.tickDuration = 0.1;
 
-        this.theHud = new HUD(
-          this,
-        	params.CANVAS_WIDTH, params.CANVAS_HEIGHT,
-        	100, //width of hud
-        	[0, 0, 6, 5] //starting rez
+        this.theHud = new HUD(this,
+          1024, params.CANVAS_HEIGHT, 256,
+          [50,60,6,4]
         );
     };
 
@@ -148,7 +146,7 @@ class GameEngine {
         this.entities.push(entity);
     };
 
-    draw() {
+    drawEntitys() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
         for (var i = 0; i < this.entities.length; i++) {
             this.entities[i].drawMe(this.ctx);
@@ -156,7 +154,7 @@ class GameEngine {
         this.camera.draw(this.ctx);
     }
 
-    update() {
+    updateEntitys() {
         var entitiesCount = this.entities.length;
 
         for (var i = 0; i < entitiesCount; i++) {

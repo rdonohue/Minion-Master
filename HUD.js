@@ -244,3 +244,26 @@ class MiniMap {
         ctx.fillRect(this.x, this.y, this.w, 500);
     }
 };
+
+//putting "UI" back in at least temperarilly
+// Rest of the UI to hold the game menu features.
+class UI {
+    constructor(game, x, y, w) {
+        Object.assign(this, { game, x, y, w });
+    };
+
+    updateMe() {
+
+    };
+
+    drawMe(ctx) {
+        ctx.fillStyle = "SaddleBrown";
+        ctx.fillRect(this.x, this.y, this.w, 576);
+        ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
+        ctx.fillStyle = "White";
+        ctx.fillText("MiniMap", this.x + 88, 568);
+        ctx.strokeStyle = "White"
+        ctx.strokeRect(this.x + 84, 552, 76, 22);
+    }
+
+};
