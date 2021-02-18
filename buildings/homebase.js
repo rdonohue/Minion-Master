@@ -1,6 +1,6 @@
 class HomeBase {
-  constructor(game, x, y, w, h) {
-      Object.assign(this, {game, x, y, w, h });
+  constructor(game, x, y, s) {
+      Object.assign(this, {game, x, y, s});
       this.myName = "HomeBase";
       this.myType = "HomeBase"; //we need to not have this redundency. I know they
       //eventually will be different but for now we should reduce to one I think.
@@ -12,24 +12,29 @@ class HomeBase {
 
       //Stats
       this.health = 200;
-      this.defense = 0.0;
+      this.defense = 3.0;
       this.attack = 0;
       this.agility = 0;
       this.intelligence = 0;
 
       this.dead = false;
       this.removeFromWorld = false;
-      this.xOriginLoc = x;
-      this.yOriginLoc = y;
-      this.baseWidth = w;
-      this.baseHeight = h;
+      this.x = x;
+      this.y = y;
+      this.s = s;
 
       this.animations = [];
       this.loadAnimations();
   };
 
   loadAnimations() {
-       this.animations[0] = new Animator(this.spritesheet, 0, 0, this.baseWidth, this.baseHeight, 1, 1, 0, false, true);
+       this.animations[0] = new Animator(
+         this.spritesheet,
+         0, 0, //pos
+         this.w, this.h, //size
+         1, 1, 0, //frame-info
+         false, true //boolean type-info
+       );
   }
 
   updateMe() {
@@ -41,7 +46,7 @@ class HomeBase {
   };
 
   drawMe(ctx) {
-    this.animations[0].drawFrame(this.game.clockTick, ctx, this.xOriginLoc, this.yOriginLoc, 0.4);
+    this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.s);
   };
 
 }

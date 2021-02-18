@@ -7,7 +7,7 @@ class Animator {
 
     };
 
-    drawFrame(tick, ctx, x, y, scale, direction) {
+    drawFrame(tick, ctx, x, y, scale) {
         this.elapsedTime += tick;
 
         if (this.isDone()) {

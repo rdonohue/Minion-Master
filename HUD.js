@@ -5,8 +5,8 @@ class HUD{
 
         this.myFood = startingRes[0];
         this.myRock = startingRes[1];
-        this.foodIncome = startingRes[2]
-        this.rockIncome = startingRes[3]
+        this.foodIncome = startingRes[2];
+        this.rockIncome = startingRes[3];
 
         this.timeBetweenUpdates = 1;
         this.timer = new Timer();
@@ -72,7 +72,7 @@ class HUD{
           var x = randomInt(150);
           var y = randomInt(150);
           this.theGame.spawnMe("minion", x, y);
-        }), [],
+        }), [this.myFood],
         "spawn minion", null, //has to be null if we don't want to add a spritesheet, cas I'm lazy.
         false, false
       );
@@ -103,12 +103,8 @@ class HUD{
       if(this.theGame.click) {
         //if there is a click, we need to let all of the buttons check if its for them.
         this.myButtons.forEach((button) => {
-          // console.log("b"+button);
           button.updateMe();
         });
-
-        //check to see if the player clicked on a entity.
-
       }
 
       //this is NOT the best implmentation of making the player not increment.
@@ -142,7 +138,6 @@ class HUD{
       ctx.fillText("AGI: " + minionStats.AGILITY, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.6);
       ctx.fillText("INT: " + minionStats.INTELLIGENCE, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.4);
 
-
       //draw the buttons
       this.myButtons.forEach((button) => {
         button.drawMe(ctx);
@@ -154,7 +149,7 @@ class HUD{
       ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
       ctx.fillStyle = "White";
 
-      var resourceX = this.gameLength - 250;
+      var resourceX = this.gameLength + 10;
 
       ctx.fillText(("Food: " + Math.round(this.myFood) + " + "
         + Math.round(this.foodIncome) + " food/second"), resourceX, params.TILE_W_H/4);
@@ -257,13 +252,13 @@ class UI {
     };
 
     drawMe(ctx) {
-        ctx.fillStyle = "SaddleBrown";
-        ctx.fillRect(this.x, this.y, this.w, 576);
-        ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
-        ctx.fillStyle = "White";
-        ctx.fillText("MiniMap", this.x + 88, 568);
-        ctx.strokeStyle = "White"
-        ctx.strokeRect(this.x + 84, 552, 76, 22);
+        // ctx.fillStyle = "SaddleBrown";
+        // ctx.fillRect(this.x, this.y, this.w, 576);
+        // ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
+        // ctx.fillStyle = "White";
+        // ctx.fillText("MiniMap", this.x + 88, 568);
+        // ctx.strokeStyle = "White"
+        // ctx.strokeRect(this.x + 84, 552, 76, 22);
     }
 
 };

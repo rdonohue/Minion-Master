@@ -9,10 +9,7 @@ class Minion {
         this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.05, 4, false, true);
         this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
 
-        this.theGame = game;
         this.theHud = this.theGame.theHud;
-        this.x = x;
-        this.y = y;
 
         this.myScale = 2;
         this.myDirection = 0; // 0 = left, 1 = right
@@ -22,17 +19,9 @@ class Minion {
         this.radius = 8;
         this.visualRadius = 200;
 
-        this.path = [
+        this.target= [
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }
         ];
-
-        this.targetID = 0;
-        if (this.path && this.path[0]) {
-          this.target = this.path[this.targetID];
-        }
 
         this.maxSpeed = 100;
         var dist = distance(this, this.target);
@@ -52,7 +41,6 @@ class Minion {
         this.intelligence = minionStats.INTELLIGENCE;
         this.combat = false;
 
-        this.dead = false;
         this.removeFromWorld = false;
         //this.facing = 0;
 
@@ -63,9 +51,10 @@ class Minion {
           this.x, this.y,
           this.radius, this.radius,
           this.radius, this.radius,
-          this.selectMe, null,
+          this.selectMe, [],
           this.myType, this.spritesheet,
-          false, true);
+          false, true
+        );
 
         // Object.assign(this, this.name);
         this.timeBetweenUpdates = 1/this.agility;
@@ -80,6 +69,7 @@ class Minion {
 
     selectMe(){
       this.theHud.selected = this;
+      console.log("minion is clicked");
     }
 
     //the move-speed is still staggered a bit, that might be because of async
