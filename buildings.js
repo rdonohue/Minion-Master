@@ -78,7 +78,7 @@ class GuardTower {
   };
 
   drawMe(ctx) {
-
+      //don't forget to subtract this.game.camera.x and this.game.camera.y from the respective coordinates.
   };
 
 };

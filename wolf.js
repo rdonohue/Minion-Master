@@ -156,11 +156,11 @@ class Wolf {
     drawMe(ctx) {
       //this.animations[this.direction][this.state].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
       if (this.state == 0) {
-          this.mySearchingAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+          this.mySearchingAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
       } else if (this.state == 1) {
-          this.myHuntingAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+          this.myHuntingAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
       } else {
-          this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+          this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
       }
     };
 };

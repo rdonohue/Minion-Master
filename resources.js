@@ -2,8 +2,8 @@ class Resources {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/trees_stones_bushes.png");
-        this.interiorX = Create2DArray(params.VERT_WALL_COUNT);
-        this.interiorY = Create2DArray(params.VERT_WALL_COUNT);
+        this.interiorX = Create2DArray(params.PLAY_HEIGHT / params.TILE_W_H - 2);
+        this.interiorY = Create2DArray(params.PLAY_HEIGHT / params.TILE_W_H - 2);
         this.resArray = [];
         this.drawArray = [];
         this.stones = randomInt(10) + 1
@@ -43,7 +43,7 @@ class Resources {
     drawMe(ctx) {
       for (var i = 0; i < 10; i++) {
         ctx.drawImage(this.spritesheet, this.drawArray[i].sx, this.drawArray[i].sy, this.drawArray[i].sw,
-           this.drawArray[i].sh, this.drawArray[i].dx, this.drawArray[i].dy, params.TILE_W_H / 3, params.TILE_W_H / 3);
+           this.drawArray[i].sh, this.drawArray[i].dx - this.game.camera.x, this.drawArray[i].dy - this.game.camera.y, params.TILE_W_H / 3, params.TILE_W_H / 3);
       }
     };
 
@@ -53,8 +53,8 @@ class Resources {
       var sx, sy, sw, sh, dx, dy, i;
       i = 0;
       while (this.berries > 0 || this.stones > 0) {
-        dx = this.x + randomInt(params.HORI_WALL_COUNT) * params.TILE_W_H;
-        dy = this.y + randomInt(params.VERT_WALL_COUNT) * params.TILE_W_H;
+        dx = this.x + randomInt(params.PLAY_WIDTH/ params.TILE_W_H - 2) * params.TILE_W_H;
+        dy = this.y + randomInt(params.PLAY_HEIGHT / params.TILE_W_H - 2) * params.TILE_W_H;
         if (resSelect > 7 || (dx >= 500 && dx <= 930 && dy >= 300 && dy <= 761)) {
           //Do Nothing.
           //Randomizes the area, also prevents resources from being built on the castle.

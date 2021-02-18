@@ -22,37 +22,9 @@ ASSET_MANAGER.downloadAll(function () {
 	var ctx = canvas.getContext('2d');
 	ctx.imageSmoothingEnabled = false;
 
-	let castle = new HomeBase(gameEngine, 400, 525, 430, 461);
-	let corners = new Grasscorner(gameEngine, 0, 0);
-	let vertwalls = new Vertwall(gameEngine, 0, params.TILE_W_H);
-	let horiwalls = new Horiwall(gameEngine, params.TILE_W_H, 0);
-	let intGrass = new InteriorGrass(gameEngine, params.TILE_W_H, params.TILE_W_H);
-	let resources = new Resources(gameEngine, params.TILE_W_H, params.TILE_W_H);
+	gameEngine.init(ctx);
 
-	let cave = new Cave(gameEngine, 700, 50);
-
-	gameEngine.init(ctx, params.CANVAS_WIDTH / 128,
-		 							params.CANVAS_HEIGHT / 128,
-									params.TILE_W_H * 2);
-  ctx.imageSmoothingEnabled = false;
-
-	gameEngine.addEntity(corners);
-	gameEngine.addEntity(vertwalls);
-	gameEngine.addEntity(horiwalls);
-	gameEngine.addEntity(intGrass);
-	gameEngine.addEntity(resources);
-	gameEngine.addEntity(castle);
-	gameEngine.addEntity(cave);
-
-	//gameEngine.spawnMe("castle", 500, 300);
-	// gameEngine.spawnMe("minion", 0, 0);
-	// gameEngine.spawnMe("minion", 10, 300);
-	// gameEngine.spawnMe("minion", 50, 550);
-	//gameEngine.spawnMe("wolf", 800, 0);
-	//gameEngine.spawnMe("wolf", 800, 100);
-	//gameEngine.spawnMe("wolf", 500, 700);
-	//gameEngine.spawnMe("ogre", 900, 50);
-	//gameEngine.spawnMe("ogre", 700, 25);
+	new SceneManager(gameEngine);
 
 	gameEngine.start();
 });
