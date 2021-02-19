@@ -29,8 +29,8 @@ class SceneManager {
       	let horiwalls = new Horiwall(this.game, params.TILE_W_H, 0);
       	let intGrass = new InteriorGrass(this.game, params.TILE_W_H, params.TILE_W_H);
       	let resources = new Resources(this.game, params.TILE_W_H, params.TILE_W_H);
-        let tower = new Tower(this.game, 100, 100);
-
+        let tower = new Tower(this.game, 300, 300);
+        let homebase = new HomeBase(this.game, 500, 400);
         // if (level.coins) {
         //     for (var i = 0; i < level.coins.length; i++) {
         //         let coin = level.coins[i];
@@ -43,7 +43,7 @@ class SceneManager {
         this.game.addEntity(horiwalls);
         this.game.addEntity(intGrass);
         this.game.addEntity(resources);
-
+        this.game.addEntity(homebase);
         this.game.addEntity(tower);
 
         this.game.addEntity(this.minimap);

@@ -15,13 +15,7 @@ class HomeBase {
         this.attack = 0;
         this.agility = 0;
         this.intelligence = 0;
-
-        this.dead = false;
         this.removeFromWorld = false;
-        this.xOriginLoc = x;
-        this.yOriginLoc = y;
-        this.baseWidth = 400;
-        this.baseHeight = 400;
 
         this.animations = [];
         this.loadAnimations();
@@ -29,7 +23,7 @@ class HomeBase {
 
     loadAnimations() {
          // idle animation for state = 0
-         this.animations[0] = new Animator(this.spritesheet, 0, 0, this.baseWidth, this.baseHeight, 1, 1, 0, false, true);
+         this.animations[0] = new Animator(this.spritesheet, 0, 0, 430, 461, 1, 1, 0, false, true);
          // this.animations[1] = some other sprite that represents a destroyed home base (wreckage)
     }
 
@@ -39,13 +33,12 @@ class HomeBase {
     }
 
     die() {
-        this.dead = true;
+        this.state = 1;
         this.removeFromWorld = true;
-        this.myTile = NULL;
     };
 
     drawMe(ctx) {
-        this.animations[0].drawFrame(this.game.clockTick, ctx, this.xOriginLoc - this.game.camera.x, this.yOriginLoc - this.game.camera.y, 0.5);
+        this.animations[0].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 0.5);
     };
 
 }
