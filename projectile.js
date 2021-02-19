@@ -1,6 +1,6 @@
 class Projectile {
-    constructor(game, x, y, target, attackMod, heatSeeking) {
-        Object.assign(this, { game, x, y, target, attackMod});
+    constructor(game, x, y, target, attackMod, scale) {
+        Object.assign(this, { game, x, y, target, attackMod, scale});
         this.radius = 12;
         this.smooth = false;
 
@@ -14,10 +14,11 @@ class Projectile {
         this.cache = [];
 
         this.animations = [];
-        this.animations.push(new Animator(this.spritesheet, 0, 0, 32, 31, 1, 0.2, 0, false, true));
-        this.animations.push(new Animator(this.spritesheet, 32, 0, 32, 31, 1, 0.2, 0, false, true));
-        this.animations.push(new Animator(this.spritesheet, 0, 32, 32, 31, 1, 0.2, 0, false, true));
-        this.animations.push(new Animator(this.spritesheet, 32, 32, 32, 31, 1, 0.2, 0, false, true));
+        this.animations.push(new Animator(this.spritesheet, 0, 0, 32, 32, 1, 0.2, 0, false, true));
+        this.animations.push(new Animator(this.spritesheet, 40, 0, 32, 32, 1, 0.2, 0, false, true));
+        this.animations.push(new Animator(this.spritesheet, 80, 0, 32, 32, 1, 0.2, 0, false, true));
+        this.animations.push(new Animator(this.spritesheet, 120, 0, 32, 32, 1, 0.2, 0, false, true));
+        this.animations.push(new Animator(this.spritesheet, 160, 0, 32, 32, 1, 0.2, 0, false, true));
 
         this.facing = 5;
 
@@ -55,7 +56,7 @@ class Projectile {
             var ent = this.game.entities[i];
             if ((ent instanceof Wolf) && collide(this, ent)) {
                 var damage = 5 * this.attackMod;
-                ent.hitpoints -= damage;
+                ent.health -= damage;
                 this.removeFromWorld = true;
             }
         }
@@ -73,14 +74,14 @@ class Projectile {
 
             this.drawAngle(ctx, degrees);
         } else {
-            // if (this.facing < 5) {
-            //     this.animations[this.facing].drawFrame(this.game.clockTick, ctx, this.x - xOffset, this.y - yOffset, 1);
-            // } else {
-            //     ctx.save();
-            //     ctx.scale(-1, 1);
-            //     this.animations[8 - this.facing].drawFrame(this.game.clockTick, ctx, -(this.x) - 32 + xOffset, this.y - yOffset, 1);
-            //     ctx.restore();
-            // }
+            if (this.facing < 5) {
+                this.animations[this.facing].drawFrame(this.game.clockTick, ctx, this.x - xOffset, this.y - yOffset, this.scale);
+            } else {
+                ctx.save();
+                ctx.scale(-1, 1);
+                this.animations[8 - this.facing].drawFrame(this.game.clockTick, ctx, -(this.x) - 32 + xOffset, this.y - yOffset, this.scale);
+                ctx.restore();
+            }
         }
     };
 };

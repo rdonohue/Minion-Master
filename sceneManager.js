@@ -30,7 +30,8 @@ class SceneManager {
       	let intGrass = new InteriorGrass(this.game, params.TILE_W_H, params.TILE_W_H);
       	let resources = new Resources(this.game, params.TILE_W_H, params.TILE_W_H);
         let tower = new Tower(this.game, 300, 300);
-        let homebase = new HomeBase(this.game, 500, 400);
+        let base = new HomeBase(this.game, 500, 400);
+
         // if (level.coins) {
         //     for (var i = 0; i < level.coins.length; i++) {
         //         let coin = level.coins[i];
@@ -43,15 +44,16 @@ class SceneManager {
         this.game.addEntity(horiwalls);
         this.game.addEntity(intGrass);
         this.game.addEntity(resources);
-        this.game.addEntity(homebase);
-        this.game.addEntity(tower);
 
+        this.game.addEntity(tower);
+        this.game.addEntity(base);
         this.game.addEntity(this.minimap);
         this.game.addEntity(this.ui);
         this.game.addEntity(this.hud);
         this.game.addEntity(this.thePlayer);
         this.game.spawnMe("minion", 0, 0);
       	this.game.spawnMe("wolf", 800, 0);
+        this.game.spawnMe("wolf", 0, 400);
     };
 
     update() {
