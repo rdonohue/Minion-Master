@@ -11,6 +11,8 @@ class Cave {
       this.scale = 0.07;
       this.radius = 20;
 
+      this.healthbar = new HealthBar(this);
+
       //Stats
       this.health = 200;
       this.defense = 0.0;
@@ -41,6 +43,7 @@ class Cave {
 
     drawMe(ctx) {
         this.caveAnim.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        this.healthbar.drawMe(ctx);
     };
 
 };
@@ -54,6 +57,8 @@ class GuardTower {
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tower.png");
 
       this.state = 0;  // 0 = idle, 1 = destroyed
+
+      this.healthbar = new HealthBar(this);
 
     //Stats
       this.health = 90;

@@ -13,6 +13,8 @@ class Ogre {
         this.radius = 20;
         this.visualRadius = 200;
 
+        this.healthbar = new HealthBar(this);
+
         this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
@@ -82,18 +84,20 @@ class Ogre {
       var combat = false;
       for (var i = 0; i < this.game.entities.length; i++) {
           var ent = this.game.entities[i];
-          if ((ent instanceof Minion || ent instanceof HomeBase) && canSee(this, ent) && ent.state != 2) {
+          if ((ent instanceof Minion || ent instanceof HomeBase) && canSee(this, ent)) {
               this.target = ent;
               combat = true;
           }
-          if ((ent instanceof Minion || ent instanceof HomeBase) && collide(this, ent)) {
-              if (this.state === 0) {
-                  this.state = 1;
-                  this.elapsedTime = 0;
-              } else if (this.elapsedTime > 0.8) {
-                  ent.health -= (this.attack - ent.defense);
-                  this.elapsedTime = 0;
-              }
+          if ((ent instanceof Minion || ent instanceof HomeBase) && collide(this, ent) && !ent.dead) {
+            if (this.state === 0) {
+                this.state = 1;
+                this.elapsedTime = 0;
+            } else if (this.elapsedTime > 0.8) {
+                var damage = (7 + randomInt(5)) - ent.defense;
+                ent.health -= damage;
+                this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage))
+                this.elapsedTime = 0;
+            }
           }
 
       }
@@ -123,6 +127,8 @@ class Ogre {
       } else if (this.state == 1) {
         this.attackAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y-80, this.myScale);
       }
+
+      this.healthbar.drawMe(ctx);
 
     };
 

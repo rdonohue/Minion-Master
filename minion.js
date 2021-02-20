@@ -9,7 +9,7 @@ class Minion {
         this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.05, 4, false, true);
         this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
 
-        this.theHud = this.theGame.theHud;
+        this.theHud = this.game.theHud;
 
         this.myScale = 2;
         this.myDirection = 0; // 0 = left, 1 = right
@@ -19,9 +19,10 @@ class Minion {
         this.radius = 8;
         this.visualRadius = 200;
 
-        this.target= [
-          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-        ];
+        this.healthbar = new HealthBar(this);
+
+        this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+        this.target = this.path[0];
 
         this.maxSpeed = 100;
         var dist = distance(this, this.target);
@@ -34,7 +35,7 @@ class Minion {
         this.maxHealth = minionStats.HEALTH;
         this.health = this.maxHealth;
         this.regen = this.maxHealth/20;
-        //how much health to regen per second.
+        //how much health to regen per second, note that /k means k seconds to regen fully
         this.defense = minionStats.DEFENSE;
         this.attack = minionStats.ATTACK;
         this.agility = minionStats.AGILITY;
@@ -47,7 +48,7 @@ class Minion {
         //i,j for cell, x,y for continuous position.
         this.myType = "minion";
         this.mySelectionButton = new Button(
-          this.theHud, this.theGame,
+          this.theHud, this.game,
           this.x, this.y,
           this.radius, this.radius,
           this.radius, this.radius,
@@ -77,8 +78,6 @@ class Minion {
     updateMe() {
       this.elapsedTime += this.game.clockTick;
 
-      this.mySelectionButton.updateMe();
-
       var dist = distance(this, this.target);
       if (dist < 5) {
           if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
@@ -104,8 +103,10 @@ class Minion {
       }
 
       dist = distance(this, this.target);
-      this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
-        y: (this.target.y - this.y) / dist * this.maxSpeed};
+      this.velocity = {
+        x: (this.target.x - this.x)/dist * this.maxSpeed,
+        y: (this.target.y - this.y) / dist * this.maxSpeed
+      };
       this.x += this.velocity.x * this.game.clockTick;
       this.y += this.velocity.y * this.game.clockTick;
       this.facing = getFacing(this.velocity);
@@ -132,5 +133,7 @@ class Minion {
             this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
             die();
         }
+
+        this.healthbar.drawMe(ctx);
     };
 };

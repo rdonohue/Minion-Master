@@ -17,6 +17,8 @@ class HomeBase {
       this.agility = 0;
       this.intelligence = 0;
 
+      this.healthbar = new HealthBar(this);
+
       this.dead = false;
       this.removeFromWorld = false;
       this.x = x;
@@ -46,7 +48,6 @@ class HomeBase {
   };
 
   drawMe(ctx) {
-    this.animations[0].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.s);
   };
 
 }
