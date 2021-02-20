@@ -17,14 +17,20 @@ class Minion {
         this.priority = 0;
 
         this.radius = 8;
-        this.visualRadius = 200;
+        this.visualRadius = 100;
+        this.maxSpeed = 100;
 
         this.healthbar = new HealthBar(this);
 
-        this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
-        this.target = this.path[0];
+        while(!this.newtarget || this.newtarget.x <= 0 || this.newtarget.x >= params.PLAY_WIDTH || this.newtarget.y <= 0 || this.newtarget.y >= params.PLAY_HEIGHT){
+            this.newtarget = {
+              x: this.x + randomInt(this.visualRadius) - this.visualRadius/2,
+              y: this.y + randomInt(this.visualRadius) - this.visualRadius/2
+            }
+          }
+        this.target = this.newtarget;
 
-        this.maxSpeed = 100;
+
         var dist = distance(this, this.target);
         this.velocity = {
           x: (this.target.x - this.x)/dist * this.maxSpeed,
@@ -47,12 +53,13 @@ class Minion {
 
         //i,j for cell, x,y for continuous position.
         this.myType = "minion";
+        console.log("hi");
         this.mySelectionButton = new Button(
-          this.theHud, this.game,
+          this, this.theHud, this.game,
           this.x, this.y,
           this.radius, this.radius,
           this.radius, this.radius,
-          this.selectMe, [],
+          this.selectMe,
           this.myType, this.spritesheet,
           false, true
         );
@@ -69,7 +76,7 @@ class Minion {
     };
 
     selectMe(){
-      this.theHud.selected = this;
+      // this.theHud.selected = this;
       console.log("minion is clicked");
     }
 
@@ -79,11 +86,15 @@ class Minion {
       this.elapsedTime += this.game.clockTick;
 
       var dist = distance(this, this.target);
-      if (dist < 5) {
-          if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
-              this.targetID++;
+      if (!this.target instanceof Wolf && dist < this.radius){
+        while(!this.newtarget || this.newtarget.x <= 0 || this.target.x >= params.PLAY_WIDTH || this.target.y <= 0 || this.target.y >= params.PLAY_HEIGHT){
+            this.newtarget = {
+              x: this.x + randomInt(this.visualRadius) - this.visualRadius/2,
+              y: this.y + randomInt(this.visualRadius) - this.visualRadius/2
+            }
+            console.log(this.target);
           }
-          this.target = this.path[this.targetID];
+          this.target = this.newtarget;
       }
 
       for (var i = 0; i < this.game.entities.length; i++) {
@@ -102,10 +113,9 @@ class Minion {
           }
       }
 
-      dist = distance(this, this.target);
       this.velocity = {
         x: (this.target.x - this.x)/dist * this.maxSpeed,
-        y: (this.target.y - this.y) / dist * this.maxSpeed
+        y: (this.target.y - this.y)/dist * this.maxSpeed
       };
       this.x += this.velocity.x * this.game.clockTick;
       this.y += this.velocity.y * this.game.clockTick;

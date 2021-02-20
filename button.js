@@ -1,28 +1,20 @@
 class Button{
   constructor(
-    theHud, theGame, //owning objects
+    theObject, theHud, theGame, //owning objects
     x, y, //position of top
     w, h, //size of click-box.
     sw, sh, //size of sprite, no offset currently implemented!
-    myFunction, myArguments,
+    myFunction,
     myText, mySpriteSheet,
     isDebugger, isSeeThrough) {
 
-    this.theHud = theHud;
-    this.theHud.myButtons.push(this);
-    Object.assign(this, {theHud, theGame, x,y});
+    Object.assign(this, {theObject, theHud, theGame, x, y, w, h, sw, sh});
+    theHud.myButtons.push(this);
 
     //we might need to make the minion's handle their
     //own button updates btw.
-    this.theGame = theGame;
-    this.x = x; //x coord of top-left
-    this.y = y;
-    this.w = w; //width and height
-    this.h = h;
-    this.sw = sw;
-    this.sh = sh;
     this.myFunction = myFunction; //the function that is to be performed
-    this.myArguments = [];
+    this.myArguments = null;
     this.myText = myText;
     this.myImage = mySpriteSheet; //since this is "optional", it has to be last I think.
 

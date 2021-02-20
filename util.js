@@ -1,3 +1,27 @@
+// add global parameters here
+var minionStats = {
+  HEALTH : 100,
+  DEFENSE : 0.0,
+  ATTACK : 1,
+  AGILITY : 0.1,
+  INTELLIGENCE : 1,
+}
+
+var params = {
+  //Tile width and height
+  DEBUG: true,
+  TILE_W_H : 64,
+  VERT_WALL_COUNT : 10,
+  HORI_WALL_COUNT : 14,
+  CANVAS_WIDTH : 1024,
+  CANVAS_HEIGHT : 768,
+  PLAY_WIDTH : 2048,
+  PLAY_HEIGHT : 1536,
+  BASE_SPD : 0.25,
+  DEBUG_ON: true,
+  BLOCKWIDTH : 48  //temporary
+};
+
 // returns a random integer between 0 and n-1
 function randomInt(n) {
     return Math.floor(Math.random() * n);
@@ -66,26 +90,20 @@ window.requestAnimFrame = (function () {
         };
 })();
 
-// add global parameters here
-var minionStats = {
-  HEALTH : 100,
-  DEFENSE : 0.0,
-  ATTACK : 1,
-  AGILITY : 0.1,
-  INTELLIGENCE : 1,
-}
+class Timer {
+    constructor() {
+        this.gameTime = 0;
+        this.maxStep = 0.05;
+        this.lastTimestamp = 0;
+    };
 
-var params = {
-  //Tile width and height
-  DEBUG: true,
-  TILE_W_H : 64,
-  VERT_WALL_COUNT : 10,
-  HORI_WALL_COUNT : 14,
-  CANVAS_WIDTH : 1024,
-  CANVAS_HEIGHT : 768,
-  PLAY_WIDTH : 2048,
-  PLAY_HEIGHT : 1536,
-  BASE_SPD : 0.25,
-  DEBUG_ON: true,
-  BLOCKWIDTH : 48  //temporary
+    tick() {
+        var current = Date.now();
+        var delta = (current - this.lastTimestamp) / 1000;
+        this.lastTimestamp = current;
+
+        var gameDelta = Math.min(delta, this.maxStep);
+        this.gameTime += gameDelta;
+        return gameDelta;
+    };
 };

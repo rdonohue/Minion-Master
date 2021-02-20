@@ -1,6 +1,8 @@
 // Rest of the UI to hold the game menu features.
 class HUD{
-    constructor(game, gameLength, gameHeight, hudLength, startingRes) {
+    constructor(game,
+      gameLength, gameHeight, hudLength, //canvas dimensions
+      startingRes) {
         Object.assign(this, {game, gameLength, gameHeight, hudLength});
 
         this.myFood = startingRes[0];
@@ -50,45 +52,49 @@ class HUD{
     };
 
     createButtons() {
+
       var debugButton = new Button(
-        this, this.theGame,
+        this, this, this.theGame,
         15, 15,
         25, 25,
         25, 25,
         (function(){
           params.DEBUG_ON = !params.DEBUG_ON;
-        }), [],
+        }),
         "debug mode", null,
         false, false //debug button should always be visable.
       );
       debugButton.myColor = "white";
 
       var minionButton = new Button(
-        this, this.theGame,
+        this, this, this.theGame,
         15, 55,
         25, 25,
         25, 25,
         (function() {
-          var x = randomInt(150);
-          var y = randomInt(150);
-          this.theGame.spawnMe("minion", x, y);
-        }), [this.myFood],
+          // if(that.myFood >= 50) {
+          //   var x = randomInt(150);
+          //   var y = randomInt(150);
+          //   console.log(that.myFood);
+          //   this.theGame.spawnMe("minion", x, y);
+          // }
+        }),
         "spawn minion", null, //has to be null if we don't want to add a spritesheet, cas I'm lazy.
         false, false
       );
       minionButton.myColor = "blue";
 
       var wolfButton = new Button(
-        this, this.theGame,
+        this, this, this.theGame,
         15, 95,
         25, 25,
         25, 25,
         (function() {
-          var x = randomInt(150);
-          var y = randomInt(150);
-          console.log("spawning wolf at: (" + x + "," + y+")");
-          this.theGame.spawnMe("wolf", x, y);
-        }), [],
+          // var x = randomInt(150);
+          // var y = randomInt(150);
+          // console.log("spawning wolf at: (" + x + "," + y+")");
+          // this.theGame.spawnMe("wolf", x, y);
+        }),
         "spawn wolf", null, //has to be null if we don't want to add a spritesheet, cas I'm lazy.
         true, false
       );
@@ -160,16 +166,15 @@ class HUD{
 
     createStatButtons(ctx) {
       var newHealthButton = new Button(
-        this, this.theGame,
+        this, this, this.theGame,
         150, 600, //location of top left corner
         25, 25, //size of button hitbox
         45, 45, //size of button sprite
-        this.incrementStat, ["incrementStat", "HEALTH" , this.healthInc], //the function to be called on it.
+        this.incrementStat,  //the function to be called on it.
         "increase Health", this.HealthButt, //the text and spritesheet to use.
         false, false
       );
       this.healthButton = newHealthButton;
-      this.theGame.addEntity(this.healthButton);
 
       // ctx.fillText("DEF", params.TILE_W_H * 4.30, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
       // ctx.drawImage(this.DefButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 4.25,

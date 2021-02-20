@@ -44,10 +44,6 @@ class GameEngine {
             let ogre = new Ogre(this, x, y);
             this.addEntity(ogre);
             break;
-          case "castle":
-            let castle = new HomeBase(this, x, y);
-            this.addEntity(castle);
-            break;
           case "tower":
             let tower = new GuardTower(this, x, y);
             this.addEntity(tower);
@@ -65,6 +61,7 @@ class GameEngine {
 
     start() {
       this.addEntity(this.theHud);
+      this.addEntity(this.theBase);
       // this.theHUD.makeButtons(this);
       var that = this;
         (function gameLoop() {
@@ -159,19 +156,24 @@ class GameEngine {
         for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];
 
-            if (!entity.removeFromWorld) {
+            if (entity.state != 0 ) {//not killed
               entity.updateMe();
             }
         }
         this.camera.update();
 
         for (var i = this.entities.length - 1; i >= 0; --i) {
-            if (this.entities[i].removeFromWorld) {
-                this.entities.splice(i, 1);
+            if (this.entities[i].state == 0 ) {//killed
+              this.entities.splice(i, 1);
             }
+        }
+        if(this.theBase.state == 0) {
+          console.log("died!");
         }
     };
 
+    //this is not how AI priority should work, each AI is going to need its own priority system for
+    //each enemy, this assumes they all share the same priority scieme with eachother.
     entityPriority() {
         var priority = 0;
         for (var i = 0; i < this.entities.length; i++) {

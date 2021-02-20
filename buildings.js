@@ -40,12 +40,10 @@ class Cave {
         }
     };
 
-
     drawMe(ctx) {
         this.caveAnim.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
         this.healthbar.drawMe(ctx);
     };
-
 };
 
 class GuardTower {
@@ -85,5 +83,59 @@ class GuardTower {
   drawMe(ctx) {
       //don't forget to subtract this.game.camera.x and this.game.camera.y from the respective coordinates.
   };
-
 };
+
+class HomeBase {
+  constructor(game, x, y, s) {
+      Object.assign(this, {game, x, y, s});
+      this.myName = "HomeBase";
+      //we need to not have this redundency. I know they
+      //eventually will be different but for now we should reduce to one I think.
+
+      this.spritesheet = ASSET_MANAGER.getAsset("./sprites/castle.png");
+
+      this.state = 1;  // 1 = idle, 0 = destroyed
+      this.radius = 20;
+
+      this.game = game;
+      this.x = x;
+      this.y = y;
+      this.s = s;
+
+      //Stats
+      this.health = 200;
+      this.defense = 3.0;
+      this.attack = 0;
+      this.agility = 0;
+      this.intelligence = 0;
+
+      this.healthbar = new HealthBar(this);
+
+      this.animations = [];
+      this.loadAnimations();
+  };
+
+  loadAnimations() {
+       this.animations[0] = new Animator(
+         this.spritesheet,
+         0, 0, //pos
+         this.radius, this.radius, //size
+         1, 1, 0, //frame-info
+         false, true //boolean type-info
+       );
+  }
+
+  updateMe() {
+      if (this.health <= 0) {
+        this.state = 0;
+      }
+      // add more code here later about speed and physics
+  };
+
+  drawMe(ctx) {
+    console.log("hi");
+    ctx.drawImage(this.animations[0], this.x, this.y, this.s);
+    this.healthbar.drawMe(ctx);
+  };
+
+}
