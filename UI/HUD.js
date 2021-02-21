@@ -29,6 +29,7 @@ class HUD{
         this.theMiniMap = new MiniMap(game, this.miniMapX, this.miniMapY, this.hudLength);
 
         this.theGame = game;
+        this.state = 1;
 
         this.AgiButt = ASSET_MANAGER.getAsset("./sprites/button_Agi.png");
         this.AtkButt = ASSET_MANAGER.getAsset("./sprites/button_Attack.png");
@@ -208,23 +209,23 @@ class HUD{
 /* When the user clicks on the button,
 
 toggle between hiding and showing the dropdown content */
-function menuFunction() {
-  document.getElementById("myDropdown").classList.toggle("show");
-};
+// function menuFunction() {
+//   document.getElementById("myDropdown").classList.toggle("show");
+// };
 
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
-  }
-};
+// // Close the dropdown if the user clicks outside of it
+// window.onclick = function(event) {
+//   if (!event.target.matches('.dropbtn')) {
+//     var dropdowns = document.getElementsByClassName("dropdown-content");
+//     var i;
+//     for (i = 0; i < dropdowns.length; i++) {
+//       var openDropdown = dropdowns[i];
+//       if (openDropdown.classList.contains('show')) {
+//         openDropdown.classList.remove('show');
+//       }
+//     }
+//   }
+// };
 
 // Minimap for the game.
 class MiniMap {

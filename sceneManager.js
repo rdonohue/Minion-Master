@@ -5,16 +5,22 @@ class SceneManager {
         this.x = 0;
         this.y = 0;
 
+        this.maxCamSpeed = 45;
+        this.baseCamSpeed = 0;
+        this.moveRight = this.baseCamSpeed;
+        this.moveDown = this.baseCamSpeed;
+        this.moveLeft = this.baseCamSpeed;
+        this.moveUp = this.baseCamSpeed;
+
         // this.minimap = new MiniMap(this.game, 1024, 576, 256);
         // this.ui = new UI(this.game, 1024, 0, 256);
         this.theHud = this.game.theHud;
         // this.thePlayer = new Player(this.game, 100, 150, 10, 5, 0, 0);
 
-        this.loadLevel();
-        this.notDead = true;
+        this.generateLevel();
     };
 
-    loadLevel() {
+    generateLevel() {
         this.game.entities = [];
 
       	let corners = new Grasscorner(this.game, 0, 0);
@@ -28,7 +34,7 @@ class SceneManager {
         this.game.addEntity(horiwalls);
         this.game.addEntity(intGrass);
         this.game.addEntity(resources);
-        this.game.theBase = new HomeBase(this.game, 150, 150, 0.15);
+        this.game.spawnMe("base", 15, 15);
 
         // this.game.addEntity(this.minimap);
         // this.game.addEntity(this.ui);
@@ -46,29 +52,63 @@ class SceneManager {
 
         let midpoint = params.CANVAS_WIDTH / 2;
 
+        var mapBorder = 20;
+
         //Check for play area edge
-        if (this.game.left && this.x > 0) {
-            this.x -= 10;
+        var left = this.game.left && this.x > -mapBorder;
+        var right = this.game.right && this.x < params.PLAY_WIDTH - params.CANVAS_WIDTH + mapBorder;
+        var up = this.game.up && this.y > -mapBorder;
+        var down = this.game.down && this.y < params.PLAY_HEIGHT - params.CANVAS_HEIGHT + mapBorder;
+
+        if (left) {
+          this.x -= this.moveLeft++;
+        } else {
+          this.moveLeft = this.baseCamSpeed;
         }
-        if (this.game.right && this.x < params.CANVAS_WIDTH - 10) {
-            this.x += 10;
+        if (right) {
+            this.x += this.moveRight++;
+        } else {
+          this.moveRight = this.baseCamSpeed;
         }
-        if (this.game.up && this.y > 3) {
-            this.y -= 10;
+        if (up) {
+            this.y -= this.moveUp++;
+        } else {
+            this.moveUp = this.baseCamSpeed;
         }
-        if (this.game.down && this.y < params.CANVAS_HEIGHT - 10) {
-            this.y += 10;
+        if (down) {
+            this.y += this.moveDown++;
+        } else {
+            this.moveDown = this.baseCamSpeed;
+        }
+
+        if(this.x < -mapBorder) {
+          this.x = -mapBorder;
+          this.moveLeft = this.baseCamSpeed;
+        } else if (this.x > params.PLAY_WIDTH - params.CANVAS_WIDTH + mapBorder) {
+          this.x = params.PLAY_WIDTH - params.CANVAS_WIDTH + mapBorder;
+          this.moveRight = this.baseCamSpeed;
+        }
+
+        if(this.y < -mapBorder) {
+          this.y = -mapBorder;
+          this.moveUp = this.baseCamSpeed;
+        } else if (this.y > params.PLAY_HEIGHT - params.CANVAS_HEIGHT + mapBorder) {
+          this.y = params.PLAY_HEIGHT - params.CANVAS_HEIGHT + mapBorder;
+          this.moveDown = this.baseCamSpeed;
         }
     };
 
     draw(ctx) {
-      if(this.notDead) {
+      if(this.game.theBase) {
         // this.minimap.drawMe(ctx);
         // this.ui.drawMe(ctx);
         this.theHud.drawMe(ctx);
         // this.thePlayer.drawMe(ctx);
       } else {
-        ctx.clearRect(0,0,params.CANVAS_WIDTH,params.CANVAS_HEIGHT)
+        ctx.clearRect(0, 0,
+          params.CANVAS_WIDTH, params.CANVAS_HEIGHT
+        )
+
         ctx.fillText("YOU DIED", 150, 50);
       }
     };

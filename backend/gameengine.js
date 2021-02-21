@@ -52,6 +52,11 @@ class GameEngine {
             let cave = new Cave(this, x, y);
             this.addEntity(cave);
             break;
+          case "base":
+            let home = new HomeBase(this, x, y);
+            this.theBase = home;
+            this.addEntity(this.theBase);
+            break;
           //case "berry":
           //  let berry = new BerryBush(this, x, y);
           //  this.addEntity(berry);
@@ -155,7 +160,6 @@ class GameEngine {
 
         for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];
-
             if (entity.state != 0 ) {//not killed
               entity.updateMe();
             }

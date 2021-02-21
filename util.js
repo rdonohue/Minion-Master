@@ -1,3 +1,15 @@
+// creates an alias for requestAnimationFrame for backwards compatibility
+window.requestAnimFrame = (function () {
+    return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function (/* function */ callback, /* DOMElement */ element) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+})();
+
 // add global parameters here
 var minionStats = {
   HEALTH : 100,
@@ -15,8 +27,8 @@ var params = {
   HORI_WALL_COUNT : 14,
   CANVAS_WIDTH : 1024,
   CANVAS_HEIGHT : 768,
-  PLAY_WIDTH : 2048,
-  PLAY_HEIGHT : 1536,
+  PLAY_WIDTH : 8192/8,
+  PLAY_HEIGHT : 8192/8,
   BASE_SPD : 0.25,
   DEBUG_ON: true,
   BLOCKWIDTH : 48  //temporary
@@ -78,18 +90,6 @@ function getFacing(velocity) {
     if (-0.875 < angle && angle < -0.625) return 7;
 };
 
-// creates an alias for requestAnimationFrame for backwards compatibility
-window.requestAnimFrame = (function () {
-    return window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.oRequestAnimationFrame ||
-        window.msRequestAnimationFrame ||
-        function (/* function */ callback, /* DOMElement */ element) {
-            window.setTimeout(callback, 1000 / 60);
-        };
-})();
-
 class Timer {
     constructor() {
         this.gameTime = 0;
@@ -105,5 +105,26 @@ class Timer {
         var gameDelta = Math.min(delta, this.maxStep);
         this.gameTime += gameDelta;
         return gameDelta;
+    };
+};
+
+class Projectile{
+    constructor(game, x, y, spritesheet, damage) {
+        Object.assign(this, { game, x, y });
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/Arrow.png");
+        this.myScale = 1;
+        // radius
+        // visualRadius
+        // damage
+        // direction
+        // state
+    };
+
+    updateMe() {
+
+    };
+
+    drawMe(ctx) {
+
     };
 };

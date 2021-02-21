@@ -29,7 +29,6 @@ class Animator {
             this.height * scale);
     };
 
-
     currentFrame() {
         return Math.floor(this.elapsedTime / this.frameDuration);
     };

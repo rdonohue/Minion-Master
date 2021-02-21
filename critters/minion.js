@@ -13,7 +13,7 @@ class Minion {
 
         this.myScale = 2;
         this.myDirection = 0; // 0 = left, 1 = right
-        this.state = 0;
+        this.state = 1; //dead 0 = dead, 1 = wandering.
         this.priority = 0;
 
         this.radius = 8;
@@ -48,12 +48,11 @@ class Minion {
         this.intelligence = minionStats.INTELLIGENCE;
         this.combat = false;
 
-        this.removeFromWorld = false;
         //this.facing = 0;
 
         //i,j for cell, x,y for continuous position.
         this.myType = "minion";
-        console.log("hi");
+
         this.mySelectionButton = new Button(
           this, this.theHud, this.game,
           this.x, this.y,

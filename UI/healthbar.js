@@ -1,5 +1,5 @@
 class HealthBar {
-    constructor(entity) {
+    constructor(entity) { //can add 2ed parameter for when we implement stamina/energy/etc.
         Object.assign(this, { entity });
     };
 
@@ -21,7 +21,7 @@ class HealthBar {
 };
 
 class Score {
-    constructor(game, x, y, score) {
+    constructor(game, x, y, score) { //4th parameter for type when we want damage, regen, collection etc.
         Object.assign(this, { game, x, y, score });
 
         this.velocity = -32;
@@ -31,7 +31,7 @@ class Score {
     updateMe() {
         this.elapsed += this.game.clockTick;
         if (this.elapsed > 1) {
-            this.removeFromWorld = true;
+            this.state = 0;
         }
 
         this.y += this.game.clockTick * this.velocity;

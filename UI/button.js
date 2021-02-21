@@ -1,14 +1,16 @@
 class Button{
   constructor(
-    theObject, theHud, theGame, //owning objects
+    theObject, theHud, theGame,
     x, y, //position of top
     w, h, //size of click-box.
-    sw, sh, //size of sprite, no offset currently implemented!
+    sw, sh, //size of sprite
+    ox, oy, //offset right and down.
     myFunction,
-    myText, mySpriteSheet,
-    isDebugger, isSeeThrough) {
+    myText, //text which floats above the button.
+    mySpriteSheet //or a color for a rectangle
+    ){
 
-    Object.assign(this, {theObject, theHud, theGame, x, y, w, h, sw, sh});
+    Object.assign(this, {theObject, theHud, theGame, x, y, w, h, sw, sh, ox, oy});
     theHud.myButtons.push(this);
 
     //we might need to make the minion's handle their
@@ -16,14 +18,10 @@ class Button{
     this.myFunction = myFunction; //the function that is to be performed
     this.myArguments = null;
     this.myText = myText;
-    this.myImage = mySpriteSheet; //since this is "optional", it has to be last I think.
+    this.myImage = mySpriteSheet; //this might be a string
+    this.myColor = mySpriteSheet; //holding what color.
+    this.state = 1;
 
-    //if this button is for only debug mode only.
-    this.isDebugger = isDebugger;
-
-    //can use this to "turn off" this button.
-    this.isVisable = !isDebugger || params.DEBUG_ON;
-    this.isSeeThrough = isSeeThrough;
   };
 
   updateMe() {
@@ -48,7 +46,7 @@ class Button{
   drawMe(ctx) {
     //note that this button should be drawn AFTER any HUD elements are drawn
     //when it should be visable, otherwise the call-order might cover it.
-    if(this.isVisable && !this.isSeeThrough) {
+    if(this.isVisable) {
       //we want to only draw ourselves if we are visable.
       ctx.font = params.TILE_W_H/5 + 'px "Playfair Display SC"';
       ctx.fillStyle = "white";
