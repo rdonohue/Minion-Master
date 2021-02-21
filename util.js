@@ -30,9 +30,98 @@ var params = {
   PLAY_WIDTH : 8192/3,
   PLAY_HEIGHT : 8192/3,
   BASE_SPD : 0.25,
-  DEBUG_ON: true,
-  BLOCKWIDTH : 48  //temporary
+  BLOCKWIDTH : 48,  //temporary
 };
+
+function checkLocation(location, mapBuffer) {
+  //that the location is within the map.
+  var x = location.x;
+  var y = location.y;
+
+  var left = x > mapBuffer;
+  var right = x < params.PLAY_WIDTH - params.CANVAS_WIDTH - mapBuffer;
+
+  var up = y > mapBuffer;
+  var down = y < params.PLAY_HEIGHT - params.CANVAS_HEIGHT + mapBuffer;
+
+  if(left && right && down && up) {
+    //the location is in the map.
+    return true;
+  } else {
+    //could not find valid location.
+    return false;
+  }
+};
+
+//this function generates a new location for a critter to go towards.
+function generateTarget(critter) {
+  var visualRadius = critter.visualRadius;
+  var oldX = critter.x;
+  var oldY = critter.y;
+  var x = -1;
+  var y = -1;
+
+  var mapBuffer = critter.radius + 5; //don't want to go up to map itself.
+  var attempts = 0;
+  var maxAttempts = 10;
+  var newLocation = null;
+
+  //attempt no more then 10 times to try to find a new place to wander towards.
+  //that is inside the map.
+  while(!newLocation && attempts++ < maxAttempts) {
+    //generate new location, note that we are techniqually
+    //searching a square and not a circle but whatever.
+    x = oldX + Math.random(visualRadius) - visualRadius/2;
+    y = oldY + Math.random(visualRadius) - visualRadius/2;
+
+    //Check new location for play area edge
+    if(checkLocation({x, y}, mapBuffer)) {
+      newLocation = {x, y};
+    }
+  }
+
+  if(attempts >= maxAttempts) {
+    newLocation = {oldX, oldY};
+  }
+
+  return newLocation;
+};
+
+//this function assumes the target is alive.
+//this funciton returns the amount of damage dealt to target.
+function attackTarget(attacker, defender) {
+  //attacker always goes first.
+  var damage = attacker.attack/defender.defense;
+  defender.health -= damage;
+  if(defender.health < 0) {
+    defender.state = 0;
+  } else {
+    //defender survived, so they can try to attack back.
+    counterDamage = defender.counterAttack/attacker.defense;
+    attack.health -= counterDamage;
+    if(attack.health < 0) {
+      //attacker died.
+      attack.state = 0;
+      return 0; //return 0 to avoid triggering grow();
+    } else {
+      //attacker survived.
+      //return damage for stat-keeping.
+      return damage;
+    }
+  }
+};
+
+//this function handles most critters passive healing
+function passiveHeal(critter, healingFactor) {
+  //healing factor is dependent on if the critter is exerting itself.
+  if(critter.health < critter.maxHealth) {
+    critter.health += critter.regen*healingFactor;
+    if(critter.health > critter.maxHealth) {
+      //we are maxed out.
+      critter.health = critter.maxHealth;
+    }
+  }
+}
 
 // returns a random integer between 0 and n-1
 function randomInt(n) {

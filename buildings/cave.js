@@ -37,7 +37,7 @@ class Cave {
     };
 
     drawMe(ctx) {
-        this.caveAnim.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        this.caveAnim.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.scale);
         this.healthbar.drawMe(ctx);
     };
 };

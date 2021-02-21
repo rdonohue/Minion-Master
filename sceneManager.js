@@ -1,15 +1,15 @@
 class SceneManager {
     constructor(game) {
         this.game = game;
-        this.game.camera = this;
+        this.game.camera = this; //should rename to SM I think.
 
         this.x = 0;
         this.y = 0;
 
         this.maxCamSpeed = 45;
         this.baseCamSpeed = 0;
-        this.acceleration = 2/3;
-        
+        this.acceleration = 2/3; //accelerationFactor.
+
         this.moveRight = this.baseCamSpeed;
         this.moveDown = this.baseCamSpeed;
         this.moveLeft = this.baseCamSpeed;
@@ -21,6 +21,7 @@ class SceneManager {
         // this.thePlayer = new Player(this.game, 100, 150, 10, 5, 0, 0);
 
         this.generateLevel();
+        this.populateLevel();
     };
 
     generateLevel() {
@@ -36,15 +37,23 @@ class SceneManager {
         this.game.addBackgroundEntity(vertwalls);
         this.game.addBackgroundEntity(horiwalls);
         this.game.addBackgroundEntity(intGrass);
-        this.game.addBackgroundEntity(resources);
-        this.game.spawnMe("base", 15, 15);
-
-        // this.game.addEntity(this.minimap);
-        // this.game.addEntity(this.ui);
-        // this.game.addEntity(this.thePlayer);
-        // this.game.spawnMe("minion", 0, 0);
-      	// this.game.spawnMe("wolf", 800, 0);
     };
+
+    populateLevel() {
+
+      let resources = new Resources(this.game, params.TILE_W_H, params.TILE_W_H);
+      this.game.addBackgroundEntity(resources);
+
+      this.game.spawnMe("base",
+        randomInt(100) + 200, randomInt(100) + 200
+      );
+
+      // this.game.addEntity(this.minimap);
+      // this.game.addEntity(this.ui);
+      // this.game.addEntity(this.thePlayer);
+      // this.game.spawnMe("minion", 0, 0);
+      // this.game.spawnMe("wolf", 800, 0);
+    }
 
     update() {
         // params.DEBUG = document.getElementById("debug").checked;

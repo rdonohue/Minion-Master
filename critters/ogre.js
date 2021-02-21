@@ -4,6 +4,7 @@ class Ogre {
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/ogres.png");
         this.walkAnimator = new Animator(this.spritesheet, 229, 205, 104, 56, 8, 0.1, 96, false, true);
         this.attackAnimator = new Animator(this.spritesheet, 25, 9, 150, 113, 10, 0.05, 42, false, true);
+        this.deadAnimator = new Animator(this.spritesheet, 433, 409, 56, 6, 0.5, 42, false, false);
 
         this.myScale = 1;
         this.myDirection = 0; // 0 = left, 1 = right
@@ -125,7 +126,7 @@ class Ogre {
       } else if (this.state == 0) {
 
         //NOTE, this is a is-wandering animator!
-        this.walkAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+        this.deadAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
       }
 
       this.healthbar.drawMe(ctx);

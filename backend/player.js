@@ -15,11 +15,11 @@ class Player {
     this.height = 768;
     this.theGame = game;
 
-    this.AgiButt = ASSET_MANAGER.getAsset("./sprites/button_Agi.png");
-    this.AtkButt = ASSET_MANAGER.getAsset("./sprites/button_Attack.png");
-    this.DefButt = ASSET_MANAGER.getAsset("./sprites/button_Def.png");
-    this.HealthButt = ASSET_MANAGER.getAsset("./sprites/button_Health.png");
-    this.IntButt = ASSET_MANAGER.getAsset("./sprites/button_Int.png");
+    // this.AgiButt = ASSET_MANAGER.getAsset("./sprites/button_Agi.png");
+    // this.AtkButt = ASSET_MANAGER.getAsset("./sprites/button_Attack.png");
+    // this.DefButt = ASSET_MANAGER.getAsset("./sprites/button_Def.png");
+    // this.HealthButt = ASSET_MANAGER.getAsset("./sprites/button_Health.png");
+    // this.IntButt = ASSET_MANAGER.getAsset("./sprites/button_Int.png");
 
     this.targetType = null;
     this.selected = null;

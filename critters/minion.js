@@ -70,7 +70,6 @@ class Minion {
 
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
-
         this.elapsedTime = 0;
     };
 

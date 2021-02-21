@@ -4,6 +4,7 @@ class GameEngine {
     constructor() {
         this.backgroundEntities = [];
         this.entities = [];
+
         this.showOutlines = false;
         this.ctx = null;
         this.click = null;
@@ -13,14 +14,18 @@ class GameEngine {
         this.right = false;
         this.up = false;
         this.down = false;
+
         this.surfaceWidth = null;
         this.surfaceHeight = null;
+
         this.tickDuration = 0.1;
 
         this.theHud = new HUD(this,
           1024, params.CANVAS_HEIGHT, 256,
           [50,60,6,4]
         );
+
+        this.theBase;
     };
 
     init(ctx) {
@@ -31,40 +36,6 @@ class GameEngine {
         this.timer = new Timer();
     };
 
-    spawnMe(type, x, y){
-      switch (type) {
-          case "minion":
-            let minion = new Minion(this, x, y);
-            this.addEntity(minion);
-            break;
-          case "wolf":
-            let wolf = new Wolf(this, x, y);
-            this.addEntity(wolf);
-            break;
-          case "ogre":
-            let ogre = new Ogre(this, x, y);
-            this.addEntity(ogre);
-            break;
-          case "tower":
-            let tower = new GuardTower(this, x, y);
-            this.addEntity(tower);
-            break;
-          case "cave":
-            let cave = new Cave(this, x, y);
-            this.addEntity(cave);
-            break;
-          case "base":
-            let home = new HomeBase(this, x, y);
-            this.theBase = home;
-            this.addEntity(this.theBase);
-            break;
-          //case "berry":
-          //  let berry = new BerryBush(this, x, y);
-          //  this.addEntity(berry);
-          //  break;
-      }
-    };
-
     start() {
       this.addEntity(this.theHud);
       // this.theHUD.makeButtons(this);
@@ -73,6 +44,40 @@ class GameEngine {
             that.loop();
             requestAnimFrame(gameLoop, that.ctx.canvas);
         })();
+    };
+
+    spawnMe(type, x, y){
+      switch (type) {
+        case "minion":
+          let minion = new Minion(this, x, y);
+          this.addEntity(minion);
+          break;
+        case "wolf":
+          let wolf = new Wolf(this, x, y);
+          this.addEntity(wolf);
+          break;
+        case "ogre":
+          let ogre = new Ogre(this, x, y);
+          this.addEntity(ogre);
+          break;
+        case "tower":
+          let tower = new GuardTower(this, x, y);
+          this.addEntity(tower);
+          break;
+        case "cave":
+          let cave = new Cave(this, x, y);
+          this.addEntity(cave);
+          break;
+        case "base":
+          let home = new HomeBase(this, x, y);
+          this.theBase = home;
+          this.addEntity(this.theBase);
+          break;
+        //case "berry":
+        //  let berry = new BerryBush(this, x, y);
+        //  this.addEntity(berry);
+        //  break;
+      }
     };
 
     startInput() {

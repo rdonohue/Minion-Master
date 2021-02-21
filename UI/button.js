@@ -1,17 +1,21 @@
 class Button{
   constructor(
-    theObject, theHud, theGame,
+    theObject, theHud, game,
     x, y, //position of top
     w, h, //size of click-box.
     sw, sh, //size of sprite
     ox, oy, //offset right and down.
     myFunction,
     myText, //text which floats above the button.
-    mySpriteSheet //or a color for a rectangle
+    mySpriteSheet, myColor //or a color for a rectangle
     ){
 
-    Object.assign(this, {theObject, theHud, theGame, x, y, w, h, sw, sh, ox, oy});
-    theHud.myButtons.push(this);
+    Object.assign(this, {theObject, theHud, game, x, y, w, h, sw, sh, ox, oy});
+
+    theObject.myButtons.push(this);
+    if(theObject != theHud) {
+      theHud.myButtons.push(this);
+    }
 
     //we might need to make the minion's handle their
     //own button updates btw.
@@ -19,35 +23,39 @@ class Button{
     this.myArguments = null;
     this.myText = myText;
     this.myImage = mySpriteSheet; //this might be a string
-    this.myColor = mySpriteSheet; //holding what color.
+    this.myColor = myColor; //holding what color.
     this.state = 1;
+    this.isVisable = true;
+    this.debugOnly = false;
 
   };
 
   updateMe() {
-    var theClick = this.theGame.click;
-    if (this.isDebugger){
-      this.isVisable = params.DEBUG_ON;
+    var theClick = this.theHud.game.click;
+
+    if(this.debugOnly) {
+      this.isVisable = params.DEBUG;
+    }
+    if(this.theObject.isSelectable) {
+      this.isVisable = this.theObject.isSelected;
     }
 
-    if(!theClick || !this.isVisable) {
+    if(theClick && this.isVisable) {
+      var isInXCoord = theClick.x > this.x + this.ox && theClick.x < this.x + this.w + this.ox;
+      var isInYCoord = theClick.y > this.y + this.oy && theClick.y < this.y + this.h + this.oy;
+
+      if(isInXCoord && isInYCoord){ //check y-axis
+        this.myFunction();
+        return true;
+      }
+    } else {
       //do nothing.
-      return;
-    }
-
-    var isInXCoord = theClick.x > this.x && theClick.x < this.x + this.w;
-    var isInYCoord = theClick.y > this.y && theClick.y < this.y + this.h;
-
-    if(isInXCoord && isInYCoord){ //check y-axis
-      this.myFunction(this.myArguments);
+      return false;
     }
   }
 
   drawMe(ctx) {
-    //note that this button should be drawn AFTER any HUD elements are drawn
-    //when it should be visable, otherwise the call-order might cover it.
     if(this.isVisable) {
-      //we want to only draw ourselves if we are visable.
       ctx.font = params.TILE_W_H/5 + 'px "Playfair Display SC"';
       ctx.fillStyle = "white";
       ctx.fillText(this.myText,
@@ -60,6 +68,18 @@ class Button{
           this.x, this.y,
           this.w, this.h
         );
+      }
+
+      if(params.DEBUG) {
+        ctx.lineWidth = 1;
+        ctx.strokeStyle= "red";
+        ctx.beginPath();
+        ctx.strokeRect(
+          this.x - this.game.camera.x + this.ow-3,
+          this.y - this.game.camera.y + this.oh-3,
+          this.w+6, this.h+6
+        );
+        ctx.stroke();
       }
     }
   }
