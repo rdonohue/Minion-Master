@@ -44,7 +44,7 @@ class GameEngine {
             this.addEntity(castle);
             break;
           case "tower":
-            let tower = new GuardTower(this, x, y);
+            let tower = new Tower(this, x, y);
             this.addEntity(tower);
             break;
           case "cave":

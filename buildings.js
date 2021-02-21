@@ -59,7 +59,8 @@ class Tower {
       this.maxHealth = 200;
       this.defense = 0.0;
       this.attack = 1;
-      this.projectileScale = 2;
+      this.projectileScale = 1;
+
       //Fire Rate of Tower
       this.agility = 1;
 
@@ -80,7 +81,6 @@ class Tower {
             this.game.addEntity(new Projectile(this.game, this.x, this.y, ent, this.attack, this.projectileScale));
         }
     }
-
 
     if (this.health <= 0) {
       die();
@@ -113,7 +113,7 @@ class Tower {
       this.projectileScale += 0.5;
       this.agility += 0.5;
     }
-  }
+  };
 
   /**
    * This method interacts with HUD buttons for when a tower is selected.
@@ -128,7 +128,7 @@ class Tower {
       this.maxHealth += this.maxHealth * (upgradeAmount * 0.2);
       this.visualRadius += this.visualRadius * (0.5 / upgradeAmount);
     }
-  }
+  };
 
   die() {
       this.state = 1;

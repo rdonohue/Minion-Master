@@ -9,7 +9,6 @@ class SceneManager {
         this.ui = new UI(this.game, 1024, 0, 256);
         this.hud = new HUD(this.game);
         this.thePlayer = new Player(this.game, 100, 150, 10, 5, 0, 0);
-
         // These are dummy values for keeping track of variables --Ryan
         // It's probably okay to delete these later.
         var theX = 0;
@@ -58,9 +57,7 @@ class SceneManager {
 
     update() {
         params.DEBUG = document.getElementById("debug").checked;
-
-        const TICK = this.game.clockTick;
-
+        
         let midpoint = params.CANVAS_WIDTH / 2;
 
         //Check for play area edge
@@ -76,7 +73,6 @@ class SceneManager {
         if (this.game.down && this.y < params.CANVAS_HEIGHT - 10) {
             this.y += 10;
         }
-
         // This logic would be good for a lose condition. If (base.dead) display loss screen.
 
         // if (this.mario.dead && this.mario.y > params.BLOCKWIDTH * 16) {
