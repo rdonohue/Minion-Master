@@ -2,11 +2,14 @@ class SceneManager {
     constructor(game) {
         this.game = game;
         this.game.camera = this;
+
         this.x = 0;
         this.y = 0;
 
         this.maxCamSpeed = 45;
         this.baseCamSpeed = 0;
+        this.acceleration = 2/3;
+        
         this.moveRight = this.baseCamSpeed;
         this.moveDown = this.baseCamSpeed;
         this.moveLeft = this.baseCamSpeed;
@@ -29,11 +32,11 @@ class SceneManager {
       	let intGrass = new InteriorGrass(this.game, params.TILE_W_H, params.TILE_W_H);
       	let resources = new Resources(this.game, params.TILE_W_H, params.TILE_W_H);
 
-        this.game.addEntity(corners);
-        this.game.addEntity(vertwalls);
-        this.game.addEntity(horiwalls);
-        this.game.addEntity(intGrass);
-        this.game.addEntity(resources);
+        this.game.addBackgroundEntity(corners);
+        this.game.addBackgroundEntity(vertwalls);
+        this.game.addBackgroundEntity(horiwalls);
+        this.game.addBackgroundEntity(intGrass);
+        this.game.addBackgroundEntity(resources);
         this.game.spawnMe("base", 15, 15);
 
         // this.game.addEntity(this.minimap);
@@ -61,22 +64,26 @@ class SceneManager {
         var down = this.game.down && this.y < params.PLAY_HEIGHT - params.CANVAS_HEIGHT + mapBorder;
 
         if (left) {
-          this.x -= this.moveLeft++;
+          this.x -= this.moveLeft;
+          this.moveLeft += this.acceleration;
         } else {
           this.moveLeft = this.baseCamSpeed;
         }
         if (right) {
-            this.x += this.moveRight++;
+            this.x += this.moveRight;
+            this.moveRight += this.acceleration;
         } else {
           this.moveRight = this.baseCamSpeed;
         }
         if (up) {
-            this.y -= this.moveUp++;
+            this.y -= this.moveUp;
+            this.moveUp += this.acceleration;
         } else {
             this.moveUp = this.baseCamSpeed;
         }
         if (down) {
-            this.y += this.moveDown++;
+            this.y += this.moveDown;
+            this.moveDown += this.acceleration;
         } else {
             this.moveDown = this.baseCamSpeed;
         }

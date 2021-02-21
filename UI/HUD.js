@@ -73,12 +73,12 @@ class HUD{
         25, 25,
         25, 25,
         (function() {
-          // if(that.myFood >= 50) {
-          //   var x = randomInt(150);
-          //   var y = randomInt(150);
-          //   console.log(that.myFood);
-          //   this.theGame.spawnMe("minion", x, y);
-          // }
+          if(that.myFood >= 50) {
+            var x = randomInt(150);
+            var y = randomInt(150);
+            console.log(that.myFood);
+            this.theGame.spawnMe("minion", x, y);
+          }
         }),
         "spawn minion", null, //has to be null if we don't want to add a spritesheet, cas I'm lazy.
         false, false
@@ -91,10 +91,10 @@ class HUD{
         25, 25,
         25, 25,
         (function() {
-          // var x = randomInt(150);
-          // var y = randomInt(150);
-          // console.log("spawning wolf at: (" + x + "," + y+")");
-          // this.theGame.spawnMe("wolf", x, y);
+          var x = randomInt(150);
+          var y = randomInt(150);
+          console.log("spawning wolf at: (" + x + "," + y+")");
+          this.theGame.spawnMe("wolf", x, y);
         }),
         "spawn wolf", null, //has to be null if we don't want to add a spritesheet, cas I'm lazy.
         true, false

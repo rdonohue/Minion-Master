@@ -2,6 +2,7 @@
 
 class GameEngine {
     constructor() {
+        this.backgroundEntities = [];
         this.entities = [];
         this.showOutlines = false;
         this.ctx = null;
@@ -66,7 +67,6 @@ class GameEngine {
 
     start() {
       this.addEntity(this.theHud);
-      this.addEntity(this.theBase);
       // this.theHUD.makeButtons(this);
       var that = this;
         (function gameLoop() {
@@ -144,33 +144,55 @@ class GameEngine {
     };
 
     addEntity(entity) {
-        this.entities.push(entity);
+      this.entities.push(entity);
+    };
+
+    addBackgroundEntity(entity) {
+        this.backgroundEntities.push(entity);
     };
 
     drawEntitys() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
+        for (var i = 0; i < this.backgroundEntities.length; i++) {
+            this.backgroundEntities[i].drawMe(this.ctx);
+        }
         for (var i = 0; i < this.entities.length; i++) {
-            this.entities[i].drawMe(this.ctx);
+          this.entities[i].drawMe(this.ctx);
         }
         this.camera.draw(this.ctx);
     }
 
     updateEntitys() {
-        var entitiesCount = this.entities.length;
+        var bCount = this.backgroundEntities.length;
 
-        for (var i = 0; i < entitiesCount; i++) {
-            var entity = this.entities[i];
-            if (entity.state != 0 ) {//not killed
+        for (var i = 0; i < bCount; i++) {
+            var entity = this.backgroundEntities[i];
+            if (entity.state != 0) {//not killed
               entity.updateMe();
             }
         }
-        this.camera.update();
+        for (var i = this.backgroundEntities.length - 1; i >= 0; --i) {
+            if (this.backgroundEntities[i].state == 0 ) {//killed
+              this.backgroundEntities.splice(i, 1);
+            }
+        }
+
+        var eCount = this.entities.length;
+        for (var i = 0; i < eCount; i++) {
+            var entity = this.entities[i];
+            if (entity.state != 0) {//not killed
+              entity.updateMe();
+            }
+        }
 
         for (var i = this.entities.length - 1; i >= 0; --i) {
             if (this.entities[i].state == 0 ) {//killed
               this.entities.splice(i, 1);
             }
         }
+        this.camera.update();
+
         if(this.theBase.state == 0) {
           console.log("died!");
         }

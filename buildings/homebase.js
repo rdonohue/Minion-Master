@@ -8,12 +8,15 @@ class HomeBase {
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/castle.png");
 
       this.state = 1;  // 1 = idle, 0 = destroyed
-      this.radius = 20;
+      this.radius = this.sw/2;
+
+      this.sw = 450;
+      this.sh = 460;
 
       this.game = game;
       this.x = x;
       this.y = y;
-      this.s = 0.15;
+      this.scale = 0.3;
 
       //Stats
       this.health = 200;
@@ -32,7 +35,7 @@ class HomeBase {
        this.animations[0] = new Animator(
          this.spritesheet,
          0, 0, //pos
-         150, 150, //size
+         this.sw, this.sh, //size
          1, 1, 0, //frame-info
          false, true //boolean type-info
        );
@@ -46,7 +49,7 @@ class HomeBase {
   };
 
   drawMe(ctx) {
-    console.log(this.animations[0].spritesheet);
+    // console.log(this.animations[0].spritesheet);
     this.animations[0].drawFrame(this.game.clockTick, ctx,
       this.x - this.game.camera.x,
       this.y - this.game.camera.y,
