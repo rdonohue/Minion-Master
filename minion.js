@@ -87,7 +87,6 @@ class Minion {
             }
             this.target = this.path[this.targetID];
         }
-
         var combat = false;
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];

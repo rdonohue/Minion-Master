@@ -27,14 +27,14 @@ ASSET_MANAGER.downloadAll(function () {
 	let vertwalls = new Vertwall(gameEngine, 0, params.TILE_W_H);
 	let horiwalls = new Horiwall(gameEngine, params.TILE_W_H, 0);
 	let intGrass = new InteriorGrass(gameEngine, params.TILE_W_H, params.TILE_W_H);
-	let resources = new Resources(gameEngine, params.TILE_W_H, params.TILE_W_H);
+
 
 	let minimap = new MiniMap(gameEngine, 1024, 576, 256);
 	let ui = new UI(gameEngine, 1024, 0, 256);
 	let hud = new HUD(gameEngine);
 
 	let cave = new Cave(gameEngine, 700, 50);
-
+	let resources = new Resources(gameEngine, params.TILE_W_H, params.TILE_W_H);
 	gameEngine.init(ctx, params.CANVAS_WIDTH / 128,
 		 							params.CANVAS_HEIGHT / 128,
 									params.TILE_W_H * 2);

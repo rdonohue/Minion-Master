@@ -21,15 +21,15 @@ class Resources {
         }
 
         //Stones
-        this.resArray[0] = new Rock(267,102,51,57); //Stone 0
-        this.resArray[1] = new Rock(331,108,39,51); //Stone 1
-        this.resArray[2] = new Rock(392,102,40,57); //Stone 2
-        this.resArray[3] = new Rock(458,102,41,57); //Stone 3
+        this.resArray[0] = new Rock(this.game,267,102,51,57); //Stone 0
+        this.resArray[1] = new Rock(this.game,331,108,39,51); //Stone 1
+        this.resArray[2] = new Rock(this.game,392,102,40,57); //Stone 2
+        this.resArray[3] = new Rock(this.game,458,102,41,57); //Stone 3
         //Berries
-        this.resArray[4] = new Bush(142,800,37,31); //Berry 0
-        this.resArray[5] = new Bush(192,808,30,23); //Berry 1
-        this.resArray[6] = new Bush(237,805,37,26); //Berry 2
-        this.resArray[7] = new Bush(294,818,20,13); //Berry 3
+        this.resArray[4] = new Bush(this.game,142,800,37,31); //Berry 0
+        this.resArray[5] = new Bush(this.game,192,808,30,23); //Berry 1
+        this.resArray[6] = new Bush(this.game,237,805,37,26); //Berry 2
+        this.resArray[7] = new Bush(this.game,294,818,20,13); //Berry 3
 
 
         this.buildResources();
@@ -43,7 +43,7 @@ class Resources {
     drawMe(ctx) {
       for (var i = 0; i < 10; i++) {
         ctx.drawImage(this.spritesheet, this.drawArray[i].sx, this.drawArray[i].sy, this.drawArray[i].sw,
-           this.drawArray[i].sh, this.drawArray[i].dx, this.drawArray[i].dy, params.TILE_W_H / 3, params.TILE_W_H / 3);
+           this.drawArray[i].sh, this.drawArray[i].x, this.drawArray[i].y, params.TILE_W_H / 3, params.TILE_W_H / 3);
       }
     };
 
@@ -63,7 +63,7 @@ class Resources {
           sy = this.resArray[resSelect].sy;
           sw = this.resArray[resSelect].sw;
           sh = this.resArray[resSelect].sh;
-          this.drawArray[i] = new Rock(sx,sy,sw,sh,dx,dy);
+          this.drawArray[i] = new Rock(this.game,sx,sy,sw,sh,dx,dy);
           this.stones--;
           i++;
         } else if ((this.berries > 0) && (resSelect > 3 && resSelect < 8)) {
@@ -71,7 +71,7 @@ class Resources {
           sy = this.resArray[resSelect].sy;
           sw = this.resArray[resSelect].sw;
           sh = this.resArray[resSelect].sh;
-          this.drawArray[i] = new Bush(sx,sy,sw,sh,dx,dy);
+          this.drawArray[i] = new Bush(this.game,sx,sy,sw,sh,dx,dy);
           this.berries--;
           i++;
         }
@@ -87,11 +87,11 @@ class Resources {
 };
 
 class Bush {
-  constructor(sx, sy, sw, sh, dx, dy) {
-    Object.assign(this, {sx, sy, sw, sh, dx, dy})
-    if (dx == undefined || dy == undefined) {
-      dx = 0;
-      dy = 0;
+  constructor(game, sx, sy, sw, sh, x, y) {
+    Object.assign(this, { game, sx, sy, sw, sh, x, y})
+    if (x == undefined || y == undefined) {
+      x = 0;
+      y = 0;
     }
 
     this.health = 100;
@@ -114,11 +114,11 @@ class Bush {
 };
 
 class Rock {
-  constructor(sx, sy, sw, sh, dx, dy) {
-    Object.assign(this, {sx, sy, sw, sh, dx, dy})
-    if (dx == undefined || dy == undefined) {
-      dx = 0;
-      dy = 0;
+  constructor(game, sx, sy, sw, sh, x, y) {
+    Object.assign(this, { game, sx, sy, sw, sh, x, y})
+    if (x == undefined || y == undefined) {
+      x = 0;
+      y = 0;
     }
 
 
