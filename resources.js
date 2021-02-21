@@ -95,16 +95,23 @@ class Bush {
     }
 
     this.health = 100;
+    this.subHealth = 0;
     this.removeFromWorld = false;
-    this.radius = 15;
+    this.radius = 20;
     this.visualRadius = 100;
 
     this.healthbar = new HealthBar(this);
   };
 
   updateMe() {
-      if (this.health <= 0) {
-          this.removeFromWorld = true;
+      this.elapsedTime += this.game.clockTick;
+      if (this.subHealth == 100) {
+          this.health = this.subHealth;
+          this.subHealth = 0;
+      }
+      if (this.elapsedTime > 1.6 && this.health <= 0 && this.subHealth < this.health) {
+          this.subHealth += 5;
+          this.elapsedTime = 0;
       }
   };
 
@@ -121,18 +128,26 @@ class Rock {
       y = 0;
     }
 
-
     this.health = 100;
+    this.subHealth = 0;
     this.removeFromWorld = false;
-    this.radius = 15;
+    this.radius = 20;
     this.visualRadius = 100;
+    this.ready = true;
 
     this.healthbar = new HealthBar(this);
+    this.elapsedTime = 0;
   };
 
   updateMe() {
-      if (this.health <= 0) {
-          this.removeFromWorld = true;
+      this.elapsedTime += this.game.clockTick;
+      if (this.subHealth == 100) {
+          this.health = this.subHealth;
+          this.subHealth = 0;
+      }
+      if (this.elapsedTime > 1.6 && this.health <= 0 && this.subHealth < this.health) {
+          this.subHealth += 5;
+          this.elapsedTime = 0;
       }
   };
 

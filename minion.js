@@ -91,7 +91,7 @@ class Minion {
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
             if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave
-              || ent instanceof Rock || ent instanceof Bush) && canSee(this, ent)) {
+              || ent instanceof Rock || ent instanceof Bush) && canSee(this, ent) && ent.health > 0 && !ent.removeFromWorld) {
                 this.target = ent;
                 combat = true;
             }
@@ -105,8 +105,9 @@ class Minion {
                     this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage, "Red"));
                     this.elapsedTime = 0;
                 }
-            } else if ((ent instanceof Rock || ent instanceof Bush) && collide(this, ent) && !ent.removeFromWorld) {
+            } else if ((ent instanceof Rock || ent instanceof Bush) && collide(this, ent) && ent.health > 0 && !ent.removeFromWorld) {
                 if (this.state === 0) {
+                    this.state = 1;
                     this.elapsedTime = 0;
                 } else if (this.elapsedTime > 0.8) {
                     var gather = 3 + randomInt(3);
