@@ -75,11 +75,11 @@ class Projectile {
             this.drawAngle(ctx, degrees);
         } else {
             if (this.facing < 5) {
-                this.animations[this.facing].drawFrame(this.game.clockTick, ctx, this.x - xOffset, this.y - yOffset, this.scale);
+                this.animations[this.facing].drawFrame(this.game.clockTick, ctx, (this.x - xOffset) - this.game.camera.x, (this.y - yOffset) - this.game.camera.y, this.scale);
             } else {
                 ctx.save();
                 ctx.scale(-1, 1);
-                this.animations[8 - this.facing].drawFrame(this.game.clockTick, ctx, -(this.x) - 32 + xOffset, this.y - yOffset, this.scale);
+                this.animations[8 - this.facing].drawFrame(this.game.clockTick, ctx, -(this.x) - 32 + xOffset + this.game.camera.x, (this.y - yOffset) - this.game.camera.y, this.scale);
                 ctx.restore();
             }
         }
