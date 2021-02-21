@@ -1,9 +1,9 @@
-// Rest of the UI to hold the game menu features.
+// Rest of the UI to hold the theGame. menu features.
 class HUD{
-    constructor(game,
+    constructor(theGame,
       gameLength, gameHeight, hudLength, //canvas dimensions
       startingRes) {
-        Object.assign(this, {game, gameLength, gameHeight, hudLength});
+        Object.assign(this, {theGame, gameLength, gameHeight, hudLength});
 
         this.myFood = startingRes[0];
         this.myRock = startingRes[1];
@@ -26,9 +26,8 @@ class HUD{
 
         this.miniMapX = gameLength;
         this.minimapY = this.gameHeight - 576;
-        this.theMiniMap = new MiniMap(game, this.miniMapX, this.miniMapY, this.hudLength);
+        this.theMiniMap = new MiniMap(theGame, this.miniMapX, this.miniMapY, this.hudLength);
 
-        this.theGame = game;
         this.state = 1;
 
         this.AgiButt = ASSET_MANAGER.getAsset("./sprites/button_Agi.png");
@@ -119,7 +118,7 @@ class HUD{
       var x = randomInt(150) + 50;
       var y = randomInt(150) + 50;
       console.log("spawning wolf at: "+x + ", "+y);
-      this.game.spawnMe("wolf", x, y);
+      this.theGame.spawnMe("wolf", x, y);
       that.buttonWasClicked = true;
     }
 
@@ -128,7 +127,7 @@ class HUD{
       var x = randomInt(150) + 50;
       var y = randomInt(150) + 50;
       console.log("spawning cave at: "+x + ", "+y);
-      this.game.spawnMe("cave", x, y);
+      this.theGame.spawnMe("cave", x, y);
       that.buttonWasClicked = true;
     }
 
@@ -137,7 +136,7 @@ class HUD{
       var x = randomInt(150) + 50;
       var y = randomInt(150) + 50;
       console.log("spawning ogre at: "+x + ", "+y);
-      this.game.spawnMe("ogre", x, y);
+      this.theGame.spawnMe("ogre", x, y);
       that.buttonWasClicked = true;
     }
 
@@ -155,30 +154,34 @@ class HUD{
           //no buttons were clicked.
         } else {
           //no hud-buttons were clicked, check if a entity was.
-          this.game.entities.forEach((entity) => {
+          this.theGame.entities.forEach((entity) => {
             //for each entity that is selectable
             if(entity.isSelectable) {
               var dist = Math.sqrt(Math.abs(
-                  (this.game.click.x - (entity.x-this.game.camera.x + entity.ow)) *
-                  (this.game.click.x - (entity.x-this.game.camera.x + entity.ow)) +
-                  (this.game.click.y - (entity.y-this.game.camera.y + entity.oh)) *
-                  (this.game.click.y - (entity.y-this.game.camera.y + entity.oh))
+                  (this.theGame.click.x - (entity.x-this.theGame.camera.x + entity.ow)) *
+                  (this.theGame.click.x - (entity.x-this.theGame.camera.x + entity.ow)) +
+                  (this.theGame.click.y - (entity.y-this.theGame.camera.y + entity.oh)) *
+                  (this.theGame.click.y - (entity.y-this.theGame.camera.y + entity.oh))
                 )
               );
               if(dist < entity.radius) {
+                console.log("inside radius");
                 this.selected = entity; //update selected
                 entity.isSelected = true;
                 this.buttonWasClicked = true;
+              } else {
+                console.log("outside radius");
               }
+            } else {
+              console.log(entity.isSelectable);
             }
           })
-
-          if(!this.buttonWasClicked && this.selected) {
-            //if the player clicked on nothing, set selected to null;
-            this.selected.isSelected = false;
-            this.selected = null;
-          }
         }
+      }
+      if(!this.buttonWasClicked && this.selected) {
+        //if the player clicked on nothing, set selected to null;
+        this.selected.isSelected = false;
+        this.selected = null;
       }
 
 
@@ -282,10 +285,10 @@ toggle between hiding and showing the dropdown content */
 //   }
 // };
 
-// Minimap for the game.
+// Minimap for the theGame..
 class MiniMap {
-    constructor(game, x, y, w) {
-        Object.assign(this, {game, x, y, w });
+    constructor(theGame, x, y, w) {
+        Object.assign(this, {theGame, x, y, w });
     };
 
     updateMe() {
@@ -302,10 +305,10 @@ class MiniMap {
 };
 
 //putting "UI" back in at least temperarilly
-// Rest of the UI to hold the game menu features.
+// Rest of the UI to hold the theGame. menu features.
 class UI {
-    constructor(game, x, y, w) {
-        Object.assign(this, { game, x, y, w });
+    constructor(theGame, x, y, w) {
+        Object.assign(this, { theGame, x, y, w });
     };
 
     updateMe() {

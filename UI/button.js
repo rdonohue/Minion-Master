@@ -1,6 +1,6 @@
 class Button{
   constructor(
-    theObject, theHud, game,
+    theObject, theHud, theGame,
     x, y, //position of top
     w, h, //size of click-box.
     sw, sh, //size of sprite
@@ -10,7 +10,7 @@ class Button{
     mySpriteSheet, myColor //or a color for a rectangle
     ){
 
-    Object.assign(this, {theObject, theHud, game, x, y, w, h, sw, sh, ox, oy});
+    Object.assign(this, {theObject, theHud, theGame, x, y, w, h, sw, sh, ox, oy});
 
     theObject.myButtons.push(this);
     if(theObject != theHud) {
@@ -31,7 +31,7 @@ class Button{
   };
 
   updateMe() {
-    var theClick = this.theHud.game.click;
+    var theClick = this.theHud.theGame.click;
 
     if(this.debugOnly) {
       this.isVisable = params.DEBUG;
@@ -45,9 +45,10 @@ class Button{
       var isInYCoord = theClick.y > this.y + this.oy && theClick.y < this.y + this.h + this.oy;
 
       if(isInXCoord && isInYCoord){ //check y-axis
+        this.theObject.buttonWasClicked = true;
         this.myFunction();
         return true;
-      }
+      } 
     } else {
       //do nothing.
       return false;
@@ -75,8 +76,8 @@ class Button{
         ctx.strokeStyle= "red";
         ctx.beginPath();
         ctx.strokeRect(
-          this.x - this.game.camera.x + this.ow-3,
-          this.y - this.game.camera.y + this.oh-3,
+          this.x - this.theGame.camera.x + this.ow-3,
+          this.y - this.theGame.camera.y + this.oh-3,
           this.w+6, this.h+6
         );
         ctx.stroke();

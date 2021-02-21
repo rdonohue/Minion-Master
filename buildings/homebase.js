@@ -64,7 +64,7 @@ class HomeBase {
 
   spawnMinion() {
     var that = this;
-    this.game.spawnMinion("minion", this.x, this.y);
+    this.game.spawnMe("minion", this.x, this.y);
     // this.game.spawnMe("minion", this.x + this.radius, this.y + this.radius);
   }
 
