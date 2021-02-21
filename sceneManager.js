@@ -9,15 +9,10 @@ class SceneManager {
         this.ui = new UI(this.game, 1024, 0, 256);
         this.hud = new HUD(this.game);
         this.thePlayer = new Player(this.game, 100, 150, 10, 5, 0, 0);
-        // These are dummy values for keeping track of variables --Ryan
-        // It's probably okay to delete these later.
-        var theX = 0;
-        var theY = 0;
-
-        this.loadLevel(theX, theY);
+        this.loadLevel();
     };
 
-    loadLevel(x, y) {
+    loadLevel() {
         this.game.entities = [];
         this.x = 0;
 
@@ -30,14 +25,6 @@ class SceneManager {
       	let resources = new Resources(this.game, params.TILE_W_H, params.TILE_W_H);
         let tower = new Tower(this.game, 300, 300);
         let base = new HomeBase(this.game, 500, 400);
-
-        // if (level.coins) {
-        //     for (var i = 0; i < level.coins.length; i++) {
-        //         let coin = level.coins[i];
-        //         this.game.addEntity(new Coin(this.game, coin.x * params.BLOCKWIDTH, coin.y * params.BLOCKWIDTH));
-        //     }
-        // }
-
         this.game.addEntity(corners);
         this.game.addEntity(vertwalls);
         this.game.addEntity(horiwalls);
@@ -48,6 +35,7 @@ class SceneManager {
         this.game.addEntity(base);
         this.game.addEntity(this.minimap);
         this.game.addEntity(this.ui);
+        this.game.addEntity(this.ui.towerButton);
         this.game.addEntity(this.hud);
         this.game.addEntity(this.thePlayer);
         this.game.spawnMe("minion", 0, 0);
@@ -57,7 +45,7 @@ class SceneManager {
 
     update() {
         params.DEBUG = document.getElementById("debug").checked;
-        
+
         let midpoint = params.CANVAS_WIDTH / 2;
 
         //Check for play area edge
@@ -73,12 +61,6 @@ class SceneManager {
         if (this.game.down && this.y < params.CANVAS_HEIGHT - 10) {
             this.y += 10;
         }
-        // This logic would be good for a lose condition. If (base.dead) display loss screen.
-
-        // if (this.mario.dead && this.mario.y > params.BLOCKWIDTH * 16) {
-        //     this.mario.dead = false;
-        //     this.loadLevel(levelOne, 2.5 * params.BLOCKWIDTH, 0 * params.BLOCKWIDTH);
-        // };
     };
 
     draw(ctx) {

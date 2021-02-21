@@ -81,12 +81,12 @@ class GameEngine {
         }
 
         this.ctx.canvas.addEventListener("mousemove", function (e) {
-            //console.log(getXandY(e));
+            // console.log(getXandY(e));
             that.mouse = getXandY(e);
         }, false);
 
         this.ctx.canvas.addEventListener("click", function (e) {
-          console.log(getXandY(e));
+          // console.log(getXandY(e));
           that.click = getXandY(e);
         }, false);
 
