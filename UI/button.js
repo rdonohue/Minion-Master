@@ -27,11 +27,11 @@ class Button{
     this.state = 1;
     this.isVisable = true;
     this.debugOnly = false;
-
+    this.start = true;
   };
 
   updateMe() {
-    var theClick = this.theHud.theGame.click;
+    var theClick = this.theGame.click;
 
     if(this.debugOnly) {
       this.isVisable = params.DEBUG;
@@ -40,15 +40,18 @@ class Button{
       this.isVisable = this.theObject.isSelected;
     }
 
-    if(theClick && this.isVisable) {
+    if(theClick) {
       var isInXCoord = theClick.x > this.x + this.ox && theClick.x < this.x + this.w + this.ox;
       var isInYCoord = theClick.y > this.y + this.oy && theClick.y < this.y + this.h + this.oy;
 
-      if(isInXCoord && isInYCoord){ //check y-axis
+      console.log(theClick);
+      console.log(isInXCoord);
+      console.log(isInYCoord);
+      if(isInXCoord && isInYCoord && this.isVisable){ //check y-axis
         this.theObject.buttonWasClicked = true;
         this.myFunction();
         return true;
-      } 
+      }
     } else {
       //do nothing.
       return false;

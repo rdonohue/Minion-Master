@@ -145,7 +145,9 @@ class HUD{
       this.buttonWasClicked = false;
 
       this.myButtons.forEach((button) => {
-        button.updateMe();
+        if(button.updateMe()) {
+          console.log(button);
+        }
       });
 
       if(this.theGame.click && this.theGame.click.x < params.CANVAS_WIDTH) {

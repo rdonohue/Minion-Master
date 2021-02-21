@@ -119,14 +119,16 @@ class Ogre {
     };
 
     drawMe(ctx) {
+      var newX = this.x - this.game.camera.x;
+      var newY = this.y - this.game.camera.y;
       if (this.state == 1) { //wandering
-        this.walkAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+        this.walkAnimator.drawFrame(this.game.clockTick, ctx, newX, newY, this.myScale);
       } else if (this.state == 2) { //attacking
-        this.attackAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y-80, this.myScale);
+        this.attackAnimator.drawFrame(this.game.clockTick, ctx, newX, newY,-80, this.myScale);
       } else if (this.state == 0) {
 
         //NOTE, this is a is-wandering animator!
-        this.deadAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+        this.deadAnimator.drawFrame(this.game.clockTick, ctx, newX, newY, this.myScale);
       }
 
       this.healthbar.drawMe(ctx);
