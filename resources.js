@@ -21,15 +21,15 @@ class Resources {
         }
 
         //Stones
-        this.resArray[0] = new SpriteDimensional(267,102,51,57); //Stone 0
-        this.resArray[1] = new SpriteDimensional(331,108,39,51); //Stone 1
-        this.resArray[2] = new SpriteDimensional(392,102,40,57); //Stone 2
-        this.resArray[3] = new SpriteDimensional(458,102,41,57); //Stone 3
+        this.resArray[0] = new Rock(this.game,267,102,51,57); //Stone 0
+        this.resArray[1] = new Rock(this.game,331,108,39,51); //Stone 1
+        this.resArray[2] = new Rock(this.game,392,102,40,57); //Stone 2
+        this.resArray[3] = new Rock(this.game,458,102,41,57); //Stone 3
         //Berries
-        this.resArray[4] = new SpriteDimensional(142,800,37,31); //Berry 0
-        this.resArray[5] = new SpriteDimensional(192,808,30,23); //Berry 1
-        this.resArray[6] = new SpriteDimensional(237,805,37,26); //Berry 2
-        this.resArray[7] = new SpriteDimensional(294,818,20,13); //Berry 3
+        this.resArray[4] = new Bush(this.game,142,800,37,31); //Berry 0
+        this.resArray[5] = new Bush(this.game,192,808,30,23); //Berry 1
+        this.resArray[6] = new Bush(this.game,237,805,37,26); //Berry 2
+        this.resArray[7] = new Bush(this.game,294,818,20,13); //Berry 3
 
 
         this.buildResources();
@@ -63,7 +63,7 @@ class Resources {
           sy = this.resArray[resSelect].sy;
           sw = this.resArray[resSelect].sw;
           sh = this.resArray[resSelect].sh;
-          this.drawArray[i] = new SpriteDimensional(sx,sy,sw,sh,dx,dy);
+          this.drawArray[i] = new Rock(this.game,sx,sy,sw,sh,dx,dy);
           this.stones--;
           i++;
         } else if ((this.berries > 0) && (resSelect > 3 && resSelect < 8)) {
@@ -71,43 +71,82 @@ class Resources {
           sy = this.resArray[resSelect].sy;
           sw = this.resArray[resSelect].sw;
           sh = this.resArray[resSelect].sh;
-          this.drawArray[i] = new SpriteDimensional(sx,sy,sw,sh,dx,dy);
+          this.drawArray[i] = new Bush(this.game,sx,sy,sw,sh,dx,dy);
           this.berries--;
           i++;
         }
         resSelect = randomInt(20);
       }
+
+      for (var j = 0; j < this.drawArray.length; j++) {
+          this.game.addEntity(this.drawArray[j]);
+      }
+
     };
+
 };
 
-
-// Class to store sprite sheet and canvas locations.
-class SpriteDimensional {
-  constructor(sx, sy, sw, sh, dx, dy) {
-    Object.assign(this, {sx, sy, sw, sh, dx, dy})
-    if (dx == undefined || dy == undefined) {
-      dx = 0;
-      dy = 0;
+class Bush {
+  constructor(game, sx, sy, sw, sh, x, y) {
+    Object.assign(this, { game, sx, sy, sw, sh, x, y})
+    if (x == undefined || y == undefined) {
+      x = 0;
+      y = 0;
     }
-  }
+
+    this.health = 100;
+    this.maxHealth = 100;
+    this.subHealth = 0;
+    this.removeFromWorld = false;
+    this.radius = 20;
+    this.visualRadius = 100;
+
+    this.healthbar = new HealthBar(this);
+  };
+
+  updateMe() {
+      this.elapsedTime += this.game.clockTick;
+      if (this.subHealth == 100) {
+          this.health = this.subHealth;
+          this.subHealth = 0;
+      }
+      if (this.elapsedTime > 1.6 && this.health <= 0 && this.subHealth < this.health) {
+          this.subHealth += 5;
+          this.elapsedTime = 0;
+      }
+  };
+
+  drawMe(ctx) {
+      this.healthbar.drawMe(ctx);
+  };
 };
 
-class Berry {
-  constructor(sx, sy, sw, sh, dx, dy) {
-    Object.assign(this, {sx, sy, sw, sh, dx, dy})
-    if (dx == undefined || dy == undefined) {
-      dx = 0;
-      dy = 0;
+class Rock {
+  constructor(game, sx, sy, sw, sh, x, y) {
+    Object.assign(this, { game, sx, sy, sw, sh, x, y})
+    if (x == undefined || y == undefined) {
+      x = 0;
+      y = 0;
     }
-  }
-}
 
-class Stone {
-  constructor(sx, sy, sw, sh, dx, dy) {
-    Object.assign(this, {sx, sy, sw, sh, dx, dy})
-    if (dx == undefined || dy == undefined) {
-      dx = 0;
-      dy = 0;
-    }
-  }
-}
+    this.health = 100;
+    this.maxHealth = 100;
+    this.subHealth = 0;
+    this.removeFromWorld = false;
+    this.radius = 20;
+    this.visualRadius = 100;
+    this.ready = true;
+
+    this.healthbar = new HealthBar(this);
+    this.elapsedTime = 0;
+  };
+
+  updateMe() {
+      this.elapsedTime += this.game.clockTick;
+  };
+
+  drawMe(ctx) {
+      this.healthbar.drawMe(ctx);
+  };
+
+};

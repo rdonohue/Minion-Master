@@ -12,14 +12,17 @@ class Minion {
         this.myScale = 2;
         this.myDirection = 0; // 0 = left, 1 = right
         this.state = 0;
+        this.priority = 0;
 
         this.radius = 20;
         this.visualRadius = 200;
 
-        this.path = [{ x: 100, y: 0 },
-          { x: 300, y: 500 },
-          { x: 0, y: 50 },
-          { x: 0, y: 0 }];
+        this.healthbar = new HealthBar(this);
+
+        this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
 
         this.targetID = 0;
         if (this.path && this.path[0]) {
@@ -38,6 +41,7 @@ class Minion {
         this.attack = minionStats.ATTACK;
         this.agility = minionStats.AGILITY;
         this.intelligence = minionStats.INTELLIGENCE;
+        this.combat = false;
 
         this.dead = false;
         this.removeFromWorld = false;
@@ -62,41 +66,73 @@ class Minion {
     updateMe() {
         this.elapsedTime += this.game.clockTick;
         var dist = distance(this, this.target);
+        if (this.targetID >= this.path.length - 1) {
+            this.targetID = 0;
+            this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+              { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+              { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+              { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+        }
+
+        // If its health is 0, it is dead.
+        if (this.health <= 0) {
+            this.state = 2;
+            this.dead = true;
+            this.removeFromWorld = true;
+        }
+
         if (dist < 5) {
             if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
                 this.targetID++;
             }
             this.target = this.path[this.targetID];
         }
-
+        var combat = false;
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
-            if (ent instanceof Wolf && canSee(this, ent) && ent.state != 2) {
+            if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave
+              || ent instanceof Rock || ent instanceof Bush) && canSee(this, ent) && ent.health > 0) {
                 this.target = ent;
+                combat = true;
             }
-            if (ent instanceof Wolf && collide(this, ent)) {
+            if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave) && collide(this, ent)) {
                 if (this.state === 0) {
                     this.state = 1;
                     this.elapsedTime = 0;
                 } else if (this.elapsedTime > 0.8) {
-                    ent.health -= 8;
+                    var damage = (5 + randomInt(5)) - ent.defense;
+                    ent.health -= damage;
+                    this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage, "Red"));
+                    this.elapsedTime = 0;
+                }
+            } else if ((ent instanceof Rock || ent instanceof Bush) && collide(this, ent) && ent.health > 0) {
+                if (this.state === 0) {
+                    this.state = 1;
+                    this.elapsedTime = 0;
+                } else if (this.elapsedTime > 0.8) {
+                    var gather = 3 + randomInt(3);
+                    ent.health -= gather;
+                    this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, gather, "Yellow"));
                     this.elapsedTime = 0;
                 }
             }
+
         }
 
-        dist = distance(this, this.target);
-        this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
-          y: (this.target.y - this.y) / dist * this.maxSpeed};
-        this.x += this.velocity.x * this.game.clockTick;
-        this.y += this.velocity.y * this.game.clockTick;
-        this.facing = getFacing(this.velocity);
-
-        if (this.health <= 0) {
-            this.state = 2;
-            this.dead = true;
-            this.removeFromWorld = true;
+        // If it never detected an enemy, make sure it is back to walking.
+        if (!combat) {
+            this.state = 0;
         }
+
+        if (this.state !== 1) {
+          dist = distance(this, this.target);
+          this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
+            y: (this.target.y - this.y) / dist * this.maxSpeed};
+          this.x += this.velocity.x * this.game.clockTick;
+          this.y += this.velocity.y * this.game.clockTick;
+          this.facing = getFacing(this.velocity);
+        }
+
     };
 
     drawMinimap(ctx, mmX, mmY) {
@@ -114,5 +150,7 @@ class Minion {
             this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
             die();
         }
+
+        this.healthbar.drawMe(ctx);
     };
 };
