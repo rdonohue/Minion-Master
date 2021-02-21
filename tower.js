@@ -30,7 +30,7 @@ class Tower {
     this.elapsedTime += this.game.clockTick;
     for (var i = 0; i < this.game.entities.length; i++) {
         var ent = this.game.entities[i];
-        if ((ent instanceof Wolf) && canSee(this, ent) && this.elapsedTime > 1 / this.agility) {
+        if ((ent instanceof Wolf || ent instanceof Ogre) && canSee(this, ent) && this.elapsedTime > 1 / this.agility) {
             this.elapsedTime = 0;
             this.game.addEntity(new Projectile(this.game, this.x, this.y, ent, this.attack, this.projectileScale));
         }
