@@ -47,8 +47,8 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.addEntity(resources);
 	gameEngine.addEntity(minimap);
 	gameEngine.addEntity(ui);
-	gameEngine.addEntity(castle);
-	gameEngine.addEntity(cave);
+	//gameEngine.addEntity(castle);
+	//gameEngine.addEntity(cave);
 
 	//gameEngine.spawnMe("castle", 500, 300);
 	gameEngine.spawnMe("minion", 0, 0);

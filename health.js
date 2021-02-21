@@ -22,7 +22,7 @@ class HealthBar {
 };
 
 class Score {
-    constructor(game, x, y, score) {
+    constructor(game, x, y, score, color) {
         Object.assign(this, { game, x, y, score });
 
         this.velocity = -32;
@@ -40,7 +40,7 @@ class Score {
 
     drawMe(ctx) {
         ctx.font = '12px "Press Start 2P"';
-        ctx.fillStyle = "Red";
+        ctx.fillStyle = this.color;
         ctx.fillText(this.score, this.x, this.y);
     };
 }

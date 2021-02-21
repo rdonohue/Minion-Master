@@ -132,7 +132,7 @@ class Wolf {
               } else if (this.elapsedTime > 0.8) {
                   var damage = (6 + randomInt(5)) - ent.defense;
                   ent.health -= damage;
-                  this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage))
+                  this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage, "Red"));
                   this.elapsedTime = 0;
               }
             }

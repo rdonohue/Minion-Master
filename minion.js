@@ -91,18 +91,28 @@ class Minion {
         var combat = false;
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
-            if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave) && canSee(this, ent)) {
+            if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave
+              || ent instanceof Rock || ent instanceof Bush) && canSee(this, ent)) {
                 this.target = ent;
                 combat = true;
             }
-            if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave) && collide(this, ent) && !ent.dead) {
+            if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave) && collide(this, ent) && !ent.removeFromWorld) {
                 if (this.state === 0) {
                     this.state = 1;
                     this.elapsedTime = 0;
                 } else if (this.elapsedTime > 0.8) {
                     var damage = (5 + randomInt(5)) - ent.defense;
                     ent.health -= damage;
-                    this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage))
+                    this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage, "Red"));
+                    this.elapsedTime = 0;
+                }
+            } else if ((ent instanceof Rock || ent instanceof Bush) && collide(this, ent) && !ent.removeFromWorld) {
+                if (this.state === 0) {
+                    this.elapsedTime = 0;
+                } else if (this.elapsedTime > 0.8) {
+                    var gather = 3 + randomInt(3);
+                    ent.health -= gather;
+                    this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, gather, "Yellow"));
                     this.elapsedTime = 0;
                 }
             }
