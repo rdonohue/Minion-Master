@@ -95,6 +95,7 @@ class Bush {
     }
 
     this.health = 100;
+    this.maxHealth = 100;
     this.subHealth = 0;
     this.removeFromWorld = false;
     this.radius = 20;
@@ -129,6 +130,7 @@ class Rock {
     }
 
     this.health = 100;
+    this.maxHealth = 100;
     this.subHealth = 0;
     this.removeFromWorld = false;
     this.radius = 20;
@@ -141,14 +143,6 @@ class Rock {
 
   updateMe() {
       this.elapsedTime += this.game.clockTick;
-      if (this.subHealth == 100) {
-          this.health = this.subHealth;
-          this.subHealth = 0;
-      }
-      if (this.elapsedTime > 1.6 && this.health <= 0 && this.subHealth < this.health) {
-          this.subHealth += 5;
-          this.elapsedTime = 0;
-      }
   };
 
   drawMe(ctx) {
