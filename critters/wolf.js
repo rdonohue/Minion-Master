@@ -1,6 +1,6 @@
 class Wolf {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+    constructor(theGame, x, y) {
+        Object.assign(this, { theGame, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
 
         this.mySearchingAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.15, 0, false, true);
@@ -63,7 +63,7 @@ class Wolf {
     // 3: hunting prey. moving towards prey.
     // 4: attacking prey. NOT MOVING.
     updateMe() {
-      this.elapsedTime += this.game.clockTick;
+      this.elapsedTime += this.theGame.clockTick;
       //this is called a decision tree, this is roughly 1/10th the complexity of the
       //AI's that halflife 1 used.
 
@@ -113,12 +113,12 @@ class Wolf {
       if(!this.wait || this.wait <= 0) {
         this.wait = Math.random(this.maxWait);
         //decide how long to wait.
-        this.waitTill = this.game.timer.lastTimestamp + this.wait;
+        this.waitTill = this.theGame.timer.lastTimestamp + this.wait;
         //find the timeStamp to wait till.
 
         this.velocity = {x: 0, y: 0};
         //don't move while idle.
-      } else if(this.waitTill && this.game.timer.lastTimestamp > this.waitTill) {
+      } else if(this.waitTill && this.theGame.timer.lastTimestamp > this.waitTill) {
         //we have waited long enough, start hunting!
         this.wait = 0;
         this.state = 2;
@@ -128,8 +128,8 @@ class Wolf {
     //looking for prey while moving towards target location (note target is a location here).
     search() {
       //looking for prey while moving towards target location (note target is a location here).
-      for (var i = 0; i < this.game.entities.length; i++) {
-        var ent = this.game.entities[i];
+      for (var i = 0; i < this.theGame.entities.length; i++) {
+        var ent = this.theGame.entities[i];
         if (ent instanceof Minion && canSee(this, ent) && !(ent.state == 0)) {
           //prey has been found!
           this.target = ent;
@@ -241,8 +241,8 @@ class Wolf {
         y: (targetLocation.y - this.y)/dist * this.maxSpeed
       };
 
-      this.x += this.velocity.x * this.game.clockTick;
-      this.y += this.velocity.y * this.game.clockTick;
+      this.x += this.velocity.x * this.theGame.clockTick;
+      this.y += this.velocity.y * this.theGame.clockTick;
 
       this.facing = getFacing(this.velocity);
     }
@@ -252,13 +252,13 @@ class Wolf {
     };
 
     drawMe(ctx) {
-      //this.animations[this.direction][this.state].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+      //this.animations[this.direction][this.state].drawFrame(this.theGame.clockTick, ctx, this.x, this.y, this.myScale);
       if (this.state == 1 || this.state == 2) {
-          this.mySearchingAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x - this.radius, this.y - this.game.camera.y - this.radius, this.myScale);
+          this.mySearchingAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.camera.x - this.radius, this.y - this.theGame.camera.y - this.radius, this.myScale);
       } else if (this.state == 3 || this.state == 4) {
-          this.myHuntingAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x - this.radius, this.y - this.game.camera.y - this.radius, this.myScale);
+          this.myHuntingAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.camera.x - this.radius, this.y - this.theGame.camera.y - this.radius, this.myScale);
       } else {
-          this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x - this.radius, this.y - this.game.camera.y - this.radius, this.myScale);
+          this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.camera.x - this.radius, this.y - this.theGame.camera.y - this.radius, this.myScale);
       }
 
       if(params.DEBUG) {
@@ -266,14 +266,14 @@ class Wolf {
           ctx.lineWidth = 1;
           ctx.strokeStyle= "red";
           ctx.beginPath();
-          ctx.arc(this.x - this.game.camera.x + this.ow, this.y - this.game.camera.y + this.oh, this.radius, 0, 2 * Math.PI);
+          ctx.arc(this.x - this.theGame.camera.x + this.ow, this.y - this.theGame.camera.y + this.oh, this.radius, 0, 2 * Math.PI);
           ctx.stroke();
         }
         if(this.attack) {
           ctx.lineWidth = 1;
           ctx.strokeStyle= "yellow";
           ctx.beginPath();
-          ctx.arc(this.x - this.game.camera.x + this.ow, this.y - this.game.camera.y + this.oh, this.attackRange, 0, 2 * Math.PI);
+          ctx.arc(this.x - this.theGame.camera.x + this.ow, this.y - this.theGame.camera.y + this.oh, this.attackRange, 0, 2 * Math.PI);
           ctx.stroke();
         }
       }

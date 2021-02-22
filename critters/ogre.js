@@ -126,8 +126,6 @@ class Ogre {
       } else if (this.state == 2) { //attacking
         this.attackAnimator.drawFrame(this.game.clockTick, ctx, newX, newY,-80, this.myScale);
       } else if (this.state == 0) {
-
-        //NOTE, this is a is-wandering animator!
         this.deadAnimator.drawFrame(this.game.clockTick, ctx, newX, newY, this.myScale);
       }
 

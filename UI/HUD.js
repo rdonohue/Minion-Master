@@ -5,8 +5,11 @@ class HUD{
       startingRes) {
         Object.assign(this, {theGame, gameLength, gameHeight, hudLength});
 
+        this.minionFoodCost = 50;
         this.myFood = startingRes[0];
+        this.myFoodsColor = "white";
         this.myRock = startingRes[1];
+        this.myRocksColor = "white";
         this.foodIncome = startingRes[2];
         this.rockIncome = startingRes[3];
 
@@ -48,6 +51,7 @@ class HUD{
 
         this.debugMode = params.DEBUG_ON;
         this.myButtons = [];
+        this.notMyButtons = [];
         this.createButtons();
     };
 
@@ -119,7 +123,7 @@ class HUD{
       var y = randomInt(150) + 50;
       console.log("spawning wolf at: "+x + ", "+y);
       this.theGame.spawnMe("wolf", x, y);
-      that.buttonWasClicked = true;
+      that.hudWasClicked = true;
     }
 
     spawnCave() {
@@ -128,7 +132,7 @@ class HUD{
       var y = randomInt(150) + 50;
       console.log("spawning cave at: "+x + ", "+y);
       this.theGame.spawnMe("cave", x, y);
-      that.buttonWasClicked = true;
+      that.hudWasClicked = true;
     }
 
     spawnOgre() {
@@ -137,69 +141,124 @@ class HUD{
       var y = randomInt(150) + 50;
       console.log("spawning ogre at: "+x + ", "+y);
       this.theGame.spawnMe("ogre", x, y);
-      that.buttonWasClicked = true;
+      that.hudWasClicked = true;
+    }
+
+    buttonManagement() {
+      this.buttonWasClicked = false;
+      this.hudWasClicked = false;
+      this.myButtons.forEach((button) => {
+        //we need to see if any single button was clicked.
+        this.hudWasClicked = this.hudWasClicked || button.updateMe();
+      });
+      this.notMyButtons.forEach((button) => {
+        //we need to see if any single button was clicked.
+        this.buttonWasClicked = this.buttonWasClicked || button.updateMe();
+
+      })
+      // var theClick = this.theGame.click;
+      // var theCam = this.theGame.camera;
+      // if(theClick && theClick.x - theCam.x < params.CANVAS_WIDTH) {
+      //   //a click was found, so check to see if it was for this entity
+      //   //by seeing if the click was within this entity's radius.
+      //
+      //   var myLoc = {
+      //     x: this.x - theCam.x + this.ow,
+      //     y: this.y - theCam.y + this.oh
+      //   }
+      //   var dist = distance(theClick, myLoc);
+      //   if(dist<this.radius) {
+      //     this.setSelected(this);
+      //   }
+      // }
+      return this.selected != null;
+    }
+
+    setSelected(entity) {
+      console.log(entity);
+      if(entity) {
+        //if entity is valid, we want to
+        //make sure to update that entity as well
+        //as the current one.
+        if(this.selected) {
+          this.selected.isSelected = false;
+          this.selected = entity;
+          this.selected.isSelected = true;
+          this.selectionChanged = true;
+        } else {
+          //just update the new entity.
+          this.selected = entity;
+          this.selected.isSelected = true;
+          this.selectionChanged = true;
+        }
+      } else {
+        //if its not valid, we do the same without updating the new.
+        //since it doesn't exist.
+        if(this.selected) {
+          this.selected.isSelected = false;
+          this.selected = entity;
+          this.selectionChanged = true;
+        } else {
+          //incase two clicks happen?
+          this.selectionChanged = true;
+        }
+      }
     }
 
     updateMe() {
       this.timeSinceUpdate += this.timer.tick();
-      this.buttonWasClicked = false;
+      this.selectionChanged = false;
+      // this is used to see if we need to set selected to null;
 
-      this.myButtons.forEach((button) => {
-        if(button.updateMe()) {
-          console.log(button);
-        }
-      });
-
-      if(this.theGame.click && this.theGame.click.x < params.CANVAS_WIDTH) {
-        //if there is a click, we need to first check to see if it is a Hud-button.
-        if(!this.buttonWasClicked) {
-          //no buttons were clicked.
-        } else {
-          //no hud-buttons were clicked, check if a entity was.
-          this.theGame.entities.forEach((entity) => {
-            //for each entity that is selectable
-            if(entity.isSelectable) {
-              var dist = Math.sqrt(Math.abs(
-                  (this.theGame.click.x - (entity.x-this.theGame.camera.x + entity.ow)) *
-                  (this.theGame.click.x - (entity.x-this.theGame.camera.x + entity.ow)) +
-                  (this.theGame.click.y - (entity.y-this.theGame.camera.y + entity.oh)) *
-                  (this.theGame.click.y - (entity.y-this.theGame.camera.y + entity.oh))
-                )
-              );
-              if(dist < entity.radius) {
-                console.log("inside radius");
-                this.selected = entity; //update selected
-                entity.isSelected = true;
-                this.buttonWasClicked = true;
-              } else {
-                console.log("outside radius");
-              }
-            } else {
-              console.log(entity.isSelectable);
-            }
-          })
+      //if our food's color is not currently white....
+      if(this.myFoodsColor != "white") {
+        //we first check to see if we have a timestamp on when it was set
+        var present = this.theGame.timer.lastTimestamp;
+        if(!this.waitTill){
+          //if not, set one.
+          this.waitTill = present + 1000; //2 seconds
+        } else if (present >= this.waitTill) {
+          //if we have one and its not been 2 seconds. change it back.
+          this.myFoodsColor = "white";
+          this.waitTill = null;
         }
       }
-      if(!this.buttonWasClicked && this.selected) {
-        //if the player clicked on nothing, set selected to null;
-        this.selected.isSelected = false;
-        this.selected = null;
+
+      //if our rock's color is not currently white....
+      if(this.myRocksColor != "white") {
+        //we first check to see if we have a timestamp on when it was set
+        var present = this.theGame.timer.lastTimestamp;
+        if(!this.waitTill){
+          //if not, set one.
+          this.waitTill = present + 1000; //2 seconds
+        } else if (present >= this.waitTill) {
+          //if we have one and its not been 2 seconds. change it back.
+          this.myRocksColor = "white";
+          this.waitTill = null;
+        }
       }
 
-
-      //this is NOT the best implmentation of making the player not increment.
       if(!(this.timeSinceUpdate < this.timeBetweenUpdates)) {
-        //if it HAS, then allow update and reset timeSinceUpdate.
+        //if it HAS been enough time, then allow update and reset timeSinceUpdate.
         this.myFood += this.foodIncome * (this.timeSinceUpdate/this.timeBetweenUpdates);
         this.myRock += this.rockIncome * (this.timeSinceUpdate/this.timeBetweenUpdates);
         this.timeSinceUpdate = 0;
         //we need to make it so that the player's resource increment
         //gets multiplied by how much time has passed.
       }
+
+      return this.buttonManagement();
     };
 
     drawMe(ctx) {
       this.drawHud(ctx);
+      //draw the buttons
+      this.myButtons.forEach((button) => {
+        button.drawMe(ctx);
+      });
+      this.notMyButtons.forEach((button) => {
+        button.drawMe(ctx);
+      });
       this.drawPlayerResources(ctx);
 
       ctx.font = params.TILE_W_H/4 + 'px "Press Start 2P"';
@@ -219,22 +278,18 @@ class HUD{
         ctx.fillText("AGI: " + this.selected.agility, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.6);
         ctx.fillText("INT: " + this.selected.intelligence, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.4);
       }
-
-      //draw the buttons
-      this.myButtons.forEach((button) => {
-        button.drawMe(ctx);
-      });
     }
 
     drawPlayerResources(ctx) {
       //Upper Right HUD
       ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
-      ctx.fillStyle = "White";
 
       var resourceX = this.gameLength + 10;
 
+      ctx.fillStyle = this.myFoodsColor;
       ctx.fillText(("Food: " + Math.round(this.myFood) + " + "
         + Math.round(this.foodIncome) + " food/second"), resourceX, params.TILE_W_H/4);
+      ctx.fillStyle = this.myRocksColor;
       ctx.fillText(("Rock: " + Math.round(this.myRock) + " + "
         + Math.round(this.rockIncome) + " rock/second"), resourceX, params.TILE_W_H/4*2);
       if(this.selected) {
