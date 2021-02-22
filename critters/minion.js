@@ -1,6 +1,6 @@
 class Minion {
-    constructor(theGame, x, y) {
-        Object.assign(this, { theGame, x, y });
+    constructor(game, x, y) {
+        Object.assign(this, { game, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
 
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
@@ -17,11 +17,12 @@ class Minion {
         this.radius = 20;
         this.visualRadius = 200;
 
-        this.healthbar = new HealthBar(this);
-        this.x = theGame.theBase.x;
-        this.y = theGame.theBase.y;
+        this.healthbar = new HealthBar(this.game, this);
 
-        this.path = [{ x: randomInt(params.PLAY_WIDTH), y: randomInt(params.PLAY_HEIGHT) }];
+        this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
 
         this.targetID = 0;
         if (this.path && this.path[0]) {
@@ -30,10 +31,8 @@ class Minion {
 
         this.maxSpeed = 100;
         var dist = distance(this, this.target);
-        this.velocity = {
-          x: (this.target.x - this.x)/dist * this.maxSpeed,
-          y: (this.target.y - this.y)/dist * this.maxSpeed
-        };
+        this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
+          y: (this.target.y - this.y) / dist * this.maxSpeed};
 
         //Stats
         this.health = minionStats.HEALTH;
@@ -43,15 +42,13 @@ class Minion {
         this.agility = minionStats.AGILITY;
         this.intelligence = minionStats.INTELLIGENCE;
         this.combat = false;
-        this.myHunger = 1;
-        this.myButtons = [];
-        //how much food this minion eats per second
 
+        this.dead = false;
+        this.removeFromWorld = false;
         //this.facing = 0;
 
         //i,j for cell, x,y for continuous position.
         this.myType = "minion";
-        this.state = 1;
 
         // Object.assign(this, this.name);
         this.timeBetweenUpdates = 1/this.agility;
@@ -64,92 +61,78 @@ class Minion {
         this.elapsedTime = 0;
     };
 
-    //seperating buttonManagement off to make it easer for re-use.
-    buttonManagement() {
-      var theClick = this.theGame.click;
-      var theCam = this.theGame.camera;
-      if(theClick && theClick.x - theCam.x < params.CANVAS_WIDTH) {
-        //a click was found, so check to see if it was for this entity
-        //by seeing if the click was within this entity's radius.
-        var myLoc = {
-          x: this.x - theCam.x + this.ow,
-          y: this.y - theCam.y + this.oh
-        }
-        var dist = distance(theClick, myLoc);
-        if(dist<this.radius) {
-          this.theHud.setSelected(this);
-        }
-      }
-      return this.selected;
-    }
-
 //the move-speed is still staggered a bit, that might be because of async
 //with the draw-method being called...may need to make the minion handle its own draw-update.
     updateMe() {
-      // If its health is 0, it is dead.
-      if (this.health <= 0) {
-          this.state = 0;
-          return false;
-      }
+        this.elapsedTime += this.game.clockTick;
+        var dist = distance(this, this.target);
+        if (this.targetID >= this.path.length - 1) {
+            this.targetID = 0;
+            this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+              { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+              { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
+              { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+        }
 
-      this.elapsedTime += this.theGame.clockTick;
+        // If its health is 0, it is dead.
+        if (this.health <= 0) {
+            this.state = 2;
+            this.dead = true;
+            this.removeFromWorld = true;
+        }
 
-      var dist = distance(this, this.target);
+        if (dist < 5) {
+            if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
+                this.targetID++;
+            }
+            this.target = this.path[this.targetID];
+        }
+        var combat = false;
+        for (var i = 0; i < this.game.entities.length; i++) {
+            var ent = this.game.entities[i];
+            if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave
+              || ent instanceof Rock || ent instanceof Bush) && canSee(this, ent) && ent.health > 0) {
+                this.target = ent;
+                combat = true;
+            }
+            if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave) && collide(this, ent)) {
+                if (this.state === 0) {
+                    this.state = 1;
+                    this.elapsedTime = 0;
+                } else if (this.elapsedTime > 0.8) {
+                    var damage = (5 + randomInt(5)) - ent.defense;
+                    ent.health -= damage;
+                    this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage, "Red"));
+                    this.elapsedTime = 0;
+                }
+            } else if ((ent instanceof Rock || ent instanceof Bush) && collide(this, ent) && ent.health > 0) {
+                if (this.state === 0) {
+                    this.state = 1;
+                    this.elapsedTime = 0;
+                } else if (this.elapsedTime > 0.8) {
+                    var gather = 3 + randomInt(3);
+                    ent.health -= gather;
+                    this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, gather, "Yellow"));
+                    this.elapsedTime = 0;
+                }
+            }
 
-      if (this.targetID >= this.path.length - 1) {
-          this.targetID = 0;
-          this.path = [{ x: randomInt(params.PLAY_WIDTH), y: randomInt(params.PLAY_HEIGHT) }];
-      }
+        }
 
-      if (dist < 5) {
-          if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
-              this.targetID++;
-          }
-          this.target = this.path[this.targetID];
-      }
+        // If it never detected an enemy, make sure it is back to walking.
+        if (!combat) {
+            this.state = 0;
+        }
 
+        if (this.state !== 1) {
+          dist = distance(this, this.target);
+          this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
+            y: (this.target.y - this.y) / dist * this.maxSpeed};
+          this.x += this.velocity.x * this.game.clockTick;
+          this.y += this.velocity.y * this.game.clockTick;
+          this.facing = getFacing(this.velocity);
+        }
 
-      for (var i = 0; i < this.theGame.entities.length; i++) {
-          var ent = this.theGame.entities[i];
-          if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave
-            || ent instanceof Rock || ent instanceof Bush) && canSee(this, ent) && ent.health > 0) {
-              this.target = ent;
-              this.state = 2 //attacking
-          }
-          if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave) && collide(this, ent)) {
-              if (this.state == 1) {
-                this.elapsedTime = 0;
-              } else if (this.elapsedTime > 0.8) {
-
-                  var damage = (5 + randomInt(5)) - ent.defense;
-                  ent.health -= damage;
-                  this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, damage, "Red"));
-                  this.elapsedTime = 0;
-              }
-          } else if ((ent instanceof Rock || ent instanceof Bush) && collide(this, ent) && ent.health > 0) {
-              if (this.state === 0) {
-                  this.state = 1;
-                  this.elapsedTime = 0;
-              } else if (this.elapsedTime > 0.8) {
-                  var gather = 3 + randomInt(3);
-                  ent.health -= gather;
-                  this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, gather, "Yellow"));
-                  this.elapsedTime = 0;
-              }
-          }
-      }
-
-      if (this.state != 0 && this.state != 2) {
-        //cannot be dead or attacking if we want to move.
-        dist = distance(this, this.target);
-        this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
-          y: (this.target.y - this.y) / dist * this.maxSpeed};
-        this.x += this.velocity.x * this.theGame.clockTick;
-        this.y += this.velocity.y * this.theGame.clockTick;
-        this.facing = getFacing(this.velocity);
-      }
-
-      return this.buttonManagement();
     };
 
     drawMinimap(ctx, mmX, mmY) {
@@ -159,20 +142,13 @@ class Minion {
     };
 
     drawMe(ctx) {
-        if (this.state == 1) {
-            this.myAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.camera.x - this.radius, this.y - this.theGame.camera.y - this.radius, this.myScale);
-        } else if (this.state == 2) {
-            this.myBattleAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.camera.x - this.radius, this.y - this.theGame.camera.y - this.radius, this.myScale);
+        if (this.state == 0) {
+            this.myAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
+        } else if (this.state == 1) {
+            this.myBattleAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
         } else {
-            this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.camera.x - this.radius, this.y - this.theGame.camera.y - this.radius, this.myScale);
-        }
-
-        if(params.DEBUG || this.isSelected) {
-          ctx.lineWidth = 1;
-          ctx.strokeStyle= "red";
-          ctx.beginPath();
-          ctx.arc(this.x - this.theGame.camera.x + this.ow, this.y - this.theGame.camera.y + this.oh, this.radius, 0, 2 * Math.PI);
-          ctx.stroke();
+            this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
+            die();
         }
 
         this.healthbar.drawMe(ctx);

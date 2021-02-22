@@ -25,7 +25,7 @@ var params = {
   TILE_W_H : 64,
   VERT_WALL_COUNT : 10,
   HORI_WALL_COUNT : 14,
-  CANVAS_WIDTH : 1024,
+  CANVAS_WIDTH : 1280,
   CANVAS_HEIGHT : 768,
   PLAY_WIDTH : 8192/3,
   PLAY_HEIGHT : 8192/3,
@@ -194,26 +194,5 @@ class Timer {
         var gameDelta = Math.min(delta, this.maxStep);
         this.gameTime += gameDelta;
         return gameDelta;
-    };
-};
-
-class Projectile{
-    constructor(game, x, y, spritesheet, damage) {
-        Object.assign(this, { game, x, y });
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/Arrow.png");
-        this.myScale = 1;
-        // radius
-        // visualRadius
-        // damage
-        // direction
-        // state
-    };
-
-    updateMe() {
-
-    };
-
-    drawMe(ctx) {
-
     };
 };

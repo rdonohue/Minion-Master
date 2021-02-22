@@ -7,17 +7,21 @@ class Cave {
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cave.png");
       this.caveAnim = new Animator(this.spritesheet, 0, 0, 2714, 1762, 1, 1, 0, false, true);
 
-      this.state = 1;  // 1 = idle, 0 = destroyed
+      this.state = 0;  // 0 = idle, 1 = destroyed
       this.scale = 0.07;
       this.radius = 20;
 
-      this.healthbar = new HealthBar(this);
+      this.healthbar = new HealthBar(this.game, this);
+
 
       //Stats
       this.health = 200;
       this.defense = 0.0;
       this.attack = 0;
       this.agility = 0;
+
+      this.dead = false;
+      this.removeFromWorld = false;
 
       this.elapsedTime = 0;
 
@@ -27,7 +31,8 @@ class Cave {
         this.elapsedTime += this.game.clockTick;
 
         if (this.health <= 0) {
-            this.state = 0;
+            this.dead = true;
+            this.removeFromWorld = true;
         }
 
         if (this.elapsedTime >= 10) {
@@ -36,8 +41,10 @@ class Cave {
         }
     };
 
+
     drawMe(ctx) {
-        this.caveAnim.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.scale);
+        this.caveAnim.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
         this.healthbar.drawMe(ctx);
     };
+
 };
