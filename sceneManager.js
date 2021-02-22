@@ -60,8 +60,6 @@ class SceneManager {
         //I do like debug being outside the game itself instead of how I have it.
         //, but for now I'm removing this.
 
-        const TICK = this.game.clockTick;
-
         let midpoint = params.CANVAS_WIDTH / 2;
 
         var mapBorder = 20;

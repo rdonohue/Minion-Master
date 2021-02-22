@@ -50,11 +50,17 @@ class Player {
     ctx.fillStyle = "White";
 
     //Upper Right HUD
+    ctx.fillText("RESOURCES", params.CANVAS_WIDTH + 78, 20);
+    ctx.strokeStyle = "White";
+    ctx.strokeRect(params.CANVAS_WIDTH + 76, 4, 95, 20);
     ctx.fillText(("Food: " + Math.round(this.myFood) + " + "
-      + Math.round(this.foodIncome) + " food/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4);
+      + Math.round(this.foodIncome) + " food/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4 + 24);
     ctx.fillText(("Rock: " + Math.round(this.myRock) + " + "
-      + Math.round(this.rockIncome) + " rock/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*2);
-    ctx.fillText(("Selected: " + this.targetType), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*3);
+      + Math.round(this.rockIncome) + " rock/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*2 + 24);
+    // ctx.fillText(("Selected: " + this.targetType), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*3);
+
+    ctx.fillText("BUILD MENU", params.CANVAS_WIDTH + 78, 82);
+    ctx.strokeRect(params.CANVAS_WIDTH + 76, 66, 102, 20);
 
     ctx.font = params.TILE_W_H/4 + 'px "Press Start 2P"';
     //Bottom Left HUD
