@@ -16,32 +16,47 @@
     <script type="text/javascript" src="./assetmanager.js"></script>
     <script type="text/javascript" src="./timer.js"></script>
     <script type="text/javascript" src="./player.js"></script>
+    <script type="text/javascript" src="./wolf.js"></script>
+    <script type="text/javascript" src="./ogre.js"></script>
+    <script type="text/javascript" src="./health.js"></script>
+    <script type="text/javascript" src="./cave.js"></script>
+    <script type="text/javascript" src="./tower.js"></script>
     <script type="text/javascript" src="./gameengine.js"></script>
     <script type="text/javascript" src="./util.js"></script>
-    <script type="text/javascript" src="./Map.js"></script>
     <script type="text/javascript" src="./animator.js"></script>
     <script type="text/javascript" src="./homebase.js"></script>
     <script type="text/javascript" src="./minion.js"></script>
-    <script type="text/javascript" src="./wolf.js"></script>
     <script type="text/javascript" src="./main.js"></script>
     <script type="text/javascript" src="./background.js"></script>
     <script type="text/javascript" src="./resources.js"></script>
-
+    <script type="text/javascript" src="./sceneManager.js"></script>
     <script type="text/javascript" src="./HUD.js"></script>
+    <script type="text/javascript" src="./UI.js"></script>
+    <script type="text/javascript" src="./MiniMap.js"></script>
+    <script type="text/javascript" src="./projectile.js"></script>
+    <script type="text/javascript" src="./towerButton.js"></script>
 </head>
 <body>
 
 
   <link rel="stylesheet" type="text/css" href="dropdown.css" />
 
-  <canvas id="gameWorld" width="1280" height="768" style="background: white; border: 1px solid black"></canvas>
+  <canvas id="gameWorld" width="1280" height="768" style="background: #777; border: 1px solid black" tabindex="0" autofocus></canvas>
 
-  <div class="menudrop">
+  <!-- <div class="menudrop">
     <button onclick="menuFunction()" class="dropbtn">Game Menu</button>
       <div id="myDropdown" class="dropdown-content">
         <a href="#debug" id="debug">Debug ON</a>
         <a href="#info">Unit Info</a>
       </div>
+  </div> -->
+  <div>
+      <br />
+      <p>Use the WASD keys to shift UP, LEFT, DOWN, and RIGHT, respectively.
+         <br><br>The arrow keys also function this way
+       </p>
+       <br>
+      <input type="checkbox" id="debug" checked> Debug </input>
   </div>
 
 </body>
