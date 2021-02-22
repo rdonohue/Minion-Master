@@ -2,10 +2,10 @@
 
 class GameEngine {
     constructor() {
-        this.backgroundEntities = [];
         this.entities = [];
 
         this.showOutlines = false;
+
         this.ctx = null;
         this.click = null;
         this.mouse = null;
@@ -22,7 +22,7 @@ class GameEngine {
 
         this.theHud = new HUD(this,
           1024, params.CANVAS_HEIGHT, 256,
-          [50,60,6,4]
+          [500,60,6,4]
         );
 
         this.theBase;
@@ -36,48 +36,46 @@ class GameEngine {
         this.timer = new Timer();
     };
 
+    spawnMe(type, x, y){
+      switch (type) {
+          case "minion":
+            let minion = new Minion(this, x, y);
+            this.addEntity(minion);
+            break;
+          case "wolf":
+            let wolf = new Wolf(this, x, y);
+            this.addEntity(wolf);
+            break;
+          case "ogre":
+            let ogre = new Ogre(this, x, y);
+            this.addEntity(ogre);
+            break;
+          case "castle":
+            let home = new HomeBase(this, x, y);
+            this.theBase = home;
+            this.addEntity(this.theBase);
+            break;
+          case "tower":
+            let tower = new Tower(this, x, y);
+            this.addEntity(tower);
+            break;
+          case "cave":
+            let cave = new Cave(this, x, y);
+            this.addEntity(cave);
+            break;
+          //case "berry":
+          //  let berry = new BerryBush(this, x, y);
+          //  this.addEntity(berry);
+          //  break;
+      }
+    };
+
     start() {
-      this.addEntity(this.theHud);
-      // this.theHUD.makeButtons(this);
       var that = this;
         (function gameLoop() {
             that.loop();
             requestAnimFrame(gameLoop, that.ctx.canvas);
         })();
-    };
-
-    spawnMe(type, x, y){
-      switch (type) {
-        case "minion":
-          let minion = new Minion(this, x, y);
-          this.addEntity(minion);
-          break;
-        case "wolf":
-          let wolf = new Wolf(this, x, y);
-          this.addEntity(wolf);
-          break;
-        case "ogre":
-          let ogre = new Ogre(this, x, y);
-          this.addEntity(ogre);
-          break;
-        case "tower":
-          let tower = new GuardTower(this, x, y);
-          this.addEntity(tower);
-          break;
-        case "cave":
-          let cave = new Cave(this, x, y);
-          this.addEntity(cave);
-          break;
-        case "base":
-          let home = new HomeBase(this, x, y);
-          this.theBase = home;
-          this.addEntity(this.theBase);
-          break;
-        //case "berry":
-        //  let berry = new BerryBush(this, x, y);
-        //  this.addEntity(berry);
-        //  break;
-      }
     };
 
     startInput() {
@@ -91,11 +89,12 @@ class GameEngine {
         }
 
         this.ctx.canvas.addEventListener("mousemove", function (e) {
-            //console.log(getXandY(e));
+            // console.log(getXandY(e));
             that.mouse = getXandY(e);
         }, false);
 
         this.ctx.canvas.addEventListener("click", function (e) {
+          // console.log(getXandY(e));
           that.click = getXandY(e);
         }, false);
 
@@ -149,62 +148,36 @@ class GameEngine {
     };
 
     addEntity(entity) {
-      this.entities.push(entity);
+        this.entities.push(entity);
     };
 
-    addBackgroundEntity(entity) {
-        this.backgroundEntities.push(entity);
-    };
-
-    drawEntitys() {
+    draw() {
         this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
-
-        for (var i = 0; i < this.backgroundEntities.length; i++) {
-            this.backgroundEntities[i].drawMe(this.ctx);
-        }
         for (var i = 0; i < this.entities.length; i++) {
-          this.entities[i].drawMe(this.ctx);
+            this.entities[i].drawMe(this.ctx);
         }
         this.camera.draw(this.ctx);
     }
 
-    updateEntitys() {
-        var bCount = this.backgroundEntities.length;
+    update() {
+        var entitiesCount = this.entities.length;
 
-        for (var i = 0; i < bCount; i++) {
-            var entity = this.backgroundEntities[i];
-            if (entity.state != 0) {//not killed
-              entity.updateMe();
-            }
-        }
-        for (var i = this.backgroundEntities.length - 1; i >= 0; --i) {
-            if (this.backgroundEntities[i].state == 0 ) {//killed
-              this.backgroundEntities.splice(i, 1);
-            }
-        }
-
-        var eCount = this.entities.length;
-        for (var i = 0; i < eCount; i++) {
+        for (var i = 0; i < entitiesCount; i++) {
             var entity = this.entities[i];
-            if (entity.state != 0) {//not killed
-              entity.updateMe();
-            }
-        }
 
-        for (var i = this.entities.length - 1; i >= 0; --i) {
-            if (this.entities[i].state == 0 ) {//killed
-              this.entities.splice(i, 1);
+            if (!entity.removeFromWorld) {
+              entity.updateMe();
             }
         }
         this.camera.update();
 
-        if(this.theBase.state == 0) {
-          console.log("died!");
+        for (var i = this.entities.length - 1; i >= 0; --i) {
+            if (this.entities[i].removeFromWorld) {
+                this.entities.splice(i, 1);
+            }
         }
     };
 
-    //this is not how AI priority should work, each AI is going to need its own priority system for
-    //each enemy, this assumes they all share the same priority scieme with eachother.
     entityPriority() {
         var priority = 0;
         for (var i = 0; i < this.entities.length; i++) {
@@ -217,8 +190,7 @@ class GameEngine {
 
     loop() {
         this.clockTick = this.timer.tick();
-        this.updateEntitys();
-        this.drawEntitys();
-        this.click = null;
+        this.update();
+        this.draw();
     };
 };

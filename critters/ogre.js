@@ -14,7 +14,7 @@ class Ogre {
         this.radius = 20;
         this.visualRadius = 200;
 
-        this.healthbar = new HealthBar(this);
+        this.healthbar = new HealthBar(this.game, this);
 
         this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
@@ -92,7 +92,7 @@ class Ogre {
             } else if (this.elapsedTime > 0.8) {
                 var damage = (7 + randomInt(5)) - ent.defense;
                 ent.health -= damage;
-                this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage))
+                this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage, "Red"));
                 this.elapsedTime = 0;
             }
           }
@@ -126,8 +126,6 @@ class Ogre {
       } else if (this.state == 2) { //attacking
         this.attackAnimator.drawFrame(this.game.clockTick, ctx, newX, newY,-80, this.myScale);
       } else if (this.state == 0) {
-
-        //NOTE, this is a is-wandering animator!
         this.deadAnimator.drawFrame(this.game.clockTick, ctx, newX, newY, this.myScale);
       }
 

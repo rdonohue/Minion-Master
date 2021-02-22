@@ -14,7 +14,7 @@ class Button{
 
     theObject.myButtons.push(this);
     if(theObject != theHud) {
-      theHud.myButtons.push(this);
+      theHud.notMyButtons.push(this);
     }
 
     //we might need to make the minion's handle their
@@ -33,10 +33,13 @@ class Button{
   updateMe() {
     var theClick = this.theGame.click;
 
+    // if(this.theObject.myType = "HomeBase" && this.start) {
+    //   console.log(this);
+    //   this.start = false;
+    // }
     if(this.debugOnly) {
       this.isVisable = params.DEBUG;
-    }
-    if(this.theObject.isSelectable) {
+    } else if(this.theObject.isSelectable) {
       this.isVisable = this.theObject.isSelected;
     }
 
@@ -44,18 +47,14 @@ class Button{
       var isInXCoord = theClick.x > this.x + this.ox && theClick.x < this.x + this.w + this.ox;
       var isInYCoord = theClick.y > this.y + this.oy && theClick.y < this.y + this.h + this.oy;
 
-      console.log(theClick);
-      console.log(isInXCoord);
-      console.log(isInYCoord);
       if(isInXCoord && isInYCoord && this.isVisable){ //check y-axis
         this.theObject.buttonWasClicked = true;
         this.myFunction();
         return true;
       }
-    } else {
-      //do nothing.
-      return false;
     }
+    //do nothing.
+      return false;
   }
 
   drawMe(ctx) {
@@ -74,17 +73,17 @@ class Button{
         );
       }
 
-      if(params.DEBUG) {
-        ctx.lineWidth = 1;
-        ctx.strokeStyle= "red";
-        ctx.beginPath();
-        ctx.strokeRect(
-          this.x - this.theGame.camera.x + this.ow-3,
-          this.y - this.theGame.camera.y + this.oh-3,
-          this.w+6, this.h+6
-        );
-        ctx.stroke();
-      }
+      // if(params.DEBUG) {
+      //   ctx.lineWidth = 1;
+      //   ctx.strokeStyle= "red";
+      //   ctx.beginPath();
+      //   ctx.strokeRect(
+      //     this.x - this.theGame.camera.x + this.ow-3,
+      //     this.y - this.theGame.camera.y + this.oh-3,
+      //     this.w+6, this.h+6
+      //   );
+      //   ctx.stroke();
+      // }
     }
   }
 }
