@@ -15,8 +15,8 @@ class SceneManager {
         this.moveLeft = this.baseCamSpeed;
         this.moveUp = this.baseCamSpeed;
 
-        // this.minimap = new MiniMap(this.theGame, 1024, 576, 256);
-        // this.ui = new UI(this.theGame, 1024, 0, 256);
+        this.minimap = new MiniMap(this.theGame, 1024, 576, 256);
+        this.ui = new UI(this.theGame, 1024, 0, 256);
         this.theHud = this.theGame.theHud;
         // this.thePlayer = new Player(this.theGame, 100, 150, 10, 5, 0, 0);
 
@@ -49,7 +49,8 @@ class SceneManager {
       );
 
       // this.theGame.addEntity(this.minimap);
-      // this.theGame.addEntity(this.ui);
+      this.theGame.addEntity(this.ui);
+      this.theGame.addEntity(this.ui.towerButton);
       // this.theGame.addEntity(this.thePlayer);
       // this.theGame.spawnMe("minion", 0, 0);
       // this.theGame.spawnMe("wolf", 800, 0);
@@ -62,7 +63,7 @@ class SceneManager {
 
         let midpoint = params.CANVAS_WIDTH / 2;
 
-        var mapBorder = 20;
+        var mapBorder = 0;
 
         //Check for play area edge
         var left = this.theGame.left && this.x > -mapBorder;
@@ -114,8 +115,8 @@ class SceneManager {
 
     draw(ctx) {
       if(this.theGame.theBase) {
-        // this.minimap.drawMe(ctx);
-        // this.ui.drawMe(ctx);
+        this.minimap.drawMe(ctx);
+        this.ui.drawMe(ctx);
         this.theHud.drawMe(ctx);
         // this.thePlayer.drawMe(ctx);
       } else {

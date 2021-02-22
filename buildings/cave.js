@@ -35,7 +35,7 @@ class Cave {
             this.removeFromWorld = true;
         }
 
-        if (this.elapsedTime >= 10) {
+        if (this.elapsedTime >= 60) {
             this.game.spawnMe("ogre", this.x+50, this.y+50);
             this.elapsedTime = 0;
         }
