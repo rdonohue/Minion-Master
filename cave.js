@@ -11,7 +11,8 @@ class Cave {
       this.scale = 0.07;
       this.radius = 20;
 
-      this.healthbar = new HealthBar(this);
+      this.healthbar = new HealthBar(this.game, this);
+
 
       //Stats
       this.health = 200;

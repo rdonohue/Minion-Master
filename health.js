@@ -1,6 +1,6 @@
 class HealthBar {
-    constructor(entity) {
-        Object.assign(this, { entity });
+    constructor(game, entity) {
+        Object.assign(this, { game, entity });
     };
 
     updateMe() {
@@ -12,9 +12,9 @@ class HealthBar {
             var ratio = this.entity.health / this.entity.maxHealth;
             ctx.strokeStyle = "black";
             ctx.fillstyle = ratio < 0.2 ? "Red" : ratio < 0.5 ? "Yellow" : "Green";
-            ctx.fillRect(this.entity.x - this.entity.radius, this.entity.y + this.entity.radius + 5,
+            ctx.fillRect(this.entity.x - this.entity.radius - this.game.camera.x, this.entity.y + this.entity.radius + 5 - this.game.camera.y,
               this.entity.radius  * 2 * ratio, 4);
-            ctx.strokeRect(this.entity.x - this.entity.radius, this.entity.y + this.entity.radius + 5,
+            ctx.strokeRect(this.entity.x - this.entity.radius - this.game.camera.x, this.entity.y + this.entity.radius + 5 - this.game.camera.y,
               this.entity.radius  * 2, 4)
         }
     };
@@ -41,6 +41,6 @@ class Score {
     drawMe(ctx) {
         ctx.font = '12px "Press Start 2P"';
         ctx.fillStyle = this.color;
-        ctx.fillText(this.score, this.x, this.y);
+        ctx.fillText(this.score, this.x - this.game.camera.x, this.y - this.game.camera.y);
     };
 }

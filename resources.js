@@ -101,7 +101,7 @@ class Bush {
     this.radius = 20;
     this.visualRadius = 100;
 
-    this.healthbar = new HealthBar(this);
+    this.healthbar = new HealthBar(this.game, this);
   };
 
   updateMe() {
@@ -137,7 +137,7 @@ class Rock {
     this.visualRadius = 100;
     this.ready = true;
 
-    this.healthbar = new HealthBar(this);
+    this.healthbar = new HealthBar(this.game, this);
     this.elapsedTime = 0;
   };
 

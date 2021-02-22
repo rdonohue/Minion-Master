@@ -15,7 +15,8 @@ class HomeBase {
       this.agility = 0;
       this.intelligence = 0;
 
-      this.healthbar = new HealthBar(this);
+      this.healthbar = new HealthBar(this.game, this);
+
 
       this.dead = false;
       this.removeFromWorld = false;

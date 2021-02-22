@@ -13,7 +13,7 @@ class Ogre {
         this.radius = 20;
         this.visualRadius = 200;
 
-        this.healthbar = new HealthBar(this);
+        this.healthbar = new HealthBar(this.game, this);
 
         this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
