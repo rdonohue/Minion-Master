@@ -3,7 +3,7 @@ class UI {
     constructor(game, x, y, w) {
         Object.assign(this, { game, x, y, w });
 
-        this.towerButton = new TowerButton(this.game, 1038, 67);
+        this.towerButton = new TowerButton(this.game, 1038, 97);
     };
 
     updateMe() {

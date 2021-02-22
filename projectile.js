@@ -55,7 +55,7 @@ class Projectile {
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
             if ((ent instanceof Wolf) && collide(this, ent)) {
-                var damage = 5 * this.attackMod;
+                var damage = 10 * this.attackMod;
                 ent.health -= damage;
                 this.removeFromWorld = true;
             }

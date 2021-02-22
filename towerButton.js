@@ -6,7 +6,7 @@ constructor(game, x, y) {
 		this.mouseover = false;
 		this.placing = false;
 
-		this.buttonWidth = 100;
+		this.buttonWidth = 63;
 		this.buttonHeight = 22;
     this.dashOffset = 0;
 		this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tower.png");
@@ -18,8 +18,8 @@ constructor(game, x, y) {
 		if (this.dashOffset > 16) {
 			this.dashOffset = 0;
 		}
-		this.drawText(ctx);
 		this.drawBox(ctx);
+		this.drawText(ctx);
 		//Draw tower for placement.
 		this.placeTower(ctx);
 		this.setTower();
@@ -27,13 +27,13 @@ constructor(game, x, y) {
 	};
 
   drawBox(ctx) {
-    ctx.strokeStyle = "White";
-    if (this.selected) {
-			ctx.strokeStyle = "Aquamarine";
-      ctx.strokeRect(this.x, this.y, this.buttonWidth, this.buttonHeight);
-    } else if (this.mouseover) {
+		if (this.mouseover) {
+			ctx.strokeStyle = "White";
 			ctx.setLineDash([4,2]);
       ctx.lineDashOffset = -this.dashOffset;
+      ctx.strokeRect(this.x, this.y, this.buttonWidth, this.buttonHeight);
+    } else if (this.selected) {
+			ctx.strokeStyle = "Aquamarine";
       ctx.strokeRect(this.x, this.y, this.buttonWidth, this.buttonHeight);
     } else {
       ctx.strokeStyle = "White";
@@ -42,9 +42,11 @@ constructor(game, x, y) {
   };
 
   drawText(ctx) {
+		ctx.save();
     ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
     ctx.strokeStyle = "White";
-    ctx.fillText("New Tower", this.x + 4, this.y + 16);
+    ctx.fillText("Tower", this.x + 4, this.y + 16);
+		ctx.restore();
   };
 
 /**
@@ -62,12 +64,13 @@ constructor(game, x, y) {
 				 // Subtracting x/yCenter from the origin point paints the tower's center where the user clicks.
 				 var x = mouse.x - xCenter;
 				 var y = mouse.y - yCenter;
+				 ctx.save();
 				 ctx.beginPath();
 				 ctx.arc(x + xCenter, y + yCenter, 300, 0, 2*Math.PI);
 				 ctx.setLineDash([10,5]);
 				 ctx.stroke();
 				 ctx.drawImage(this.spritesheet, 0, 0, 105, 138, x, y, 52.5, 69);
-
+				 ctx.restore();
 				 this.placing = true;
 			}
 		}
@@ -87,7 +90,7 @@ constructor(game, x, y) {
 
   updateMe() {
 		if (this.game.mouse) {
-			let xMove = this.game.mouse.xw
+			let xMove = this.game.mouse.x
 	    let yMove = this.game.mouse.y
 	    if ((xMove >= this.x && xMove <= this.x + this.buttonWidth) && (yMove >= this.y && yMove <= this.y + this.buttonHeight)) {
 	      this.mouseover = true;
@@ -106,13 +109,5 @@ constructor(game, x, y) {
 	    }
 		}
   };
-
-  // isSelected() {
-  //   return this.selected;
-  // };
-  //
-  // isMouseover() {
-  //   return this.mouseover;
-  // }
 
 };
