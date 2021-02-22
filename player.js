@@ -54,7 +54,7 @@ class Player {
       + Math.round(this.foodIncome) + " food/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4);
     ctx.fillText(("Rock: " + Math.round(this.myRock) + " + "
       + Math.round(this.rockIncome) + " rock/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*2);
-    ctx.fillText(("Selected: " + this.targetType), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*3);
+    // ctx.fillText(("Selected: " + this.targetType), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*3);
 
     ctx.font = params.TILE_W_H/4 + 'px "Press Start 2P"';
     //Bottom Left HUD
