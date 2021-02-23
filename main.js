@@ -26,6 +26,7 @@ ASSET_MANAGER.downloadAll(function () {
 	gameEngine.init(ctx);
 
 	new SceneManager(gameEngine);
+	//test stuff
 
 	gameEngine.start();
 });

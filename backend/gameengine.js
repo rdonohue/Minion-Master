@@ -41,6 +41,7 @@ class GameEngine {
             break;
           case "castle":
             let castle = new HomeBase(this, x, y);
+            this.theBase = castle;
             this.addEntity(castle);
             break;
           case "tower":
