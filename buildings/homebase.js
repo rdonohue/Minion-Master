@@ -1,7 +1,7 @@
 class HomeBase {
   constructor(theGame, x, y) {
       Object.assign(this, {theGame, x, y});
-      console.log(this.theGame);
+      
       this.camera = this.theGame.theSM; //theSM is the game's camera.
       this.myType = "HomeBase";
 

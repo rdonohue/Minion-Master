@@ -1,10 +1,10 @@
 class HealthBar {
   constructor(theGame, entity) {
-      Object.assign(this, { theGame, entity });
+    Object.assign(this, {theGame, entity});
+    this.state = 1;
   };
 
   updateMe() {
-
   };
 
   drawMe(ctx) {
@@ -18,12 +18,11 @@ class HealthBar {
         this.entity.radius  * 2, 4)
     }
   };
-
 };
 
 class Score {
   constructor(theGame, x, y, score, color) {
-    Object.assign(this, { theGame, x, y, score });
+    Object.assign(this, {theGame, x, y, score});
 
     this.velocity = -32;
     this.elapsed = 0;
@@ -32,7 +31,7 @@ class Score {
   updateMe() {
     this.elapsed += this.theGame.clockTick;
     if (this.elapsed > 1) {
-      this.removeFromWorld = true;
+      this.state == 0;
     }
 
     this.y += this.theGame.clockTick * this.velocity;

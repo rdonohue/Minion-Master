@@ -2,7 +2,8 @@
 class GameEngine {
   constructor() {
       this.entities = [];
-      this.background = [];
+      //elements anything which don't need to be selectable.
+      this.elements = [];
 
       this.ctx = null;
 
@@ -69,7 +70,7 @@ class GameEngine {
     }
   };
 
-  addEntity(entity, x, y) {
+  addEntity(entity) {
     this.entities.push(entity);
     // this.entities.forEach((other) => {
     //   if(collide(entity, other)) {
@@ -93,12 +94,15 @@ class GameEngine {
     //we want to make sure that any new entities are not colliding with any already present entitys.
   };
 
-  addBackground(background){
-    this.background.push(background);
+  addElement(element){
+    this.elements.push(element);
   }
 
   draw() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+    for (var i = 0; i < this.elements.length; i++) {
+      this.elements[i].drawMe(this.ctx);
+    }
     for (var i = 0; i < this.entities.length; i++) {
       this.entities[i].drawMe(this.ctx);
     }
@@ -107,7 +111,15 @@ class GameEngine {
 
   update() {
     var entitiesCount = this.entities.length;
+    var elementsCount = this.elements.length;
 
+    for (var i = 0; i < elementsCount; i++) {
+      var element = this.elements[i];
+
+      if (!element.removeFromWorld) {
+        element.updateMe();
+      }
+    }
     for (var i = 0; i < entitiesCount; i++) {
       var entity = this.entities[i];
 
@@ -118,7 +130,8 @@ class GameEngine {
     this.theSM.update();
 
     for (var i = this.entities.length - 1; i >= 0; --i) {
-      if (this.entities[i].removeFromWorld) {
+      var entity = this.entities[i];
+      if (entity.removeFromWorld) {
         this.entities.splice(i, 1);
       }
     }
