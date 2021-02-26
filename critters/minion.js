@@ -187,7 +187,7 @@ class Minion {
               this.direction = 0;
               break;
         }
-        this.sideWalkAnim.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
 
         this.healthbar.drawMe(ctx);
     };
