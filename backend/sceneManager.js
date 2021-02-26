@@ -1,70 +1,68 @@
 class SceneManager {
-    constructor(game) {
-        this.game = game;
-        this.game.camera = this;
-        this.x = 0;
-        this.y = 0;
+  constructor(theGame) {
+      this.theGame = theGame;
+      this.theGame.camera = this;
+      this.x = 0;
+      this.y = 0;
 
-        this.minimap = new MiniMap(this.game, 1024, 576, 256);
-        this.ui = new UI(this.game, 1024, 0, 256);
-        this.hud = new HUD(this.game);
-        this.thePlayer = new Player(this.game, 100, 150, 10, 5, 0, 0);
-        this.loadLevel();
-    };
+      this.theMiniMap = new MiniMap(this.theGame, 1024, 576, 256);
+      this.theHud = new Hud(this.theGame, 1024, 0, 256);
+      this.thePlayer = new Player(this.theGame, 100, 150, 10, 5, 0, 0);
+      this.createLevel();
+      this.populateLevel();
+  };
 
-    loadLevel() {
-        this.game.entities = [];
-        this.x = 0;
+  createLevel(){
+    //let castle = new HomeBase(theGameEngine, 500, 300, 430, 461);
+    let corners = new Grasscorner(this.theGame, 0, 0);
+    let vertwalls = new Vertwall(this.theGame, 0, params.TILE_W_H);
+    let horiwalls = new Horiwall(this.theGame, params.TILE_W_H, 0);
+    let intGrass = new InteriorGrass(this.theGame, params.TILE_W_H, params.TILE_W_H);
+    let resources = new Resources(this.theGame, params.TILE_W_H, params.TILE_W_H);
 
+    this.theGame.addEntity(corners);
+    this.theGame.addEntity(vertwalls);
+    this.theGame.addEntity(horiwalls);
+    this.theGame.addEntity(intGrass);
+    this.theGame.addEntity(resources);
+  }
 
-        //let castle = new HomeBase(gameEngine, 500, 300, 430, 461);
-      	let corners = new Grasscorner(this.game, 0, 0);
-      	let vertwalls = new Vertwall(this.game, 0, params.TILE_W_H);
-      	let horiwalls = new Horiwall(this.game, params.TILE_W_H, 0);
-      	let intGrass = new InteriorGrass(this.game, params.TILE_W_H, params.TILE_W_H);
-      	let resources = new Resources(this.game, params.TILE_W_H, params.TILE_W_H);
-        let base = new HomeBase(this.game, 500, 400);
-        this.game.addEntity(corners);
-        this.game.addEntity(vertwalls);
-        this.game.addEntity(horiwalls);
-        this.game.addEntity(intGrass);
-        this.game.addEntity(resources);
+  populateLevel(){
+    let base = new HomeBase(this.theGame, 500, 400);
 
-        this.game.addEntity(base);
-        this.game.addEntity(this.minimap);
-        this.game.addEntity(this.ui);
-        this.game.addEntity(this.ui.towerButton);
-        this.game.addEntity(this.hud);
-        this.game.addEntity(this.thePlayer);
-        this.game.spawnMe("minion", 0, 0);
-      	this.game.spawnMe("wolf", 800, 0);
-        this.game.spawnMe("wolf", 0, 400);
-    };
+    this.theGame.addEntity(base);
+    this.theGame.addEntity(this.theMiniMap);
+    this.theGame.addEntity(this.theHud);
+    this.theGame.addEntity(this.theHud.towerButton);
+    this.theGame.addEntity(this.thePlayer);
+    this.theGame.spawnMe("minion", 0, 0);
+    this.theGame.spawnMe("wolf", 800, 0);
+    this.theGame.spawnMe("wolf", 0, 400);
+  }
 
-    update() {
-        params.DEBUG = document.getElementById("debug").checked;
+  update() {
+    params.DEBUG = document.getElementById("debug").checked;
 
-        let midpoint = params.CANVAS_WIDTH / 2;
+    let midpoint = params.CANVAS_WIDTH / 2;
 
-        //Check for play area edge
-        if (this.game.left && this.x > 0) {
-            this.x -= 10;
-        }
-        if (this.game.right && this.x < params.CANVAS_WIDTH - 10) {
-            this.x += 10;
-        }
-        if (this.game.up && this.y > 3) {
-            this.y -= 10;
-        }
-        if (this.game.down && this.y < params.CANVAS_HEIGHT - 10) {
-            this.y += 10;
-        }
-    };
+    //Check for play area edge
+    if (this.theGame.left && this.x > 0) {
+        this.x -= 10;
+    }
+    if (this.theGame.right && this.x < params.CANVAS_WIDTH - 10) {
+        this.x += 10;
+    }
+    if (this.theGame.up && this.y > 3) {
+        this.y -= 10;
+    }
+    if (this.theGame.down && this.y < params.CANVAS_HEIGHT - 10) {
+        this.y += 10;
+    }
+  };
 
-    draw(ctx) {
-            this.minimap.drawMe(ctx);
-            this.ui.drawMe(ctx);
-            this.hud.drawMe(ctx);
-            this.thePlayer.drawMe(ctx);
-    };
+  draw(ctx) {
+    this.theMiniMap.drawMe(ctx);
+    this.theHud.drawMe(ctx);
+    this.thePlayer.drawMe(ctx);
+  };
 };

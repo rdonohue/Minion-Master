@@ -1,6 +1,9 @@
-class HUD {
-    constructor(game) {
-        Object.assign(this, { game });
+// Rest of the UI to hold the game menu features.
+class Hud{
+    constructor(game, x, y, w) {
+        Object.assign(this, { game, x, y, w });
+
+        this.towerButton = new TowerButton(this.game, 1038, 97);
     };
 
     updateMe() {
@@ -8,26 +11,18 @@ class HUD {
     };
 
     drawMe(ctx) {
+        ctx.fillStyle = "SaddleBrown";
+        ctx.fillRect(this.x, this.y, this.w, 576);
+        ctx.strokeStyle = "Black";
+        ctx.strokeRect(this.x, this.y, this.w - 2, 576 - 1);
+        ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
 
-    };
+        ctx.fillStyle = "White";
+        ctx.fillText("MiniMap", this.x + 88, 564);
+        ctx.strokeStyle = "White"
+        ctx.strokeRect(this.x + 84, 548, 76, 22);
 
-};
- /* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
-function menuFunction() {
-  document.getElementById("myDropdown").classList.toggle("show");
-};
-
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
+        this.towerButton.drawMe(this.game.ctx);
     }
-  }
+
 };
