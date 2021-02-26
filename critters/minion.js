@@ -19,6 +19,11 @@ class Minion {
         this.upAttackAnim = new Animator(this.upAttack, 13, 3, 38, 48, 2, 0.25, 26, false, true);
         this.upWalkAnim = new Animator(this.upWalk, 22, 17, 20, 34, 4, 0.25, 44, false, true);
 
+        this.leftFinish = new Animator(this.sideAttack, 2, 78, 47, 37, 1, 0.25, 0, false, true);
+        this.rightFinish = new Animator(this.sideAttack, 2, 78, 47, 37, 1, 0.25, 0, false, true);
+        this.upFinish = new Animator(this.upAttack, 13, 70, 38, 48, 1, 0.25, 0, false, true);
+        this.downFinish = new Animator(this.downAttack, 13, 80, 38, 41, 1, 0.25, 0, false, true);
+
         console.log("Creating Animations");
         this.animations = [];
         this.loadAnimations();
@@ -187,7 +192,25 @@ class Minion {
               this.direction = 0;
               break;
         }
-        this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+
+        this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x,
+                                                              this.y - this.game.camera.y, this.scale);
+        if (this.state == 1) {
+            switch (this.direction) {
+                case 0:
+                  this.leftFinish.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+                  break;
+                case 1:
+                  this.rightFinish.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+                  break;
+                case 2:
+                  this.upFinish.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+                  break;
+                case 3:
+                  this.downFinish.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+                  break;
+            }
+        }
 
         this.healthbar.drawMe(ctx);
     };
