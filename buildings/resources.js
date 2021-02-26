@@ -100,6 +100,7 @@ class Bush {
     this.removeFromWorld = false;
     this.baseWidth = 16;
     this.baseHeight = 16;
+    this.scale = 1;
     this.radius = this.baseWidth*this.scale/2;
     this.Center = {
       x: this.x + this.baseWidth*this.scale/2,
@@ -117,7 +118,7 @@ class Bush {
           this.health = this.subHealth;
           this.subHealth = 0;
       }
-      if (this.elapsedTime > 1.6 && this.health <= 0 && this.subHealth < this.health) {
+      if (this.elapsedTime > 1.6 && this.health > 0 && this.subHealth < this.health) {
           this.subHealth += 5;
           this.elapsedTime = 0;
       }
@@ -142,6 +143,7 @@ class Rock {
     this.removeFromWorld = false;
     this.baseWidth = 16;
     this.baseHeight = 16;
+    this.scale = 1;
     this.radius = this.baseWidth*this.scale/2;
     this.Center = {
       x: this.x + this.baseWidth*this.scale/2,

@@ -2,7 +2,6 @@ class Minion {
     constructor(theGame, x, y) {
         Object.assign(this, {theGame, x, y });
         this.camera = this.theGame.theSM; //theSM is the game's camera.
-        
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
 
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
@@ -115,11 +114,13 @@ class Minion {
                     this.state = 1;
                     this.elapsedTime = 0;
                 } else if (this.elapsedTime > 0.8) {
-                    var gather = 3 + randomInt(3);
-                    ent.health -= gather;
                     if(ent instanceof Rock) {
+                      var gather = 3 + randomInt(3);
+                      ent.Health -= gather;
                       this.theGame.theSM.thePlayer.myRock += gather;
                     } else if (ent instanceof Bush) {
+                      var gather = 3 + randomInt(3);
+                      ent.subHealth -= gather;
                       this.theGame.theSM.thePlayer.myFood += gather;
                     }
                     this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, gather, "Yellow"));
@@ -130,7 +131,7 @@ class Minion {
         }
 
         // If it never detected an enemy, make sure it is back to walking.
-        if (!combat) {
+        if (!combat || !this.target) {
             this.state = 0;
         }
 

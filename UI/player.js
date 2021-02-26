@@ -7,6 +7,8 @@ class Player {
     this.foodIncome = trickleFood;
     this.rockIncome = trickleRock;
 
+    
+
     this.timer = new Timer();
     this.timeBetweenUpdates = 1;
     this.timeSinceUpdate = 0;
