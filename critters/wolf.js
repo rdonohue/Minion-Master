@@ -2,7 +2,7 @@ class Wolf {
     constructor(theGame, x, y) {
         Object.assign(this, { theGame, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
-
+        this.camera = this.theGame.theSM; //theSM is the game's camera.
         //this.animations = [];
         //loadAnimations();
 
@@ -140,7 +140,7 @@ class Wolf {
                   this.state = 1;
                   this.elapsedTime = 0;
               } else if (this.elapsedTime > 0.8) {
-                  var damage = (6 + randomInt(5)) - ent.defense;
+                  var damage = (this.attack + randomInt(this.attack)) - ent.defense
                   ent.health -= damage;
                   this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, damage, "Red"));
                   this.elapsedTime = 0;
@@ -180,7 +180,7 @@ class Wolf {
       if(params.DEBUG || this.isSelected) {
         ctx.strokeStyle = "red";
         ctx.beginPath();
-        ctx.arc(this.Center.x, this.Center.y, this.radius, 0, 2*Math.PI);
+        ctx.arc(this.Center.x - this.camera.x, this.Center.y - this.camera.y, this.radius, 0, 2*Math.PI);
         ctx.stroke();
       }
 

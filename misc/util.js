@@ -53,7 +53,7 @@ function getFacing(velocity) {
 var minionStats = {
   HEALTH : 100,
   DEFENSE : 0.0,
-  ATTACK : 50,
+  ATTACK : 8,
   AGILITY : 0.1,
   INTELLIGENCE : 1,
 }
@@ -66,8 +66,8 @@ var params = {
   HORI_WALL_COUNT : 14,
   CANVAS_WIDTH : 1024,
   CANVAS_HEIGHT : 768,
-  PLAY_WIDTH : 2048,
-  PLAY_HEIGHT : 1536,
+  PLAY_WIDTH : 2048/2,
+  PLAY_HEIGHT : 1536/3*2,
   BASE_SPD : 0.25,
   BLOCKWIDTH : 48  //temporary
 };

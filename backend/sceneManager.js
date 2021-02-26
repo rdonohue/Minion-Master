@@ -33,8 +33,8 @@ class SceneManager {
   populateLevel(){
     this.theGame.spawnMe("castle", 150, 150);
     this.theGame.spawnMe("minion", 0, 0);
-    this.theGame.spawnMe("wolf", 800, 0);
-    this.theGame.spawnMe("wolf", 0, 400);
+    this.theGame.spawnMe("minion", 0, 0);
+    this.theGame.spawnMe("minion", 0, 0);
   }
 
   update() {

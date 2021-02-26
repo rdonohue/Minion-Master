@@ -155,11 +155,11 @@ class Rock {
   };
 
   updateMe() {
-      this.elapsedTime += this.theGame.clockTick;
+    this.elapsedTime += this.theGame.clockTick;
   };
 
   drawMe(ctx) {
-      this.healthbar.drawMe(ctx);
+    this.healthbar.drawMe(ctx);
   };
 
 };

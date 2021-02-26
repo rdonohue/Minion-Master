@@ -56,7 +56,7 @@ class HomeBase {
     if(params.DEBUG || this.isSelected) {
       ctx.strokeStyle = "red";
       ctx.beginPath();
-      ctx.arc(this.Center.x, this.Center.y, this.radius, 0, 2*Math.PI);
+      ctx.arc(this.Center.x - this.camera.x, this.Center.y - this.camera.y, this.radius, 0, 2*Math.PI);
       ctx.stroke();
     }
   };

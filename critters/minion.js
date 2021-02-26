@@ -1,6 +1,8 @@
 class Minion {
     constructor(theGame, x, y) {
         Object.assign(this, {theGame, x, y });
+        this.camera = this.theGame.theSM; //theSM is the game's camera.
+        
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
 
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
@@ -79,8 +81,9 @@ class Minion {
 
         // If its health is 0, it is dead.
         if (this.health <= 0) {
-            this.removeFromWorld = true;
+            this.state = 2;
             this.dead = true;
+            this.removeFromWorld = true;
         }
 
         if (dist < 5) {
@@ -98,7 +101,7 @@ class Minion {
                 combat = true;
             }
             if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave) && collide(this, ent)) {
-                if (this.state === 0) {
+                if (this.state == 0) {
                     this.state = 1;
                     this.elapsedTime = 0;
                 } else if (this.elapsedTime > 0.8) {
@@ -108,12 +111,17 @@ class Minion {
                     this.elapsedTime = 0;
                 }
             } else if ((ent instanceof Rock || ent instanceof Bush) && collide(this, ent) && ent.health > 0) {
-                if (this.state === 0) {
+                if (this.state == 0) {
                     this.state = 1;
                     this.elapsedTime = 0;
                 } else if (this.elapsedTime > 0.8) {
                     var gather = 3 + randomInt(3);
                     ent.health -= gather;
+                    if(ent instanceof Rock) {
+                      this.theGame.theSM.thePlayer.myRock += gather;
+                    } else if (ent instanceof Bush) {
+                      this.theGame.theSM.thePlayer.myFood += gather;
+                    }
                     this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, gather, "Yellow"));
                     this.elapsedTime = 0;
                 }
@@ -134,7 +142,6 @@ class Minion {
           this.y += this.velocity.y * this.theGame.clockTick;
           this.facing = getFacing(this.velocity);
         }
-
     };
 
     drawMinimap(ctx, mmX, mmY) {
@@ -156,7 +163,7 @@ class Minion {
         if(params.DEBUG || this.isSelected) {
           ctx.strokeStyle = "red";
           ctx.beginPath();
-          ctx.arc(this.Center.x, this.Center.y, this.radius, 0, 2*Math.PI);
+          ctx.arc(this.Center.x - this.camera.x, this.Center.y - this.camera.y, this.radius, 0, 2*Math.PI);
           ctx.stroke();
         }
 
