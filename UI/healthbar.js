@@ -2,20 +2,26 @@ class HealthBar {
   constructor(theGame, entity) {
     Object.assign(this, {theGame, entity});
     this.state = 1;
+    this.width = this.entity.baseWidth*this.entity.scale/2;
+    this.height = 4;
   };
 
   updateMe() {
+    this.width = this.entity.baseWidth*this.entity.scale/2
   };
 
   drawMe(ctx) {
-    if (this.entity.health < this.entity.maxHealth) {
+    if (this.entity.health < this.entity.maxHealth || params.DEBUG) {
       var ratio = this.entity.health / this.entity.maxHealth;
       ctx.strokeStyle = "black";
       ctx.fillstyle = ratio < 0.2 ? "Red" : ratio < 0.5 ? "Yellow" : "Green";
-      ctx.fillRect(this.entity.x - this.entity.radius - this.theGame.theCamera.x, this.entity.y + this.entity.radius + 5 - this.theGame.theCamera.y,
-        this.entity.radius  * 2 * ratio, 4);
-      ctx.strokeRect(this.entity.x - this.entity.radius - this.theGame.theCamera.x, this.entity.y + this.entity.radius + 5 - this.theGame.theCamera.y,
-        this.entity.radius  * 2, 4)
+      ctx.fillRect(
+        this.entity.x - this.theGame.theCamera.x, this.entity.y + this.entity.baseHeight*this.entity.scale - this.theGame.theCamera.y,
+        this.width * ratio, this.height
+      );
+      ctx.strokeRect(
+        this.entity.x - this.theGame.theCamera.x, this.entity.y + this.entity.baseHeight*this.entity.scale - this.theGame.theCamera.y,
+        this.width, this.height)
     }
   };
 };

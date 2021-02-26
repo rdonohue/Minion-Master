@@ -98,8 +98,15 @@ class Bush {
     this.maxHealth = 100;
     this.subHealth = 0;
     this.removeFromWorld = false;
-    this.radius = 20;
+    this.baseWidth = 16;
+    this.baseHeight = 16;
+    this.radius = this.baseWidth*this.scale/2;
+    this.Center = {
+      x: this.x + this.baseWidth*this.scale/2,
+      y: this.y + this.baseHeight*this.scale/2
+    }
     this.visualRadius = 100;
+    this.ready = true;
 
     this.healthbar = new HealthBar(this.theGame, this);
   };
@@ -133,7 +140,13 @@ class Rock {
     this.maxHealth = 100;
     this.subHealth = 0;
     this.removeFromWorld = false;
-    this.radius = 20;
+    this.baseWidth = 16;
+    this.baseHeight = 16;
+    this.radius = this.baseWidth*this.scale/2;
+    this.Center = {
+      x: this.x + this.baseWidth*this.scale/2,
+      y: this.y + this.baseHeight*this.scale/2
+    }
     this.visualRadius = 100;
     this.ready = true;
 

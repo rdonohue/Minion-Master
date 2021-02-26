@@ -69,6 +69,8 @@ class Minion {
           x: this.x + this.baseWidth*this.scale/2,
           y: this.y + this.baseHeight*this.scale/2
         }
+        this.isSelected = (this.theGame.theSM.thePlayer.selected == this);
+        console.log(this.theGame.theSM.thePlayer.selected);
 
         var dist = distance(this, this.target);
         if (this.targetID >= this.path.length - 1) {

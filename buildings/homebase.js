@@ -40,6 +40,8 @@ class HomeBase {
         this.state = 0;
     }
 
+    this.isSelected = (this.theGame.theSM.thePlayer.selected == this);
+
     this.Center = {
       x: this.x + this.baseWidth*this.scale/2,
       y: this.y + this.baseHeight*this.scale/2

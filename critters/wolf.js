@@ -22,7 +22,6 @@ class Wolf {
 
         this.baseWidth = 64;
         this.baseHeight = 24;
-        this.radius = 20;
         this.radius = this.baseWidth*this.scale/2;
         this.Center = {
           x: this.x + this.baseWidth*this.scale/2,
@@ -106,6 +105,7 @@ class Wolf {
           x: this.x + this.baseWidth*this.scale/2,
           y: this.y + this.baseHeight*this.scale/2
         }
+        this.isSelected = (this.theGame.theSM.thePlayer.selected == this);
 
         var dist = distance(this, this.target);
 

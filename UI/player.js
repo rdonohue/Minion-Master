@@ -54,13 +54,12 @@ class Player {
       //hud click, do nothing
     } else {
       //on canvas.
-      console.log(click.x + ", " + click.y);
       let entities = this.theGame.entities;
       let theClick = {
         x: click.x + this.cam.x,
         y: click.y + this.cam.y
       }
-      console.log(theClick.x + ", " + theClick.y);
+
       let newSelect = null;
       let closest = null;
 
@@ -76,6 +75,13 @@ class Player {
         }
       }
 
+      console.log(theClick.x + ", " + theClick.y);
+      console.log(click.x + ", " + click.y);
+      if(newSelect) {
+        console.log("target: "+ newSelect.x + ", " + newSelect.y);
+      } else {
+        //console.log("target: "+ newSelect);
+      }
       if(newSelect && newSelect.radius > closest) {
         this.selected = newSelect;
         this.targetType = this.selected.myType;
