@@ -8,6 +8,7 @@ class SceneManager {
       this.theMiniMap = new MiniMap(this.theGame, 1024, 576, 256);
       this.theHud = new Hud(this.theGame, 1024, 0, 256);
       this.thePlayer = new Player(this.theGame, 100, 150, 10, 5, 0, 0);
+      
       this.createLevel();
       this.populateLevel();
   };
@@ -43,8 +44,14 @@ class SceneManager {
   update() {
     params.DEBUG = document.getElementById("debug").checked;
 
-    let midpoint = params.CANVAS_WIDTH / 2;
+    this.theHud.updateMe();
+    this.theMiniMap.updateMe();
+    this.thePlayer.updateMe();
 
+    this.updateCamera();
+  };
+
+  updateCamera(){
     //Check for play area edge
     if (this.theGame.left && this.x > 0) {
         this.x -= 10;
@@ -58,7 +65,7 @@ class SceneManager {
     if (this.theGame.down && this.y < params.CANVAS_HEIGHT - 10) {
         this.y += 10;
     }
-  };
+  }
 
   draw(ctx) {
     this.theMiniMap.drawMe(ctx);
