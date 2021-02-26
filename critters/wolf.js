@@ -25,7 +25,7 @@ class Wolf {
         this.baseHeight = 24;
 
         this.radius = this.baseWidth*this.scale/2;
-        this.Center = {
+        this.center = {
           x: this.x + this.baseWidth*this.scale/2,
           y: this.y + this.baseHeight*this.scale/2
         }
@@ -103,7 +103,7 @@ class Wolf {
     updateMe() {
       this.elapsedTime += this.theGame.clockTick;
 
-      this.Center = {
+      this.center = {
         x: this.x + this.baseWidth*this.scale/2,
         y: this.y + this.baseHeight*this.scale/2
       }
@@ -181,7 +181,7 @@ class Wolf {
     if(params.DEBUG || this.isSelected) {
       ctx.strokeStyle = "red";
       ctx.beginPath();
-      ctx.arc(this.Center.x - this.camera.x, this.Center.y - this.camera.y, this.radius, 0, 2*Math.PI);
+      ctx.arc(this.center.x - this.camera.x, this.center.y - this.camera.y, this.radius, 0, 2*Math.PI);
       ctx.stroke();
     }
 

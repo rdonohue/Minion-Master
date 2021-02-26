@@ -19,7 +19,7 @@ class Minion {
         this.baseWidth = 16;
         this.baseHeight = 16;
         this.radius = 20;
-        this.Center = {
+        this.center = {
           x: this.x + this.baseWidth*this.scale/2,
           y: this.y + this.baseHeight*this.scale/2
         }
@@ -68,7 +68,7 @@ class Minion {
     updateMe() {
         this.elapsedTime += this.theGame.clockTick;
 
-        this.Center = {
+        this.center = {
           x: this.x + this.baseWidth*this.scale/2,
           y: this.y + this.baseHeight*this.scale/2
         }
@@ -166,7 +166,7 @@ class Minion {
         if(params.DEBUG || this.isSelected) {
           ctx.strokeStyle = "red";
           ctx.beginPath();
-          ctx.arc(this.Center.x - this.camera.x, this.Center.y - this.camera.y, this.radius, 0, 2*Math.PI);
+          ctx.arc(this.center.x - this.camera.x, this.center.y - this.camera.y, this.radius, 0, 2*Math.PI);
           ctx.stroke();
         }
 

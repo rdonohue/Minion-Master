@@ -69,10 +69,10 @@ class Player {
         if(entities[i].isSelected === false) {
           if(!closest) {
             newSelect = entities[i];
-            closest = distance(entities[i], theClick);
-          } else if (closest > distance(entities[i], theClick)) {
+            closest = distance(entities[i].center, theClick);
+          } else if (closest > distance(entities[i].center, theClick)) {
             newSelect = entities[i];
-            closest = distance(entities[i], theClick);
+            closest = distance(entities[i].center, theClick);
           }
         }
       }
@@ -85,6 +85,8 @@ class Player {
         console.log(newSelect);
         this.selected = newSelect;
         this.targetType = this.selected.myType;
+      } else if (this.selected && closest >= newSelect.radius) {
+        this.selected = null;
       }
     }
   }
