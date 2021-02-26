@@ -53,7 +53,7 @@ function getFacing(velocity) {
 var minionStats = {
   HEALTH : 100,
   DEFENSE : 0.0,
-  ATTACK : 1,
+  ATTACK : 50,
   AGILITY : 0.1,
   INTELLIGENCE : 1,
 }

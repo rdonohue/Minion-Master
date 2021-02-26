@@ -22,6 +22,7 @@ class Wolf {
 
         this.baseWidth = 64;
         this.baseHeight = 24;
+
         this.radius = this.baseWidth*this.scale/2;
         this.Center = {
           x: this.x + this.baseWidth*this.scale/2,
@@ -47,11 +48,11 @@ class Wolf {
           y: (this.target.y - this.y) / dist * this.maxSpeed};
 
         //Stats
-        this.health = minionStats.HEALTH;
-        this.maxHealth = minionStats.HEALTH;
-        this.defense = minionStats.DEFENSE;
-        this.attack = minionStats.ATTACK;
-        this.agility = minionStats.AGILITY;
+        this.health = 100;
+        this.maxHealth = 100;
+        this.defense = 3;
+        this.attack = 5;
+        this.agility = minionStats.AGILITY*1.5;
         this.intelligence = minionStats.INTELLIGENCE;
 
         this.dead = false;

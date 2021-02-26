@@ -70,7 +70,6 @@ class Minion {
           y: this.y + this.baseHeight*this.scale/2
         }
         this.isSelected = (this.theGame.theSM.thePlayer.selected == this);
-        console.log(this.theGame.theSM.thePlayer.selected);
 
         var dist = distance(this, this.target);
         if (this.targetID >= this.path.length - 1) {
@@ -103,7 +102,7 @@ class Minion {
                     this.state = 1;
                     this.elapsedTime = 0;
                 } else if (this.elapsedTime > 0.8) {
-                    var damage = (5 + randomInt(5)) - ent.defense;
+                    var damage = (this.attack + randomInt(this.attack)) - ent.defense;
                     ent.health -= damage;
                     this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, damage, "Red"));
                     this.elapsedTime = 0;
