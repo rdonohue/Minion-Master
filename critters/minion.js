@@ -1,6 +1,8 @@
 class Minion {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
+
+        // Different sprites for directions and interactions
         this.downAttack = ASSET_MANAGER.getAsset("./sprites/minion/down_attack.png");
         this.downWalk = ASSET_MANAGER.getAsset("./sprites/minion/down_walk.png");
         this.pickUp = ASSET_MANAGER.getAsset("./sprites/minion/pick_up.png");
@@ -9,22 +11,34 @@ class Minion {
         this.upAttack = ASSET_MANAGER.getAsset("./sprites/minion/up_attack.png");
         this.upWalk = ASSET_MANAGER.getAsset("./sprites/minion/up_walk.png");
 
-        // Minions
-
-        this.downAttackAnim = new Animator(this.downAttack, 13, 20, 38, 41, 2, 0.25, 25, false, true);
+        // Down
         this.downWalkAnim = new Animator(this.downWalk, 22, 20, 20, 31, 4, 0.25, 44, false, true);
-        this.pickUpAnim = new Animator(this.pickUp, 23, 20, 20, 31, 4, 0.25, 44, false, true);
-        this.sideAttackAnim = new Animator(this.sideAttack, 2, 14, 47, 37, 2, 0.25, 16, false, true);
+        this.downFinish = new Animator(this.downWalk, 22, 83, 20, 31, 2, 0.25, 44, false, true);
+        this.downAttackAnim = new Animator(this.downAttack, 13, 20, 38, 41, 2, 0.25, 25, false, true);
+        this.downFinishAttack = new Animator(this.downAttack, 13, 80, 38, 41, 1, 0.25, 0, false, true);
+
+        // Left
         this.sideWalkAnim = new Animator(this.sideWalk, 22, 16, 20, 37, 4, 0.25, 44, false, true);
-        this.upAttackAnim = new Animator(this.upAttack, 13, 3, 38, 48, 2, 0.25, 26, false, true);
+        this.sideFinish = new Animator(this.sideWalk, 22, 80, 20, 37, 2, 0.25, 44, false, true);
+        this.sideAttackAnim = new Animator(this.sideAttack, 2, 14, 47, 37, 2, 0.25, 16, false, true);
+        this.leftFinishAttack = new Animator(this.sideAttack, 2, 78, 47, 37, 1, 0.25, 0, false, true);
+
+        // Right
+        this.sideWalkAnim = new Animator(this.sideWalk, 22, 16, 20, 37, 4, 0.25, 44, false, true);
+        this.sideFinish = new Animator(this.sideWalk, 22, 80, 20, 37, 2, 0.25, 44, false, true);
+        this.sideAttackAnim = new Animator(this.sideAttack, 2, 14, 47, 37, 2, 0.25, 16, false, true);
+        this.rightFinishAttack = new Animator(this.sideAttack, 2, 78, 47, 37, 1, 0.25, 0, false, true);
+
+        // Up
         this.upWalkAnim = new Animator(this.upWalk, 22, 17, 20, 34, 4, 0.25, 44, false, true);
+        this.upWalkAnim = new Animator(this.upWalk, 22, 81, 20, 34, 2, 0.25, 44, false, true);
+        this.upAttackAnim = new Animator(this.upAttack, 13, 3, 38, 48, 2, 0.25, 26, false, true);
+        this.upFinishAttack = new Animator(this.upAttack, 13, 70, 38, 48, 1, 0.25, 0, false, true);
 
-        this.leftFinish = new Animator(this.sideAttack, 2, 78, 47, 37, 1, 0.25, 0, false, true);
-        this.rightFinish = new Animator(this.sideAttack, 2, 78, 47, 37, 1, 0.25, 0, false, true);
-        this.upFinish = new Animator(this.upAttack, 13, 70, 38, 48, 1, 0.25, 0, false, true);
-        this.downFinish = new Animator(this.downAttack, 13, 80, 38, 41, 1, 0.25, 0, false, true);
+        // Pick Up
+        this.leftPick = new Animator(this.pickUp, 23, 20, 20, 31, 4, 0.25, 44, false, true);
+        this.rightPick = new Animator(this.pickUp, 23, 20, 20, 31, 4, 0.25, 44, false, true);
 
-        console.log("Creating Animations");
         this.animations = [];
         this.loadAnimations();
 
@@ -143,32 +157,49 @@ class Minion {
             this.state = 0;
         }
 
+        this.facing = getFacing(this.velocity);
         if (this.state !== 1) {
           dist = distance(this, this.target);
           this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
             y: (this.target.y - this.y) / dist * this.maxSpeed};
           this.x += this.velocity.x * this.game.clockTick;
           this.y += this.velocity.y * this.game.clockTick;
-          this.facing = getFacing(this.velocity);
+
         }
 
     };
 
     loadAnimations() {
-        this.animations.push([]);
-        this.animations.push([]);
+        for (var i = 0; i < 2; i++) {
+            this.animations.push([]);
+            for (var j = 0; j < 4; j++) {
+                this.animations[i].push([]);
+            }
+        }
 
         // Idle/Walking
-        this.animations[0].push(this.sideWalkAnim);
-        this.animations[0].push(this.sideWalkAnim);
-        this.animations[0].push(this.upWalkAnim);
-        this.animations[0].push(this.downWalkAnim);
+        this.animations[0][0].push(this.sideWalkAnim);
+        this.animations[0][0].push(this.sideFinish);
+        this.animations[0][1].push(this.sideWalkAnim);
+        this.animations[0][1].push(this.sideFinish);
+        this.animations[0][2].push(this.upWalkAnim);
+        this.animations[0][2].push(this.upFinish);
+        this.animations[0][3].push(this.downWalkAnim);
+        this.animations[0][3].push(this.downFinish);
 
         // Attacking
-        this.animations[1].push(this.sideAttackAnim);
-        this.animations[1].push(this.sideAttackAnim);
-        this.animations[1].push(this.upAttackAnim);
-        this.animations[1].push(this.downAttackAnim);
+        this.animations[1][0].push(this.sideAttackAnim);
+        this.animations[1][0].push(this.leftFinishAttack);
+        this.animations[1][1].push(this.sideAttackAnim);
+        this.animations[1][1].push(this.rightFinishAttack);
+        this.animations[1][2].push(this.upAttackAnim);
+        this.animations[1][2].push(this.upFinishAttack);
+        this.animations[1][3].push(this.downAttackAnim);
+        this.animations[1][3].push(this.downFinishAttack);
+
+        console.log(this.animations.length);
+        console.log(this.animations[0].length);
+        console.log(this.animations[0][0].length);
     };
 
     drawMinimap(ctx, mmX, mmY) {
@@ -193,23 +224,9 @@ class Minion {
               break;
         }
 
-        this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x,
-                                                              this.y - this.game.camera.y, this.scale);
-        if (this.state == 1) {
-            switch (this.direction) {
-                case 0:
-                  this.leftFinish.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-                  break;
-                case 1:
-                  this.rightFinish.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-                  break;
-                case 2:
-                  this.upFinish.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-                  break;
-                case 3:
-                  this.downFinish.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
-                  break;
-            }
+        for (var i = 0; i < 2; i++) {
+          this.animations[this.state][this.direction][i].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x,
+                                                                this.y - this.game.camera.y, this.scale);
         }
 
         this.healthbar.drawMe(ctx);
