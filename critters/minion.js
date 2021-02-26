@@ -9,6 +9,8 @@ class Minion {
         this.upAttack = ASSET_MANAGER.getAsset("./sprites/minion/up_attack.png");
         this.upWalk = ASSET_MANAGER.getAsset("./sprites/minion/up_walk.png");
 
+        // Minions
+
         this.downAttackAnim = new Animator(this.downAttack, 13, 20, 38, 41, 2, 0.25, 25, false, true);
         this.downWalkAnim = new Animator(this.downWalk, 22, 20, 20, 31, 4, 0.25, 44, false, true);
         this.pickUpAnim = new Animator(this.pickUp, 23, 20, 20, 31, 4, 0.25, 44, false, true);
