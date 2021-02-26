@@ -12,6 +12,7 @@ class HomeBase {
       this.isSelected = false;
 
       //Stats
+      this.maxHealth = 200;
       this.health = 200;
       this.defense = 3.0;
       this.attack = 0;
