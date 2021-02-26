@@ -1,6 +1,6 @@
 class TowerButton {
-constructor(game, x, y) {
-		Object.assign(this, {game, x, y});
+constructor(theGame, x, y) {
+		Object.assign(this, {theGame, x, y});
 
 		this.selected = false;
 		this.mouseover = false;
@@ -53,8 +53,8 @@ constructor(game, x, y) {
  * Draws a tower over the mouse for tower placement.
  */
 	placeTower(ctx) {
-		if (this.game.mouse && this.selected) {
-			let mouse = this.game.mouse;
+		if (this.theGame.mouse && this.selected) {
+			let mouse = this.theGame.mouse;
 			if ( (mouse.x < params.CANVAS_WIDTH && mouse.x > 20)
 				 && (mouse.y < params.CANVAS_HEIGHT && mouse.y > 20) ) {
 				 ctx.globalAlpha = 0.25;
@@ -77,21 +77,21 @@ constructor(game, x, y) {
 	};
 
 	setTower() {
-		if (this.game.click) {
-			let click = this.game.click;
+		if (this.theGame.click) {
+			let click = this.theGame.click;
 			if (this.placing &&
 			 	 (click.x > 0 && click.x < params.CANVAS_WIDTH) &&
 			 	 (click.y > 0 && click.y < params.CANVAS_HEIGHT) ) {
-						this.game.spawnMe("tower", click.x + this.game.camera.x, click.y + this.game.camera.y);
+						this.theGame.spawnMe("tower", click.x + this.theGame.theCamera.x, click.y + this.theGame.theCamera.y);
 						this.placing = false;
 				 }
 		}
 	};
 
   updateMe() {
-		if (this.game.mouse) {
-			let xMove = this.game.mouse.x
-	    let yMove = this.game.mouse.y
+		if (this.theGame.mouse) {
+			let xMove = this.theGame.mouse.x
+	    let yMove = this.theGame.mouse.y
 	    if ((xMove >= this.x && xMove <= this.x + this.buttonWidth) && (yMove >= this.y && yMove <= this.y + this.buttonHeight)) {
 	      this.mouseover = true;
 	    } else {
@@ -99,9 +99,9 @@ constructor(game, x, y) {
 	    }
 		}
 
-		if (this.game.click) {
-			let xClick = this.game.click.x
-	    let yClick = this.game.click.y
+		if (this.theGame.click) {
+			let xClick = this.theGame.click.x
+	    let yClick = this.theGame.click.y
 	    if ((xClick >= this.x && xClick <= this.x + this.buttonWidth) && (yClick >= this.y && yClick <= this.y + this.buttonHeight)) {
 	      this.selected = true;
 	    } else {

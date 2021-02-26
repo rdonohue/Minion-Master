@@ -1,6 +1,6 @@
 class Minion {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+    constructor(theGame, x, y) {
+        Object.assign(this, {theGame, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
 
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
@@ -11,13 +11,13 @@ class Minion {
 
         this.myScale = 2;
         this.myDirection = 0; // 0 = left, 1 = right
-        this.state = 0;
+        this.state = 1;
         this.priority = 0;
 
         this.radius = 20;
         this.visualRadius = 200;
 
-        this.healthbar = new HealthBar(this.game, this);
+        this.healthbar = new HealthBar(this.theGame, this);
 
         this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
@@ -43,10 +43,6 @@ class Minion {
         this.intelligence = minionStats.INTELLIGENCE;
         this.combat = false;
 
-        this.dead = false;
-        this.removeFromWorld = false;
-        //this.facing = 0;
-
         //i,j for cell, x,y for continuous position.
         this.myType = "minion";
 
@@ -64,7 +60,8 @@ class Minion {
 //the move-speed is still staggered a bit, that might be because of async
 //with the draw-method being called...may need to make the minion handle its own draw-update.
     updateMe() {
-        this.elapsedTime += this.game.clockTick;
+        this.elapsedTime += this.theGame.clockTick;
+
         var dist = distance(this, this.target);
         if (this.targetID >= this.path.length - 1) {
             this.targetID = 0;
@@ -76,9 +73,7 @@ class Minion {
 
         // If its health is 0, it is dead.
         if (this.health <= 0) {
-            this.state = 2;
-            this.dead = true;
-            this.removeFromWorld = true;
+            this.state = 0;
         }
 
         if (dist < 5) {
@@ -88,8 +83,8 @@ class Minion {
             this.target = this.path[this.targetID];
         }
         var combat = false;
-        for (var i = 0; i < this.game.entities.length; i++) {
-            var ent = this.game.entities[i];
+        for (var i = 0; i < this.theGame.entities.length; i++) {
+            var ent = this.theGame.entities[i];
             if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave
               || ent instanceof Rock || ent instanceof Bush) && canSee(this, ent) && ent.health > 0) {
                 this.target = ent;
@@ -102,7 +97,7 @@ class Minion {
                 } else if (this.elapsedTime > 0.8) {
                     var damage = (5 + randomInt(5)) - ent.defense;
                     ent.health -= damage;
-                    this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage, "Red"));
+                    this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, damage, "Red"));
                     this.elapsedTime = 0;
                 }
             } else if ((ent instanceof Rock || ent instanceof Bush) && collide(this, ent) && ent.health > 0) {
@@ -112,7 +107,7 @@ class Minion {
                 } else if (this.elapsedTime > 0.8) {
                     var gather = 3 + randomInt(3);
                     ent.health -= gather;
-                    this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, gather, "Yellow"));
+                    this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, gather, "Yellow"));
                     this.elapsedTime = 0;
                 }
             }
@@ -128,8 +123,8 @@ class Minion {
           dist = distance(this, this.target);
           this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
             y: (this.target.y - this.y) / dist * this.maxSpeed};
-          this.x += this.velocity.x * this.game.clockTick;
-          this.y += this.velocity.y * this.game.clockTick;
+          this.x += this.velocity.x * this.theGame.clockTick;
+          this.y += this.velocity.y * this.theGame.clockTick;
           this.facing = getFacing(this.velocity);
         }
 
@@ -143,11 +138,11 @@ class Minion {
 
     drawMe(ctx) {
         if (this.state == 0) {
-            this.myAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
+            this.myAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.myScale);
         } else if (this.state == 1) {
-            this.myBattleAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
+            this.myBattleAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.myScale);
         } else {
-            this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
+            this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.myScale);
             die();
         }
 

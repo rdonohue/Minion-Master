@@ -1,14 +1,16 @@
 class SceneManager {
   constructor(theGame) {
       this.theGame = theGame;
-      this.theGame.camera = this;
+      this.theGame.theSM = this;
+      this.theGame.theCamera = this;
+
       this.x = 0;
       this.y = 0;
 
       this.theMiniMap = new MiniMap(this.theGame, 1024, 576, 256);
       this.theHud = new Hud(this.theGame, 1024, 0, 256);
       this.thePlayer = new Player(this.theGame, 100, 150, 10, 5, 0, 0);
-      
+
       this.createLevel();
       this.populateLevel();
   };
@@ -29,13 +31,7 @@ class SceneManager {
   }
 
   populateLevel(){
-    let base = new HomeBase(this.theGame, 500, 400);
-
-    this.theGame.addEntity(base);
-    this.theGame.addEntity(this.theMiniMap);
-    this.theGame.addEntity(this.theHud);
-    this.theGame.addEntity(this.theHud.towerButton);
-    this.theGame.addEntity(this.thePlayer);
+    this.theGame.spawnMe("castle", 150, 150);
     this.theGame.spawnMe("minion", 0, 0);
     this.theGame.spawnMe("wolf", 800, 0);
     this.theGame.spawnMe("wolf", 0, 400);

@@ -49,18 +49,6 @@ function getFacing(velocity) {
     if (-0.875 < angle && angle < -0.625) return 7;
 };
 
-// creates an alias for requestAnimationFrame for backwards compatibility
-window.requestAnimFrame = (function () {
-    return window.requestAnimationFrame ||
-        window.webkitRequestAnimationFrame ||
-        window.mozRequestAnimationFrame ||
-        window.oRequestAnimationFrame ||
-        window.msRequestAnimationFrame ||
-        function (/* function */ callback, /* DOMElement */ element) {
-            window.setTimeout(callback, 1000 / 60);
-        };
-})();
-
 // add global parameters here
 var minionStats = {
   HEALTH : 100,
@@ -83,3 +71,15 @@ var params = {
   BASE_SPD : 0.25,
   BLOCKWIDTH : 48  //temporary
 };
+
+// creates an alias for requestAnimationFrame for backwards compatibility
+window.requestAnimFrame = (function () {
+    return window.requestAnimationFrame ||
+        window.webkitRequestAnimationFrame ||
+        window.mozRequestAnimationFrame ||
+        window.oRequestAnimationFrame ||
+        window.msRequestAnimationFrame ||
+        function (/* function */ callback, /* DOMElement */ element) {
+            window.setTimeout(callback, 1000 / 60);
+        };
+})();

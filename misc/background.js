@@ -1,6 +1,6 @@
 class InteriorGrass {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+    constructor(theGame, x, y) {
+        Object.assign(this, { theGame, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/ground_sprites.png");
         this.interiorX = Create2DArray(params.PLAY_HEIGHT / params.TILE_W_H - 2);
         this.interiorY = Create2DArray(params.PLAY_HEIGHT / params.TILE_W_H - 2);
@@ -8,7 +8,6 @@ class InteriorGrass {
     };
 
     updateMe() {
-
     };
 
     // drawImage(spritesheet, sx, sy, sw, sh, dx, dy, dw, dh)
@@ -20,7 +19,7 @@ class InteriorGrass {
           sy = this.interiorY[i][j];
           dx = this.x + j * params.TILE_W_H;
           dy = this.y + i * params.TILE_W_H;
-          ctx.drawImage(this.spritesheet, sx, sy, params.TILE_W_H, params.TILE_W_H, dx - this.game.camera.x, dy - this.game.camera.y, params.TILE_W_H, params.TILE_W_H);
+          ctx.drawImage(this.spritesheet, sx, sy, params.TILE_W_H, params.TILE_W_H, dx - this.theGame.theCamera.x, dy - this.theGame.theCamera.y, params.TILE_W_H, params.TILE_W_H);
         }
       }
     };
@@ -39,13 +38,13 @@ class InteriorGrass {
     };
 };
 
-// This class draws the corners of the canvas for the game map.
-// game: the current iteration of the GameEngine
+// This class draws the corners of the canvas for the theGame map.
+// theGame: the current iteration of the GameEngine
 // x: the origin point of the x (horizontal) cardinal direction for drawing
 // y: the origin point of the y (vertical) cardinal direction for drawing
 class Grasscorner {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+    constructor(theGame, x, y) {
+        Object.assign(this, { theGame, x, y });
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/ground_sprites.png");
     };
@@ -57,37 +56,37 @@ class Grasscorner {
     // drawImage(spritesheet, sx, sy, sw, sh, dx, dy, dw, dh)
     drawMe(ctx) {
         //top left corner
-        ctx.drawImage(this.spritesheet, 0, 1216, params.TILE_W_H, params.TILE_W_H, 0 - this.game.camera.x, 0 - this.game.camera.y, params.TILE_W_H, params.TILE_W_H);
+        ctx.drawImage(this.spritesheet, 0, 1216, params.TILE_W_H, params.TILE_W_H, 0 - this.theGame.theCamera.x, 0 - this.theGame.theCamera.y, params.TILE_W_H, params.TILE_W_H);
         let yCanvasOrigin = params.PLAY_HEIGHT - params.TILE_W_H;
         let xCanvasOrigin = params.PLAY_WIDTH - params.TILE_W_H;
 
         //bottom left corner
         ctx.save();
         ctx.scale(1,-1);
-        ctx.drawImage(this.spritesheet, 0, 1216, params.TILE_W_H, params.TILE_W_H, 0 - this.game.camera.x, -yCanvasOrigin - params.TILE_W_H + this.game.camera.y, params.TILE_W_H, params.TILE_W_H);
+        ctx.drawImage(this.spritesheet, 0, 1216, params.TILE_W_H, params.TILE_W_H, 0 - this.theGame.theCamera.x, -yCanvasOrigin - params.TILE_W_H + this.theGame.theCamera.y, params.TILE_W_H, params.TILE_W_H);
         ctx.restore();
 
         //top right corner
         ctx.save();
         ctx.scale(-1,1);
-        ctx.drawImage(this.spritesheet, 0, 1216, params.TILE_W_H, params.TILE_W_H, -xCanvasOrigin - params.TILE_W_H + this.game.camera.x, 0 - this.game.camera.y, params.TILE_W_H, params.TILE_W_H);
+        ctx.drawImage(this.spritesheet, 0, 1216, params.TILE_W_H, params.TILE_W_H, -xCanvasOrigin - params.TILE_W_H + this.theGame.theCamera.x, 0 - this.theGame.theCamera.y, params.TILE_W_H, params.TILE_W_H);
         ctx.restore();
 
         //bottom right corner
         ctx.save();
         ctx.scale(-1,-1);
-        ctx.drawImage(this.spritesheet, 0, 1216, params.TILE_W_H, params.TILE_W_H, -xCanvasOrigin - params.TILE_W_H + this.game.camera.x, -yCanvasOrigin - params.TILE_W_H + this.game.camera.y, params.TILE_W_H, params.TILE_W_H);
+        ctx.drawImage(this.spritesheet, 0, 1216, params.TILE_W_H, params.TILE_W_H, -xCanvasOrigin - params.TILE_W_H + this.theGame.theCamera.x, -yCanvasOrigin - params.TILE_W_H + this.theGame.theCamera.y, params.TILE_W_H, params.TILE_W_H);
         ctx.restore();
     };
 };
 
-// This class draws the along the walls of the canvas for the game map.
-// game: the current iteration of the GameEngine
+// This class draws the along the walls of the canvas for the theGame map.
+// theGame: the current iteration of the GameEngine
 // x: the origin point of the x (horizontal) cardinal direction for drawing
 // y: the origin point of the y (vertical) cardinal direction for drawing
 class Vertwall {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+    constructor(theGame, x, y) {
+        Object.assign(this, { theGame, x, y });
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/ground_sprites.png");
     };
@@ -99,27 +98,27 @@ class Vertwall {
     // drawImage(spritesheet, sx, sy, sw, sh, dx, dy, dw, dh)
     drawMe(ctx) {
       for (var i = 0; i < (params.PLAY_HEIGHT / params.TILE_W_H - 2); i++) {
-          ctx.drawImage(this.spritesheet, 0, 1247, params.TILE_W_H, params.TILE_W_H, this.x - this.game.camera.x, this.y + i * params.TILE_W_H - this.game.camera.y, params.TILE_W_H, params.TILE_W_H);
+          ctx.drawImage(this.spritesheet, 0, 1247, params.TILE_W_H, params.TILE_W_H, this.x - this.theGame.theCamera.x, this.y + i * params.TILE_W_H - this.theGame.theCamera.y, params.TILE_W_H, params.TILE_W_H);
 
           ctx.save();
           ctx.scale(-1,1);
           // The dx here is a copy of the one in Grasscorner above.
           // -(this.x + (params.CANVAS_WIDTH - params.TILE_W_H)) = -(0 + (1024 - 64)) - 64
           // First it flips the original image and puts it off the canvas. The -params.TILE_W_H(64px) shifts it left to be visible once more.
-          ctx.drawImage(this.spritesheet, 0, 1247, params.TILE_W_H, params.TILE_W_H, -(this.x + (params.PLAY_WIDTH - params.TILE_W_H)) - params.TILE_W_H + this.game.camera.x,
-                        this.y + i * params.TILE_W_H - this.game.camera.y, params.TILE_W_H, params.TILE_W_H);
+          ctx.drawImage(this.spritesheet, 0, 1247, params.TILE_W_H, params.TILE_W_H, -(this.x + (params.PLAY_WIDTH - params.TILE_W_H)) - params.TILE_W_H + this.theGame.theCamera.x,
+                        this.y + i * params.TILE_W_H - this.theGame.theCamera.y, params.TILE_W_H, params.TILE_W_H);
           ctx.restore();
       }
     };
 };
 
-// This class draws the along the walls of the canvas for the game map.
-// game: the current iteration of the GameEngine
+// This class draws the along the walls of the canvas for the theGame map.
+// theGame: the current iteration of the GameEngine
 // x: the origin point of the x (horizontal) cardinal direction for drawing
 // y: the origin point of the y (vertical) cardinal direction for drawing
 class Horiwall {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+    constructor(theGame, x, y) {
+        Object.assign(this, { theGame, x, y });
 
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/ground_sprites.png");
     };
@@ -135,8 +134,8 @@ class Horiwall {
         ctx.save();
         ctx.rotate(Math.PI / 2);
         ctx.drawImage(this.spritesheet, 0, 1247, params.TILE_W_H, params.TILE_W_H,
-                      this.x - params.TILE_W_H - this.game.camera.y, //dx
-                      (this.y - params.TILE_W_H * 2) - i * params.TILE_W_H + this.game.camera.x, //dy
+                      this.x - params.TILE_W_H - this.theGame.theCamera.y, //dx
+                      (this.y - params.TILE_W_H * 2) - i * params.TILE_W_H + this.theGame.theCamera.x, //dy
                       params.TILE_W_H, params.TILE_W_H);
 
         // The dx here is a copy of the one in Grasscorner above.
@@ -151,7 +150,7 @@ class Horiwall {
         ctx.save();
         ctx.translate(params.TILE_W_H, params.PLAY_HEIGHT - params.TILE_W_H);
         ctx.rotate(3 * (Math.PI / 2));
-        ctx.drawImage(this.spritesheet, 0, 1247, params.TILE_W_H, params.TILE_W_H, 0 - params.TILE_W_H + this.game.camera.y, 0 + i * params.TILE_W_H - this.game.camera.x, params.TILE_W_H, params.TILE_W_H);
+        ctx.drawImage(this.spritesheet, 0, 1247, params.TILE_W_H, params.TILE_W_H, 0 - params.TILE_W_H + this.theGame.theCamera.y, 0 + i * params.TILE_W_H - this.theGame.theCamera.x, params.TILE_W_H, params.TILE_W_H);
         ctx.restore();
       }
     };

@@ -1,19 +1,19 @@
 class Player {
-  constructor(game, startFood, startRock, trickleFood, trickleRock, posX, posY) {
+  constructor(theGame, startFood, startRock, trickleFood, trickleRock, posX, posY) {
+    Object.assign(this, {theGame, startFood, startRock, trickleFood, trickleRock, posX, posY});
+
     this.myFood = startFood;
     this.myRock = startRock;
     this.foodIncome = trickleFood;
     this.rockIncome = trickleRock;
 
-    this.timeBetweenUpdates = 1;
     this.timer = new Timer();
+    this.timeBetweenUpdates = 1;
     this.timeSinceUpdate = 0;
 
-    this.camX = posX;
-    this.camY = posY;
-    this.width = 1024;
-    this.height = 768;
-    this.theGame = game;
+    this.cam = this.theGame.theSM;
+    this.w = 1024;
+    this.h = 768;
 
     this.AgiButt = ASSET_MANAGER.getAsset("./sprites/button_Agi.png");
     this.AtkButt = ASSET_MANAGER.getAsset("./sprites/button_Attack.png");
@@ -28,7 +28,13 @@ class Player {
 
   updateMe() {
     this.timeSinceUpdate += this.timer.tick();
+    this.updateResources();
+    if(this.theGame.click){
+      this.updateSelected(this.theGame.click);
+    }
+  }
 
+  updateResources() {
     //this is NOT the best implmentation of making the player not increment.
     if(this.timeSinceUpdate < this.timeBetweenUpdates) {
       //NOTE! we always want to respond to player input!
@@ -43,7 +49,29 @@ class Player {
     }
   }
 
+  updateSelected(click){
+    if(click.x > this.width) {
+      //hud click, do nothing
+    } else {
+      //on canvas.
+      console.log(click.x + ", " + click.y);
+
+
+      let entities = this.theGame.entities;
+      for(var i = 0; i< entities.length; i++) {
+        if(entities[i].isSelectable) {
+
+        }
+      }
+    }
+  }
+
   drawMe(ctx) {
+    this.drawPlayerResources(ctx);
+    this.drawSelectedInfo(ctx);
+  }
+
+  drawPlayerResources(ctx) {
     //this can be where we update the resources displayed
     //make sure to round to integer.
     ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
@@ -61,10 +89,12 @@ class Player {
 
     ctx.fillText("BUILD MENU", params.CANVAS_WIDTH + 78, 82);
     ctx.strokeRect(params.CANVAS_WIDTH + 76, 66, 102, 20);
+  }
 
+  drawSelectedInfo(ctx) {
     ctx.font = params.TILE_W_H/4 + 'px "Press Start 2P"';
     //Bottom Left HUD
-    //if (this.selected = "minion") {
+    if (this.selected == "minion") {
       ctx.fillText(this.targetType + "'s", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2);
       ctx.fillText("STATS: ", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5);
 
@@ -172,7 +202,6 @@ class Player {
       ctx.drawImage(this.IntButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 8.5,
                     params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
       ctx.fillText("UPGRADE!", params.TILE_W_H * 8.2, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
-    //}
-
+    }
   }
 }

@@ -2,6 +2,7 @@
 class GameEngine {
   constructor() {
       this.entities = [];
+      this.background = [];
 
       this.ctx = null;
 
@@ -13,16 +14,15 @@ class GameEngine {
       this.up = false;
       this.down = false;
 
-      this.surfaceWidth = null;
-      this.surfaceHeight = null;
-      
       this.tickDuration = 0.1;
   };
 
   init(ctx) {
       this.ctx = ctx;
-      this.surfaceWidth = this.ctx.canvas.width;
-      this.surfaceHeight = this.ctx.canvas.height;
+      this.cameraWidth = this.ctx.canvas.width;
+      this.cameraHeight = this.ctx.canvas.height;
+      this.mapWidth = params.PLAY_WIDTH;
+      this.mapHeight = params.PLAY_HEIGHT;
       this.startInput();
       this.timer = new Timer();
   };
@@ -39,28 +39,28 @@ class GameEngine {
     switch (type) {
         case "minion":
           let minion = new Minion(this, x, y);
-          this.addEntity(minion);
+          this.addEntity(minion, x, y);
           break;
         case "wolf":
           let wolf = new Wolf(this, x, y);
-          this.addEntity(wolf);
+          this.addEntity(wolf, x, y);
           break;
         case "ogre":
           let ogre = new Ogre(this, x, y);
-          this.addEntity(ogre);
+          this.addEntity(ogre, x, y);
           break;
         case "castle":
           let castle = new HomeBase(this, x, y);
           this.theBase = castle;
-          this.addEntity(castle);
+          this.addEntity(castle, x, y);
           break;
         case "tower":
           let tower = new Tower(this, x, y);
-          this.addEntity(tower);
+          this.addEntity(tower, x, y);
           break;
         case "cave":
           let cave = new Cave(this, x, y);
-          this.addEntity(cave);
+          this.addEntity(cave, x, y);
           break;
         //case "berry":
         //  let berry = new BerryBush(this, x, y);
@@ -69,16 +69,40 @@ class GameEngine {
     }
   };
 
-  addEntity(entity) {
+  addEntity(entity, x, y) {
     this.entities.push(entity);
+    // this.entities.forEach((other) => {
+    //   if(collide(entity, other)) {
+    //     this.addEntity(entity, x + 5, y + 5);
+    //   }
+    // });
+    // if(
+    //   x > this.mapWidth-entity.radius  ||
+    //   y > this.mapHeight-entity.radius ||
+    //   x < 0 + entity.radius ||
+    //   y < 0 + entity.radius
+    // ){
+    //   console.log("new entity: " + entity.myType + " is off the map!");
+    // } else {
+    //   this.entities.forEach((other) => {
+    //     if(collide(entity, other)) {
+    //       this.addEntity(entity, x + 5, y + 5);
+    //     }
+    //   });
+    // }
+    //we want to make sure that any new entities are not colliding with any already present entitys.
   };
+
+  addBackground(background){
+    this.background.push(background);
+  }
 
   draw() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     for (var i = 0; i < this.entities.length; i++) {
       this.entities[i].drawMe(this.ctx);
     }
-    this.camera.draw(this.ctx);
+    this.theCamera.draw(this.ctx);
   }
 
   update() {
@@ -91,7 +115,7 @@ class GameEngine {
         entity.updateMe();
       }
     }
-    this.camera.update();
+    this.theSM.update();
 
     for (var i = this.entities.length - 1; i >= 0; --i) {
       if (this.entities[i].removeFromWorld) {
@@ -114,6 +138,7 @@ class GameEngine {
     this.clockTick = this.timer.tick();
     this.update();
     this.draw();
+    this.click = null;
   };
 
   startInput() {

@@ -1,6 +1,6 @@
 class Tower {
-  constructor(game, x, y) {
-      Object.assign(this, {game, x, y });
+  constructor(theGame, x, y) {
+      Object.assign(this, {theGame, x, y });
       this.myName = "tower";
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tower.png");
@@ -27,12 +27,12 @@ class Tower {
   };
 
   updateMe() {
-    this.elapsedTime += this.game.clockTick;
-    for (var i = 0; i < this.game.entities.length; i++) {
-        var ent = this.game.entities[i];
+    this.elapsedTime += this.theGame.clockTick;
+    for (var i = 0; i < this.theGame.entities.length; i++) {
+        var ent = this.theGame.entities[i];
         if ((ent instanceof Wolf || ent instanceof Ogre) && canSee(this, ent) && this.elapsedTime > 1 / this.agility) {
             this.elapsedTime = 0;
-            this.game.addEntity(new Projectile(this.game, this.x, this.y, ent, this.attack, this.projectileScale));
+            this.theGame.addEntity(new Projectile(this.theGame, this.x, this.y, ent, this.attack, this.projectileScale));
         }
     }
 
@@ -62,7 +62,7 @@ class Tower {
    * @upgradeAmount: The stage of upgrade the tower is currently at. (ryan: I think 3 is probably the max amount of upgrades if this is a good idea.)
    */
   upgradeOffense(upgradeAmount) {
-    if (this.game.player.selectedAttackUP) {
+    if (this.theGame.player.selectedAttackUP) {
       this.attack++;
       this.projectileScale += 0.5;
       this.agility += 0.5;
@@ -77,7 +77,7 @@ class Tower {
    * @upgradeAmount: The stage of upgrade the tower is currently at. (ryan: I think 3 is probably the max amount of upgrades if this is a good idea.)
    */
   upgradeDefense(upgradeAmount) {
-    if (this.game.player.selectedDefenseUP) {
+    if (this.theGame.player.selectedDefenseUP) {
       this.defense += 1;
       this.maxHealth += this.maxHealth * (upgradeAmount * 0.2);
       this.visualRadius += this.visualRadius * (0.5 / upgradeAmount);
@@ -94,8 +94,8 @@ class Tower {
     const yCenter = 34.5 / 2;
 
     // Subtracting x/yCenter from the origin point paints the tower's center where the user clicks.
-    var x = this.x - xCenter - this.game.camera.x;
-    var y = this.y - yCenter - this.game.camera.y;
+    var x = this.x - xCenter - this.theGame.theCamera.x;
+    var y = this.y - yCenter - this.theGame.theCamera.y;
 
     ctx.drawImage(this.spritesheet, 0, 0, 105, 138, x, y, 52.5, 69);
 
@@ -103,7 +103,7 @@ class Tower {
     // ctx.strokeStyle = "Pink";
     // ctx.strokeRect(x, y, 52.5, 69);
 
-      //don't forget to subtract this.game.camera.x and this.game.camera.y from the respective coordinates.
+      //don't forget to subtract this.theGame.theCamera.x and this.theGame.theCamera.y from the respective coordinates.
   };
 
 };

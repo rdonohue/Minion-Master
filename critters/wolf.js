@@ -1,6 +1,6 @@
 class Wolf {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+    constructor(theGame, x, y) {
+        Object.assign(this, { theGame, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
 
         //this.animations = [];
@@ -24,7 +24,7 @@ class Wolf {
         this.visualRadius = 200;
         this.state = 0;
 
-        this.healthbar = new HealthBar(this.game, this);
+        this.healthbar = new HealthBar(this.theGame, this);
 
 
         this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
@@ -95,7 +95,7 @@ class Wolf {
     };
 
     updateMe() {
-        this.elapsedTime += this.game.clockTick;
+        this.elapsedTime += this.theGame.clockTick;
         var dist = distance(this, this.target);
 
         if (this.targetID >= this.path.length - 1) {
@@ -120,8 +120,8 @@ class Wolf {
         }
 
         var combat = false;
-        for (var i = 0; i < this.game.entities.length; i++) {
-            var ent = this.game.entities[i];
+        for (var i = 0; i < this.theGame.entities.length; i++) {
+            var ent = this.theGame.entities[i];
             if (ent instanceof Minion && canSee(this, ent)) {
                 this.target = ent;
                 combat = true;
@@ -133,7 +133,7 @@ class Wolf {
               } else if (this.elapsedTime > 0.8) {
                   var damage = (6 + randomInt(5)) - ent.defense;
                   ent.health -= damage;
-                  this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage, "Red"));
+                  this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, damage, "Red"));
                   this.elapsedTime = 0;
               }
             }
@@ -147,8 +147,8 @@ class Wolf {
           dist = distance(this, this.target);
           this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
             y: (this.target.y - this.y) / dist * this.maxSpeed};
-          this.x += this.velocity.x * this.game.clockTick;
-          this.y += this.velocity.y * this.game.clockTick;
+          this.x += this.velocity.x * this.theGame.clockTick;
+          this.y += this.velocity.y * this.theGame.clockTick;
           this.facing = getFacing(this.velocity);
         }
 
@@ -159,13 +159,13 @@ class Wolf {
     };
 
     drawMe(ctx) {
-      //this.animations[this.direction][this.state].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+      //this.animations[this.direction][this.state].drawFrame(this.theGame.clockTick, ctx, this.x, this.y, this.myScale);
       if (this.state == 0) {
-          this.mySearchingAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
+          this.mySearchingAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.myScale);
       } else if (this.state == 1) {
-          this.myHuntingAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
+          this.myHuntingAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.myScale);
       } else {
-          this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
+          this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.myScale);
       }
 
       this.healthbar.drawMe(ctx);
