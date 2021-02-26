@@ -7,7 +7,7 @@ class Player {
     this.foodIncome = trickleFood;
     this.rockIncome = trickleRock;
 
-    
+
 
     this.timer = new Timer();
     this.timeBetweenUpdates = 1;
@@ -66,7 +66,7 @@ class Player {
       let closest = null;
 
       for(var i = 0; i< entities.length; i++) {
-        if(entities[i].isSelectable) {
+        if(entities[i].isSelected === false) {
           if(!closest) {
             newSelect = entities[i];
             closest = distance(entities[i], theClick);
@@ -76,15 +76,10 @@ class Player {
           }
         }
       }
+      console.log(theClick);
 
-      console.log(theClick.x + ", " + theClick.y);
-      console.log(click.x + ", " + click.y);
-      if(newSelect) {
-        console.log("target: "+ newSelect.x + ", " + newSelect.y);
-      } else {
-        //console.log("target: "+ newSelect);
-      }
-      if(newSelect && newSelect.radius > closest) {
+      if(newSelect && closest < newSelect.radius) {
+        console.log(newSelect);
         this.selected = newSelect;
         this.targetType = this.selected.myType;
       }
@@ -119,17 +114,17 @@ class Player {
   drawSelectedInfo(ctx) {
     ctx.font = params.TILE_W_H/4 + 'px "Press Start 2P"';
     //Bottom Left HUD
-    if (this.selected == "minion") {
+    if (this.selected) {
       ctx.fillText(this.targetType + "'s", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2);
       ctx.fillText("STATS: ", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5);
 
       ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';
 
-      ctx.fillText("HEALTH: " + 100, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.2);
-      ctx.fillText("DEF: " + 0, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.0);
-      ctx.fillText("ATK: " + 1, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.8);
-      ctx.fillText("AGI: " + 1, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.6);
-      ctx.fillText("INT: " + 1, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.4);
+      ctx.fillText("HEALTH: " + this.selected.health + "/" + this.selected.maxHealth, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.2);
+      ctx.fillText("DEF: " + this.selected.defense, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.0);
+      ctx.fillText("ATK: " + this.selected.attack, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.8);
+      ctx.fillText("AGI: " + this.selected.agility, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.6);
+      ctx.fillText("INT: " + this.selected.intelligence, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.4);
 
       //Health Stat UI
       ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';

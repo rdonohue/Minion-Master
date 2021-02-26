@@ -3,6 +3,7 @@ class Wolf {
         Object.assign(this, { theGame, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
         this.camera = this.theGame.theSM; //theSM is the game's camera.
+        this.isSelected = false;
         //this.animations = [];
         //loadAnimations();
 
@@ -100,90 +101,90 @@ class Wolf {
     };
 
     updateMe() {
-        this.elapsedTime += this.theGame.clockTick;
+      this.elapsedTime += this.theGame.clockTick;
 
-        this.Center = {
-          x: this.x + this.baseWidth*this.scale/2,
-          y: this.y + this.baseHeight*this.scale/2
-        }
-        this.isSelected = (this.theGame.theSM.thePlayer.selected == this);
+      this.Center = {
+        x: this.x + this.baseWidth*this.scale/2,
+        y: this.y + this.baseHeight*this.scale/2
+      }
+      this.isSelected = (this.theGame.theSM.thePlayer.selected == this);
 
-        var dist = distance(this, this.target);
+      var dist = distance(this, this.target);
 
-        if (this.targetID >= this.path.length - 1) {
-            this.targetID = 0;
-            this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
-        }
-
-        if (this.health <= 0) {
-            this.state = 2;
-            this.dead = true;
-            this.removeFromWorld = true;
-        }
-
-        if (dist < 5) {
-            if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
-                this.targetID++;
-            }
-            this.target = this.path[this.targetID];
-        }
-
-        var combat = false;
-        for (var i = 0; i < this.theGame.entities.length; i++) {
-            var ent = this.theGame.entities[i];
-            if (ent instanceof Minion && canSee(this, ent)) {
-                this.target = ent;
-                combat = true;
-            }
-            if (ent instanceof Minion && collide(this, ent) && !ent.dead) {
-              if (this.state === 0) {
-                  this.state = 1;
-                  this.elapsedTime = 0;
-              } else if (this.elapsedTime > 0.8) {
-                  var damage = (this.attack + randomInt(this.attack)) - ent.defense
-                  ent.health -= damage;
-                  this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, damage, "Red"));
-                  this.elapsedTime = 0;
-              }
-            }
-        }
-
-        if (!combat) {
-            this.state = 0;
-        }
-
-        if (this.state !== 1) {
-          dist = distance(this, this.target);
-          this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
-            y: (this.target.y - this.y) / dist * this.maxSpeed};
-          this.x += this.velocity.x * this.theGame.clockTick;
-          this.y += this.velocity.y * this.theGame.clockTick;
-          this.facing = getFacing(this.velocity);
-        }
-
-    };
-
-    drawMinimap(ctx, mmX, mmY) {
-
-    };
-
-    drawMe(ctx) {
-      //this.animations[this.direction][this.state].drawFrame(this.theGame.clockTick, ctx, this.x, this.y, this.scale);
-      if (this.state == 0) {
-          this.mySearchingAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
-      } else if (this.state == 1) {
-          this.myHuntingAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
-      } else {
-          this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
+      if (this.targetID >= this.path.length - 1) {
+          this.targetID = 0;
+          this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
       }
 
-      if(params.DEBUG || this.isSelected) {
-        ctx.strokeStyle = "red";
-        ctx.beginPath();
-        ctx.arc(this.Center.x - this.camera.x, this.Center.y - this.camera.y, this.radius, 0, 2*Math.PI);
-        ctx.stroke();
+      if (this.health <= 0) {
+          this.state = 2;
+          this.dead = true;
+          this.removeFromWorld = true;
       }
 
-      this.healthbar.drawMe(ctx);
-    };
+      if (dist < 5) {
+          if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
+              this.targetID++;
+          }
+          this.target = this.path[this.targetID];
+      }
+
+      var combat = false;
+      for (var i = 0; i < this.theGame.entities.length; i++) {
+          var ent = this.theGame.entities[i];
+          if (ent instanceof Minion && canSee(this, ent)) {
+              this.target = ent;
+              combat = true;
+          }
+          if (ent instanceof Minion && collide(this, ent) && !ent.dead) {
+            if (this.state === 0) {
+                this.state = 1;
+                this.elapsedTime = 0;
+            } else if (this.elapsedTime > 0.8) {
+                var damage = (this.attack + randomInt(this.attack)) - ent.defense
+                ent.health -= damage;
+                this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, damage, "Red"));
+                this.elapsedTime = 0;
+            }
+          }
+      }
+
+      if (!combat) {
+          this.state = 0;
+      }
+
+      if (this.state !== 1) {
+        dist = distance(this, this.target);
+        this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
+          y: (this.target.y - this.y) / dist * this.maxSpeed};
+        this.x += this.velocity.x * this.theGame.clockTick;
+        this.y += this.velocity.y * this.theGame.clockTick;
+        this.facing = getFacing(this.velocity);
+      }
+
+  };
+
+  drawMinimap(ctx, mmX, mmY) {
+
+  };
+
+  drawMe(ctx) {
+    //this.animations[this.direction][this.state].drawFrame(this.theGame.clockTick, ctx, this.x, this.y, this.scale);
+    if (this.state == 0) {
+        this.mySearchingAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
+    } else if (this.state == 1) {
+        this.myHuntingAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
+    } else {
+        this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
+    }
+
+    if(params.DEBUG || this.isSelected) {
+      ctx.strokeStyle = "red";
+      ctx.beginPath();
+      ctx.arc(this.Center.x - this.camera.x, this.Center.y - this.camera.y, this.radius, 0, 2*Math.PI);
+      ctx.stroke();
+    }
+
+    this.healthbar.drawMe(ctx);
+  };
 };

@@ -54,7 +54,7 @@ var minionStats = {
   HEALTH : 100,
   DEFENSE : 0.0,
   ATTACK : 12,
-  AGILITY : 0.1,
+  AGILITY : 1,
   INTELLIGENCE : 1,
 }
 

@@ -3,6 +3,7 @@ class Minion {
         Object.assign(this, {theGame, x, y });
         this.camera = this.theGame.theSM; //theSM is the game's camera.
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
+        this.thePlayer = this.theGame.theSM.thePlayer;
 
         this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
         this.myLeftAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
@@ -23,6 +24,7 @@ class Minion {
           y: this.y + this.baseHeight*this.scale/2
         }
         this.visualRadius = 200;
+        this.isSelected = false;
 
         this.healthbar = new HealthBar(this.theGame, this);
 
@@ -70,10 +72,10 @@ class Minion {
           x: this.x + this.baseWidth*this.scale/2,
           y: this.y + this.baseHeight*this.scale/2
         }
-        this.isSelected = (this.theGame.theSM.thePlayer.selected == this);
+        this.isSelected = (this.thePlayer.selected == this);
 
         var dist = distance(this, this.target);
-        if (this.targetID >= this.path.length - 1) {
+        if (!this.target && this.targetID >= this.path.length - 1 || this.target && this.target.health < 0) {
             this.targetID = 0;
             this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
         }
@@ -117,11 +119,11 @@ class Minion {
                     if(ent instanceof Rock) {
                       var gather = 3 + randomInt(3);
                       ent.Health -= gather;
-                      this.theGame.theSM.thePlayer.myRock += gather;
+                      this.thePlayer.myRock += gather;
                     } else if (ent instanceof Bush) {
                       var gather = 3 + randomInt(3);
                       ent.subHealth -= gather;
-                      this.theGame.theSM.thePlayer.myFood += gather;
+                      this.thePlayer.myFood += gather;
                     }
                     this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, gather, "Yellow"));
                     this.elapsedTime = 0;

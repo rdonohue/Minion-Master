@@ -31,9 +31,7 @@ class Resources {
         this.resArray[6] = new Bush(this.theGame,237,805,37,26); //Berry 2
         this.resArray[7] = new Bush(this.theGame,294,818,20,13); //Berry 3
 
-
         this.buildResources();
-
     };
 
     updateMe() {
@@ -81,7 +79,6 @@ class Resources {
       for (var j = 0; j < this.drawArray.length; j++) {
           this.theGame.addEntity(this.drawArray[j]);
       }
-
     };
 
 };
@@ -93,10 +90,11 @@ class Bush {
       x = 0;
       y = 0;
     }
-
+    this.camera = this.theGame.theSM;
     this.health = 100;
     this.maxHealth = 100;
-    this.subHealth = 0;
+
+    this.growRate = 5;
     this.removeFromWorld = false;
     this.baseWidth = 16;
     this.baseHeight = 16;
@@ -114,18 +112,30 @@ class Bush {
 
   updateMe() {
       this.elapsedTime += this.theGame.clockTick;
-      if (this.subHealth == 100) {
-          this.health = this.subHealth;
-          this.subHealth = 0;
+      this.healthbar.updateMe();
+
+      if(this.health < 0) {
+        this.removeFromWorld = true;
       }
-      if (this.elapsedTime > 1.6 && this.health > 0 && this.subHealth < this.health) {
-          this.subHealth += 5;
+
+      if (this.elapsedTime > 1 && this.health > 0 && this.health < this.maxHealth) {
+          this.health += this.regen;
+          if(this.health > this.maxHealth) {
+            this.health = this.maxHealth
+          }
           this.elapsedTime = 0;
       }
   };
 
   drawMe(ctx) {
-      this.healthbar.drawMe(ctx);
+    this.healthbar.drawMe(ctx);
+
+    if(params.DEBUG || this.isSelected) {
+      ctx.strokeStyle = "red";
+      ctx.beginPath();
+      ctx.arc(this.Center.x - this.camera.x, this.Center.y - this.camera.y, this.radius, 0, 2*Math.PI);
+      ctx.stroke();
+    }
   };
 };
 
@@ -136,10 +146,9 @@ class Rock {
       x = 0;
       y = 0;
     }
-
+    this.camera = this.theGame.theSM;
     this.health = 100;
     this.maxHealth = 100;
-    this.subHealth = 0;
     this.removeFromWorld = false;
     this.baseWidth = 16;
     this.baseHeight = 16;
@@ -158,10 +167,24 @@ class Rock {
 
   updateMe() {
     this.elapsedTime += this.theGame.clockTick;
+
+    this.healthbar.updateMe();
+
+    if(this.health < 0) {
+      this.removeFromWorld = true;
+      this.dead = true;
+    }
   };
 
   drawMe(ctx) {
     this.healthbar.drawMe(ctx);
+
+    if(params.DEBUG || this.isSelected) {
+      ctx.strokeStyle = "red";
+      ctx.beginPath();
+      ctx.arc(this.Center.x - this.camera.x, this.Center.y - this.camera.y, this.radius, 0, 2*Math.PI);
+      ctx.stroke();
+    }
   };
 
 };

@@ -35,6 +35,8 @@ class SceneManager {
     this.theGame.spawnMe("minion", 0, 0);
     this.theGame.spawnMe("minion", 0, 0);
     this.theGame.spawnMe("minion", 0, 0);
+    this.theGame.spawnMe("wolf", 800, 0);
+    this.theGame.spawnMe("wolf", 0, 400);
   }
 
   update() {

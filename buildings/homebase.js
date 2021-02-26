@@ -3,11 +3,13 @@ class HomeBase {
       Object.assign(this, {theGame, x, y});
 
       this.camera = this.theGame.theSM; //theSM is the game's camera.
+      this.thePlayer = this.camera.thePlayer;
       this.myType = "HomeBase";
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/castle.png");
 
       this.state = 1;  // 1 = idle, 0 = destroyed
+      this.isSelected = false;
 
       //Stats
       this.health = 200;
@@ -40,7 +42,7 @@ class HomeBase {
         this.state = 0;
     }
 
-    this.isSelected = (this.theGame.theSM.thePlayer.selected == this);
+    this.isSelected = (this.thePlayer.selected == this);
 
     this.Center = {
       x: this.x + this.baseWidth*this.scale/2,
