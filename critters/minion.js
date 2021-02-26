@@ -9,12 +9,18 @@ class Minion {
         this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.05, 4, false, true);
         this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
 
-        this.myScale = 2;
+        this.scale = 2;
         this.myDirection = 0; // 0 = left, 1 = right
         this.state = 1;
         this.priority = 0;
 
+        this.baseWidth = 16;
+        this.baseHeight = 16;
         this.radius = 20;
+        this.Center = {
+          x: this.x + this.baseWidth*this.scale/2,
+          y: this.y + this.baseHeight*this.scale/2
+        }
         this.visualRadius = 200;
 
         this.healthbar = new HealthBar(this.theGame, this);
@@ -58,6 +64,11 @@ class Minion {
 //with the draw-method being called...may need to make the minion handle its own draw-update.
     updateMe() {
         this.elapsedTime += this.theGame.clockTick;
+
+        this.Center = {
+          x: this.x + this.baseWidth*this.scale/2,
+          y: this.y + this.baseHeight*this.scale/2
+        }
 
         var dist = distance(this, this.target);
         if (this.targetID >= this.path.length - 1) {
@@ -133,12 +144,19 @@ class Minion {
 
     drawMe(ctx) {
         if (this.state == 0) {
-            this.myAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.myScale);
+            this.myAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
         } else if (this.state == 1) {
-            this.myBattleAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.myScale);
+            this.myBattleAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
         } else {
-            this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.myScale);
+            this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
             die();
+        }
+
+        if(params.DEBUG || this.isSelected) {
+          ctx.strokeStyle = "red";
+          ctx.beginPath();
+          ctx.arc(this.Center.x, this.Center.y, this.radius, 0, 2*Math.PI);
+          ctx.stroke();
         }
 
         this.healthbar.drawMe(ctx);

@@ -55,13 +55,30 @@ class Player {
     } else {
       //on canvas.
       console.log(click.x + ", " + click.y);
-
-
       let entities = this.theGame.entities;
+      let theClick = {
+        x: click.x + this.cam.x,
+        y: click.y + this.cam.y
+      }
+      console.log(theClick.x + ", " + theClick.y);
+      let newSelect = null;
+      let closest = null;
+
       for(var i = 0; i< entities.length; i++) {
         if(entities[i].isSelectable) {
-
+          if(!closest) {
+            newSelect = entities[i];
+            closest = distance(entities[i], theClick);
+          } else if (closest > distance(entities[i], theClick)) {
+            newSelect = entities[i];
+            closest = distance(entities[i], theClick);
+          }
         }
+      }
+
+      if(newSelect && newSelect.radius > closest) {
+        this.selected = newSelect;
+        this.targetType = this.selected.myType;
       }
     }
   }

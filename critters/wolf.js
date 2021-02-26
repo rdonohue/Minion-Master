@@ -16,16 +16,24 @@ class Wolf {
 
         this.initialPoint = { x, y };
 
-        this.myScale = 1;
+        this.scale = 1;
         this.myDirection = 0; // 0 = left, 1 = right, 2 = up, 3 = down
         this.priority = 1;
 
+        this.baseWidth = 64;
+        this.baseHeight = 24;
         this.radius = 20;
+        this.radius = this.baseWidth*this.scale/2;
+        this.Center = {
+          x: this.x + this.baseWidth*this.scale/2,
+          y: this.y + this.baseHeight*this.scale/2
+        }
+
+
         this.visualRadius = 200;
         this.state = 0;
 
         this.healthbar = new HealthBar(this.theGame, this);
-
 
         this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
 
@@ -93,6 +101,12 @@ class Wolf {
 
     updateMe() {
         this.elapsedTime += this.theGame.clockTick;
+
+        this.Center = {
+          x: this.x + this.baseWidth*this.scale/2,
+          y: this.y + this.baseHeight*this.scale/2
+        }
+
         var dist = distance(this, this.target);
 
         if (this.targetID >= this.path.length - 1) {
@@ -153,13 +167,20 @@ class Wolf {
     };
 
     drawMe(ctx) {
-      //this.animations[this.direction][this.state].drawFrame(this.theGame.clockTick, ctx, this.x, this.y, this.myScale);
+      //this.animations[this.direction][this.state].drawFrame(this.theGame.clockTick, ctx, this.x, this.y, this.scale);
       if (this.state == 0) {
-          this.mySearchingAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.myScale);
+          this.mySearchingAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
       } else if (this.state == 1) {
-          this.myHuntingAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.myScale);
+          this.myHuntingAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
       } else {
-          this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.myScale);
+          this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
+      }
+
+      if(params.DEBUG || this.isSelected) {
+        ctx.strokeStyle = "red";
+        ctx.beginPath();
+        ctx.arc(this.Center.x, this.Center.y, this.radius, 0, 2*Math.PI);
+        ctx.stroke();
       }
 
       this.healthbar.drawMe(ctx);
