@@ -55,13 +55,13 @@ class SceneManager {
     if (this.theGame.left && this.x > 0) {
         this.x -= 10;
     }
-    if (this.theGame.right && this.x < params.CANVAS_WIDTH - 10) {
+    if (this.theGame.right && this.x < params.PLAY_WIDTH - params.CANVAS_WIDTH) {
         this.x += 10;
     }
     if (this.theGame.up && this.y > 3) {
         this.y -= 10;
     }
-    if (this.theGame.down && this.y < params.CANVAS_HEIGHT - 10) {
+    if (this.theGame.down && this.y < params.PLAY_HEIGHT - params.CANVAS_HEIGHT) {
         this.y += 10;
     }
   }
