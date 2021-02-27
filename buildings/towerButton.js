@@ -6,7 +6,8 @@ constructor(theGame, x, y) {
 		this.mouseover = false;
 		this.placing = false;
 
-		this.rockCost = 50//note, till this is re-factored, the ACTUAL cost to the
+		this.rockCost = 50
+		//note, till this is re-factored, the ACTUAL cost to the
 		//player will be twice this due to setTower seemingly called twice to
 		//create the tower.
 
