@@ -205,19 +205,15 @@ class Minion {
         }
 
         ctx.save();
+        if (flip < 0) {
+          ctx.scale(-1, 1);
+        }
         switch (this.state) {
           case 0:
-            if (flip < 0) {
-              ctx.scale(-1, 1);
-            }
             this.animations[this.state][this.direction].drawLongFrame(this.game.clockTick, ctx, flip * (this.x - this.game.camera.x) - w,
                                                                 this.y - this.game.camera.y, this.scale, 4);
             break;
           case 1:
-            ctx.save();
-            if (flip < 0) {
-              ctx.scale(-1, 1);
-            }
             this.animations[this.state][this.direction].drawLongFrame(this.game.clockTick, ctx, flip * (this.x - this.game.camera.x) - w,
                                                                 this.y - this.game.camera.y, this.scale, 2);
             break;
