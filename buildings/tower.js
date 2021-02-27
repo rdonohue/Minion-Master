@@ -8,6 +8,8 @@ class Tower {
       this.state = 0;  // 0 = idle, 1 = destroyed
       this.upgradeAmount = 1; // 1 being the initial spawned upgrade state of a tower.
 
+      this.healthbar = new HealthBar(this.game, this);
+
       //Stats
       this.health = 200;
       this.maxHealth = 200;
@@ -22,7 +24,6 @@ class Tower {
       this.radius = 30;
       this.visualRadius = 300;
 
-//      this.dead = false; This is redundant. Use this.state.
       this.removeFromWorld = false;
   };
 
@@ -30,14 +31,16 @@ class Tower {
     this.elapsedTime += this.game.clockTick;
     for (var i = 0; i < this.game.entities.length; i++) {
         var ent = this.game.entities[i];
-        if ((ent instanceof Wolf || ent instanceof Ogre) && canSee(this, ent) && this.elapsedTime > 1 / this.agility) {
+        if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon)
+              && canSee(this, ent) && this.elapsedTime > 1 / this.agility) {
             this.elapsedTime = 0;
             this.game.addEntity(new Projectile(this.game, this.x, this.y, ent, this.attack, this.projectileScale));
         }
     }
 
     if (this.health <= 0) {
-      die();
+      this.state = 1;
+      this.removeFromWorld = true;
     }
   };
 
@@ -84,11 +87,6 @@ class Tower {
     }
   };
 
-  die() {
-      this.state = 1;
-      this.removeFromWorld = true;
-  };
-
   drawMe(ctx) {
     const xCenter = 52.5 / 2;
     const yCenter = 34.5 / 2;
@@ -98,6 +96,8 @@ class Tower {
     var y = this.y - yCenter - this.game.camera.y;
 
     ctx.drawImage(this.spritesheet, 0, 0, 105, 138, x, y, 52.5, 69);
+
+    this.healthbar.drawMe(ctx);
 
     // Did this to test centering of the sprite on the draw point.
     // ctx.strokeStyle = "Pink";

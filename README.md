@@ -16,4 +16,5 @@ Sprite Sources:
 9): Arrow - https://opengameart.org/content/rotating-arrow-projectile
 10): Rocks -
 11): Berry Bushes -
-12): Buttons/UI - 
+12): Buttons/UI -
+13): Fireball - https://www.clipartmax.com/middle/m2H7K9d3N4N4d3H7_fireball-clipart-pixel-sprite-pixel-transparent-fire-ball/

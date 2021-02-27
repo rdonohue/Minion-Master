@@ -10,7 +10,7 @@ class Wolf {
 
         this.scale = 1;
         this.direction = 0; // 0 = left, 1 = right, 2 = up, 3 = down
-        this.priority = 1;
+        this.facing = 0;
 
         this.radius = 20;
         this.visualRadius = 200;
@@ -121,6 +121,9 @@ class Wolf {
                   this.elapsedTime = 0;
               } else if (this.elapsedTime > 0.8) {
                   var damage = (6 + randomInt(5)) - ent.defense;
+                  if (damage <= 0) {
+                      damage = 0;
+                  }
                   ent.health -= damage;
                   this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage, "Red"));
                   this.elapsedTime = 0;
