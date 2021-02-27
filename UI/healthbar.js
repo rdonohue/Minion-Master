@@ -39,8 +39,10 @@ class Score {
 
   updateMe() {
     this.elapsed += this.theGame.clockTick;
-    if (this.elapsed > 1) {
+    if (this.elapsed > 2) {
       this.state == 0;
+      this.dead = true;
+      this.removeFromWorld = true;
     }
 
     this.y += this.theGame.clockTick * this.velocity;
@@ -50,6 +52,7 @@ class Score {
     ctx.save();
     ctx.font = '12px "Press Start 2P"';
     ctx.fillStyle = this.color;
+    ctx.globalAlpha = 1-(this.elapsed/2);
     ctx.fillText(this.score, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y);
     ctx.restore();
   };
