@@ -1,6 +1,12 @@
 var ASSET_MANAGER = new AssetManager();
 
-ASSET_MANAGER.queueDownload("./sprites/human_regular.png");
+ASSET_MANAGER.queueDownload("./sprites/minion/down_attack.png");
+ASSET_MANAGER.queueDownload("./sprites/minion/down_walk.png");
+ASSET_MANAGER.queueDownload("./sprites/minion/pick_up.png");
+ASSET_MANAGER.queueDownload("./sprites/minion/side_attack.png");
+ASSET_MANAGER.queueDownload("./sprites/minion/side_walk.png");
+ASSET_MANAGER.queueDownload("./sprites/minion/up_attack.png");
+ASSET_MANAGER.queueDownload("./sprites/minion/up_walk.png");
 ASSET_MANAGER.queueDownload("./sprites/wolfsheet1.png");
 ASSET_MANAGER.queueDownload("./sprites/castle.png");
 ASSET_MANAGER.queueDownload("./sprites/ogres.png");

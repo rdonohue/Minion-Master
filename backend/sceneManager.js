@@ -38,7 +38,7 @@ class SceneManager {
         this.game.addEntity(this.thePlayer);
         this.game.spawnMe("minion", 0, 0);
       	this.game.spawnMe("wolf", 800, 0);
-        this.game.spawnMe("wolf", 0, 400);
+        //this.game.spawnMe("wolf", 0, 400);
     };
 
     update() {
