@@ -76,13 +76,8 @@ class Player {
           }
         }
       }
-      console.log(theClick);
-      console.log(newSelect);
-      console.log(newSelect.radius);
-      console.log(closest)
 
       if(newSelect && closest < newSelect.radius) {
-        console.log(newSelect);
         this.selected = newSelect;
         this.targetType = this.selected.myType;
       } else if (this.selected && closest >= newSelect.radius) {

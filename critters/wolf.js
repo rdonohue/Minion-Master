@@ -3,7 +3,6 @@ class Wolf {
         Object.assign(this, { theGame, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
         this.camera = this.theGame.theSM; //theSM is the game's camera.
-        this.isSelected = false;
         //this.animations = [];
         //loadAnimations();
 
@@ -153,14 +152,12 @@ class Wolf {
           this.state = 0;
       }
 
-      if (this.state !== 1) {
-        dist = distance(this, this.target);
-        this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
-          y: (this.target.y - this.y) / dist * this.maxSpeed};
-        this.x += this.velocity.x * this.theGame.clockTick;
-        this.y += this.velocity.y * this.theGame.clockTick;
-        this.facing = getFacing(this.velocity);
-      }
+      dist = distance(this, this.target);
+      this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
+        y: (this.target.y - this.y) / dist * this.maxSpeed};
+      this.x += this.velocity.x * this.theGame.clockTick;
+      this.y += this.velocity.y * this.theGame.clockTick;
+      this.facing = getFacing(this.velocity);
 
   };
 

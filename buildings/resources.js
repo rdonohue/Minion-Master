@@ -40,8 +40,10 @@ class Resources {
 
     drawMe(ctx) {
       for (var i = 0; i < 10; i++) {
-        ctx.drawImage(this.spritesheet, this.drawArray[i].sx, this.drawArray[i].sy, this.drawArray[i].sw,
-           this.drawArray[i].sh, this.drawArray[i].x - this.theGame.theCamera.x, this.drawArray[i].y - this.theGame.theCamera.y, params.TILE_W_H / 3, params.TILE_W_H / 3);
+        if(!this.drawArray[i].dead) {
+          ctx.drawImage(this.spritesheet, this.drawArray[i].sx, this.drawArray[i].sy, this.drawArray[i].sw,
+             this.drawArray[i].sh, this.drawArray[i].x - this.theGame.theCamera.x, this.drawArray[i].y - this.theGame.theCamera.y, params.TILE_W_H / 3, params.TILE_W_H / 3);
+        }
       }
     };
 
@@ -91,16 +93,14 @@ class Bush {
       y = 0;
     }
     this.camera = this.theGame.theSM;
-    this.health = 100;
-    this.maxHealth = 100;
-
-    this.growRate = 5;
+    this.health = 10;
+    this.maxHealth = 10;
     this.removeFromWorld = false;
     this.baseWidth = 16;
     this.baseHeight = 16;
     this.scale = 1;
     this.radius = this.baseWidth*this.scale/2;
-    this.Center = {
+    this.center = {
       x: this.x + this.baseWidth*this.scale/2,
       y: this.y + this.baseHeight*this.scale/2
     }
@@ -116,15 +116,16 @@ class Bush {
 
       if(this.health < 0) {
         this.removeFromWorld = true;
+        this.dead = true;
       }
 
-      if (this.elapsedTime > 1 && this.health > 0 && this.health < this.maxHealth) {
-          this.health += this.regen;
-          if(this.health > this.maxHealth) {
-            this.health = this.maxHealth
-          }
-          this.elapsedTime = 0;
-      }
+      // if (this.elapsedTime > 1 && this.health > 0 && this.health < this.maxHealth) {
+      //     this.health += this.regen;
+      //     if(this.health > this.maxHealth) {
+      //       this.health = this.maxHealth
+      //     }
+      //     this.elapsedTime = 0;
+      // }
   };
 
   drawMe(ctx) {
@@ -133,7 +134,7 @@ class Bush {
     if(params.DEBUG || this.isSelected) {
       ctx.strokeStyle = "red";
       ctx.beginPath();
-      ctx.arc(this.Center.x - this.camera.x, this.Center.y - this.camera.y, this.radius, 0, 2*Math.PI);
+      ctx.arc(this.center.x - this.camera.x, this.center.y - this.camera.y, this.radius, 0, 2*Math.PI);
       ctx.stroke();
     }
   };
@@ -147,14 +148,14 @@ class Rock {
       y = 0;
     }
     this.camera = this.theGame.theSM;
-    this.health = 100;
-    this.maxHealth = 100;
+    this.health = 10;
+    this.maxHealth = 10;
     this.removeFromWorld = false;
     this.baseWidth = 16;
     this.baseHeight = 16;
     this.scale = 1;
     this.radius = this.baseWidth*this.scale/2;
-    this.Center = {
+    this.center = {
       x: this.x + this.baseWidth*this.scale/2,
       y: this.y + this.baseHeight*this.scale/2
     }
@@ -182,7 +183,7 @@ class Rock {
     if(params.DEBUG || this.isSelected) {
       ctx.strokeStyle = "red";
       ctx.beginPath();
-      ctx.arc(this.Center.x - this.camera.x, this.Center.y - this.camera.y, this.radius, 0, 2*Math.PI);
+      ctx.arc(this.center.x - this.camera.x, this.center.y - this.camera.y, this.radius, 0, 2*Math.PI);
       ctx.stroke();
     }
   };

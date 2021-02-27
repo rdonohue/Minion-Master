@@ -118,11 +118,11 @@ class Minion {
                 } else if (this.elapsedTime > 0.8) {
                     if(ent instanceof Rock) {
                       var gather = 3 + randomInt(3);
-                      ent.Health -= gather;
+                      ent.health -= gather;
                       this.thePlayer.myRock += gather;
                     } else if (ent instanceof Bush) {
                       var gather = 3 + randomInt(3);
-                      ent.subHealth -= gather;
+                      ent.health -= gather;
                       this.thePlayer.myFood += gather;
                     }
                     this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, gather, "Yellow"));
@@ -137,14 +137,12 @@ class Minion {
             this.state = 0;
         }
 
-        if (this.state !== 1) {
-          dist = distance(this, this.target);
-          this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
-            y: (this.target.y - this.y) / dist * this.maxSpeed};
-          this.x += this.velocity.x * this.theGame.clockTick;
-          this.y += this.velocity.y * this.theGame.clockTick;
-          this.facing = getFacing(this.velocity);
-        }
+        dist = distance(this, this.target);
+        this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
+          y: (this.target.y - this.y) / dist * this.maxSpeed};
+        this.x += this.velocity.x * this.theGame.clockTick;
+        this.y += this.velocity.y * this.theGame.clockTick;
+        this.facing = getFacing(this.velocity);
     };
 
     drawMinimap(ctx, mmX, mmY) {
