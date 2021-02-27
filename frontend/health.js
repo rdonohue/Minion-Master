@@ -12,9 +12,9 @@ class HealthBar {
             var ratio = this.entity.health / this.entity.maxHealth;
             ctx.strokeStyle = "black";
             ctx.fillstyle = ratio < 0.2 ? "Red" : ratio < 0.5 ? "Yellow" : "Green";
-            ctx.fillRect(this.entity.x + this.entity.radius / 2 - this.game.camera.x, this.entity.y - 10 + this.entity.radius - this.game.camera.y,
+            ctx.fillRect(this.entity.x - this.entity.radius - this.game.camera.x, this.entity.y + this.entity.radius + 5 - this.game.camera.y,
               this.entity.radius  * 2 * ratio, 4);
-            ctx.strokeRect(this.entity.x + this.entity.radius / 2 - this.game.camera.x, this.entity.y - 10 + this.entity.radius - this.game.camera.y,
+            ctx.strokeRect(this.entity.x - this.entity.radius - this.game.camera.x, this.entity.y + this.entity.radius + 5 - this.game.camera.y,
               this.entity.radius  * 2, 4)
         }
     };

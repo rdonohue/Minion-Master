@@ -22,13 +22,13 @@ class SceneManager {
       	let vertwalls = new Vertwall(this.game, 0, params.TILE_W_H);
       	let horiwalls = new Horiwall(this.game, params.TILE_W_H, 0);
       	let intGrass = new InteriorGrass(this.game, params.TILE_W_H, params.TILE_W_H);
+      	let resources = new Resources(this.game, params.TILE_W_H, params.TILE_W_H);
         let base = new HomeBase(this.game, 500, 400);
         this.game.addEntity(corners);
         this.game.addEntity(vertwalls);
         this.game.addEntity(horiwalls);
         this.game.addEntity(intGrass);
-
-        this.resources = new Resources(this.game, params.TILE_W_H, params.TILE_W_H);
+        this.game.addEntity(resources);
 
         this.game.addEntity(base);
         this.game.addEntity(this.minimap);
