@@ -3,21 +3,13 @@ class Wolf {
         Object.assign(this, { game, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/wolfsheet1.png");
 
-        //this.animations = [];
-        //loadAnimations();
-
-        this.mySearchingAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.15, 0, false, true);
-        this.myLeftAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.15, 0, false, true);
-        this.myRightAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.15, 0, false, true);
-        this.myNorthAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.15, 0, false, true);
-        this.mySouthAnimator = new Animator(this.spritesheet, 320, 128, 64, 32, 4, 0.15, 0, false, true);
-        this.myHuntingAnimator = new Animator(this.spritesheet, 320, 160, 64, 32, 4, 0.05, 0, false, true);
-        this.myDeadAnimator = new Animator(this.spritesheet, 512, 202, 64, 32, 1, 3, 0, false, true);
+        this.animations = [];
+        this.loadAnimations();
 
         this.initialPoint = { x, y };
 
-        this.myScale = 1;
-        this.myDirection = 0; // 0 = left, 1 = right, 2 = up, 3 = down
+        this.scale = 1;
+        this.direction = 0; // 0 = left, 1 = right, 2 = up, 3 = down
         this.priority = 1;
 
         this.radius = 20;
@@ -68,30 +60,27 @@ class Wolf {
     // Load the animations for this entity.
     loadAnimations() {
         for (var i = 0; i < 4; i++) {
-            this.animations[i].push([]);
-            for (var j = 0; j < 3; j++) {
-                this.animations[i][j].push([]);
-            }
+            this.animations.push([]);
         }
         // Left
-        this.animations[0][0] = new Animator(this.spritesheet, 320, 288, 64, 32, 5, 0.15, 0, false, true);
-        this.animations[0][1] = new Animator(this.spritesheet, 320, 352, 64, 32, 5, 0.05, 0, false, true);
-        this.animations[0][2] = new Animator(this.spritesheet, 512, 202, 64, 25, 1, 3, 0, false, true);
+        this.animations[0].push(new Animator(this.spritesheet, 320, 288, 64, 32, 5, 0.15, 0, false, true));
+        this.animations[0].push(new Animator(this.spritesheet, 320, 352, 64, 32, 5, 0.05, 0, false, true));
+        this.animations[0].push(new Animator(this.spritesheet, 512, 202, 64, 25, 1, 3, 0, false, true));
 
         // Right
-        this.animations[1][0] = new Animator(this.spritesheet, 320, 128, 64, 32, 5, 0.15, 0, false, true);
-        this.animations[1][1] = new Animator(this.spritesheet, 320, 160, 64, 32, 5, 0.05, 0, false, true);
-        this.animations[1][2] = new Animator(this.spritesheet, 512, 9, 64, 25, 1, 3, 0, false, true);
+        this.animations[1].push(new Animator(this.spritesheet, 320, 128, 64, 32, 5, 0.15, 0, false, true));
+        this.animations[1].push(new Animator(this.spritesheet, 320, 160, 64, 32, 5, 0.05, 0, false, true));
+        this.animations[1].push(new Animator(this.spritesheet, 512, 9, 64, 25, 1, 3, 0, false, true));
 
         // Up
-        this.animations[2][0] = new Animator(this.spritesheet, 164, 134, 25, 57, 5, 0.15, 7, false, true);
-        this.animations[2][1] = new Animator(this.spritesheet, 164, 258, 25, 57, 5, 0.15, 7, false, true);
-        this.animations[2][2] = new Animator(this.spritesheet, 260, 84, 25, 40, 1, 3, 0, false, true);
+        this.animations[2].push(new Animator(this.spritesheet, 164, 134, 25, 57, 5, 0.15, 7, false, true));
+        this.animations[2].push(new Animator(this.spritesheet, 164, 258, 25, 57, 5, 0.15, 7, false, true));
+        this.animations[2].push(new Animator(this.spritesheet, 260, 84, 25, 40, 1, 3, 0, false, true));
 
         // Down
-        this.animations[3][0] = new Animator(this.spritesheet, 4, 192, 25, 64, 5, 0.15, 7, false, true);
-        this.animations[3][1] = new Animator(this.spritesheet, 4, 256, 25, 64, 5, 0.15, 7, false, true);
-        this.animations[3][2] = new Animator(this.spritesheet, 100, 79, 25, 49, 1, 3, 0, false, true);
+        this.animations[3].push(new Animator(this.spritesheet, 4, 192, 25, 64, 5, 0.15, 7, false, true));
+        this.animations[3].push(new Animator(this.spritesheet, 4, 256, 25, 64, 5, 0.15, 7, false, true));
+        this.animations[3].push(new Animator(this.spritesheet, 100, 79, 25, 49, 1, 3, 0, false, true));
     };
 
     updateMe() {
@@ -143,13 +132,14 @@ class Wolf {
             this.state = 0;
         }
 
+        this.facing = getFacing(this.velocity);
         if (this.state !== 1) {
           dist = distance(this, this.target);
           this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
             y: (this.target.y - this.y) / dist * this.maxSpeed};
           this.x += this.velocity.x * this.game.clockTick;
           this.y += this.velocity.y * this.game.clockTick;
-          this.facing = getFacing(this.velocity);
+
         }
 
     };
@@ -159,15 +149,17 @@ class Wolf {
     };
 
     drawMe(ctx) {
-      //this.animations[this.direction][this.state].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
-      if (this.state == 0) {
-          this.mySearchingAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
-      } else if (this.state == 1) {
-          this.myHuntingAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
-      } else {
-          this.myDeadAnimator.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.myScale);
-      }
+        if (this.facing == 0) {
+          this.direction = 2;
+        } else if (this.facing < 4 && this.facing > 0) {
+          this.direction = 1;
+        } else if (this.facing == 4) {
+          this.direction = 3
+        } else if (this.facing > 4) {
+          this.direction = 0;
+        }
+        this.animations[this.direction][this.state].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.scale);
 
-      this.healthbar.drawMe(ctx);
+        this.healthbar.drawMe(ctx);
     };
 };
