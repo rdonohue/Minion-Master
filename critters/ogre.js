@@ -44,7 +44,7 @@ class Ogre {
 
         this.dead = false;
         this.removeFromWorld = false;
-        //this.facing = 0;
+        this.facing = 0;
 
         //i,j for cell, x,y for continuous position.
         this.myType = "ogre";
@@ -88,11 +88,11 @@ class Ogre {
       var combat = false;
       for (var i = 0; i < this.game.entities.length; i++) {
           var ent = this.game.entities[i];
-          if ((ent instanceof Minion || ent instanceof HomeBase) && canSee(this, ent)) {
+          if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && canSee(this, ent)) {
               this.target = ent;
               combat = true;
           }
-          if ((ent instanceof Minion || ent instanceof HomeBase) && collide(this, ent) && !ent.dead) {
+          if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && collide(this, ent) && !ent.dead) {
             if (this.state === 0) {
                 this.state = 1;
                 this.elapsedTime = 0;
