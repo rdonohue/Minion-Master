@@ -21,13 +21,14 @@ class Minion {
     //Stats
     this.health = minionStats.HEALTH;
     this.maxHealth = minionStats.HEALTH;
+    this.regen = this.maxHealth/20;
     this.defense = minionStats.DEFENSE;
     this.attack = minionStats.ATTACK;
     this.agility = minionStats.AGILITY;
     this.intelligence = minionStats.INTELLIGENCE;
     this.combat = false;
-
     this.maxSpeed = this.agility*50;
+    this.actionSpeed = 3/this.agility
 
     this.velocity = {
       x: 0,
@@ -55,90 +56,97 @@ class Minion {
     this.timer = new Timer();
     this.timeSinceUpdate = 0;
 
-    this.elapsedTime = 0;
+    this.actionTime = 0;
+    this.regenTime = 0;
   };
 
 //the move-speed is still staggered a bit, that might be because of async
 //with the draw-method being called...may need to make the minion handle its own draw-update.
     updateMe() {
       this.elapsedTime += this.theGame.clockTick;
-
       this.center = {
         x: this.x + this.baseWidth*this.scale/2,
         y: this.y + this.baseHeight*this.scale/2
       }
+
       this.isSelected = (this.thePlayer.selected == this);
 
-      // var dist = distance(this, this.target);
-      // if (!this.target && this.targetID >= this.path.length - 1 || this.target && this.target.health < 0) {
-      //     this.targetID = 0;
-      //     this.path = [{ x: randomInt(params.PLAY_WIDTH), y: randomInt(params.PLAY_HEIGHT) }];
-      // }
-      //
-      // // If its health is 0, it is dead.
-      // if (this.health <= 0) {
-      //     this.state = 2;
-      //     this.dead = true;
-      //     this.removeFromWorld = true;
-      // }
-      //
-      // if (dist < 5) {
-      //     if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
-      //         this.targetID++;
-      //     }
-      //     this.target = this.path[this.targetID];
-      // }
-      // var combat = false;
-      // for (var i = 0; i < this.theGame.entities.length; i++) {
-      //     var ent = this.theGame.entities[i];
-      //     if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave
-      //       || ent instanceof Rock || ent instanceof Bush) && canSee(this, ent) && ent.health > 0) {
-      //         this.target = ent;
-      //         combat = true;
-      //     }
-      //     if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Cave) && collide(this, ent)) {
-      //         if (this.state == 0) {
-      //             this.state = 1;
-      //             this.elapsedTime = 0;
-      //         } else if (this.elapsedTime > 0.8) {
-      //             var damage = (this.attack + randomInt(this.attack)) - ent.defense;
-      //             ent.health -= damage;
-      //             this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, damage, "Red"));
-      //             this.elapsedTime = 0;
-      //         }
-      //     } else if ((ent instanceof Rock || ent instanceof Bush) && collide(this, ent) && ent.health > 0) {
-      //         if (this.state == 0) {
-      //             this.state = 1;
-      //             this.elapsedTime = 0;
-      //         } else if (this.elapsedTime > 0.8) {
-      //             if(ent instanceof Rock) {
-      //               var gather = 3 + randomInt(3);
-      //               ent.health -= gather;
-      //               this.thePlayer.myRock += gather;
-      //             } else if (ent instanceof Bush) {
-      //               var gather = 3 + randomInt(3);
-      //               ent.health -= gather;
-      //               this.thePlayer.myFood += gather;
-      //             }
-      //             this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, gather, "Yellow"));
-      //             this.elapsedTime = 0;
-      //         }
-      //     }
-      //
-      // }
-      //
-      // // If it never detected an enemy, make sure it is back to walking.
-      // if (!combat || !this.target) {
-      //     this.state = 0;
-      // }
-      //
-      // dist = distance(this, this.target);
-      // this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
-      //   y: (this.target.y - this.y) / dist * this.maxSpeed};
-      // this.x += this.velocity.x * this.theGame.clockTick;
-      // this.y += this.velocity.y * this.theGame.clockTick;
-      // this.facing = getFacing(this.velocity);
+      //states are numbered by how "important" the state is,
+      //so alive/dead is determined first, followed by "if attacking"
+      //followed by "if gathering"...etc.
+      //0-->dead,
+      //1-->attacking enemy
+      //2-->gathering resource.
+      //3-->moving to target (moving),
+      //4-->searching for enemy/resource (moving),
+      //-1 --> means broken state!
+
+      this.updateHealth();
+      this.attackEnemy();
+
     };
+
+    updateHealth() {
+      if(this.health < 0) {
+        this.state = 0;
+        return; //break here NOW as we don't want to regen a minion.
+      }
+      if (this.regenTime >= 1) {
+        this.regenTime = 0;
+        //regen health.
+        if(this.health < this.maxHealth) {
+          this.health += this.regen;
+          if (this.health > this.maxHealth) {
+            this.health = this.maxHealth
+          }
+        }
+      } else {
+        this.regenTime += this.theGame.clockTick;
+      }
+    }
+
+    reportZombieState() {
+      if (this.actionTime >= this.actionSpeed) {
+        //tell console that something went wrong.
+        console.log(this + " has entered a broken state!");
+        this.actionTime = 0;
+      }
+    }
+
+    //yes this function is INCREDABLY over-engineered, this is to GURANTEE that minions will ALWAYS
+    //in some 'state' and so can be handled as such. note that this.state is NOT the actual state
+    //this.state is only the *representation* of the minion's state and thats all it CAN be.
+    attackEnemy() {
+      if(this.target && (this.target.state != 0 || this.target.health > 0)) {
+        //we do still have a target to attack and it is alive.
+        let ent = this.target;
+        if((ent.state != 0 || ent.health > 0) && attack(this, ent)) {
+          //the target is alive and in range.
+          if (this.actionTime >= this.actionSpeed) {
+            //we can attack them!
+            var damage = (this.attack + randomInt(this.attack)) - ent.defense
+            ent.health -= damage;
+            this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, damage, "Red"));
+            this.actionTime = 0;
+          } else {
+            //we cannot attack them.
+          }
+        } else if ((ent.state != 0 || ent.health > 0) && !attack(this, ent)) {
+          this.state = 3;
+          //the target moved out of range, so change to hunt-mode.
+        } else {
+          //this should not EVER happen!
+          this.state = "attack_method entity_handling failure";
+        }
+      } else if (!this.target || !(this.target.state != 0 || this.target.health > 0)){
+        // the target has died (or broke)! find new target.
+        this.target = null;
+        this.state = 4;
+      } else {
+        //this should not EVER happen! this.target yet somehow not have valid stats.
+        this.state = "attack_method targeting failed";
+      }
+    }
 
     drawMinimap(ctx, mmX, mmY) {
         //ctx.fillStyle = "Orange";
@@ -147,16 +155,18 @@ class Minion {
     };
 
     drawMe(ctx) {
-        if (this.state == 0) {
-            this.myAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
-        } else if (this.state == 1) {
-            this.myBattleAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
+        if (this.state > 0 && this.state < 4) {
+          this.myAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
+        } else if (this.state == 4) {
+          this.myBattleAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
+        } else if (this.state == 0) {
+          this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
         } else {
-            this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
-            die();
+          ctx.fillText(this.myType + " has entered a broken state: see console for details", this.x, this.y);
+          this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
         }
 
-        if(params.DEBUG || this.isSelected) {
+        if(params.DEBUG || this.isSelected || this.state < 0 || this.state > 4) {
           ctx.strokeStyle = "red";
           ctx.beginPath();
           ctx.arc(this.center.x - this.camera.x, this.center.y - this.camera.y, this.radius, 0, 2*Math.PI);

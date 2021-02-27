@@ -103,8 +103,9 @@ class Player {
       if(newSelect && closest < newSelect.radius) {
         this.selected = newSelect;
         this.targetType = this.selected.myType;
+      } else if (this.selected == newSelect) {
       } else if (this.selected && closest >= newSelect.radius) {
-        this.selected = null;
+        this.selected = null
       }
     }
   }
@@ -150,6 +151,9 @@ class Player {
       ctx.fillText("ATK: " + this.selected.attack, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.8);
       ctx.fillText("AGI: " + this.selected.agility, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.6);
       ctx.fillText("INT: " + this.selected.intelligence, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.4);
+      if(params.DEBUG) {
+        ctx.fillText("State: " + this.selected.state, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.2);
+      }
 
       //Health Stat UI
       ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';

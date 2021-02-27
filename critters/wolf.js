@@ -29,7 +29,6 @@ class Wolf {
           y: this.y + this.baseHeight*this.scale/2
         }
 
-
         this.visualRadius = 200;
         this.state = 0;
 
@@ -59,6 +58,7 @@ class Wolf {
         this.removeFromWorld = false;
 
         this.myType = "wolf";
+        this.myFaction = "enemy";
 
         this.timeBetweenUpdates = 1/this.agility;
         //this gives how long this minion will wait before moving.

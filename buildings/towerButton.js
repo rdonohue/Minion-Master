@@ -6,7 +6,7 @@ constructor(theGame, x, y) {
 		this.mouseover = false;
 		this.placing = false;
 
-		this.rockCost = 50
+		this.rockCost = 100
 		//note, till this is re-factored, the ACTUAL cost to the
 		//player will be twice this due to setTower seemingly called twice to
 		//create the tower.
@@ -94,6 +94,7 @@ constructor(theGame, x, y) {
 					 }
 				} else if (this.placing){
  					this.theGame.theSM.thePlayer.myRockColor = "orange";
+					this.placing = false;
  				}
 		}
 	};

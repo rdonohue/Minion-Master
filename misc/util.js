@@ -27,8 +27,15 @@ function distance(A, B) {
     return Math.sqrt((B.x - A.x) * (B.x - A.x) + (B.y - A.y)*(B.y - A.y));
 };
 
+//this method is like collide but its used for checking attack RANGE, since targets
+//can bump into eachother without actually attacking and vis-versa...so they should
+//be independent checks.
+function attack(A, B) {
+  return (distance(A, B) <= A.attackRadius);
+}
+
 function collide(A, B) {
-    return (distance(A, B) < A.radius + B.radius);
+  return (distance(A, B) < A.radius + B.radius);
 };
 
 function canSee(A, B) { // if A can see B
@@ -66,8 +73,8 @@ var params = {
   HORI_WALL_COUNT : 14,
   CANVAS_WIDTH : 1024,
   CANVAS_HEIGHT : 768,
-  PLAY_WIDTH : 1024*2,
-  PLAY_HEIGHT : 768*2,
+  PLAY_WIDTH : 1024,
+  PLAY_HEIGHT : 768,
   BASE_SPD : 0.25,
   BLOCKWIDTH : 48  //temporary
 };

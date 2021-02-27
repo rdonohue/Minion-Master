@@ -4,9 +4,6 @@ class SceneManager {
       this.theGame.theSM = this;
       this.theGame.theCamera = this;
 
-      this.x = 0;
-      this.y = 0;
-
       this.theMiniMap = new MiniMap(this.theGame, 1024, 576, 256);
       this.theHud = new Hud(this.theGame, 1024, 0, 256);
       this.thePlayer = new Player(this.theGame, 100, 150, 10, 5, 0, 0);
@@ -40,11 +37,15 @@ class SceneManager {
   }
 
   populateLevel(){
-    this.theGame.spawnMe("castle", 150, 150);
-    this.theGame.spawnMe("minion", 0, 0);
-    this.theGame.spawnMe("minion", 0, 0);
-    this.theGame.spawnMe("minion", 0, 0);
-    this.theGame.spawnMe("minion", 0, 0);
+    let castleX = params.PLAY_WIDTH/2 - 150 + randomInt(150);
+    let castleY = params.PLAY_HEIGHT/2 - 150 + randomInt(150);
+
+    this.x = castleX - params.CANVAS_WIDTH/2; //centering the camera on the castle.
+    this.y = castleY - params.CANVAS_HEIGHT/2;
+
+    this.theGame.spawnMe("castle", castleX, castleY);
+    this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
+    this.theGame.spawnMe("minion", castleX + 60, castleY + 160);
     this.theGame.spawnMe("wolf", 800, 0);
     this.theGame.spawnMe("wolf", 0, 400);
   }
