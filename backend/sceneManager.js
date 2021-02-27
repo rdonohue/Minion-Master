@@ -11,6 +11,15 @@ class SceneManager {
       this.theHud = new Hud(this.theGame, 1024, 0, 256);
       this.thePlayer = new Player(this.theGame, 100, 150, 10, 5, 0, 0);
 
+      this.maxCamSpeed = 45;
+      this.baseCamSpeed = 0;
+      this.acceleration = 2/3; //accelerationFactor.
+
+      this.moveRight = this.baseCamSpeed;
+      this.moveDown = this.baseCamSpeed;
+      this.moveLeft = this.baseCamSpeed;
+      this.moveUp = this.baseCamSpeed;
+
       this.createLevel();
       this.populateLevel();
   };
@@ -51,18 +60,53 @@ class SceneManager {
   };
 
   updateCamera(){
+    var mapBorder = 0;
+
     //Check for play area edge
-    if (this.theGame.left && this.x > 0) {
-        this.x -= 10;
+    var left = this.theGame.left && this.x > -mapBorder;
+    var right = this.theGame.right && this.x < params.PLAY_WIDTH - params.CANVAS_WIDTH + mapBorder;
+    var up = this.theGame.up && this.y > -mapBorder;
+    var down = this.theGame.down && this.y < params.PLAY_HEIGHT - params.CANVAS_HEIGHT + mapBorder;
+
+    if (left) {
+      this.x -= this.moveLeft;
+      this.moveLeft += this.acceleration;
+    } else {
+      this.moveLeft = this.baseCamSpeed;
     }
-    if (this.theGame.right && this.x < params.PLAY_WIDTH - params.CANVAS_WIDTH) {
-        this.x += 10;
+    if (right) {
+        this.x += this.moveRight;
+        this.moveRight += this.acceleration;
+    } else {
+      this.moveRight = this.baseCamSpeed;
     }
-    if (this.theGame.up && this.y > 3) {
-        this.y -= 10;
+    if (up) {
+        this.y -= this.moveUp;
+        this.moveUp += this.acceleration;
+    } else {
+        this.moveUp = this.baseCamSpeed;
     }
-    if (this.theGame.down && this.y < params.PLAY_HEIGHT - params.CANVAS_HEIGHT) {
-        this.y += 10;
+    if (down) {
+        this.y += this.moveDown;
+        this.moveDown += this.acceleration;
+    } else {
+        this.moveDown = this.baseCamSpeed;
+    }
+
+    if(this.x < -mapBorder) {
+      this.x = -mapBorder;
+      this.moveLeft = this.baseCamSpeed;
+    } else if (this.x > params.PLAY_WIDTH - params.CANVAS_WIDTH + mapBorder) {
+      this.x = params.PLAY_WIDTH - params.CANVAS_WIDTH + mapBorder;
+      this.moveRight = this.baseCamSpeed;
+    }
+
+    if(this.y < -mapBorder) {
+      this.y = -mapBorder;
+      this.moveUp = this.baseCamSpeed;
+    } else if (this.y > params.PLAY_HEIGHT - params.CANVAS_HEIGHT + mapBorder) {
+      this.y = params.PLAY_HEIGHT - params.CANVAS_HEIGHT + mapBorder;
+      this.moveDown = this.baseCamSpeed;
     }
   }
 
