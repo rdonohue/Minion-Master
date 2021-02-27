@@ -35,6 +35,7 @@ class Score {
 
     this.velocity = -32;
     this.elapsed = 0;
+    this.x += randomInt(10) - 5
   }
 
   updateMe() {
@@ -46,6 +47,7 @@ class Score {
     }
 
     this.y += this.theGame.clockTick * this.velocity;
+    this.x += randomInt(3) - 1;
   };
 
   drawMe(ctx) {
