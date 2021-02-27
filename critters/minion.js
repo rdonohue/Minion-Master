@@ -316,6 +316,17 @@ class Minion {
     } else {
       temp = 0; //if dead or broken.
     }
+
+    if (this.facing == 0) {
+      this.direction = 2;
+    } else if (this.facing < 4 && this.facing > 0) {
+      this.direction = 1;
+    } else if (this.facing == 4) {
+      this.direction = 3
+    } else if (this.facing > 4) {
+      this.direction = 0;
+    }
+
     var w = this.animations[temp][this.direction].width;
         if (this.direction == 1) {
           ctx.save();
