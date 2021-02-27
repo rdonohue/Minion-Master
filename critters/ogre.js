@@ -135,9 +135,9 @@ class Ogre {
 
       var w = this.animator[this.state].width;
       if (this.direction == 0) {
-        this.animator[this.state].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+        this.animations[this.state].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
       } else {
-        this.animator[this.state].drawFrame(this.game.clockTick, ctx, -(this.x - this.game.camera.x) - w, this.y - 80 - this.game.camera.y, this.myScale);
+        this.animations[this.state].drawFrame(this.game.clockTick, ctx, -(this.x - this.game.camera.x) - w, this.y - 80 - this.game.camera.y, this.myScale);
       }
 
       this.healthbar.drawMe(ctx);
