@@ -13,6 +13,10 @@ class Ogre {
         this.radius = 20;
         this.visualRadius = 200;
 
+        this.animations = [];
+        this.animations.push(this.walkAnimator);
+        this.animations.push(this.attackAnimator);
+
         this.healthbar = new HealthBar(this.game, this);
 
         this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
@@ -40,7 +44,7 @@ class Ogre {
 
         this.dead = false;
         this.removeFromWorld = false;
-        //this.facing = 0;
+        this.facing = 0;
 
         //i,j for cell, x,y for continuous position.
         this.myType = "ogre";
@@ -84,11 +88,11 @@ class Ogre {
       var combat = false;
       for (var i = 0; i < this.game.entities.length; i++) {
           var ent = this.game.entities[i];
-          if ((ent instanceof Minion || ent instanceof HomeBase) && canSee(this, ent)) {
+          if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && canSee(this, ent)) {
               this.target = ent;
               combat = true;
           }
-          if ((ent instanceof Minion || ent instanceof HomeBase) && collide(this, ent) && !ent.dead) {
+          if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && collide(this, ent) && !ent.dead) {
             if (this.state === 0) {
                 this.state = 1;
                 this.elapsedTime = 0;
@@ -106,13 +110,14 @@ class Ogre {
         this.state = 0;
       }
 
+      this.facing = getFacing(this.velocity);
       if (this.state !== 1) {
         dist = distance(this, this.target);
         this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
           y: (this.target.y - this.y) / dist * this.maxSpeed};
         this.x += this.velocity.x * this.game.clockTick;
         this.y += this.velocity.y * this.game.clockTick;
-        this.facing = getFacing(this.velocity);
+
       }
 
     };
@@ -122,10 +127,17 @@ class Ogre {
     };
 
     drawMe(ctx) {
-      if (this.state == 0) {
-        this.walkAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
-      } else if (this.state == 1) {
-        this.attackAnimator.drawFrame(this.game.clockTick, ctx, this.x, this.y-80, this.myScale);
+      if (this.facing <= 4) {
+        this.direction = 0;
+      } else {
+        this.direction = 1;
+      }
+
+      var w = this.animator[this.state].width;
+      if (this.direction == 0) {
+        this.animations[this.state].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.myScale);
+      } else {
+        this.animations[this.state].drawFrame(this.game.clockTick, ctx, -(this.x - this.game.camera.x) - w, this.y - 80 - this.game.camera.y, this.myScale);
       }
 
       this.healthbar.drawMe(ctx);
