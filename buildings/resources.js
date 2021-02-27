@@ -93,9 +93,10 @@ class Bush {
       y = 0;
     }
     this.camera = this.theGame.theSM;
-    this.health = 10;
-    this.maxHealth = 10;
+    this.health = 20;
+    this.maxHealth = 20;
     this.removeFromWorld = false;
+    this.dead = false;
     this.baseWidth = 16;
     this.baseHeight = 16;
     this.scale = 1;
@@ -112,6 +113,7 @@ class Bush {
 
   updateMe() {
       this.elapsedTime += this.theGame.clockTick;
+
       this.healthbar.updateMe();
 
       if(this.health < 0) {
@@ -148,9 +150,10 @@ class Rock {
       y = 0;
     }
     this.camera = this.theGame.theSM;
-    this.health = 10;
-    this.maxHealth = 10;
+    this.health = 20;
+    this.maxHealth = 20;
     this.removeFromWorld = false;
+    this.dead = false;
     this.baseWidth = 16;
     this.baseHeight = 16;
     this.scale = 1;

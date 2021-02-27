@@ -28,7 +28,7 @@ class Minion {
 
         this.healthbar = new HealthBar(this.theGame, this);
 
-        this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+        this.path = [{ x: randomInt(params.PLAY_WIDTH), y: randomInt(params.PLAY_HEIGHT) }];
 
         this.targetID = 0;
         if (this.path && this.path[0]) {
@@ -77,7 +77,7 @@ class Minion {
         var dist = distance(this, this.target);
         if (!this.target && this.targetID >= this.path.length - 1 || this.target && this.target.health < 0) {
             this.targetID = 0;
-            this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+            this.path = [{ x: randomInt(params.PLAY_WIDTH), y: randomInt(params.PLAY_HEIGHT) }];
         }
 
         // If its health is 0, it is dead.

@@ -35,7 +35,7 @@ class Wolf {
 
         this.healthbar = new HealthBar(this.theGame, this);
 
-        this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+        this.path = [{ x: randomInt(params.PLAY_WIDTH), y: randomInt(params.PLAY_HEIGHT) }];
 
         this.targetID = 0;
         if (this.path && this.path[0]) {
