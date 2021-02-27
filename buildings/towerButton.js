@@ -83,7 +83,7 @@ constructor(theGame, x, y) {
 
 	setTower() {
 		if (this.theGame.click) {
-			if(this.theGame.theSM.thePlayer.myRock >= this.rockCost) {
+			if(this.theGame.theSM.thePlayer.myRock >= this.rockCost && this.placing) {
 				this.theGame.theSM.thePlayer.myRock -= this.rockCost;
 				let click = this.theGame.click;
 				if (this.placing &&
@@ -92,7 +92,7 @@ constructor(theGame, x, y) {
 							this.theGame.spawnMe("tower", click.x + this.theGame.theCamera.x, click.y + this.theGame.theCamera.y);
 							this.placing = false;
 					 }
-				} else {
+				} else if (this.placing){
  					this.theGame.theSM.thePlayer.myRockColor = "orange";
  				}
 		}
