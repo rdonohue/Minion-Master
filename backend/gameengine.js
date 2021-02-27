@@ -131,7 +131,7 @@ class GameEngine {
 
     for (var i = this.entities.length - 1; i >= 0; --i) {
       var entity = this.entities[i];
-      if (entity.removeFromWorld) {
+      if (entity.removeFromWorld || (entity instanceof Minion && entity.state == 0)) {
         this.entities.splice(i, 1);
       }
     }

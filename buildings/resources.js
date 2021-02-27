@@ -35,7 +35,11 @@ class Resources {
     };
 
     updateMe() {
-
+      for (var i = 0; i < 10; i++) {
+        if(this.drawArray[i].dead) {
+          this.theGame.entities.splice(this.theGame.entities.indexOf(this.drawArray[i]),1);
+        }
+      }
     };
 
     drawMe(ctx) {
@@ -108,6 +112,9 @@ class Bush {
     this.visualRadius = 100;
     this.ready = true;
 
+    this.myFaction = "resource";
+    this.myType = "bush";
+
     this.healthbar = new HealthBar(this.theGame, this);
   };
 
@@ -164,6 +171,9 @@ class Rock {
     }
     this.visualRadius = 100;
     this.ready = true;
+
+    this.myFaction = "resource";
+    this.myType = "rock";
 
     this.healthbar = new HealthBar(this.theGame, this);
     this.elapsedTime = 0;

@@ -27,11 +27,52 @@ function distance(A, B) {
     return Math.sqrt((B.x - A.x) * (B.x - A.x) + (B.y - A.y)*(B.y - A.y));
 };
 
-//this method is like collide but its used for checking attack RANGE, since targets
+//this method is like collide but its used for checking the entitys reach, since targets
 //can bump into eachother without actually attacking and vis-versa...so they should
 //be independent checks.
-function attack(A, B) {
-  return (distance(A, B) <= A.attackRadius);
+function reach(A, B) {
+  return (distance(A, B) <= A.reachRadius);
+}
+
+function checkFor(A, faction) {
+  let closest = 0
+  let temp = null;
+  for (var i = 0; i < A.theGame.entities.length; i++) {
+    var ent = A.theGame.entities[i];
+    if (ent && ent.myFaction) {
+      if(ent.myFaction == faction) {
+        //priortize closest entity that matchs the targeted faction.
+        if(!closest || closest > distance(A, ent)) {
+          temp = ent;
+          closest = distance(A, ent);
+        }
+      }
+    }
+  }
+  if(closest < A.visualRadius) {
+    return temp;
+  } else {
+    return null;
+  }
+}
+
+function pickLocation(A) {
+  temp = {
+    x: null,
+    y: null
+  }
+  attempts = 0;
+  maxAttempts = 10;
+  while((!temp.x || !temp.y) && attempts++ < maxAttempts) {
+    let x = A.x - A.visualRadius + randomInt(2*A.visualRadius);
+    let y = A.y - A.visualRadius + randomInt(2*A.visualRadius);
+    if( (x < params.PLAY_WIDTH - A.radius && x > A.radius) &&
+        (y < params.PLAY_HEIGHT - A.radius && y > A.radius)) {
+      temp.x = x;
+      temp.y = y;
+    }
+  }
+  return temp;
 }
 
 function collide(A, B) {
