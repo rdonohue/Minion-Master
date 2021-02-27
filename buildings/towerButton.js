@@ -62,21 +62,31 @@ constructor(theGame, x, y) {
 			let mouse = this.theGame.mouse;
 			if ( (mouse.x < params.CANVAS_WIDTH && mouse.x > 20)
 				 && (mouse.y < params.CANVAS_HEIGHT && mouse.y > 20) ) {
-				 ctx.globalAlpha = 0.25;
-				 const xCenter = 52.5 / 2;
-				 const yCenter = 34.5 / 2;
+				ctx.globalAlpha = 0.25;
+				const xCenter = 52.5 / 2;
+				const yCenter = 34.5 / 2;
 
-				 // Subtracting x/yCenter from the origin point paints the tower's center where the user clicks.
-				 var x = mouse.x - xCenter;
-				 var y = mouse.y - yCenter;
-				 ctx.save();
-				 ctx.beginPath();
-				 ctx.arc(x + xCenter, y + yCenter, 300, 0, 2*Math.PI);
-				 ctx.setLineDash([10,5]);
-				 ctx.stroke();
-				 ctx.drawImage(this.spritesheet, 0, 0, 105, 138, x, y, 52.5, 69);
-				 ctx.restore();
-				 this.placing = true;
+				// Subtracting x/yCenter from the origin point paints the tower's center where the user clicks.
+				var x = mouse.x - xCenter;
+				var y = mouse.y - yCenter;
+				ctx.save();
+				ctx.beginPath();
+				ctx.arc(x + xCenter, y + yCenter, 300, 0, 2*Math.PI);
+				ctx.setLineDash([10,5]);
+				ctx.stroke();
+				ctx.drawImage(this.spritesheet, 0, 0, 105, 138, x, y, 52.5, 69);
+				ctx.restore();
+				if(this.theGame.theSM.thePlayer.myRock >= this.rockCost) {
+					this.placing = true;
+				} else if (this.theGame.theSM.thePlayer.myRock < this.rockCost) {
+					this.theGame.theSM.thePlayer.myRockColor = "orange";
+					ctx.save();
+					ctx.fillStyle = "orange";
+					ctx.globalAlpha = 1;
+			 		ctx.fillText("Your short on rock!", mouse.x - 3*xCenter, mouse.y - yCenter);
+					ctx.restore();
+				}
+
 			}
 		}
 	};
