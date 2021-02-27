@@ -8,7 +8,7 @@ class Wolf {
 
         this.initialPoint = { x, y };
 
-        this.myScale = 1;
+        this.scale = 1;
         this.direction = 0; // 0 = left, 1 = right, 2 = up, 3 = down
         this.priority = 1;
 
@@ -132,13 +132,14 @@ class Wolf {
             this.state = 0;
         }
 
+        this.facing = getFacing(this.velocity);
         if (this.state !== 1) {
           dist = distance(this, this.target);
           this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
             y: (this.target.y - this.y) / dist * this.maxSpeed};
           this.x += this.velocity.x * this.game.clockTick;
           this.y += this.velocity.y * this.game.clockTick;
-          this.facing = getFacing(this.velocity);
+
         }
 
     };
@@ -148,21 +149,16 @@ class Wolf {
     };
 
     drawMe(ctx) {
-        switch (this.facing) {
-            case 0:
-              this.direction = 2;
-              break;
-            case (this.facing < 4 && this.facing > 0):
-              this.direction = 1;
-              break;
-            case 4:
-              this.direction = 3;
-              break;
-            case (this.facing > 4):
-              this.direction = 0;
-              break;
+        if (this.facing == 0) {
+          this.direction = 2;
+        } else if (this.facing < 4 && this.facing > 0) {
+          this.direction = 1;
+        } else if (this.facing == 4) {
+          this.direction = 3
+        } else if (this.facing > 4) {
+          this.direction = 0;
         }
-        this.animations[this.direction][this.state].drawFrame(this.game.clockTick, ctx, this.x, this.y, this.scale);
+        this.animations[this.direction][this.state].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.scale);
 
         this.healthbar.drawMe(ctx);
     };
