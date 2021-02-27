@@ -7,11 +7,13 @@ class Player {
     this.foodIncome = trickleFood;
     this.rockIncome = trickleRock;
 
-
+    this.myFoodColor = "white";
+    this.myRockColor = "white";
 
     this.timer = new Timer();
     this.timeBetweenUpdates = 1;
     this.timeSinceUpdate = 0;
+    this.elapsedTime = null;
 
     this.cam = this.theGame.theSM;
     this.w = 1024;
@@ -37,7 +39,7 @@ class Player {
   }
 
   updateResources() {
-    //this is NOT the best implmentation of making the player not increment.
+
     if(this.timeSinceUpdate < this.timeBetweenUpdates) {
       //NOTE! we always want to respond to player input!
       return;
@@ -101,8 +103,10 @@ class Player {
     ctx.fillText("RESOURCES", params.CANVAS_WIDTH + 78, 20);
     ctx.strokeStyle = "White";
     ctx.strokeRect(params.CANVAS_WIDTH + 76, 4, 95, 20);
+    ctx.fillStyle = this.myFoodColor;
     ctx.fillText(("Food: " + Math.round(this.myFood) + " + "
       + Math.round(this.foodIncome) + " food/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4 + 24);
+    ctx.fillStyle = this.myRockColor;
     ctx.fillText(("Rock: " + Math.round(this.myRock) + " + "
       + Math.round(this.rockIncome) + " rock/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*2 + 24);
     // ctx.fillText(("Selected: " + this.targetType), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*3);
