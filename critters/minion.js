@@ -1,18 +1,44 @@
 class Minion {
   constructor(theGame, x, y) {
     Object.assign(this, {theGame, x, y });
-    this.camera = this.theGame.theSM; //theSM is the game's camera.
+    this.theCamera = this.theGame.theSM; //theSM is the theGame's theCamera.
     this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
     this.thePlayer = this.theGame.theSM.thePlayer;
 
-    this.myAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
-    this.myLeftAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
-    this.myRightAnimator = new Animator(this.spritesheet, 2, 4, 16, 16, 4, 0.1, 4, false, true);
-    this.myBattleAnimator = new Animator(this.spritesheet, 62, 5, 16, 16, 4, 0.05, 4, false, true);
-    this.myDeadAnimator = new Animator(this.spritesheet, 162, 7, 16, 16, 1, 0.1, 4, false, true);
+    // Different sprites for directions and interactions
+    this.downAttack = ASSET_MANAGER.getAsset("./sprites/minion/down_attack.png");
+    this.downWalk = ASSET_MANAGER.getAsset("./sprites/minion/down_walk.png");
+    this.pickUp = ASSET_MANAGER.getAsset("./sprites/minion/pick_up.png");
+    this.sideAttack = ASSET_MANAGER.getAsset("./sprites/minion/side_attack.png");
+    this.sideWalk = ASSET_MANAGER.getAsset("./sprites/minion/side_walk.png");
+    this.upAttack = ASSET_MANAGER.getAsset("./sprites/minion/up_attack.png");
+    this.upWalk = ASSET_MANAGER.getAsset("./sprites/minion/up_walk.png");
 
-    this.scale = 2;
-    this.myDirection = 0; // 0 = left, 1 = right
+    // Down
+    this.downWalkAnim = new Animator(this.downWalk, 0, 0, 64, 64, 6, 0.25, 0, false, true);
+    this.downAttackAnim = new Animator(this.downAttack, 0, 0, 64, 64, 3, 0.25, 0, false, true);
+
+    // Left
+    this.leftWalkAnim = new Animator(this.sideWalk, 0, 0, 64, 64, 6, 0.25, 0, false, true);
+    this.leftAttackAnim = new Animator(this.sideAttack, 0, 0, 64, 64, 3, 0.25, 0, false, true);
+
+    // Right
+    this.rightWalkAnim = new Animator(this.sideWalk, 0, 0, 64, 64, 6, 0.25, 0, false, true);
+    this.rightAttackAnim = new Animator(this.sideAttack, 0, 0, 64, 64, 3, 0.25, 0, false, true);
+
+    // Up
+    this.upWalkAnim = new Animator(this.upWalk, 0, 0, 64, 64, 6, 0.25, 0, false, true);
+    this.upAttackAnim = new Animator(this.upAttack, 0, 0, 64, 64, 3, 0.25, 0, false, true);
+
+    // Pick Up
+    this.leftPick = new Animator(this.pickUp, 0, 0, 64, 64, 5, 0.25, 0, false, true);
+    this.rightPick = new Animator(this.pickUp, 0, 0, 64, 64, 5, 0.25, 0, false, true);
+
+    this.animations = [];
+    this.loadAnimations();
+
+    this.scale = 1;
+    this.direction = 0; // 0 = left, 1 = right, 2 = up, 3 = down
     this.state = 4;
     this.priority = 0;
 
@@ -37,14 +63,14 @@ class Minion {
       y: this.maxSpeed
     };
 
-    this.baseWidth = 16;
-    this.baseHeight = 16;
+    this.baseWidth = 32;
+    this.baseHeight = 32;
     this.radius = this.baseWidth/2*this.scale;
     this.center = {
       x: this.x + this.baseWidth*this.scale/2,
       y: this.y + this.baseHeight*this.scale/2
     }
-    this.visualRadius = 200;
+    this.visualRadius = 50 + this.intelligence*50;
     this.reachRadius = this.radius*1.2;
     this.isSelected = false;
 
@@ -106,7 +132,6 @@ class Minion {
     if(this.waitTill == 0) {
       this.waitTill = printTime + 1000;
     } else if (this.waitTill < printTime) {
-      console.log(this);
       this.waitTill = 0;
     } else if (!this.waitTill) {
       this.waitTill = 0;
@@ -237,9 +262,14 @@ class Minion {
           return 1;
         } else if (this.target.myFaction == "resource"){
           return 2;
+        } else {
+          //just a location, find new location.
+          return 4;
         }
+      } else {
+        //still not reached target so stay in current mode.
+        return 3;
       }
-      return 3;
     } else if (!this.target || !canSee(this, this.target)){
       //we lost the target or it went out of range.
       return 4;
@@ -278,34 +308,78 @@ class Minion {
   };
 
   drawMe(ctx) {
-    if (this.state > 0 && this.state < 4) {
-      this.myAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
-    } else if (this.state == 4) {
-      this.myBattleAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
-    } else if (this.state == 0) {
-      this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
+    let temp;
+    if (this.state == 3 || this.state == 4) {
+      temp = 0;
+    } else if (this.state == 1 || this.state == 2) {
+      temp = 1;
     } else {
-      ctx.save();
-      ctx.font = 16 + 'px "Playfair Display SC"';
-      ctx.fillText(this.myType + " has entered a broken state: see console for details", this.x - 200, this.y);
-      this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
-      ctx.restore();
+      temp = 0; //if dead or broken.
     }
+    var w = this.animations[temp][this.direction].width;
+        if (this.direction == 1) {
+          ctx.save();
+          ctx.scale(-1, 1);
+          switch (temp) {
+            //Walking
+            case 0: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx, -(this.x - this.theGame.theCamera.x) - w,
+                                                                  this.y - this.theGame.theCamera.y, this.scale, 4);
+                                                                  break;
+            //Attacking
+            case 1: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx, -(this.x - this.theGame.theCamera.x) - w,
+                                                                  this.y - this.theGame.theCamera.y, this.scale, 2);
+                                                                  break;
+          }
+          ctx.restore();
+        } else {
+          switch (temp) {
+            case 0: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x,
+                                                                  this.y - this.theGame.theCamera.y, this.scale, 4);
+                                                                  break;
+            case 1: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x,
+                                                                  this.y - this.theGame.theCamera.y, this.scale, 2);
+                                                                  break;
+          }
+        }
+        this.healthbar.drawMe(ctx);
 
     if(params.DEBUG || this.isSelected || this.state < 0 || this.state > 4) {
       ctx.save();
       ctx.strokeStyle = "red";
       ctx.beginPath();
-      ctx.arc(this.center.x - this.camera.x, this.center.y - this.camera.y, this.radius, 0, 2*Math.PI);
+      ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.radius, 0, 2*Math.PI);
       ctx.stroke();
 
       ctx.strokeStyle = "yellow";
       ctx.beginPath();
-      ctx.arc(this.center.x - this.camera.x, this.center.y - this.camera.y, this.visualRadius, 0, 2*Math.PI);
+      ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.visualRadius, 0, 2*Math.PI);
       ctx.stroke();
       ctx.restore();
     }
 
     this.healthbar.drawMe(ctx);
+  };
+
+  loadAnimations() {
+    this.animations.push([]);
+    this.animations.push([]);
+
+    // Idle/Walking
+    this.animations[0].push(this.leftWalkAnim);
+    this.animations[0].push(this.rightWalkAnim);
+    this.animations[0].push(this.upWalkAnim);
+    this.animations[0].push(this.downWalkAnim);
+
+    // Attacking
+    this.animations[1].push(this.leftAttackAnim);
+    this.animations[1].push(this.rightAttackAnim);
+    this.animations[1].push(this.upAttackAnim);
+    this.animations[1].push(this.downAttackAnim);
+  };
+
+  drawMinimap(ctx, mmX, mmY) {
+      //ctx.fillStyle = "Orange";
+      //ctx.fillRect(mmX + this.myTile.myX / params.TILE_W_H, mmY + this.myTile.myY / params.TILE_W_H,
+        //params.TILE_W_H / 8, params.TILE_W_H / 8);
   };
 };
