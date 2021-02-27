@@ -13,6 +13,7 @@ class HealthBar {
   drawMe(ctx) {
     if (this.entity.health < this.entity.maxHealth || params.DEBUG) {
       var ratio = this.entity.health / this.entity.maxHealth;
+      ctx.save();
       ctx.strokeStyle = "black";
       ctx.fillstyle = ratio < 0.2 ? "Red" : ratio < 0.5 ? "Yellow" : "Green";
       ctx.fillRect(
@@ -22,6 +23,8 @@ class HealthBar {
       ctx.strokeRect(
         this.entity.x - this.theGame.theCamera.x, this.entity.y + this.entity.baseHeight*this.entity.scale - this.theGame.theCamera.y,
         this.width, this.height)
+
+      ctx.restore();
     }
   };
 };
@@ -44,8 +47,10 @@ class Score {
   };
 
   drawMe(ctx) {
+    ctx.save();
     ctx.font = '12px "Press Start 2P"';
     ctx.fillStyle = this.color;
     ctx.fillText(this.score, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y);
+    ctx.restore();
   };
 }

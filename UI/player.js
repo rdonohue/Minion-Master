@@ -13,7 +13,8 @@ class Player {
     this.timer = new Timer();
     this.timeBetweenUpdates = 1;
     this.timeSinceUpdate = 0;
-    this.elapsedTime = null;
+    this.waitTillFood = 0;
+    this.waitTillRock = 0;
 
     this.cam = this.theGame.theSM;
     this.w = 1024;
@@ -39,6 +40,26 @@ class Player {
   }
 
   updateResources() {
+    if(this.myFoodColor != "white") {
+      let currentFoodTime = this.theGame.timer.lastTimestamp;
+      if(this.waitTillFood == 0) {
+        this.waitTillFood = currentFoodTime + 1000;
+      } else if (this.waitTillFood < currentFoodTime) {
+        this.myFoodColor = "white";
+        this.waitTillFood = 0;
+      }
+    }
+
+    if(this.myRockColor != "white") {
+      let currentRockTime = this.theGame.timer.lastTimestamp;
+      if(this.waitTillRock == 0) {
+        this.waitTillRock = currentRockTime + 1000;
+        console.log(this.waitTillRock);
+      } else if (this.waitTillRock < currentRockTime) {
+        this.myRockColor = "white";
+        this.waitTillRock = 0;
+      }
+    }
 
     if(this.timeSinceUpdate < this.timeBetweenUpdates) {
       //NOTE! we always want to respond to player input!

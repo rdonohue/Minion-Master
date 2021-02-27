@@ -6,6 +6,10 @@ constructor(theGame, x, y) {
 		this.mouseover = false;
 		this.placing = false;
 
+		this.rockCost = 50//note, till this is re-factored, the ACTUAL cost to the
+		//player will be twice this due to setTower seemingly called twice to
+		//create the tower.
+
 		this.buttonWidth = 63;
 		this.buttonHeight = 22;
     this.dashOffset = 0;
@@ -78,18 +82,18 @@ constructor(theGame, x, y) {
 
 	setTower() {
 		if (this.theGame.click) {
-			if(this.theGame.theSM.thePlayer.myRock >= 100) {
+			if(this.theGame.theSM.thePlayer.myRock >= this.rockCost) {
+				this.theGame.theSM.thePlayer.myRock -= this.rockCost;
 				let click = this.theGame.click;
 				if (this.placing &&
-				 	 (click.x > 0 && click.x < params.CANVAS_WIDTH) &&
-				 	 (click.y > 0 && click.y < params.CANVAS_HEIGHT) ) {
+					 (click.x > 0 && click.x < params.CANVAS_WIDTH) &&
+					 (click.y > 0 && click.y < params.CANVAS_HEIGHT) ) {
 							this.theGame.spawnMe("tower", click.x + this.theGame.theCamera.x, click.y + this.theGame.theCamera.y);
 							this.placing = false;
 					 }
-				this.theGame.theSM.thePlayer.myRock -= 100;
-			} else {
-				this.theGame.theSM.thePlayer.myRockColor = "orange";
-			}
+				} else {
+ 					this.theGame.theSM.thePlayer.myRockColor = "orange";
+ 				}
 		}
 	};
 
