@@ -54,7 +54,6 @@ class Player {
       let currentRockTime = this.theGame.timer.lastTimestamp;
       if(this.waitTillRock == 0) {
         this.waitTillRock = currentRockTime + 1000;
-        console.log(this.waitTillRock);
       } else if (this.waitTillRock < currentRockTime) {
         this.myRockColor = "white";
         this.waitTillRock = 0;
