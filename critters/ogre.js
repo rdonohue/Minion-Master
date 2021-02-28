@@ -10,7 +10,6 @@ class Ogre {
         this.state = 0;
         this.priority = 2;
 
-        this.radius = 20;
         this.visualRadius = 200;
 
         this.animations = [];
@@ -53,6 +52,8 @@ class Ogre {
         this.timeBetweenUpdates = 1/this.agility;
         //this gives how long this minion will wait before moving.
         //note that its the inverse of the given speed stat.
+        // this.currentAnim = this.animations[this.state];
+        this.radius = 20;
 
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
@@ -142,6 +143,9 @@ class Ogre {
       } else {
         this.animations[this.state].drawFrame(this.game.clockTick, ctx, -(this.x - this.game.camera.x) - w, this.y - 80 - this.game.camera.y, this.myScale);
       }
+
+      this.currentAnim = this.animations[this.state];
+      this.radius = Math.floor(this.currentAnim.width / 2);
 
       this.healthbar.drawMe(ctx);
 

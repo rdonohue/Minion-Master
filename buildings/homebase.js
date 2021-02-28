@@ -1,12 +1,13 @@
 class HomeBase {
-  constructor(game, x, y, w, h) {
-      Object.assign(this, {game, x, y, w, h });
-      this.myName = "HomeBase";
+  constructor(game, x, y) {
+      Object.assign(this, {game, x, y });
+      this.myType = "HomeBase";
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/castle.png");
+      this.castleAnim = new Animator(this.spritesheet, 0, 0, 430, 461, 1, 1, 0, false, true);
 
       this.state = 0;  // 0 = idle, 1 = destroyed
-      this.radius = 20;
+      this.radius = Math.floor(this.castleAnim.width / 2) - 50;
 
       //Stats
       this.health = 200;
@@ -17,24 +18,15 @@ class HomeBase {
 
       this.healthbar = new HealthBar(this.game, this);
 
-
       this.dead = false;
       this.removeFromWorld = false;
-      this.xOriginLoc = x;
-      this.yOriginLoc = y;
-      this.baseWidth = w;
-      this.baseHeight = h;
-
-      this.animations = [];
-      this.loadAnimations();
   };
 
-  loadAnimations() {
-       this.animations[0] = new Animator(this.spritesheet, 0, 0, this.baseWidth, this.baseHeight, 1, 1, 0, false, true);
-  }
+
 
   updateMe() {
       if (this.health <= 0) {
+          this.state = 1;
           this.dead = true;
           this.removeFromWorld = true;
       }
@@ -42,7 +34,7 @@ class HomeBase {
   };
 
   drawMe(ctx) {
-      this.animations[0].drawFrame(this.game.clockTick, ctx, this.xOriginLoc, this.yOriginLoc, 0.4);
+      this.castleAnim.drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, 0.4);
       this.healthbar.drawMe(ctx);
   };
 

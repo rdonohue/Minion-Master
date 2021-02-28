@@ -10,11 +10,10 @@ class Dragon {
         this.animations = [];
         this.loadAnimations();
 
-        this.initialPoint = { x, y };
-
         this.scale = 1;
         this.direction = 0; // 0 = left, 1 = right, 2 = up, 3 = down
         this.facing = 0;
+        this.state = 0;
 
         this.radius = 20;
         this.visualRadius = 190;
@@ -58,6 +57,11 @@ class Dragon {
         this.timeSinceUpdate = 0;
 
         this.elapsedTime = 0;
+
+        // this.currentAnim = this.animations[this.state][this.direction];
+        this.radius = 20;
+        this.visualRadius = 190;
+
     };
 
     loadAnimations() {
@@ -111,6 +115,10 @@ class Dragon {
           if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && canSee(this, ent)) {
               this.target = ent;
               combat = true;
+              // if (this.elapsedTime > 1 / this.agility) {
+              //     this.elapsedTime = 0;
+              //     this.game.addEntity(new Fireball(this.game, this.x, this.y, ent, this.attack, this.projectileScale));
+              // }
           }
           if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && collide(this, ent) && !ent.dead) {
             if (this.state === 0) {
@@ -139,7 +147,6 @@ class Dragon {
           y: (this.target.y - this.y) / dist * this.maxSpeed};
         this.x += this.velocity.x * this.game.clockTick;
         this.y += this.velocity.y * this.game.clockTick;
-
       }
     };
 
@@ -159,6 +166,8 @@ class Dragon {
       }
       this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x,
                                                             this.y - this.game.camera.y, this.scale);
+      // this.currentAnim = this.animations[this.state][this.direction];
+      // this.radius = Math.floor(this.currentAnim.width / 2);
 
       this.healthbar.drawMe(ctx);
     };

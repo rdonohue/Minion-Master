@@ -2,7 +2,7 @@ class Cave {
     constructor(game, x, y) {
       Object.assign(this, { game, x, y });
 
-      this.myName = "cave";
+      this.myType = "cave";
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cave.png");
       this.caveAnim = new Animator(this.spritesheet, 0, 0, 2714, 1762, 1, 1, 0, false, true);

@@ -40,7 +40,6 @@ class Minion {
         this.state = 0; // 0 = idle/walking, 1 = attacking
         this.priority = 0;
 
-        this.radius = 20;
         this.visualRadius = 200;
 
         this.healthbar = new HealthBar(this.game, this);
@@ -80,6 +79,8 @@ class Minion {
         this.timeBetweenUpdates = 1/this.agility;
         //this gives how long this minion will wait before moving.
         //note that its the inverse of the given speed stat.
+        //this.currentAnim = this.animations[this.state][this.direction];
+        this.radius = 20;
 
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
@@ -223,6 +224,8 @@ class Minion {
         }
         ctx.restore();
 
+        //this.currentAnim = this.animations[this.state][this.direction];
+        //this.radius = Math.floor(this.currentAnim.width / 2);
         this.healthbar.drawMe(ctx);
     };
 };

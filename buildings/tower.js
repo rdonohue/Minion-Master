@@ -1,7 +1,7 @@
 class Tower {
   constructor(game, x, y) {
       Object.assign(this, {game, x, y });
-      this.myName = "tower";
+      this.myType = "tower";
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tower.png");
       this.elapsedTime = 0;
@@ -21,9 +21,10 @@ class Tower {
       this.agility = 1;
 
       //Tower Vision
-      this.radius = 30;
+      this.radius = 79;
       this.visualRadius = 300;
 
+      this.dead = false;
       this.removeFromWorld = false;
   };
 
@@ -40,6 +41,7 @@ class Tower {
 
     if (this.health <= 0) {
       this.state = 1;
+      this.dead = true;
       this.removeFromWorld = true;
     }
   };

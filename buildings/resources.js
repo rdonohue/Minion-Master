@@ -94,23 +94,29 @@ class Bush {
       y = 0;
     }
 
+    this.myType = "bush";
+
     this.health = 100;
     this.maxHealth = 100;
     this.subHealth = 0;
     this.removeFromWorld = false;
-    this.radius = 20;
+    this.radius = Math.floor(this.w / 2);
     this.visualRadius = 100;
 
     this.healthbar = new HealthBar(this.game, this);
+
+    this.dead = false;
   };
 
   updateMe() {
       this.elapsedTime += this.game.clockTick;
       if (this.subHealth == 100) {
+          this.dead = false;
           this.health = this.subHealth;
           this.subHealth = 0;
       }
       if (this.elapsedTime > 1.6 && this.health <= 0 && this.subHealth < this.health) {
+          this.dead = true;
           this.subHealth += 5;
           this.elapsedTime = 0;
       }
@@ -129,6 +135,8 @@ class Rock {
       y = 0;
     }
 
+    this.myType = "rock";
+
     this.health = 100;
     this.maxHealth = 100;
     this.subHealth = 0;
@@ -139,10 +147,21 @@ class Rock {
 
     this.healthbar = new HealthBar(this.game, this);
     this.elapsedTime = 0;
+    this.dead = false;
   };
 
   updateMe() {
       this.elapsedTime += this.game.clockTick;
+      if (this.subHealth == 100) {
+          this.dead = false;
+          this.health = this.subHealth;
+          this.subHealth = 0;
+      }
+      if (this.elapsedTime > 1.6 && this.health <= 0 && this.subHealth < this.health) {
+          this.dead = true;
+          this.subHealth += 5;
+          this.elapsedTime = 0;
+      }
   };
 
   drawMe(ctx) {

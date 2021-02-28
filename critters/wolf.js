@@ -12,12 +12,10 @@ class Wolf {
         this.direction = 0; // 0 = left, 1 = right, 2 = up, 3 = down
         this.facing = 0;
 
-        this.radius = 20;
         this.visualRadius = 200;
         this.state = 0;
 
         this.healthbar = new HealthBar(this.game, this);
-
 
         this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
@@ -50,6 +48,14 @@ class Wolf {
         this.timeBetweenUpdates = 1/this.agility;
         //this gives how long this minion will wait before moving.
         //note that its the inverse of the given speed stat.
+
+        this.radius = 20;
+        // this.currentAnim = this.animations[this.direction][this.state];
+        // if (this.currentAnim.width < this.currentAnim.height) {
+        //   this.radius = Math.floor(this.currentAnim.height / 2);
+        // } else {
+        //   this.radius = Math.floor(this.currentAnim.width / 2);
+        // }
 
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
@@ -161,7 +167,14 @@ class Wolf {
         } else if (this.facing > 4) {
           this.direction = 0;
         }
-        this.animations[this.direction][this.state].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x, this.y - this.game.camera.y, this.scale);
+        this.animations[this.direction][this.state].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x,
+                                                              this.y - this.game.camera.y, this.scale);
+        // this.currentAnim = this.animations[this.direction][this.state];
+        // if (this.currentAnim.width < this.currentAnim.height) {
+        //   this.radius = Math.floor(this.currentAnim.height / 2);
+        // } else {
+        //   this.radius = Math.floor(this.currentAnim.width / 2);
+        // }
 
         this.healthbar.drawMe(ctx);
     };
