@@ -11,6 +11,7 @@ class Dragon {
         this.loadAnimations();
 
         this.scale = 1;
+        this.projectileScale = 1;
         this.direction = 0; // 0 = left, 1 = right, 2 = up, 3 = down
         this.facing = 0;
         this.state = 0;
@@ -115,10 +116,10 @@ class Dragon {
           if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && canSee(this, ent)) {
               this.target = ent;
               combat = true;
-              // if (this.elapsedTime > 1 / this.agility) {
-              //     this.elapsedTime = 0;
-              //     this.game.addEntity(new Fireball(this.game, this.x, this.y, ent, this.attack, this.projectileScale));
-              // }
+              if (this.elapsedTime > 1 / this.agility) {
+                  this.elapsedTime = 0;
+                  this.game.addEntity(new Fireball(this.game, this.x, this.y, ent, this.attack, this.projectileScale));
+              }
           }
           if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && collide(this, ent) && !ent.dead) {
             if (this.state === 0) {
