@@ -75,7 +75,7 @@ class Minion {
     this.isSelected = false;
 
     //i,j for cell, x,y for continuous position.
-    this.myType = "minion";
+    this.myType = "MINION";
     this.myFaction = "friendly";
 
     // Object.assign(this, this.name);
@@ -226,7 +226,7 @@ class Minion {
             }
           }
         }
-        //this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, gather, "yellow"));
+        this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, gather, "yellow"));
         this.actionTime = 0;
         return 2; //keep gathering.
       } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {

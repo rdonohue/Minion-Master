@@ -13,7 +13,7 @@ class Rock {
     this.isSelected = false;
 
     this.myFaction = "resource";
-    this.myType = "rock";
+    this.myType = "BOULDER";
 
     this.defineDefaultValues();
     this.chooseSprite(this.spriteChoice);

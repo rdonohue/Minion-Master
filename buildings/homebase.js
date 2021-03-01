@@ -4,7 +4,7 @@ class HomeBase {
 
       this.camera = this.theGame.theSM; //theSM is the game's camera.
       this.thePlayer = this.camera.thePlayer;
-      this.myType = "HomeBase";
+      this.myType = "HOMEBASE";
       this.myFaction = "friendly";
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/castle.png");
@@ -70,6 +70,8 @@ class HomeBase {
     let y = mmY + (this.center.y)*(mmH/params.PLAY_HEIGHT);
     ctx.save();
     ctx.strokeStyle = "grey";
+    ctx.strokeRect(x-1, y-1, 3, 3);
+    ctx.strokeStyle = "yellow";
     ctx.strokeRect(x, y, 1, 1);
     ctx.restore();
   }

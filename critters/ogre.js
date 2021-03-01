@@ -47,7 +47,8 @@ class Ogre {
         this.facing = 0;
 
         //i,j for cell, x,y for continuous position.
-        this.myType = "ogre";
+        this.myType = "OGRE";
+        this.myFaction = "enemy";
 
         // Object.assign(this, this.name);
         this.timeBetweenUpdates = 1/this.agility;

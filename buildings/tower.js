@@ -1,12 +1,12 @@
 class Tower {
   constructor(theGame, x, y) {
       Object.assign(this, {theGame, x, y });
-      this.myType = "tower";
+      this.myType = "TOWER";
       this.myFaction = "friendly";
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tower.png");
       this.elapsedTime = 0;
-      this.state = 1;  // 0 = idle, 1 = destroyed
+      this.state = 1;  // 1 = idle, 0 = destroyed
       this.upgradeAmount = 1; // 1 being the initial spawned upgrade state of a tower.
 
       //Stats
@@ -16,12 +16,20 @@ class Tower {
       this.attack = 1;
       this.projectileScale = 1;
 
-      //Fire Rate of Tower
-      this.agility = 1;
-
       //Tower Vision
       this.radius = 30;
       this.visualRadius = 300;
+
+      this.center = {
+        x: this.x,
+				y: this.y + 34.5 / 2
+      }
+
+      //Fire Rate of Tower
+      this.agility = 1;
+
+      this.theCamera = this.theGame.theSM;
+      this.thePlayer = this.theCamera.thePlayer;
   };
 
   updateMe() {
@@ -35,8 +43,10 @@ class Tower {
     }
 
     if (this.health <= 0) {
-      die();
+      this.state = 0;
     }
+
+    this.isSelected = (this.thePlayer.selected == this);
   };
 
 
@@ -82,11 +92,6 @@ class Tower {
     }
   };
 
-  die() {
-      this.state = 1;
-      this.removeFromWorld = true;
-  };
-
   drawMe(ctx) {
     const xCenter = 52.5 / 2;
     const yCenter = 34.5 / 2;
@@ -97,11 +102,34 @@ class Tower {
 
     ctx.drawImage(this.spritesheet, 0, 0, 105, 138, x, y, 52.5, 69);
 
+    if(params.DEBUG || this.isSelected || this.state < 0 || this.state > 4) {
+      ctx.save();
+      ctx.strokeStyle = "red";
+      ctx.beginPath();
+      ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.radius, 0, 2*Math.PI);
+      ctx.stroke();
+
+      ctx.strokeStyle = "yellow";
+      ctx.beginPath();
+      ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.visualRadius, 0, 2*Math.PI);
+      ctx.stroke();
+      ctx.restore();
+    }
+
     // Did this to test centering of the sprite on the draw point.
     // ctx.strokeStyle = "Pink";
     // ctx.strokeRect(x, y, 52.5, 69);
 
       //don't forget to subtract this.theGame.theCamera.x and this.theGame.theCamera.y from the respective coordinates.
   };
+
+  drawMinimap(ctx, mmX, mmY, mmW, mmH) {
+    let x = mmX + (this.center.x)*(mmW/params.PLAY_WIDTH);
+    let y = mmY + (this.center.y)*(mmH/params.PLAY_HEIGHT);
+    ctx.save();
+    ctx.strokeStyle = "grey";
+    ctx.strokeRect(x, y, 1, 1);
+    ctx.restore();
+  }
 
 };

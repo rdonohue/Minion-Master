@@ -60,7 +60,7 @@ class Wolf {
         this.dead = false;
         this.removeFromWorld = false;
 
-        this.myType = "wolf";
+        this.myType = "WOLF";
         this.myFaction = "enemy";
 
         this.timeBetweenUpdates = 1/this.agility;

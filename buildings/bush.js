@@ -2,18 +2,21 @@ class Bush {
   constructor(theGame, x, y, scale, spriteChoice) {
     Object.assign(this, { theGame, x, y, scale, spriteChoice })
     this.spritesheet = ASSET_MANAGER.getAsset("./sprites/trees_stones_bushes.png");
+
     this.maxHealth = 100;
     this.health = 100;
     this.subHealth = 0;
     this.regenTimer = 20;
+
     this.scale = 1;
     this.radius = 13*this.scale;
     this.visualRadius = 100;
+
     this.state = 1;
 
     this.isSelected = false;
     this.myFaction = "resource";
-    this.myType = "bush";
+    this.myType = "BUSH";
 
     this.defineDefaultValues();
     this.chooseSprite(this.spriteChoice);
@@ -25,7 +28,9 @@ class Bush {
       x: this.x + this.radius,
       y: this.y + this.radius
     }
+
     this.elapsedTime = 0;
+
     this.theCamera = this.theGame.theSM;
     this.thePlayer = this.theCamera.thePlayer;
   };
