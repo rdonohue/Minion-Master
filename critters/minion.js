@@ -353,12 +353,6 @@ class Minion {
     }
   }
 
-  drawMinimap(ctx, mmX, mmY) {
-    //ctx.fillStyle = "Orange";
-    //ctx.fillRect(mmX + this.myTile.myX / params.TILE_W_H, mmY + this.myTile.myY / params.TILE_W_H,
-      //params.TILE_W_H / 8, params.TILE_W_H / 8);
-  };
-
   drawMe(ctx) {
     let temp;
     if (this.state == 3 || this.state == 4) {
