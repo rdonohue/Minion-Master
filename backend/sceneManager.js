@@ -30,7 +30,7 @@ class SceneManager {
         this.game.addEntity(intGrass);
         this.game.addEntity(resources);
 
-        this.game.addEntity(base);
+        //this.game.addEntity(base);
         this.game.addEntity(this.minimap);
         this.game.addEntity(this.ui);
         this.game.addEntity(this.ui.towerButton);

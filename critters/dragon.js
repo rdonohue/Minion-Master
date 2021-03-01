@@ -59,7 +59,7 @@ class Dragon {
 
         this.elapsedTime = 0;
 
-        // this.currentAnim = this.animations[this.state][this.direction];
+        this.currentAnim = this.animations[this.state][this.direction];
         this.radius = 20;
         this.visualRadius = 190;
 
@@ -116,9 +116,10 @@ class Dragon {
           if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && canSee(this, ent)) {
               this.target = ent;
               combat = true;
-              if (this.elapsedTime > 1 / this.agility) {
+              if (this.elapsedTime > (0.2 / this.agility) && !collide(this, ent)) {
                   this.elapsedTime = 0;
-                  this.game.addEntity(new Fireball(this.game, this.x, this.y, ent, this.attack, this.projectileScale));
+                  this.game.addEntity(new Fireball(this.game, this.currentAnim.width / 2 + this.x - this.game.camera.x,
+                    this.currentAnim.height / 2 + this.y - this.game.camera.y, ent, this.attack, this.projectileScale));
               }
           }
           if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && collide(this, ent) && !ent.dead) {
@@ -167,7 +168,7 @@ class Dragon {
       }
       this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x,
                                                             this.y - this.game.camera.y, this.scale);
-      // this.currentAnim = this.animations[this.state][this.direction];
+      this.currentAnim = this.animations[this.state][this.direction];
       // this.radius = Math.floor(this.currentAnim.width / 2);
 
       this.healthbar.drawMe(ctx);

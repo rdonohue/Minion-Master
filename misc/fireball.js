@@ -25,6 +25,7 @@ class Fireball {
         if (!this.cache[angle]) {
            let radians = angle / 360 * 2 * Math.PI;
            let offscreenCanvas = document.createElement('canvas');
+           var maxer = Math.max(this.fireAnim.width, this.fireAnim.height);
 
             offscreenCanvas.width = 27;
             offscreenCanvas.height = 27;
@@ -32,9 +33,9 @@ class Fireball {
             let offscreenCtx = offscreenCanvas.getContext('2d');
 
             offscreenCtx.save();
-            offscreenCtx.translate(13.5, 13.5);
+            offscreenCtx.translate(Math.floor(maxer / 2), Math.floor(maxer / 2));
             offscreenCtx.rotate(radians);
-            offscreenCtx.translate(-13.5, -13.5);
+            offscreenCtx.translate(-Math.floor(maxer / 2), -Math.floor(maxer / 2));
             offscreenCtx.drawImage(this.spritesheet, 0, 0, 10, 27, 5, 0, 10, 27);
             offscreenCtx.restore();
             this.cache[angle] = offscreenCanvas;

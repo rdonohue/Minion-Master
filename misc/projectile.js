@@ -73,7 +73,7 @@ class Projectile {
             if (angle < 0) angle += Math.PI * 2;
             let degrees = Math.floor(angle / Math.PI / 2 * 360);
 
-            this.drawAngle(ctx, degrees);
+            //this.drawAngle(ctx, degrees);
         } else {
             if (this.facing < 5) {
                 this.animations[this.facing].drawFrame(this.game.clockTick, ctx, (this.x - xOffset) - this.game.camera.x, (this.y - yOffset) - this.game.camera.y, this.scale);
