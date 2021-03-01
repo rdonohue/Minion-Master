@@ -16,7 +16,6 @@ class SceneManager {
         this.game.entities = [];
         this.x = 0;
 
-
         //let castle = new HomeBase(gameEngine, 500, 300, 430, 461);
       	let corners = new Grasscorner(this.game, 0, 0);
       	let vertwalls = new Vertwall(this.game, 0, params.TILE_W_H);
