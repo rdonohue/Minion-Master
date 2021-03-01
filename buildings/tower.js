@@ -1,11 +1,12 @@
 class Tower {
   constructor(theGame, x, y) {
       Object.assign(this, {theGame, x, y });
-      this.myName = "tower";
+      this.myType = "tower";
+      this.myFaction = "friendly";
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tower.png");
       this.elapsedTime = 0;
-      this.state = 0;  // 0 = idle, 1 = destroyed
+      this.state = 1;  // 0 = idle, 1 = destroyed
       this.upgradeAmount = 1; // 1 being the initial spawned upgrade state of a tower.
 
       //Stats
@@ -21,9 +22,6 @@ class Tower {
       //Tower Vision
       this.radius = 30;
       this.visualRadius = 300;
-
-//      this.dead = false; This is redundant. Use this.state.
-      this.removeFromWorld = false;
   };
 
   updateMe() {

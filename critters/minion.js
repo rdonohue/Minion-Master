@@ -88,6 +88,7 @@ class Minion {
 
     this.actionTime = 0;
     this.regenTime = 0;
+    this.thePlayer = this.theCamera.thePlayer;
   };
 
   //the move-speed is still staggered a bit, that might be because of async
@@ -183,7 +184,7 @@ class Minion {
         if(damage > 0) {
           ent.health -= damage; //don't heal the target by dealing negitive damage!
         }
-        this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
+        this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
         this.actionTime = 0;
         return 1;
       } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {
@@ -217,11 +218,15 @@ class Minion {
             ent.health -= gather; //don't heal the target by dealing negitive gather!
             this.thePlayer.myRock += gather;
           } else if (ent instanceof Bush) {
-            ent.health -= gather; //don't heal the target by dealing negitive gather!
-            this.thePlayer.myFood += gather;
+            if(this.intelligence == 0 || ent.health/ent.maxHealth > 0.1) { //make smarter minions not kill the food!
+              ent.health -= gather; //don't heal the target by dealing negitive gather!
+              this.thePlayer.myFood += gather;
+            } else if (ent.health/ent.maxHealth > 0.1 && this.intelligence > 0) {
+              return 3; // the berries are low on food.
+            }
           }
         }
-        this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, gather, "yellow"));
+        //this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, gather, "yellow"));
         this.actionTime = 0;
         return 2; //keep gathering.
       } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {
@@ -278,14 +283,61 @@ class Minion {
 
   findNewTarget() {
     //first look around for enemys
-    this.target = checkFor(this, "enemy");
+    if(this.intelligence == 0 ) {
+      //we are too dumb to attack anything.
+    } else if (this.intelligence == 1){
+      //we know to attack baddies and thats it.
+      this.target = this.theGame.entities.filter(entity => {
+        return (
+          distance(this,entity) < this.visualRadius &&
+          entity.myFaction == "enemy"
+        );
+      })
+    } else if (this.intelligence > 1) {
+      //we are smart enough to not attack enemys bigger then us.
+      let attackWeight = 3;
+      let defenseWeight = 2;
+      let maxHealthWeight = 1;
+      let totalWeight = attackWeight + defenseWeight + maxHealthWeight
+      let that = this;
+      this.target = this.theGame.entities.filter(entity => {
+        return (
+          distance(this,entity) < this.visualRadius &&
+          entity.myFaction == "enemy" &&
+          (
+            ((entity.attack / that.attack) * that.attackWeight) +
+            ((entity.defense / that.defense) * that.defenseWeight) +
+            ((entity.maxHealth / that.maxHealth) * that.maxHealthWeight)
+          ) / (that.totalWeight) > 1
+          //if the target's average stats are too great relative to our own, don't try to engage it.
+          //(and weighting some more then others), this will sum up to more then 3.
+        );
+      })
+    }
+
     //either stop here because we have our target,
     //or search for resources.
     if(this.target) {
       return 3;
     }
 
-    this.target = checkFor(this, "resource");
+    if(this.intelligence > 0) {
+      //we want to ignore bush's with less then 1% health left if we are not braindead.
+      this.target = this.theGame.entities.find(entity => {
+        return (
+          distance(this,entity) < this.visualRadius &&
+          entity.myFaction == "resource" &&
+          (entity.subHealth && entity.health/entity.maxHealth > 0.01) //don't over-harvest bushs
+        )
+      })
+    } else {
+      this.target = this.theGame.entities.find(entity => {
+        return (
+          distance(this,entity) < this.visualRadius &&
+          entity.myFaction == "resource"
+        ) //we are littearlly braindead and don't know better.
+      })
+    }
 
     //we don't see any enemys OR resources.
     if(this.target) {
@@ -327,28 +379,38 @@ class Minion {
       this.direction = 0;
     }
 
+    let tempAdjust = 70; //I'm not sure why the sprites are so off-center, but I'm doing this for now.
+
     var w = this.animations[temp][this.direction].width;
         if (this.direction == 1) {
           ctx.save();
           ctx.scale(-1, 1);
           switch (temp) {
             //Walking
-            case 0: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx, -(this.x - this.theGame.theCamera.x) - w,
-                                                                  this.y - this.theGame.theCamera.y, this.scale, 4);
+            case 0: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx,
+                            -(this.center.x - this.theGame.theCamera.x) - w,
+                            this.y - this.theGame.theCamera.y,
+                            this.scale, 4);
                                                                   break;
             //Attacking
-            case 1: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx, -(this.x - this.theGame.theCamera.x) - w,
-                                                                  this.y - this.theGame.theCamera.y, this.scale, 2);
+            case 1: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx,
+                            -(this.center.x - this.theGame.theCamera.x) - w,
+                            this.y - this.theGame.theCamera.y,
+                            this.scale, 2);
                                                                   break;
           }
           ctx.restore();
         } else {
           switch (temp) {
-            case 0: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x,
-                                                                  this.y - this.theGame.theCamera.y, this.scale, 4);
+            case 0: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx,
+                            this.center.x - this.theGame.theCamera.x,
+                            this.center.y - this.theGame.theCamera.y,
+                            this.scale, 4);
                                                                   break;
-            case 1: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x,
-                                                                  this.y - this.theGame.theCamera.y, this.scale, 2);
+            case 1: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx,
+                            this.center.x - this.theGame.theCamera.x,
+                            this.center.y - this.theGame.theCamera.y,
+                            this.scale, 2);
                                                                   break;
           }
         }
@@ -388,9 +450,12 @@ class Minion {
     this.animations[1].push(this.downAttackAnim);
   };
 
-  drawMinimap(ctx, mmX, mmY) {
-      //ctx.fillStyle = "Orange";
-      //ctx.fillRect(mmX + this.myTile.myX / params.TILE_W_H, mmY + this.myTile.myY / params.TILE_W_H,
-        //params.TILE_W_H / 8, params.TILE_W_H / 8);
-  };
+  drawMinimap(ctx, mmX, mmY, mmW, mmH) {
+    let x = mmX + (this.center.x)*(mmW/params.PLAY_WIDTH);
+    let y = mmY + (this.center.y)*(mmH/params.PLAY_HEIGHT);
+    ctx.save();
+    ctx.strokeStyle = "orange";
+    ctx.strokeRect(x, y, 1, 1);
+    ctx.restore();
+  }
 };

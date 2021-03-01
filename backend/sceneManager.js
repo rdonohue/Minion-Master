@@ -27,13 +27,11 @@ class SceneManager {
     let vertwalls = new Vertwall(this.theGame, 0, params.TILE_W_H);
     let horiwalls = new Horiwall(this.theGame, params.TILE_W_H, 0);
     let intGrass = new InteriorGrass(this.theGame, params.TILE_W_H, params.TILE_W_H);
-    let resources = new Resources(this.theGame, params.TILE_W_H, params.TILE_W_H);
 
-    this.theGame.addEntity(corners);
-    this.theGame.addEntity(vertwalls);
-    this.theGame.addEntity(horiwalls);
-    this.theGame.addEntity(intGrass);
-    this.theGame.addEntity(resources);
+    this.theGame.addElement(corners);
+    this.theGame.addElement(vertwalls);
+    this.theGame.addElement(horiwalls);
+    this.theGame.addElement(intGrass);
   }
 
   populateLevel(){
@@ -44,10 +42,15 @@ class SceneManager {
     this.y = castleY - params.CANVAS_HEIGHT/2;
 
     this.theGame.spawnMe("castle", castleX, castleY);
+
+    this.resources = new Resources(this.theGame, params.TILE_W_H, params.TILE_W_H);
+    this.resources.buildResources();
+
+    
     this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
     this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
     this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
-    this.theGame.spawnMe("wolf", 800, 0);
+    // this.theGame.spawnMe("wolf", 800, 0);
   }
 
   update() {
@@ -111,8 +114,19 @@ class SceneManager {
     }
   }
 
-  drawCamera(ctx, mmX, mmY, mmS) {
-
+  drawCamera(ctx, mmX, mmY, mmW, mmH) {
+    //leftEdgeOfMapOnMiniMap = mmX;
+    //topEdgeOfMapOnMiniMap = mmY;
+    //we want to find the location of the 4 sides of the camera relative to the maps
+    //dimensions and then translate and down-scale it to the mini-map's dimensions.
+    let leftside = mmX + (this.x)*(mmW/params.PLAY_WIDTH);
+    let rightside = mmX + (this.x+params.CANVAS_WIDTH)*(mmW/params.PLAY_WIDTH);
+    let topside = mmY + (this.y)*(mmH/params.PLAY_HEIGHT);
+    let bottomside = mmY + (this.y+params.CANVAS_HEIGHT)*(mmH/params.PLAY_HEIGHT);
+    ctx.save();
+    ctx.strokeStyle = "white";
+    ctx.strokeRect(leftside, topside, rightside - leftside, bottomside - topside);
+    ctx.restore();
   }
 
   draw(ctx) {

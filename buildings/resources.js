@@ -26,7 +26,11 @@ class Resources {
       while (this.berries > 0 || this.rocks > 0) {
         dx = this.x + randomInt(params.PLAY_WIDTH / params.TILE_W_H - 2) * params.TILE_W_H + (16 + randomInt(16) - 8);
         dy = this.y + randomInt(params.PLAY_HEIGHT / params.TILE_W_H - 2) * params.TILE_W_H + (16 + randomInt(16) - 8);
-        if (resSelect > 7) {
+        let center = {
+          x: dx,
+          y: dy
+        }
+        if (resSelect > 7 || distance(center, this.theGame.theBase) < this.theGame.theBase.radius*2) {
         // || (dx >= 500 && dx <= 930 && dy >= 300 && dy <= 761))
         // This is the former homebase location we had in the prototype build.
         // It needs some optimization with the homebase x, y, w, and h.

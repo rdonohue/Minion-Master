@@ -2,7 +2,7 @@
 class GameEngine {
   constructor() {
       this.entities = [];
-      //elements anything which don't need to be selectable or collidable.
+      //elements anything which don't need to be selectable, collidable or show up on the minimap
       this.elements = [];
 
       this.ctx = null;
@@ -116,7 +116,10 @@ class GameEngine {
     for (var i = 0; i < elementsCount; i++) {
       var element = this.elements[i];
 
-      if (!element.removeFromWorld) {
+      if (!element) {
+        // this.elements.splice(i, 1);
+        // //somehow a dead reference, remove it immediately.
+      } else if(element.state != 0) {
         element.updateMe();
       }
     }
@@ -124,8 +127,9 @@ class GameEngine {
       var entity = this.entities[i];
 
       if (!entity) {
-        this.entities.splice(i, 1);
-      } else if (!entity.removeFromWorld) {
+        // this.entities.splice(i, 1);
+        // //somehow a dead reference, remove it immediately.
+      } else if (entity.state != 0) {
         entity.updateMe();
       }
     }
@@ -133,7 +137,7 @@ class GameEngine {
 
     for (var i = this.entities.length - 1; i >= 0; --i) {
       var entity = this.entities[i];
-      if (entity.removeFromWorld || (entity instanceof Minion && entity.state == 0)) {
+      if (entity.state == 0) {
         this.entities.splice(i, 1);
       }
     }

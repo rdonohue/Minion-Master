@@ -1,11 +1,12 @@
 class Button{
   constructor(
     theObject, theHud, theGame,
-    myFunction, myArguments
-    myText, myColor//text which floats above the button.
+    myFunction, myArguments,
+    myText, myImage
+    //text which floats above the button.
     ){
 
-    Object.assign(this, {theObject, theHud, theGame, myFunction, myArguments, myText, myColor = "blue"});
+    Object.assign(this, {theObject, theHud, theGame, myFunction, myArguments, myText, myImage});
 
     theObject.myButtons.push(this);
 
