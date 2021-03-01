@@ -2,7 +2,7 @@
 class GameEngine {
   constructor() {
       this.entities = [];
-      //elements anything which don't need to be selectable.
+      //elements anything which don't need to be selectable or collidable.
       this.elements = [];
 
       this.ctx = null;

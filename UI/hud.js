@@ -4,10 +4,13 @@ class Hud{
     Object.assign(this, { game, x, y, w });
 
     this.towerButton = new TowerButton(this.game, 1038, 97);
+    // this.minionButton = new Button
   };
 
   updateMe() {
     this.towerButton.updateMe();
+
+
   };
 
   drawMe(ctx) {

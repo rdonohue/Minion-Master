@@ -111,6 +111,10 @@ class SceneManager {
     }
   }
 
+  drawCamera(ctx, mmX, mmY, mmS) {
+
+  }
+
   draw(ctx) {
     this.theMiniMap.drawMe(ctx);
     this.theHud.drawMe(ctx);
