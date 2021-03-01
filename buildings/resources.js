@@ -26,13 +26,16 @@ class Resources {
       while (this.berries > 0 || this.rocks > 0) {
         dx = this.x + randomInt(params.PLAY_WIDTH / params.TILE_W_H - 2) * params.TILE_W_H + (16 + randomInt(16) - 8);
         dy = this.y + randomInt(params.PLAY_HEIGHT / params.TILE_W_H - 2) * params.TILE_W_H + (16 + randomInt(16) - 8);
-        if (resSelect > 7) {
+        if (resSelect > 9) {
         // || (dx >= 500 && dx <= 930 && dy >= 300 && dy <= 761))
         // This is the former homebase location we had in the prototype build.
         // It needs some optimization with the homebase x, y, w, and h.
 
           //Do Nothing.
           //Randomizes the area, also prevents resources from being built on the castle.
+        } else if (resSelect > 7 && resSelect <= 9) {
+          //Bad luck, WOLFPATCH!
+          this.game.addEntity(new Wolfpatch(this.game, dx, dy));
         } else if (this.rocks > 0 && resSelect <= 3) {
           this.game.addEntity(new Rock(this.game, dx, dy));
           this.rocks--;
