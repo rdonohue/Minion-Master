@@ -27,7 +27,7 @@ ASSET_MANAGER.queueDownload("./sprites/button_Health.png");
 ASSET_MANAGER.queueDownload("./sprites/button_Int.png");
 ASSET_MANAGER.queueDownload("./sprites/tower.png");
 ASSET_MANAGER.queueDownload("./sprites/arrow.png");
-ASSET_MANAGER.queueDownload("./sprites/Fires/Small_Fireball_10x26.png");
+ASSET_MANAGER.queueDownload("./sprites/spicy.png");
 ASSET_MANAGER.downloadAll(function () {
 	var gameEngine = new GameEngine();
 

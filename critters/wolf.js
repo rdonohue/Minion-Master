@@ -70,16 +70,16 @@ class Wolf {
         }
         // Left
         this.animations[0].push(new Animator(this.spritesheet, 320, 288, 64, 32, 5, 0.15, 0, false, true));
-        this.animations[0].push(new Animator(this.spritesheet, 320, 352, 64, 32, 5, 0.05, 0, false, true));
+        this.animations[0].push(new Animator(this.spritesheet, 320, 352, 64, 32, 5, 0.15, 0, false, true));
         this.animations[0].push(new Animator(this.spritesheet, 512, 202, 64, 25, 1, 3, 0, false, true));
 
         // Right
         this.animations[1].push(new Animator(this.spritesheet, 320, 128, 64, 32, 5, 0.15, 0, false, true));
-        this.animations[1].push(new Animator(this.spritesheet, 320, 160, 64, 32, 5, 0.05, 0, false, true));
+        this.animations[1].push(new Animator(this.spritesheet, 320, 160, 64, 32, 5, 0.15, 0, false, true));
         this.animations[1].push(new Animator(this.spritesheet, 512, 9, 64, 25, 1, 3, 0, false, true));
 
         // Up
-        this.animations[2].push(new Animator(this.spritesheet, 164, 134, 25, 57, 5, 0.15, 7, false, true));
+        this.animations[2].push(new Animator(this.spritesheet, 164, 134, 25, 57, 4, 0.15, 7, false, true));
         this.animations[2].push(new Animator(this.spritesheet, 164, 258, 25, 57, 5, 0.15, 7, false, true));
         this.animations[2].push(new Animator(this.spritesheet, 260, 84, 25, 40, 1, 3, 0, false, true));
 
@@ -117,11 +117,11 @@ class Wolf {
         var combat = false;
         for (var i = 0; i < this.game.entities.length; i++) {
             var ent = this.game.entities[i];
-            if (ent instanceof Minion && canSee(this, ent)) {
+            if ((ent instanceof Minion || ent instanceof Dragon) && canSee(this, ent)) {
                 this.target = ent;
                 combat = true;
             }
-            if (ent instanceof Minion && collide(this, ent) && !ent.dead) {
+            if ((ent instanceof Minion || ent instanceof Dragon) && collide(this, ent) && !ent.dead) {
               if (this.state === 0) {
                   this.state = 1;
                   this.elapsedTime = 0;

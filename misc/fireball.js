@@ -6,8 +6,16 @@ class Fireball {
 
         this.myType = "fire";
 
-        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/Fires/Small_Fireball_10x26.png");
-        this.fireAnim = new Animator(this.spritesheet, 0, 0, 10, 27, 10, 0.25, 0, false, true);
+        this.spritesheet = ASSET_MANAGER.getAsset("./sprites/spicy.png");
+
+        this.downFire = new Animator(this.spritesheet, 0, 0, 10, 27, 10, 0.25, 0, false, true);
+        this.upFire = new Animator(this.spritesheet, 129, 0, 10, 27, 10, 0.25, 0, false, true);
+        this.leftFire = new Animator(this.spritesheet, 0, 168, 27, 10, 10, 0.25, 0, false, true);
+        this.rightFire = new Animator(this.spritesheet, 0, 278, 27, 10, 10, 0.25, 0, false, true);
+
+        this.animations = [];
+        this.loadAnimations();
+        this.direction = 0;
 
         var dist = distance(this, this.target);
         this.maxSpeed = 400; // pixels per second
@@ -42,6 +50,13 @@ class Fireball {
         }
     };
 
+    loadAnimations() {
+        this.animations.push(this.leftFire);
+        this.animations.push(this.rightFire);
+        this.animations.push(this.upFire);
+        this.animations.push(this.downFire);
+    };
+
     updateMe() {
         this.x += this.velocity.x * this.game.clockTick;
         this.y += this.velocity.y * this.game.clockTick;
@@ -61,20 +76,24 @@ class Fireball {
     drawMe(ctx) {
         var xOffset = 16;
         var yOffset = 16;
+        if (this.facing == 0) {
+          this.direction = 2;
+        } else if (this.facing < 4 && this.facing > 0) {
+          this.direction = 1;
+        } else if (this.facing == 4) {
+          this.direction = 3
+        } else if (this.facing > 4) {
+          this.direction = 0;
+        }
+        
         if (this.smooth) {
             let angle = Math.atan2(this.velocity.y , this.velocity.x);
             if (angle < 0) angle += Math.PI * 2;
             let degrees = Math.floor(angle / Math.PI / 2 * 360);
             this.drawAngle(ctx, degrees);
         } else {
-            if (this.facing < 5) {
-                this.fireAnim.drawFrame(this.game.clockTick, ctx, (this.x - xOffset) - this.game.camera.x, (this.y - yOffset) - this.game.camera.y, this.scale);
-            } else {
-                ctx.save();
-                ctx.scale(-1, 1);
-                this.fireAnim.drawFrame(this.game.clockTick, ctx, -(this.x) - 32 + xOffset + this.game.camera.x, (this.y - yOffset) - this.game.camera.y, this.scale);
-                ctx.restore();
-            }
+            this.animations[this.direction].drawFrame(this.game.clockTick, ctx, (this.x - xOffset) - this.game.camera.x,
+                                                      (this.y - yOffset) - this.game.camera.y, this.scale);
         }
     };
 };

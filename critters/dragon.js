@@ -112,8 +112,8 @@ class Dragon {
       var combat = false;
       for (var i = 0; i < this.game.entities.length; i++) {
           var ent = this.game.entities[i];
-          // (ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower)
-          if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && canSee(this, ent)) {
+          if ((ent instanceof Minion || ent instanceof Tower || ent instanceof HomeBase
+            || ent instanceof Wolf || ent instanceof Ogre) && canSee(this, ent)) {
               this.target = ent;
               combat = true;
               if (this.elapsedTime > (0.2 / this.agility) && !collide(this, ent)) {
@@ -122,7 +122,8 @@ class Dragon {
                     this.currentAnim.height / 2 + this.y - this.game.camera.y, ent, this.attack, this.projectileScale));
               }
           }
-          if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && collide(this, ent) && !ent.dead) {
+          if ((ent instanceof Minion || ent instanceof Tower || ent instanceof HomeBase
+            || ent instanceof Wolf || ent instanceof Ogre) && collide(this, ent) && !ent.dead) {
             if (this.state === 0) {
                 this.state = 1;
                 this.elapsedTime = 0;
@@ -166,10 +167,10 @@ class Dragon {
       } else if (this.facing > 4) {
         this.direction = 0;
       }
+
       this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x,
                                                             this.y - this.game.camera.y, this.scale);
       this.currentAnim = this.animations[this.state][this.direction];
-      // this.radius = Math.floor(this.currentAnim.width / 2);
 
       this.healthbar.drawMe(ctx);
     };

@@ -94,7 +94,7 @@ class Bush {
       y = 0;
     }
 
-    this.myType = "bush";
+    this.myType = "resource";
 
     this.health = 100;
     this.maxHealth = 100;
@@ -135,7 +135,7 @@ class Rock {
       y = 0;
     }
 
-    this.myType = "rock";
+    this.myType = "resource";
 
     this.health = 100;
     this.maxHealth = 100;

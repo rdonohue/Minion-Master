@@ -16,7 +16,6 @@ class SceneManager {
         this.game.entities = [];
         this.x = 0;
 
-
         //let castle = new HomeBase(gameEngine, 500, 300, 430, 461);
       	let corners = new Grasscorner(this.game, 0, 0);
       	let vertwalls = new Vertwall(this.game, 0, params.TILE_W_H);
@@ -30,14 +29,14 @@ class SceneManager {
         this.game.addEntity(intGrass);
         this.game.addEntity(resources);
 
-        //this.game.addEntity(base);
+        this.game.addEntity(base);
         this.game.addEntity(this.minimap);
         this.game.addEntity(this.ui);
         this.game.addEntity(this.ui.towerButton);
         this.game.addEntity(this.hud);
         this.game.addEntity(this.thePlayer);
         this.game.spawnMe("minion", 0, 0);
-      	//this.game.spawnMe("wolf", 800, 0);
+      	this.game.spawnMe("wolf", 800, 0);
         //this.game.spawnMe("wolf", 0, 400);
         this.game.spawnMe("dragon", 1200, 590);
     };
