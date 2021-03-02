@@ -30,7 +30,9 @@ class Resources {
           x: dx,
           y: dy
         }
-        if (resSelect > 7 || distance(center, this.theGame.theBase) < this.theGame.theBase.radius*2) {
+        if (resSelect > 7 || distance(center, this.theGame.theBase) < this.theGame.theBase.radius*4) {
+          //avoid putting resources near the base.
+
         // || (dx >= 500 && dx <= 930 && dy >= 300 && dy <= 761))
         // This is the former homebase location we had in the prototype build.
         // It needs some optimization with the homebase x, y, w, and h.

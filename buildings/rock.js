@@ -32,6 +32,9 @@ class Rock {
   updateMe() {
       this.elapsedTime += this.theGame.clockTick;
       this.isSelected = (this.thePlayer.selected == this);
+      if(this.health <= 0) {
+        this.state = 0;
+      }
   };
 
   drawMe(ctx) {
@@ -45,10 +48,6 @@ class Rock {
       24 * this.scale
     );
 
-    if(this.health < 0) {
-      this.state = 0;
-    }
-
     if(params.DEBUG || this.isSelected || this.state < 0 || this.state > 4) {
       ctx.save();
       ctx.strokeStyle = "red";
@@ -58,7 +57,7 @@ class Rock {
       ctx.stroke();
     }
 
-    this.healthbar.drawMe(ctx);
+    this.healthbar.drawMe(ctx, this.health, this.maxHealth, 0);
   };
 
   drawMinimap(ctx, mmX, mmY, mmW, mmH) {

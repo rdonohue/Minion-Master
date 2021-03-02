@@ -42,8 +42,11 @@ class Bush {
           this.subHealth = 0;
       }
       if (this.elapsedTime > 1 && this.health < this.maxHealth) {
-          this.subHealth += 2 * (this.maxHealth/this.health); //making the bush regrow faster the more health you leave it.
+          this.subHealth += (this.maxHealth/this.health); //making the bush regrow faster the more health you leave it.
           this.elapsedTime = 0;
+      }
+      if(this.health <= 0) {
+        this.state = 0;
       }
       this.isSelected = (this.thePlayer.selected == this);
   };

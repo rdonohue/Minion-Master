@@ -12,6 +12,7 @@ class HealthBar {
 
   drawMe(ctx, stat, maxStat, posY) {
     if(stat && maxStat && posY) { //we want to let bushs or other entitys have "healthbars" for things other then their health.
+
       if (stat < maxStat || params.DEBUG) {
         var ratio = stat / maxStat;
         ctx.save();
@@ -44,6 +45,7 @@ class HealthBar {
         ctx.restore();
       }
     }
+
   };
 };
 
