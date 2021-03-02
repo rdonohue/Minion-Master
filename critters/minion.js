@@ -84,7 +84,7 @@ class Minion {
 
     this.timer = new Timer();
     this.timeSinceUpdate = 0;
-    this.debugMe = [];
+    this.oldTargetList = [];
     this.tryToFix = false;
 
     this.actionTime = 0;
@@ -125,113 +125,13 @@ class Minion {
       this.state = this.moveToTarget();
     } else if (this.state == 4 || !this.target) {
       this.state = this.findNewTarget();
-    }
-
-    let target = null;
-
-    if(this.target) {
-      if(this.target.health) {
-        target = {
-          target: this.target,
-          health: this.target.health,
-          loc: {
-            x: this.x,
-            y: this.y
-          }
-        }
-      } else {
-        target = {
-          target: this.target,
-          health: null,
-          loc: {
-            x: this.x,
-            y: this.y
-          }
-        }
-      }
     } else {
-      target = {
-        target: null,
-        health: null,
-        loc: {
-          x: this.x,
-          y: this.y
-        }
-      }
+      //invalid state!
+      this.tryToFixSelf();
     }
-    this.debugMe.push(target);
-    let targetReoccurance = 0;
-    let listLength = 10;
-    if(this.debugMe.length > listLength) {
-      //we want to maintain a list of the last bunch of targets for debugging purposes
-      for(var i = 0; i < this.debugMe.length; i++) {
-        //check to see if the entire debuglist is basically the same target.
-        if((this.debugMe[i].target == this.target) || (!this.target && distance(this, this.debugMe[0]) < 50)) {
-          //NOTE: (!(A == B) is NOT the same as (A != B)) !!!!
-          targetReoccurance += 1;
-        }
-      }
 
-      if(targetReoccurance/this.debugMe.lenght > 0.90) {
-        //the target seems to keep reoccuring, check to see if we are at least moving
-
-        if(distance(this.debugMe[0].location, this.location) > this.radius) {
-          //we are just moving a long distance.
-          this.debugMe.shift();
-        } else if (this.target && this.debugMe[0].target == this.target){
-          //we are just interacting with a entity, check to see if its health is changing.
-          if(this.debugMe[0].health < this.target.health) {
-            this.debuggerFunction();
-            if(this.debugMe.length > listLength*2) {
-              //if we are possably stuck, we should keep a longer debugger list.
-              this.debugMe.shift();
-            }
-          } else {
-            this.debugMe.shift();
-          }
-        }
-      } else {
-        //we have a low reoccurance of the target, so just maintain list.
-        this.debugMe.shift();
-      }
-    }
+    this.targetListMaintenence();
   };
-
-  debuggerFunction() {
-    let printTime = this.theGame.timer.lastTimestamp;
-    if(this.waitTill == 0 || !this.waitTill) {
-      this.waitTill = printTime + 2500;
-    } else if (this.waitTill < printTime) {
-      if(!this.tryToFix) {
-        if(params.DEBUG){
-          console.log("we might have a stuck minion, its last 3 targets are:");
-          console.log(this.debugMe)
-          for(var i = this.debugMe.length-1; i > this.debugMe.length - 4 ;i--) {
-            let ent = this.debugMe[i];
-            if(ent.target && ent.target.myType) {
-              console.log((i+1) + "): " + ent.target.myType + ", " + ent.health)
-            } else if (ent.target){
-              console.log((i+1) + "): {" + ent.target.x + ", " + ent.target.y + "}")
-            } else {
-              console.log((i+1) + "): " + ent);
-            }
-          }
-          console.log("waiting before self-fix");
-        }
-        //try waiting a moment.
-        this.tryToFix = true;
-        this.waitTill = 0;
-      } else {
-        //try to find new target to try to escape broken state.
-        this.target = null;
-        this.tryToFix = false;
-        if(params.DEBUG) {
-          console.log("trying to self-fix");
-        }
-        this.state = this.findNewTarget();
-      }
-    }
-  }
 
   updateHealth() {
     if(this.health < 0) {
@@ -249,14 +149,6 @@ class Minion {
       }
     } else {
       this.regenTime += this.theGame.clockTick;
-    }
-  }
-
-  reportZombieState() {
-    if (this.actionTime >= this.actionSpeed*50) {
-      //tell console that something went wrong.
-      console.log(this + " has entered a broken state!");
-      this.actionTime = 0;
     }
   }
 
@@ -297,8 +189,8 @@ class Minion {
   }
 
   gatherResources() {
-    if(this.actionTime >= this.actionSpeed && this.target && (this.target.state != 0 || this.target.health > 0)) {
-      //we do still have a target to attack and it is alive.
+    if(this.actionTime >= this.actionSpeed && this.target && (this.target.health > 0)) {
+      //we do still have a target to attack and it is alive and we are ready to attack.
       let ent = this.target;
       if((ent.state != 0 || ent.health > 0) && reach(this, ent)) {
         //the target is alive and in range and we are ready to attack.
@@ -332,7 +224,7 @@ class Minion {
         //this should not EVER happen!
         return "gather_method entity_handling failure";
       }
-    } else if (!this.target || this.state == 0){
+    } else if (!this.target || this.target.state == 0){
       // the target has died (or broke)! find new target.
       this.target = null;
       return 4;
@@ -346,7 +238,7 @@ class Minion {
   }
 
   moveToTarget() {
-    this.debuggerFunction(false);
+
     if(this.target) {
       let dist = distance(this, this.target);
       this.velocity = {
@@ -624,5 +516,116 @@ class Minion {
     ctx.strokeStyle = "orange";
     ctx.strokeRect(x, y, 1, 1);
     ctx.restore();
+  }
+
+  targetListMaintenence() {
+    let target = {
+      oldTarget: this.target,
+      type: null,
+      health: null,
+      loc: null,
+      ownLoc: {
+        x: this.center.x,
+        y: this.center.y
+      }
+    };
+
+    if(this.target) {
+      //if we have a target, record certain characteristics of it.
+      if(this.target.myType) {
+        target.type = this.target.myType;
+      }
+      if(this.target.health) {
+        target.health = this.target.health;
+      }
+      if(this.target.x && this.target.y) {
+        target.loc.x = this.target.x;
+        target.loc.y = this.target.y;
+      }
+    }
+
+    this.oldTargetList.push(target);
+    let reoccurance = 0;
+    let listLength = 5; //try to maintain list length to this amount.
+    if(this.oldTargetList.length > listLength) {
+      //we want to maintain a list of the last bunch of targets for debugging purposes
+      for(var i = 0; i < this.oldTargetList.length; i++) {
+        //see how many entitys are "similar" to the current target.
+        if(this.target) {
+          //we have a current target, so compare "propertys"
+          if(this.target.myType) {
+            //it is a proper entity.
+
+          } else {
+
+          }
+        } else {
+          //we don't have a location atm, so just compare old locations.
+        }
+      }
+
+      if(reoccurance/this.debugMe.lenght > 0.90) {
+        //the target seems to keep reoccuring, check to see if we are at least moving
+
+        if(distance(this.debugMe[0].location, this.location) > this.radius) {
+          //we are just moving a long distance.
+          this.debugMe.shift();
+        } else if (this.target && this.debugMe[0].target == this.target){
+          //we are just interacting with a entity, check to see if its health is changing.
+          if(this.debugMe[0].target.health < this.target.health) {
+            this.debuggerFunction();
+            if(this.debugMe.length > listLength*2) {
+              //if we are possably stuck, we should keep a longer debugger list.
+              this.debugMe.shift();
+            }
+          } else {
+            this.debugMe.shift();
+          }
+        }
+      } else {
+        //we have a low reoccurance of the target, so just maintain list.
+        this.debugMe.shift();
+      }
+    }
+  }
+
+  debuggerFunction() {
+    let printTime = this.theGame.timer.lastTimestamp;
+    if(this.waitTill == 0 || !this.waitTill) {
+      this.waitTill = printTime + 2500;
+    } else if (this.waitTill < printTime) {
+      if(!this.tryToFix) {
+        if(params.DEBUG){
+          console.log("we might have a stuck minion, its last 3 targets are:");
+          console.log(this.debugMe)
+          for(var i = this.debugMe.length-1; i > this.debugMe.length - 4 ;i--) {
+            let ent = this.debugMe[i];
+            if(ent && ent.target && ent.target.myType) {
+              console.log((i+1) + " (entity): " + ent.target.myType + ", " + Math.round(ent.health) + ", {" + Math.round(ent.target.x) + ", " + Math.round(ent.y) + "}")
+            }
+            if(ent.loc) {
+              console.log((i+1) + " (self location): {" + Math.round(ent.x) + ", " + Math.round(ent.y) + "}");
+            }
+          }
+          console.log("waiting before self-fix");
+        }
+        //try waiting a moment.
+        this.tryToFix = true;
+        this.waitTill = 0;
+      } else {
+        //try to find new target to try to escape broken non-static state.
+        tryToFixSelf();
+      }
+    }
+  }
+
+  tryToFixSelf() {
+    this.target = null;
+    this.tryToFix = false;
+    if(params.DEBUG) {
+      console.log("trying to self-fix");
+    }
+    this.state = this.findNewTarget();
+
   }
 };
