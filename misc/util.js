@@ -31,7 +31,7 @@ function distance(A, B) {
 //can bump into eachother without actually attacking and vis-versa...so they should
 //be independent checks.
 function reach(A, B) {
-  return (distance(A, B) <= A.reachRadius);
+  return (distance(A, B) < A.reachRadius);
 }
 
 function checkFor(A, faction) {

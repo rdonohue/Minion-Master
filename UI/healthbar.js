@@ -49,12 +49,13 @@ class HealthBar {
 
 class Score {
   constructor(theGame, x, y, score, color) {
-    Object.assign(this, {theGame, x, y, score});
+    Object.assign(this, {theGame, x, y, score, color});
 
     this.velocity = -32;
     this.elapsed = 0;
     this.x += randomInt(10) - 5 //this makes the score start off in a few different spots randomly.
     this.lifespan = 2;
+    this.state = 1;
   }
 
   updateMe() {

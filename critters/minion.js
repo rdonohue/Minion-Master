@@ -2,7 +2,6 @@ class Minion {
   constructor(theGame, x, y) {
     Object.assign(this, {theGame, x, y });
     this.theCamera = this.theGame.theSM; //theSM is the theGame's theCamera.
-    this.spritesheet = ASSET_MANAGER.getAsset("./sprites/human_regular.png");
     this.thePlayer = this.theGame.theSM.thePlayer;
 
     // Different sprites for directions and interactions
@@ -96,10 +95,12 @@ class Minion {
   updateMe() {
     this.elapsedTime += this.theGame.clockTick;
     this.actionTime += this.theGame.clockTick;
+
     this.center = {
       x: this.x + this.baseWidth*this.scale/2,
       y: this.y + this.baseHeight*this.scale/2
     }
+    this.facing = getFacing(this.velocity);
 
     this.isSelected = (this.thePlayer.selected == this);
 
@@ -126,6 +127,13 @@ class Minion {
       //we entered a invalid state, see console for details on how or when we did that.
       this.debuggerFunction(true);
     }
+
+    if(!this.debugMe){
+      this.debugMe = this.target;
+    } else if (this.target === this.debugMe && this.state > 2) {
+      console.log("stuck on: "+ this.target);
+    }
+
   };
 
   debuggerFunction(findNewTarget) {
@@ -221,12 +229,13 @@ class Minion {
             if(this.intelligence == 0 || ent.health/ent.maxHealth > 0.1) { //make smarter minions not kill the food!
               ent.health -= gather; //don't heal the target by dealing negitive gather!
               this.thePlayer.myFood += gather;
-            } else if (ent.health/ent.maxHealth > 0.1 && this.intelligence > 0) {
+            } else if (ent.health/ent.maxHealth < 0.1 && this.intelligence > 0) {
+              this.target = null;
               return 3; // the berries are low on food.
             }
           }
         }
-        this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, gather, "yellow"));
+        this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, gather, "blue"));
         this.actionTime = 0;
         return 2; //keep gathering.
       } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {
@@ -263,12 +272,13 @@ class Minion {
       this.facing = getFacing(this.velocity);
 
       if(reach(this, this.target)) {
-        if(this.target.myFaction == "enemy") {
+        if(this.target.myFaction === "enemy") {
           return 1;
-        } else if (this.target.myFaction == "resource"){
+        } else if (this.target.myFaction === "resource"){
           return 2;
         } else {
           //just a location, find new location.
+          this.target = null;
           return 4;
         }
       } else {
@@ -277,79 +287,100 @@ class Minion {
       }
     } else if (!this.target || !canSee(this, this.target)){
       //we lost the target or it went out of range.
+      this.target = null;
       return 4;
     }
   }
 
   findNewTarget() {
     //first look around for enemys
+    let that = this;
     if(this.intelligence == 0 ) {
       //we are too dumb to attack anything.
-    } else if (this.intelligence == 1){
+    } else if (this.intelligence >= 1){
       //we know to attack baddies and thats it.
-      this.target = this.theGame.entities.filter(entity => {
-        return (
-          distance(this,entity) < this.visualRadius &&
-          entity.myFaction == "enemy"
-        );
-      })
-    } else if (this.intelligence > 1) {
-      //we are smart enough to not attack enemys bigger then us.
-      let attackWeight = 3;
-      let defenseWeight = 2;
-      let maxHealthWeight = 1;
-      let totalWeight = attackWeight + defenseWeight + maxHealthWeight
-      let that = this;
-      this.target = this.theGame.entities.filter(entity => {
-        return (
-          distance(this,entity) < this.visualRadius &&
-          entity.myFaction == "enemy" &&
-          (
-            ((entity.attack / that.attack) * that.attackWeight) +
-            ((entity.defense / that.defense) * that.defenseWeight) +
-            ((entity.maxHealth / that.maxHealth) * that.maxHealthWeight)
-          ) / (that.totalWeight) > 1
-          //if the target's average stats are too great relative to our own, don't try to engage it.
-          //(and weighting some more then others), this will sum up to more then 3.
-        );
-      })
+
+      //create a list of enemys at moment of search, sort IN THE ARRAY by their distance
+      //to this minion and then shift() returns the closest enemy.
+      let closestEnemy = this.theGame.entities.filter(entity => {
+        return entity.myFaction == "enemy";
+      }).sort(function(a,b) {
+        return (distance(that, a) - distance(that, b))
+      }).shift();
+
+      //if the closest is visualRadius, target it, if not, then none of them are.
+      if(closestEnemy && distance(that, closestEnemy) < that.visualRadius) {
+        this.target = closestEnemy;
+      }
+    } else if (this.intelligence > 1 && false) {
+      // //not yet functional!
+      // //we are smart enough to not attack enemys bigger then us.
+      // let attackWeight = 3;
+      // let defenseWeight = 2;
+      // let maxHealthWeight = 1;
+      // let totalWeight = attackWeight + defenseWeight + maxHealthWeight
+      // this.target = this.theGame.entities.filter(entity => {
+      //   return (
+      //     distance(this,entity) < this.visualRadius &&
+      //     entity.myFaction == "enemy" &&
+      //     (
+      //       ((entity.attack / that.attack) * that.attackWeight) +
+      //       ((entity.defense / that.defense) * that.defenseWeight) +
+      //       ((entity.maxHealth / that.maxHealth) * that.maxHealthWeight)
+      //     ) / (that.totalWeight) > 1
+      //     //if the target's average stats are too great relative to our own, don't try to engage it.
+      //     //(and weighting some more then others), this will sum up to more then 3.
+      //   );
+      // })
     }
 
     //either stop here because we have our target,
     //or search for resources.
     if(this.target) {
       return 3;
-    }
-
-    if(this.intelligence > 0) {
-      //we want to ignore bush's with less then 1% health left if we are not braindead.
-      this.target = this.theGame.entities.find(entity => {
-        return (
-          distance(this,entity) < this.visualRadius &&
-          entity.myFaction == "resource" &&
-          (entity.subHealth && entity.health/entity.maxHealth > 0.01) //don't over-harvest bushs
-        )
-      })
     } else {
-      this.target = this.theGame.entities.find(entity => {
-        return (
-          distance(this,entity) < this.visualRadius &&
-          entity.myFaction == "resource"
-        ) //we are littearlly braindead and don't know better.
-      })
+      //search for resources
+      if(this.intelligence > 0) {
+        //we want to ignore bush's with less then 10% health left if we are not braindead.
+        let closestHarvestable = this.theGame.entities.filter(entity => {
+          return ( //don't over-harvest bushs by ignoring low-health bushs
+            entity instanceof Rock ||
+            (entity instanceof Bush && entity.health/entity.maxHealth > 0.1)
+          )
+        }).sort(function(a,b) {
+          return (distance(that, a) - distance(that, b))
+        }).shift();
+
+        //if the closest is visualRadius, target it, if not, then none of them are.
+        this.target = (distance(that, closestHarvestable) < that.visualRadius ? closestHarvestable : null);
+      } else {
+        //we are littearlly braindead and don't know better.
+        let closestHarvestable = this.theGame.entities.filter(entity => {
+          return ( //don't over-harvest bushs by ignoring low-health bushs
+            entity instanceof Rock || entity instanceof Bush
+          )
+        }).sort(function(a,b) { //sort by distance to this minion.
+          return (distance(that, a) - distance(that, b))
+        }).shift();
+
+        //if the closest is visualRadius, target it, if not, then none of them are.
+        if(closestHarvestable && distance(that, closestHarvestable) < that.visualRadius) {
+          this.target = closestHarvestable;
+        }
+      }
     }
 
-    //we don't see any enemys OR resources.
+    //we don't see any enemys OR resources, pick random location in sight.
     if(this.target) {
       return 3;
+    } else {
+      this.target = pickLocation(this);
     }
-
-    this.target = pickLocation(this);
 
     if(this.target) {
       return 3;
     } else {
-      return "findNewTarget_method coulden't find a target!";
+      return 4;
     }
   }
 
@@ -371,60 +402,115 @@ class Minion {
       this.direction = 3
     } else if (this.facing > 4) {
       this.direction = 0;
+    } else {
+      this.direction = 0;
+      this.state = "facing is null";
     }
 
     let tempAdjust = 70; //I'm not sure why the sprites are so off-center, but I'm doing this for now.
 
     var w = this.animations[temp][this.direction].width;
-        if (this.direction == 1) {
-          ctx.save();
-          ctx.scale(-1, 1);
-          switch (temp) {
-            //Walking
-            case 0: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx,
-                            -(this.center.x - this.theGame.theCamera.x) - w,
-                            this.y - this.theGame.theCamera.y,
-                            this.scale, 4);
-                                                                  break;
-            //Attacking
-            case 1: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx,
-                            -(this.center.x - this.theGame.theCamera.x) - w,
-                            this.y - this.theGame.theCamera.y,
-                            this.scale, 2);
-                                                                  break;
-          }
-          ctx.restore();
-        } else {
-          switch (temp) {
-            case 0: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx,
-                            this.center.x - this.theGame.theCamera.x,
-                            this.center.y - this.theGame.theCamera.y,
-                            this.scale, 4);
-                                                                  break;
-            case 1: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx,
-                            this.center.x - this.theGame.theCamera.x,
-                            this.center.y - this.theGame.theCamera.y,
-                            this.scale, 2);
-                                                                  break;
-          }
-        }
-        this.healthbar.drawMe(ctx);
+
+    if (this.direction == 1) {
+      ctx.save();
+      ctx.scale(-1, 1);
+      switch (temp) {
+        //Walking
+        case 0: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx,
+                        -(this.x - this.theGame.theCamera.x) - w,
+                        this.y - this.theGame.theCamera.y,
+                        this.scale, 4);
+                                                              break;
+        //Attacking
+        case 1: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx,
+                        -(this.x - this.theGame.theCamera.x) - w,
+                        this.y - this.theGame.theCamera.y,
+                        this.scale, 2);
+                                                              break;
+      }
+      ctx.restore();
+    } else {
+      switch (temp) {
+        case 0: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx,
+                        this.x - this.theGame.theCamera.x,
+                        this.y - this.theGame.theCamera.y,
+                        this.scale, 4);
+                                                              break;
+        case 1: this.animations[temp][this.direction].drawLongFrame(this.theGame.clockTick, ctx,
+                        this.x - this.theGame.theCamera.x,
+                        this.y - this.theGame.theCamera.y,
+                        this.scale, 2);
+                                                              break;
+      }
+    }
+    this.healthbar.drawMe(ctx);
 
     if(params.DEBUG || this.isSelected || this.state < 0 || this.state > 4) {
+      //display own radius.
       ctx.save();
       ctx.strokeStyle = "red";
       ctx.beginPath();
       ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.radius, 0, 2*Math.PI);
       ctx.stroke();
 
+      //display visualRadius
       ctx.strokeStyle = "yellow";
       ctx.beginPath();
       ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.visualRadius, 0, 2*Math.PI);
       ctx.stroke();
       ctx.restore();
+
+      if(this.target) {
+        ctx.save();
+        let radius;
+        if(this.target.myFaction === "enemy") {
+          //Attacking entity at location
+          let location = {
+            x: this.target.center.x,
+            y: this.target.center.y
+          }
+          ctx.strokeStyle = "red";
+          ctx.fillStyle = "red";
+          radius = this.target.radius
+        } else if (this.target.myFaction === "resource") {
+          //harvesting entity at location
+          let location = {
+            x: this.target.center.x,
+            y: this.target.center.y
+          }
+          ctx.strokeStyle = "blue";
+          ctx.fillStyle = "blue";
+          radius = this.target.radius
+        } else if (!(this.target.myType)) {
+          //searching for entity's at location
+          let location = {
+            x: this.target.x,
+            y: this.target.y
+          }
+          ctx.strokeStyle = "yellow";
+          ctx.fillStyle = "yellow";
+          radius = this.radius;
+        }
+        ctx.beginPath(); //draw own radius.
+        ctx.arc(location.x - this.theCamera.x, location.y - this.theCamera.y, radius, 0, 2*Math.PI);
+        ctx.stroke();
+        ctx.strokeRect( //draw rectangle around desired location
+          location.x - this.theCamera.x, location.y - this.theCamera.y,
+          radius*2, radius*2
+        )
+        ctx.stroke();
+        ctx.fillStyle = "yellow"; //display desired motion
+        ctx.fillText("moving to", location.x, location.y);
+        ctx.beginPath(); //draw line from own location to desired location.
+        ctx.moveTo(this.center.x, this.center.y);
+        ctx.lineTo(location.x, location.y);
+        ctx.stroke();
+      }
+      ctx.restore();
     }
 
     this.healthbar.drawMe(ctx);
+    ctx.restore();
   };
 
   loadAnimations() {

@@ -106,7 +106,7 @@ class GameEngine {
     for (var i = 0; i < this.entities.length; i++) {
       this.entities[i].drawMe(this.ctx);
     }
-    this.theCamera.draw(this.ctx);
+    this.theSM.draw(this.ctx);
   }
 
   update() {
@@ -116,7 +116,7 @@ class GameEngine {
     for (var i = 0; i < elementsCount; i++) {
       var element = this.elements[i];
 
-      if(element.state != 0) {
+      if(!element.state == 0) {
         element.updateMe();
       }
     }
@@ -124,16 +124,22 @@ class GameEngine {
     for (var i = 0; i < entitiesCount; i++) {
       var entity = this.entities[i];
 
-      if (entity.state != 0) {
+      if (!entity.state == 0) {
         entity.updateMe();
       }
     }
     this.theSM.update();
 
-    for (var i = this.entities.length - 1; i >= 0; --i) {
+    for (var i = entitiesCount - 1; i >= 0; --i) {
       var entity = this.entities[i];
       if (entity.state == 0) {
         this.entities.splice(i, 1);
+      }
+    }
+    for (var i = elementsCount - 1; i >= 0; --i) {
+      var element = this.elements[i];
+      if (element.state == 0) {
+        this.elements.splice(i, 1);
       }
     }
   };
