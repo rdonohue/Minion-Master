@@ -50,7 +50,7 @@ class Minion {
     this.regen = this.maxHealth/20;
     this.defense = minionStats.DEFENSE;
     this.attack = minionStats.ATTACK;
-    this.gatherRate = 5
+    this.gatherRate = 10
     this.agility = minionStats.AGILITY;
     this.intelligence = minionStats.INTELLIGENCE;
     this.combat = false;
@@ -204,7 +204,7 @@ class Minion {
     } else if (this.waitTill < printTime) {
       if(!this.tryToFix) {
         if(params.DEBUG){
-          console.log("we seem to have a stuck minion, its last 3 targets are:");
+          console.log("we might have a stuck minion, its last 3 targets are:");
           console.log(this.debugMe)
           for(var i = this.debugMe.length-1; i > this.debugMe.length - 4 ;i--) {
             let ent = this.debugMe[i];

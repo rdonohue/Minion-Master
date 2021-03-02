@@ -116,7 +116,7 @@ class GameEngine {
     for (var i = 0; i < elementsCount; i++) {
       var element = this.elements[i];
 
-      if(!element.state == 0) {
+      if(element.state != 0) {
         element.updateMe();
       }
     }
@@ -124,7 +124,7 @@ class GameEngine {
     for (var i = 0; i < entitiesCount; i++) {
       var entity = this.entities[i];
 
-      if (!entity.state == 0) {
+      if (entity.state != 0) {
         entity.updateMe();
       }
     }
