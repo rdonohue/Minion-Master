@@ -9,7 +9,7 @@ class Wolfpatch {
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/ground_sprites.png");
       this.chooseSprite();
 
-      this.healthbar = new HealthBar(this.theGame, this);
+      this.myHealthBar = new HealthBar(this.theGame, this);
 
       //Stats
       this.health = 200;
@@ -17,8 +17,7 @@ class Wolfpatch {
       this.attack = 0;
       this.agility = 0;
 
-      this.state = 0;  // 0 = idle, 1 = destroyed
-      this.removeFromWorld = false;
+      this.state = 1;
 
       this.elapsedTime = 0;
     };
@@ -27,9 +26,9 @@ class Wolfpatch {
         this.elapsedTime += this.theGame.clockTick;
         let summonAwoo = randomInt(4); //20% chance to spawn a wolf
         let spawnTime = 60 + (randomInt(20) - 10); // Every 50 to 70 seconds see if a wolf spawns.
+        
         if (this.health <= 0) {
-            this.dead = true;
-            this.removeFromWorld = true;
+            this.state = 0;
         }
 
         if (this.elapsedTime >= spawnTime) {

@@ -41,7 +41,7 @@ class Resources {
           //Randomizes the area, also prevents resources from being built on the castle.
         } else if (resSelect > 7 && resSelect <= 9) {
           //Bad luck, WOLFPATCH!
-          this.game.addEntity(new Wolfpatch(this.game, dx, dy));
+          this.theGame.addEntity(new Wolfpatch(this.theGame, dx, dy));
         } else if (this.rocks > 0 && resSelect <= 3) {
           this.theGame.addEntity(new Rock(this.theGame, dx, dy));
           this.rocks--;
