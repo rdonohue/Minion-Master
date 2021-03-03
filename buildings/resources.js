@@ -30,7 +30,7 @@ class Resources {
           x: dx,
           y: dy
         }
-        if (resSelect > 7 || distance(center, this.theGame.theBase) < this.theGame.theBase.radius*4) {
+        if (resSelect > 9 || distance(center, this.theGame.theBase) < this.theGame.theBase.radius*4) {
           //avoid putting resources near the base.
 
         // || (dx >= 500 && dx <= 930 && dy >= 300 && dy <= 761))
@@ -39,6 +39,9 @@ class Resources {
 
           //Do Nothing.
           //Randomizes the area, also prevents resources from being built on the castle.
+        } else if (resSelect > 7 && resSelect <= 9) {
+          //Bad luck, WOLFPATCH!
+          this.game.addEntity(new Wolfpatch(this.game, dx, dy));
         } else if (this.rocks > 0 && resSelect <= 3) {
           this.theGame.addEntity(new Rock(this.theGame, dx, dy));
           this.rocks--;
