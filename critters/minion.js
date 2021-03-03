@@ -4,6 +4,9 @@ class Minion {
     this.theCamera = this.theGame.theSM; //theSM is the theGame's theCamera.
     this.thePlayer = this.theGame.theSM.thePlayer;
 
+    this.x = x;
+    this.y = y;
+
     // Different sprites for directions and interactions
     this.downAttack = ASSET_MANAGER.getAsset("./sprites/minion/down_attack.png");
     this.downWalk = ASSET_MANAGER.getAsset("./sprites/minion/down_walk.png");
@@ -91,6 +94,9 @@ class Minion {
     this.delta = 1/this.tick;
     this.startup = null;
     this.myHealthBar = new HealthBar(this.theGame, this);
+    this.elapsedTime = 0;
+    this.actionTime = 0;
+    this.printTime = 0;
   };
 
   //the move-speed is still staggered a bit, that might be because of async
@@ -104,6 +110,7 @@ class Minion {
       x: this.x + this.baseWidth*this.scale/2,
       y: this.y + this.baseHeight*this.scale/2
     }
+
     this.facing = getFacing(this.velocity);
 
     this.isSelected = (this.thePlayer.selected == this);
@@ -118,7 +125,6 @@ class Minion {
     //4-->searching for enemy/resource (moving),
 
     this.updateHealth();
-    console.log(this.state);
     if(this.state == 1) {
       this.state = this.attackEnemy();
     } else if (this.state == 2) {
@@ -242,12 +248,21 @@ class Minion {
   }
 
   moveToTarget() {
+    var that = this;
 
-    if(this.target) {
-      let dist = distance(this, this.target);
+    if(this.target && this.target.x != this.x && this.target.y != this.y) {
+      let b = this.target;
+      // console.log(b);
+      // console.log(this.center);
+      var dist = Math.sqrt(
+        (that.x - b.x) * (that.x - b.x) +
+        (that.y - b.y) * (that.y - b.y)
+      );
+
+      //console.log(this + " is moving to: "+ this.target.x + ", " + this.target.y + ", " + dist);
       this.velocity = {
         x: (this.target.x - this.x)/dist * this.maxSpeed,
-        y: (this.target.y - this.y) / dist * this.maxSpeed
+        y: (this.target.y - this.y)/dist * this.maxSpeed
       };
 
       this.x += this.velocity.x * this.theGame.clockTick;
@@ -268,8 +283,9 @@ class Minion {
         //still not reached target so stay in current mode.
         return 3;
       }
-    } else if (!this.target || !canSee(this, this.target)){
-      //we lost the target or it went out of range.
+    } else {
+      //!this.target || !canSee(this, this.target)
+      //we lost the target or it went out of range or its our own location
       this.target = null;
       return 4;
     }
@@ -361,12 +377,14 @@ class Minion {
     //we don't see any enemys OR resources, pick location that which is proprotionally far to our
     //intelligence. more intelligence makes the movement less erratic as a result
     if(this.target) {
+      console.log("resource");
       return 3;
     } else {
-      this.target = generateTarget(this, this.visualRadius*this.intelligence/8);
+      this.target = generateTarget(this);
     }
 
     if(this.target) {
+      console.log("ran loc");
       return 3;
     } else {
       this.target = null;

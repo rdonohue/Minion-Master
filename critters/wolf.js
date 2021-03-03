@@ -118,11 +118,11 @@ class Wolf {
     } else if (this.state == 2) {
       this.state = this.moveToTarget();
     } else if (this.state == 3) {
-      if(Math.random(this.exaustion) > this.wolf_size) {
-        this.state = this.idle();
-      } else {
+      // if(Math.random(this.exaustion) > this.wolf_size) {
+      //   this.state = this.idle();
+      // } else {
         this.state = this.findNewTarget();
-      }
+      // }
     } else if (this.state == 4) {
       this.state = this.idle();
     } else {
@@ -276,10 +276,12 @@ class Wolf {
     if(this.target) {
       return 1;
     } else {
-      this.target = generateTarget(this, this.visualRadius*this.intelligence/8);
+      console.log("b")
+      this.target = generateTarget(this);
     }
 
     if(this.target) {
+      console.log(this.target);
       return 2;
     } else {
       this.target = null;

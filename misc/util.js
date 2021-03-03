@@ -24,7 +24,10 @@ function Create2DArray(rows) {
 };
 
 function distance(A, B) {
-    return Math.sqrt((B.x - A.x) * (B.x - A.x) + (B.y - A.y)*(B.y - A.y));
+  return Math.sqrt(
+    (B.x - A.x) * (B.x - A.x) +
+    (B.y - A.y) * (B.y - A.y)
+  );
 };
 
 //this method is like collide but its used for checking the entitys reach, since targets
@@ -68,42 +71,22 @@ function passiveHeal(critter, healingFactor) {
   }
 }
 
-function checkLocation(A, x, y, mapBuffer, dist) {
-  //that the location is within the map.
-  var left = x > mapBuffer;
-  var right = x < params.PLAY_WIDTH - params.CANVAS_WIDTH - mapBuffer;
-
-  var up = y > mapBuffer;
-  var down = y < params.PLAY_HEIGHT - params.CANVAS_HEIGHT - mapBuffer;
-
-  if(left && right && down && up) {
-    //the location is in the map.
-    return distance(A,{x:x,y:y})>dist;
-  } else {
-    //could not find valid location.
-    return false;
-  }
-};
-
-function generateTarget(A, dist) {
-  temp = {
-    x: A.x,
-    y: A.y
-  }
+function generateTarget(A) {
+  let tx;
+  let ty;
   attempts = 0;
   maxAttempts = 10;
-  while((!temp.x || !temp.y) && attempts++ < maxAttempts) {
+  while((!tx && !ty) && attempts++ < maxAttempts) {
     let x = A.x - A.visualRadius + randomInt(2*A.visualRadius);
     let y = A.y - A.visualRadius + randomInt(2*A.visualRadius);
     if( (x < params.PLAY_WIDTH - A.radius && x > A.radius) &&
-        (y < params.PLAY_HEIGHT - A.radius && y > A.radius) &&
-        (checkLocation(A,x,y,A.radius,dist))) {
-      temp.x = x;
-      temp.y = y;
+        (y < params.PLAY_HEIGHT - A.radius && y > A.radius)) {
+      tx = x;
+      ty = y;
     }
+    console.log(attempts);
   }
-
-  return temp;
+  return {x: tx, y: ty};
 }
 
 function collide(A, B) {
