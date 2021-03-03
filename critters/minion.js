@@ -118,7 +118,7 @@ class Minion {
     //4-->searching for enemy/resource (moving),
 
     this.updateHealth();
-
+    console.log(this.state);
     if(this.state == 1) {
       this.state = this.attackEnemy();
     } else if (this.state == 2) {
