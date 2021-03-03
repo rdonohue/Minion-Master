@@ -7,45 +7,37 @@ class HealthBar {
   };
 
   updateMe() {
-    this.width = this.entity.baseWidth*this.entity.scale/2
+    //this.width = this.entity.baseWidth*this.entity.scale/2
   };
 
-  drawMe(ctx, stat, maxStat, posY) {
-    if(stat && maxStat && posY) { //we want to let bushs or other entitys have "healthbars" for things other then their health.
+  drawMe(ctx, stat, maxStat, type) {
+    if (stat < maxStat || params.DEBUG || entity.isSelected) {
+      var ratio = stat / maxStat;
+      let x = this.entity.x - this.theGame.theCamera.x;
+      let y = this.entity.y - this.theGame.theCamera.y;
 
-      if (stat < maxStat || params.DEBUG) {
-        var ratio = stat / maxStat;
-        ctx.save();
-        ctx.strokeStyle = "black";
-        ctx.fillstyle = ratio < 0.2 ? "Red" : ratio < 0.5 ? "Yellow" : "Green";
+      x += this.entity.baseWidth * this.entity.scale * 0.2
+      y += this.entity.baseHeight * this.entity.scale * 1.1
+      ctx.save();
+      if(type == "health") {
+        ctx.fillStyle = (ratio < 0.2 ? "Red" : ratio < 0.5 ? "Yellow" : "Green");
         ctx.fillRect(
-          this.entity.x - this.theGame.theCamera.x, this.entity.y + this.entity.baseHeight*this.entity.scale - this.theGame.theCamera.y,
-          this.width * ratio, this.height + posY*this.height + 1
-        );
-        ctx.strokeRect(
-          this.entity.x - this.theGame.theCamera.x, this.entity.y + this.entity.baseHeight*this.entity.scale - this.theGame.theCamera.y,
-          this.width, this.height + posY*this.height + 1)
-
-        ctx.restore();
-      }
-    } else {
-      if (this.entity.health < this.entity.maxHealth || params.DEBUG) {
-        var ratio = this.entity.health / this.entity.maxHealth;
-        ctx.save();
-        ctx.strokeStyle = "black";
-        ctx.fillstyle = ratio < 0.2 ? "Red" : ratio < 0.5 ? "Yellow" : "Green";
-        ctx.fillRect(
-          this.entity.x - this.theGame.theCamera.x, this.entity.y + this.entity.baseHeight*this.entity.scale - this.theGame.theCamera.y,
+          x, y,
           this.width * ratio, this.height
         );
+        ctx.strokeStyle = "black";
         ctx.strokeRect(
-          this.entity.x - this.theGame.theCamera.x, this.entity.y + this.entity.baseHeight*this.entity.scale - this.theGame.theCamera.y,
+          x, y,
           this.width, this.height)
-
-        ctx.restore();
+      } else {
+        ctx.fillStyle = "red";
+        ctx.fillText((stat + "/" + maxStat),
+          x, y
+        );
       }
-    }
 
+      ctx.restore();
+    }
   };
 };
 

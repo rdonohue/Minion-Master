@@ -20,8 +20,6 @@ class HomeBase {
       this.agility = 0;
       this.intelligence = 0;
 
-      this.healthbar = new HealthBar(this.theGame, this);
-
       this.baseWidth = 450;
       this.baseHeight = 450;
       this.scale = 0.4;
@@ -33,6 +31,8 @@ class HomeBase {
 
       this.animations = [];
       this.loadAnimations();
+      this.isSelected = false;
+      this.myHealthBar = new HealthBar(this.theGame, this);
   };
 
   loadAnimations() {
@@ -55,7 +55,6 @@ class HomeBase {
 
   drawMe(ctx) {
     this.animations[0].drawFrame(this.theGame.clockTick, ctx, this.x - this.camera.x, this.y - this.camera.y, this.scale);
-    this.healthbar.drawMe(ctx);
 
     if(params.DEBUG || this.isSelected) {
       ctx.strokeStyle = "red";
@@ -63,6 +62,8 @@ class HomeBase {
       ctx.arc(this.center.x - this.camera.x, this.center.y - this.camera.y, this.radius, 0, 2*Math.PI);
       ctx.stroke();
     }
+
+    this.myHealthBar.drawMe(ctx, this.health, this.maxHealth, "health");
   };
 
   drawMinimap(ctx, mmX, mmY, mmW, mmH) {

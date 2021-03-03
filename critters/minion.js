@@ -41,7 +41,6 @@ class Minion {
     this.state = 4;
     this.priority = 0;
 
-    this.healthbar = new HealthBar(this.theGame, this);
     this.target = null;
 
     //Stats
@@ -95,6 +94,7 @@ class Minion {
     this.tick = this.theGame.tickDuration;
     this.delta = 1/this.tick;
     this.startup = null;
+    this.myHealthBar = new HealthBar(this.theGame, this);
   };
 
   //the move-speed is still staggered a bit, that might be because of async
@@ -191,9 +191,11 @@ class Minion {
     } else {
       this.regenTime += this.theGame.clockTick;
     }
+
+    this.myHealthBar.updateMe();
   }
 
-  //yes this function is INCREDABLY over-engineered, this is to GURANTEE that minions will ALWAYS
+  //yes this minion AI is INCREDABLY over-engineered, this is to GURANTEE that minions will ALWAYS be
   //in some 'state' and so can be handled as such. note that this.state is NOT the actual state
   //this.state is only the *representation* of the minion's state and thats all it CAN be.
 
@@ -463,7 +465,6 @@ class Minion {
                                                               break;
       }
     }
-    this.healthbar.drawMe(ctx);
 
     if(params.DEBUG || this.isSelected || this.state < 0 || this.state > 4) {
       //display own radius.
@@ -528,8 +529,7 @@ class Minion {
       }
       ctx.restore();
     }
-
-    this.healthbar.drawMe(ctx);
+    this.myHealthBar.drawMe(ctx, this.health, this.maxHealth, "health");
     ctx.restore();
   };
 
@@ -560,7 +560,7 @@ class Minion {
   }
 
   printHistory() {
-    let printNum = 3;
+    let printNum = 0;
     let startup = Math.round(this.startup/this.delta); //approximate time to start up
     if(this.isBorked) {
       printNum *= 2;
