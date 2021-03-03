@@ -9,6 +9,8 @@ class Tower {
       this.state = 1;  // 1 = idle, 0 = destroyed
       this.upgradeAmount = 1; // 1 being the initial spawned upgrade state of a tower.
 
+      this.healthbar = new HealthBar(this.theGame, this);
+
       //Stats
       this.health = 200;
       this.maxHealth = 200;
@@ -17,7 +19,7 @@ class Tower {
       this.projectileScale = 1;
 
       //Tower Vision
-      this.radius = 30;
+      this.radius = 79;
       this.visualRadius = 300;
 
       this.center = {
@@ -36,7 +38,8 @@ class Tower {
     this.elapsedTime += this.theGame.clockTick;
     for (var i = 0; i < this.theGame.entities.length; i++) {
         var ent = this.theGame.entities[i];
-        if ((ent instanceof Wolf || ent instanceof Ogre) && canSee(this, ent) && this.elapsedTime > 1 / this.agility) {
+        if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon) &&
+              canSee(this, ent) && this.elapsedTime > 1 / this.agility) {
             this.elapsedTime = 0;
             this.theGame.addEntity(new Projectile(this.theGame, this.x, this.y, ent, this.attack, this.projectileScale));
         }

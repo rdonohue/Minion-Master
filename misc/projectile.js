@@ -3,14 +3,15 @@ class Projectile {
         Object.assign(this, { theGame, x, y, target, attackMod, scale});
         this.radius = 12;
         this.smooth = false;
-
+        this.myType = "arrow";
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/arrow.png");
+
+        this.state = 1;
 
         var dist = distance(this, this.target);
         this.maxSpeed = 400; // pixels per second
 
         this.velocity = { x: (this.target.x - this.x) / dist * this.maxSpeed, y: (this.target.y - this.y) / dist * this.maxSpeed };
-
         this.cache = [];
 
         this.animations = [];
@@ -21,6 +22,9 @@ class Projectile {
         this.animations.push(new Animator(this.spritesheet, 160, 0, 32, 32, 1, 0.2, 0, false, true));
 
         this.facing = 5;
+
+        //this.currentAnim = this.animations[this.facing];
+        this.radius = 12;
 
         this.elapsedTime = 0;
     };
@@ -54,10 +58,10 @@ class Projectile {
 
         for (var i = 0; i < this.theGame.entities.length; i++) {
             var ent = this.theGame.entities[i];
-            if ((ent instanceof Wolf) && collide(this, ent)) {
+            if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon) && collide(this, ent)) {
                 var damage = 10 * this.attackMod;
                 ent.health -= damage;
-                this.removeFromWorld = true;
+                this.state = 0;
             }
         }
 
@@ -72,7 +76,7 @@ class Projectile {
             if (angle < 0) angle += Math.PI * 2;
             let degrees = Math.floor(angle / Math.PI / 2 * 360);
 
-            this.drawAngle(ctx, degrees);
+            //this.drawAngle(ctx, degrees);
         } else {
             if (this.facing < 5) {
                 this.animations[this.facing].drawFrame(this.theGame.clockTick, ctx, (this.x - xOffset) - this.theGame.theCamera.x, (this.y - yOffset) - this.theGame.theCamera.y, this.scale);
@@ -83,5 +87,7 @@ class Projectile {
                 ctx.restore();
             }
         }
+        //this.currentAnim = this.animations[this.facing];
+        //this.radius = Math.floor(this.animations[this.facing].width / 2);
     };
 };

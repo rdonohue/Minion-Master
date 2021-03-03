@@ -21,7 +21,7 @@ class Wolf {
 
         this.scale = 1;
         this.direction = 0; // 0 = left, 1 = right, 2 = up, 3 = down
-        this.priority = 1;
+        this.facing = 0;
 
         this.baseWidth = 64;
         this.baseHeight = 24;
@@ -67,6 +67,14 @@ class Wolf {
         //this gives how long this minion will wait before moving.
         //note that its the inverse of the given speed stat.
 
+        this.radius = 20;
+        // this.currentAnim = this.animations[this.direction][this.state];
+        // if (this.currentAnim.width < this.currentAnim.height) {
+        //   this.radius = Math.floor(this.currentAnim.height / 2);
+        // } else {
+        //   this.radius = Math.floor(this.currentAnim.width / 2);
+        // }
+
         this.timer = new Timer();
         this.timeSinceUpdate = 0;
 
@@ -80,16 +88,16 @@ class Wolf {
         }
         // Left
         this.animations[0].push(new Animator(this.spritesheet, 320, 288, 64, 32, 5, 0.15, 0, false, true));
-        this.animations[0].push(new Animator(this.spritesheet, 320, 352, 64, 32, 5, 0.05, 0, false, true));
+        this.animations[0].push(new Animator(this.spritesheet, 320, 352, 64, 32, 5, 0.15, 0, false, true));
         this.animations[0].push(new Animator(this.spritesheet, 512, 202, 64, 25, 1, 3, 0, false, true));
 
         // Right
         this.animations[1].push(new Animator(this.spritesheet, 320, 128, 64, 32, 5, 0.15, 0, false, true));
-        this.animations[1].push(new Animator(this.spritesheet, 320, 160, 64, 32, 5, 0.05, 0, false, true));
+        this.animations[1].push(new Animator(this.spritesheet, 320, 160, 64, 32, 5, 0.15, 0, false, true));
         this.animations[1].push(new Animator(this.spritesheet, 512, 9, 64, 25, 1, 3, 0, false, true));
 
         // Up
-        this.animations[2].push(new Animator(this.spritesheet, 164, 134, 25, 57, 5, 0.15, 7, false, true));
+        this.animations[2].push(new Animator(this.spritesheet, 164, 134, 25, 57, 4, 0.15, 7, false, true));
         this.animations[2].push(new Animator(this.spritesheet, 164, 258, 25, 57, 5, 0.15, 7, false, true));
         this.animations[2].push(new Animator(this.spritesheet, 260, 84, 25, 40, 1, 3, 0, false, true));
 
@@ -120,11 +128,30 @@ class Wolf {
 
         }
 
-      if (this.health <= 0) {
-          this.state = 2;
-          this.dead = true;
-          this.removeFromWorld = true;
-      }
+    };
+
+    drawMinimap(ctx, mmX, mmY) {
+
+    };
+
+    drawMe(ctx) {
+        if (this.facing == 0) {
+          this.direction = 2;
+        } else if (this.facing < 4 && this.facing > 0) {
+          this.direction = 1;
+        } else if (this.facing == 4) {
+          this.direction = 3
+        } else if (this.facing > 4) {
+          this.direction = 0;
+        }
+        this.animations[this.direction][this.state].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x,
+                                                              this.y - this.game.camera.y, this.scale);
+        // this.currentAnim = this.animations[this.direction][this.state];
+        // if (this.currentAnim.width < this.currentAnim.height) {
+        //   this.radius = Math.floor(this.currentAnim.height / 2);
+        // } else {
+        //   this.radius = Math.floor(this.currentAnim.width / 2);
+        // }
 
       if (dist < 5) {
           if (this.targetID < this.path.length - 1 && this.target === this.path[this.targetID]) {
