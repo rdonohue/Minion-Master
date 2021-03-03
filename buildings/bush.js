@@ -16,6 +16,7 @@ class Bush {
 
     this.isSelected = false;
     this.myFaction = "resource";
+    this.description = "your minion's will gather food from this";
     this.myType = "BUSH";
 
     this.defineDefaultValues();

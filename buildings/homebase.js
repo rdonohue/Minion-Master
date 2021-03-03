@@ -6,6 +6,7 @@ class HomeBase {
       this.thePlayer = this.camera.thePlayer;
       this.myType = "HOMEBASE";
       this.myFaction = "friendly";
+      this.description = "you will lose if this is destroyed!"
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/castle.png");
       this.castleAnim = new Animator(this.spritesheet, 0, 0, 430, 461, 1, 1, 0, false, true);

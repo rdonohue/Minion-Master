@@ -141,7 +141,7 @@ class Player {
     if (this.selected) {
       ctx.save();
       ctx.font = params.TILE_W_H/4 + 'px "Press Start 2P"';
-      ctx.fillText(this.targetType + "", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2);
+      ctx.fillText(this.targetType + " ("+this.selected.description+")", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2);
       ctx.fillText("STATS: ", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5);
 
       ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';

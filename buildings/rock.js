@@ -15,6 +15,7 @@ class Rock {
 
     this.myFaction = "resource";
     this.myType = "BOULDER";
+    this.description = "your minion's will gather rock from this";
 
     this.defineDefaultValues();
     this.chooseSprite(this.spriteChoice);

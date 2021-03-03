@@ -52,7 +52,7 @@ class Minion {
     this.gatherRate = 10
     this.agility = minionStats.AGILITY;
     this.intelligence = minionStats.INTELLIGENCE;
-    this.combat = false;
+
     this.maxSpeed = this.agility*50;
     this.actionSpeed = 3/this.agility
 
@@ -75,6 +75,7 @@ class Minion {
     //i,j for cell, x,y for continuous position.
     this.myType = "MINION";
     this.myFaction = "friendly";
+    this.description = "your loyal servent";
 
     // Object.assign(this, this.name);
     this.timeBetweenUpdates = 1/this.agility;
@@ -145,51 +146,13 @@ class Minion {
     }
   };
 
-  //this function puts together information on this entity's current state.
-  //could also be used for player.js's selection-info printing but don't bother refactoring it.
-  makeStateEntry() {
-    var that = this;
-    const entry = {
-      time: Math.round(that.theGame.timer.lastTimestamp - that.myBirth),
-      oX: Math.round(that.center.x), //ownX
-      oY: Math.round(that.center.y), //ownY
-      health: Math.round(that.health),
-      isBorked: that.isBorked,
-      target: "none",
-      tX: 0,
-      tY: 0,
-      tHealth: 0
-    }
-    if(that.target && that.target.myType) {
-      entry.target = that.target.myType;
-      entry.tX = Math.round(that.target.center.x);
-      entry.tY = Math.round(that.target.center.y);
-      entry.tHealth = that.target.health;
-    } else if (that.target){
-      entry.target = "loc";
-      entry.tX = Math.round(that.target.x);
-      entry.tY = Math.round(that.target.y);
-    }
-
-    return entry;
-  }
-
   updateHealth() {
     if(this.health < 0) {
       this.state = 0;
-      return; //break here NOW as we don't want to regen a minion.
-    }
-    if (this.regenTime >= 1) {
-      this.regenTime = 0;
-      //regen health.
-      if(this.health < this.maxHealth) {
-        this.health += this.regen;
-        if (this.health > this.maxHealth) {
-          this.health = this.maxHealth
-        }
-      }
     } else {
-      this.regenTime += this.theGame.clockTick;
+      //at the end of each minion's "turn", it heals depending on how much it went through.
+      //wandering heals most for example
+     passiveHeal(this, 1/(this.state*2));
     }
 
     this.myHealthBar.updateMe();
@@ -238,6 +201,9 @@ class Minion {
       if((ent.state != 0 || ent.health > 0) && reach(this, ent)) {
         //the target is alive and in range and we are ready to attack.
         var gather = (this.gatherRate + randomInt(this.gatherRate))
+        if(ent.health - gather < 0) {
+          gather = ent.health; //don't let the minion's create resources from nothing!
+        }
         if(gather > 0) {
           if(ent instanceof Rock) {
             ent.health -= gather; //don't heal the target by dealing negitive gather!
@@ -604,5 +570,34 @@ class Minion {
     if(this.isSelected && params.DEBUG) {
       this.printHistory();
     }
+  }
+
+  //this function puts together information on this entity's current state.
+  //could also be used for player.js's selection-info printing but don't bother refactoring it.
+  makeStateEntry() {
+    var that = this;
+    const entry = {
+      time: Math.round(that.theGame.timer.lastTimestamp - that.myBirth),
+      oX: Math.round(that.center.x), //ownX
+      oY: Math.round(that.center.y), //ownY
+      health: Math.round(that.health),
+      isBorked: that.isBorked,
+      target: "none",
+      tX: 0,
+      tY: 0,
+      tHealth: 0
+    }
+    if(that.target && that.target.myType) {
+      entry.target = that.target.myType;
+      entry.tX = Math.round(that.target.center.x);
+      entry.tY = Math.round(that.target.center.y);
+      entry.tHealth = that.target.health;
+    } else if (that.target){
+      entry.target = "loc";
+      entry.tX = Math.round(that.target.x);
+      entry.tY = Math.round(that.target.y);
+    }
+
+    return entry;
   }
 };

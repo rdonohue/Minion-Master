@@ -3,6 +3,7 @@ class Wolfpatch {
     Object.assign(this, { theGame, x, y });
 
     this.myType = "STINKY DOG FLOWERS";
+    this.description = "wolves wait to come out..."
     this.myFaction = "untouchable"; //minion AI needs this to NOT be a enemy
 
     // The draw parameters
