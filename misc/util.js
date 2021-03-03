@@ -97,13 +97,79 @@ function getFacing(velocity) {
     if (-0.875 < angle && angle < -0.625) return 7;
 };
 
+//method used for AI-debugging.
+function addHistoryEntry(entity, entry, maxLength, isBorked) {
+  if((maxLength <= 0) || (!entity) || (!entry)) {
+    return;
+  } else {
+    if(!entity.stateHistory) {
+      entity.stateHistory = [];
+    }
+  }
+
+  if(entity.target) {
+    //if we have a target, record certain characteristics of it.
+    entry.targetLoc = {
+      x: entity.target.x,
+      y: entity.target.y
+    }
+    if(entity.target.myType) {
+      //if the target is also a entity, record more.
+      entry.targetType = entity.target.myType;
+      entry.targetHealth = entity.target.health;
+    }
+  }
+  if(isBorked) {
+
+  }
+
+  entity.stateHistory.push(entry);
+  if(entity.stateHistory.length > maxLength + (maxLength*isBorked)) {
+    return entity.stateHistory.shift();
+  }
+}
+
+function changeHistory(entity) {
+  //this function doesn't work without a statehistory.
+  if(!entity.stateHistory) {
+    console.log("entity state history!: " + entity);
+    return;
+  }
+  let compareEntry = {};
+  let history = entity.stateHistory;
+  let changeHistory = [];
+
+  //print backwards, starting from most recent entry.
+  //note that compareEntry holds the entitys CURRENT state.
+  //as we go through history, we will only save CHANGES as we go backwards in time.
+
+  for(var i = entity.stateHistory.length - 1; i >= 0; i--) {
+    let entry = entity.stateHistory[i];
+    let entryChanges = [];
+    for(var j in entry) { //loop through the entry's propertie's
+      if(entry.hasOwnProperty(j)) {
+        //non-prototype property
+        if(!compareEntry.j || compareEntry.j != entry.j) {
+          //property which is new to the comparison entry.
+
+          //add it to the print string and replace the compareEntry's version.
+          entryChanges.push(j + ": " + entry.j); //$ is a char used to replace parts of a string with certain things.
+          compareEntry[j] = entry[j];
+        }
+      }
+    }
+    changeHistory.push(entryChanges);
+  }
+  return changeHistory;
+}
+
 // add global parameters here
 var minionStats = {
   HEALTH : 100,
-  DEFENSE : 0.0,
+  DEFENSE : 1.0,
   ATTACK : 12,
   AGILITY : 3,
-  INTELLIGENCE : 1,
+  INTELLIGENCE : 0,
 }
 
 var params = {

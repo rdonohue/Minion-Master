@@ -69,7 +69,7 @@ class Minion {
       x: this.x + this.baseWidth*this.scale/2,
       y: this.y + this.baseHeight*this.scale/2
     }
-    this.visualRadius = 50 + this.intelligence*50;
+    this.visualRadius = 100 + this.intelligence*25;
     this.reachRadius = this.radius*1.2;
     this.isSelected = false;
 
@@ -85,7 +85,8 @@ class Minion {
     this.timer = new Timer();
     this.timeSinceUpdate = 0;
     this.stateHistory = [];
-    this.tryToFix = false;
+    this.isBorked = false;
+    this.waitTill = 0;
 
     this.actionTime = 0;
     this.regenTime = 0;
@@ -97,6 +98,7 @@ class Minion {
   updateMe() {
     this.elapsedTime += this.theGame.clockTick;
     this.actionTime += this.theGame.clockTick;
+    this.printTime += this.theGame.clockTick;
 
     this.center = {
       x: this.x + this.baseWidth*this.scale/2,
@@ -126,13 +128,36 @@ class Minion {
     } else if (this.state == 4 || !this.target) {
       this.state = this.findNewTarget();
     } else {
-      //invalid state!
-      this.tryToFixSelf();
+      this.tryToFixSelf(); //invalid state!
     }
 
-    this.historyMaintenence(5);
+    addHistoryEntry(this, this.makeStateEntry(this), 5, 10, this.isBorked);
     this.checkHistory();
   };
+
+  //this function puts together information on this entity's current state.
+  //could also be used for player.js's selection-info printing but don't bother refactoring it.
+  makeStateEntry(entity) {
+
+    let entry = {
+      time: entity.theGame.timer.lastTimestamp,
+      state: entity.state,
+      health: entity.health,
+      isBorked: entity.isBorked,
+      x: entity.center.x,
+      y: entity.center.y,
+    }
+    if(entity.target) {
+      entry.targetType = entity.target.myType;
+      entry.targetLoc = {
+        x: entity.target.x,
+        y: entity.target.y
+      }
+      //note that we are NOT storing the target's state, because
+      //this could create a infinite loop if two entitys target eachother.
+    }
+    return entry;
+  }
 
   updateHealth() {
     if(this.health < 0) {
@@ -519,91 +544,21 @@ class Minion {
     ctx.restore();
   }
 
-  //method used for AI-debugging.
-  historyMaintenence(lengthOfList, debugLength) {
-    if(lengthOfList <= 0 && debugLength <= 0) {
-      return;
-    }
-
-    let entry = {
-      state: this.state,
-      health: this.health,
-      ownLoc: {
-        x: this.center.x,
-        y: this.center.y
-      },
-      ownVelocity: null,
-
-      targetType: null,
-      targetHealth: null,
-      targetLoc: null
-    };
-
-    if(this.target) {
-      //if we have a target, record certain characteristics of it.
-      entry.targetLoc = {
-        x: this.target.x,
-        y: this.target.y
-      }
-      if(this.target.myType) {
-        //if the target is also a entity, record more.
-        entry.targetType = this.target.myType;
-        entry.targetHealth = this.target.health;
-      }
-    }
-
-    this.stateHistory.push(entry);
-    let reoccurance = 0;
-    let history = this.stateHistory;
-    if(history.length > lengthOfList) {
-      if(this.tryToFix && history.length > debugLength){
-        history.shift();
-      }
-    }
-
-  }
-
-  debuggerFunction() {
-    let printTime = this.theGame.timer.lastTimestamp;
-    if(this.waitTill == 0 || !this.waitTill) {
-      this.waitTill = printTime + 2500;
-    } else if (this.waitTill < printTime) {
-      if(!this.tryToFix) {
-        if(params.DEBUG){
-          console.log("we might have a stuck minion, its last 3 targets are:");
-          console.log(this.debugMe)
-          for(var i = this.debugMe.length-1; i > this.debugMe.length - 4 ;i--) {
-            let ent = this.debugMe[i];
-            if(ent && ent.target && ent.target.myType) {
-              console.log((i+1) + " (entity): " + ent.target.myType + ", " + Math.round(ent.health) + ", {" + Math.round(ent.target.x) + ", " + Math.round(ent.y) + "}")
-            }
-            if(ent.loc) {
-              console.log((i+1) + " (self location): {" + Math.round(ent.x) + ", " + Math.round(ent.y) + "}");
-            }
-          }
-          console.log("waiting before self-fix");
-        }
-        //try waiting a moment.
-        this.tryToFix = true;
-        this.waitTill = 0;
-      } else {
-        //try to find new target to try to escape broken non-static state.
-        tryToFixSelf();
-      }
-    }
-  }
-
   checkHistory() {
-
+    let printTime = this.theGame.timer.lastTimestamp;
+    if(this.waitTill == 0) {
+      this.waitTill = printTime + 3000;
+    } else if (this.waitTill < printTime) {
+      console.log(changeHistory(this));
+      this.waitTill = 0;
+    }
   }
 
   tryToFixSelf() {
     this.target = null;
-    this.tryToFix = false;
-    if(params.DEBUG) {
-      console.log("trying to self-fix");
-    }
     this.state = this.findNewTarget();
-
+    if(params.DEBUG) {
+      console.log("minion at: {" + this.center.x + "," + this.center.y + "} self fixing, changed to: " + this.state + " and targeting: "+ this.target);
+    }
   }
 };
