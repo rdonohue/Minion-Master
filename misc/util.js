@@ -98,69 +98,54 @@ function getFacing(velocity) {
 };
 
 //method used for AI-debugging.
-function addHistoryEntry(entity, entry, maxLength, isBorked) {
+//returns the latest entry in history after "simplifying" history.
+function addHistoryEntry(entity, entry, maxLength, delta, isBorked) {
   if((maxLength <= 0) || (!entity) || (!entry)) {
+    console.log("diden't call history right");
     return;
+  } else if (!entity.stateHistory) {
+    entity.stateHistory = [];
+    entry.time = Math.round(entry.time/delta);
+    entity.stateHistory.push(entry);
+    return entry;
+  } else if (entity.stateHistory.length < 1) {
+    entry.time = Math.round(entry.time/delta);
+    entity.stateHistory.push(entry);
+    return entry;
+  }
+  let now = entity.theGame.timer.lastTimestamp;
+  let lastEntry = entity.stateHistory[entity.stateHistory.length - 1];
+  let newTime = Math.round((entry.time)/delta);
+  let oldTime = Math.round((lastEntry.time)/delta);
+
+  if(newTime > oldTime) {
+    //make a new time slot
+    entry.time = newTime;
+    entity.stateHistory.push(entry);
+    if(entity.stateHistory.length > maxLength + (maxLength*isBorked)) {
+      entity.stateHistory.shift();
+    }
+    return entry;
   } else {
-    if(!entity.stateHistory) {
-      entity.stateHistory = [];
-    }
+    //not a new time slot.
+    entry.time = lastEntry.time;
   }
+  //only record the CHANGE!
+  entry.time = lastEntry.time;
+  entry.oX = entry.oX - lastEntry.oX;
+  entry.oY = entry.oY - lastEntry.oY;
+  entry.health = entry.health - lastEntry.health;
+  entry.isBorked = entry.isBorked  //except for isBorked, always keep the lastest.
 
-  if(entity.target) {
-    //if we have a target, record certain characteristics of it.
-    entry.targetLoc = {
-      x: entity.target.x,
-      y: entity.target.y
-    }
-    if(entity.target.myType) {
-      //if the target is also a entity, record more.
-      entry.targetType = entity.target.myType;
-      entry.targetHealth = entity.target.health;
-    }
-  }
-  if(isBorked) {
-
-  }
+  entry.tX = entry.tX - lastEntry.tX;
+  entry.tY = entry.tY - lastEntry.tY;
+  entry.tHealth = entry.tHealth - lastEntry.tHealth;
 
   entity.stateHistory.push(entry);
   if(entity.stateHistory.length > maxLength + (maxLength*isBorked)) {
-    return entity.stateHistory.shift();
+    entity.stateHistory.shift();
   }
-}
-
-function changeHistory(entity) {
-  //this function doesn't work without a statehistory.
-  if(!entity.stateHistory) {
-    console.log("entity state history!: " + entity);
-    return;
-  }
-  let compareEntry = {};
-  let history = entity.stateHistory;
-  let changeHistory = [];
-
-  //print backwards, starting from most recent entry.
-  //note that compareEntry holds the entitys CURRENT state.
-  //as we go through history, we will only save CHANGES as we go backwards in time.
-
-  for(var i = entity.stateHistory.length - 1; i >= 0; i--) {
-    let entry = entity.stateHistory[i];
-    let entryChanges = [];
-    for(var j in entry) { //loop through the entry's propertie's
-      if(entry.hasOwnProperty(j)) {
-        //non-prototype property
-        if(!compareEntry.j || compareEntry.j != entry.j) {
-          //property which is new to the comparison entry.
-
-          //add it to the print string and replace the compareEntry's version.
-          entryChanges.push(j + ": " + entry.j); //$ is a char used to replace parts of a string with certain things.
-          compareEntry[j] = entry[j];
-        }
-      }
-    }
-    changeHistory.push(entryChanges);
-  }
-  return changeHistory;
+  return entry;
 }
 
 // add global parameters here

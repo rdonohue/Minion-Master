@@ -91,6 +91,10 @@ class Minion {
     this.actionTime = 0;
     this.regenTime = 0;
     this.thePlayer = this.theCamera.thePlayer;
+    this.myBirth = this.theGame.timer.lastTimestamp;
+    this.tick = this.theGame.tickDuration;
+    this.delta = 1/this.tick;
+    this.startup = null;
   };
 
   //the move-speed is still staggered a bit, that might be because of async
@@ -131,31 +135,42 @@ class Minion {
       this.tryToFixSelf(); //invalid state!
     }
 
-    addHistoryEntry(this, this.makeStateEntry(this), 5, 10, this.isBorked);
+    this.maxListLength = 25;
+    addHistoryEntry(this, this.makeStateEntry(this), this.maxListLength, this.delta, this.isBorked);
     this.checkHistory();
+    if(this.startup) {
+      //do Nothing
+    } else {
+      this.startup = this.theGame.timer.lastTimestamp;
+    }
   };
 
   //this function puts together information on this entity's current state.
   //could also be used for player.js's selection-info printing but don't bother refactoring it.
-  makeStateEntry(entity) {
+  makeStateEntry() {
+    var that = this;
+    const entry = {
+      time: Math.round(that.theGame.timer.lastTimestamp - that.myBirth),
+      oX: Math.round(that.center.x), //ownX
+      oY: Math.round(that.center.y), //ownY
+      health: Math.round(that.health),
+      isBorked: that.isBorked,
+      target: "none",
+      tX: 0,
+      tY: 0,
+      tHealth: 0
+    }
+    if(that.target && that.target.myType) {
+      entry.target = that.target.myType;
+      entry.tX = Math.round(that.target.center.x);
+      entry.tY = Math.round(that.target.center.y);
+      entry.tHealth = that.target.health;
+    } else if (that.target){
+      entry.target = "loc";
+      entry.tX = Math.round(that.target.x);
+      entry.tY = Math.round(that.target.y);
+    }
 
-    let entry = {
-      time: entity.theGame.timer.lastTimestamp,
-      state: entity.state,
-      health: entity.health,
-      isBorked: entity.isBorked,
-      x: entity.center.x,
-      y: entity.center.y,
-    }
-    if(entity.target) {
-      entry.targetType = entity.target.myType;
-      entry.targetLoc = {
-        x: entity.target.x,
-        y: entity.target.y
-      }
-      //note that we are NOT storing the target's state, because
-      //this could create a infinite loop if two entitys target eachother.
-    }
     return entry;
   }
 
@@ -544,13 +559,34 @@ class Minion {
     ctx.restore();
   }
 
+  printHistory() {
+    let printNum = 3;
+    let startup = Math.round(this.startup/this.delta); //approximate time to start up
+    if(this.isBorked) {
+      printNum *= 2;
+    }
+
+    let history = this.stateHistory;
+    for(var i = 0; i < printNum; i++) {
+      let entry = history[history.length-1-i];
+      let string = "";
+      string += "time: " + (entry.time - startup) + ", ";
+      for(var j in entry) {
+        if(entry.hasOwnProperty(j) && j != "time") {
+          string += j + ": " + entry[j] + ", ";
+        }
+      }
+      console.log(string);
+    }
+  }
+
   checkHistory() {
     let printTime = this.theGame.timer.lastTimestamp;
     if(this.waitTill == 0) {
-      this.waitTill = printTime + 3000;
+      this.waitTill = printTime + 2000;
     } else if (this.waitTill < printTime) {
-      console.log(changeHistory(this));
       this.waitTill = 0;
+      this.amIStuck();
     }
   }
 
@@ -559,6 +595,14 @@ class Minion {
     this.state = this.findNewTarget();
     if(params.DEBUG) {
       console.log("minion at: {" + this.center.x + "," + this.center.y + "} self fixing, changed to: " + this.state + " and targeting: "+ this.target);
+    }
+  }
+
+  amIStuck() {
+    //later I will make this method check this minion if its stuck.
+    //for now it just prints out its state history.
+    if(this.isSelected && params.DEBUG) {
+      this.printHistory();
     }
   }
 };
