@@ -17,42 +17,46 @@ class Wolf {
       this.animations = [];
       this.loadAnimations();
 
-      this.initialPoint = { x, y };
-
-      this.scale = 1;
       this.direction = 0; // 0 = left, 1 = right, 2 = up, 3 = down
-      this.facing = 0;
-
+      this.state = 4;
       this.baseWidth = 64;
       this.baseHeight = 24;
 
-      this.state = 1;
+      this.target = null;
 
       //wolf_size is how big a wolf is, they generally start small.
-      this.wolf_size = randomInt(5); // [0, 4]
+      this.wolf_size = 0;
 
-      //Stats
-      this.maxHealth = 50 + this.wolf_size*2;
+      //base stats {
+      this.maxHealth = 50 + 10 * randomInt(10);
       this.health = this.maxHealth;
       this.regen = this.maxHealth/15;
-      this.defense = 0 + this.wolf_size/2;
-      this.attack = 3 + this.wolf_size;
-      this.counterAttack = this.attack*0.1;
-      this.agility = 1 + randomInt(3) - Math.floor(this.wolf_size/3);
-      this.intelligence = randomInt(this.wolf_size);
-      //maxWait is used for thhe max length a wolf will wait for before starting a search again.
-      this.maxWait = (this.agility+this.intelligence)/2;
-       //I have no idea if this is reasonable.
-      this.maxSpeed = 100 + Math.ceil(this.agility) * 25;
+      this.defense = 5 + randomInt(3);
+      this.attack = 5 + randomInt(3);
+      this.agility = 1 + randomInt(3);
+      this.intelligence = 1 + randomInt(1);
+      // }
+
+      //derived stats {
+      //I have no idea if this is reasonable.
+      this.maxSpeed = 25 + Math.ceil(this.agility) * 15;
       //for wolves, intelligence determines how far they can see.
 
+      this.scale = 0.7;
       this.radius = this.baseWidth*this.scale/2;
       this.center = {
-        x: this.x + this.baseWidth*this.scale/2,
-        y: this.y + this.baseHeight*this.scale/2
+        x: this.x + this.radius,
+        y: this.y + this.radius
       }
-      this.attackRange = this.radius*1.2; //give it a little extra range.
-      this.visualRadius = 50 * this.intelligence;
+
+      this.reachRadius = this.radius*1.2; //give it a little extra range.
+      this.visualRadius = 50 + 25 * this.intelligence;
+      // }
+
+      this.grow(randomInt(30)); //see if the wolf starts off having grown some.
+      this.grow(randomInt(30));
+      this.grow(randomInt(30));
+      this.grow(randomInt(30));
 
       this.myHealthBar = new HealthBar(this.theGame, this);
       this.isSelected = false;
@@ -60,11 +64,6 @@ class Wolf {
       this.myType = "WOLF";
       this.myFaction = "enemy";
       this.description = "don't let them eat your minions!";
-
-      // Object.assign(this, this.name);
-      this.timeBetweenUpdates = 1/this.agility;
-      //this gives how long this minion will wait before moving.
-      //note that its the inverse of the given speed stat.
 
       this.timer = new Timer();
       this.timeSinceUpdate = 0;
@@ -80,201 +79,227 @@ class Wolf {
       this.delta = 1/this.tick;
       this.startup = null;
       this.myHealthBar = new HealthBar(this.theGame, this);
-  };
 
-  // Load the animations for this entity.
-  loadAnimations() {
-      for (var i = 0; i < 4; i++) {
-          this.animations.push([]);
-      }
-      // Left
-      this.animations[0].push(new Animator(this.spritesheet, 320, 288, 64, 32, 5, 0.15, 0, false, true));
-      this.animations[0].push(new Animator(this.spritesheet, 320, 352, 64, 32, 5, 0.15, 0, false, true));
-      this.animations[0].push(new Animator(this.spritesheet, 512, 202, 64, 25, 1, 3, 0, false, true));
-
-      // Right
-      this.animations[1].push(new Animator(this.spritesheet, 320, 128, 64, 32, 5, 0.15, 0, false, true));
-      this.animations[1].push(new Animator(this.spritesheet, 320, 160, 64, 32, 5, 0.15, 0, false, true));
-      this.animations[1].push(new Animator(this.spritesheet, 512, 9, 64, 25, 1, 3, 0, false, true));
-
-      // Up
-      this.animations[2].push(new Animator(this.spritesheet, 164, 134, 25, 57, 4, 0.15, 7, false, true));
-      this.animations[2].push(new Animator(this.spritesheet, 164, 258, 25, 57, 5, 0.15, 7, false, true));
-      this.animations[2].push(new Animator(this.spritesheet, 260, 84, 25, 40, 1, 3, 0, false, true));
-
-      // Down
-      this.animations[3].push(new Animator(this.spritesheet, 4, 192, 25, 64, 5, 0.15, 7, false, true));
-      this.animations[3].push(new Animator(this.spritesheet, 4, 256, 25, 64, 5, 0.15, 7, false, true));
-      this.animations[3].push(new Animator(this.spritesheet, 100, 79, 25, 49, 1, 3, 0, false, true));
+      this.exaustion = 0;
   };
 
   // states
   // 0: dead, not moving
-  // 1: idle/waiting, not moving.
-  // 2: searching for prey, actually looking for prey, moving.
-  // 3: hunting prey. moving towards prey.
-  // 4: attacking prey. NOT MOVING.
+  // 1: attacking prey. NOT MOVING.
+  // 2: hunting prey. moving towards prey.
+  // 3: searching for prey, actually looking for prey, moving.
+  // 4: idle/waiting, not moving.
   updateMe() {
     this.elapsedTime += this.theGame.clockTick;
-    //this is called a decision tree, this is roughly 1/10th the complexity of the
-    //AI's that halflife 1 used.
+    this.actionTime += this.theGame.clockTick;
+    this.printTime += this.theGame.clockTick;
 
-    //see the following:
-    //  https://www.youtube.com/watch?v=JyF0oyarz4U&ab_channel=AIandGames
-    //  https://en.wikipedia.org/wiki/Finite-state_machine
-    //  https://en.wikipedia.org/wiki/Finite-state_machine#Usage
-    if(this.state == 0 || this.health <= 0) {
-      //dead, do nothing
-      this.state = 0;
-      this.target = null;
-      this.velocity = params.ZERO;
-      return;
-    } else if (this.state == 1) {
-      //idle, wait till elapsedTime surpasses randomly decided wait-time,
-      //waittime will max out depending on the wolf's intellegence (may decrease it based on hunger.)
-      //see this.maxWait above.
-
-      //note, wolves CAN fail to see prey when in this state since their "not paying attention".
-      this.idle();
-      this.velocity = params.ZERO
-    } else if (this.state == 2) {
-      //searching for prey.
-      this.target = this.search();
-      if(this.target) {
-        //found new spot to explore.
-        this.moveTowards(this.target);
-      } else {
-        this.state = 1;
-
-      }
-    } else if (this.state == 3) {
-      //prey has been found, check to see if its still there.
-      this.target = hunt();
-      this.moveTowards(this.target);
-    } else if (this.state == 4) {
-      attack();
+    this.center = {
+      x: this.x + this.radius,
+      y: this.y + this.radius
     }
-     //at the end of each wolf's "turn", it heals depending on how much it went through.
-     //idle heals most for example
-    passiveHeal(this, 1/(this.state*2));
+
+    this.isSelected = (this.thePlayer.selected == this);
+
+    //states are numbered by how "important" the state is,
+    //so alive/dead is determined first, followed by "if attacking"
+    //followed by "if gathering"...etc.
+    //0-->dead,
+    //1-->attacking enemy
+    //2-->moving to target (moving),
+    //3-->searching for enemy/resource (moving),
+    //4-->idle
+
+    this.updateHealth();
+    this.exaustion += randomInt(this.agility/this.state);
+
+    if(this.state == 1) {
+      this.state = this.attackEnemy();
+    } else if (this.state == 2) {
+      this.state = this.moveToTarget();
+    } else if (this.state == 3) {
+      if(Math.random(this.exaustion) > this.wolf_size) {
+        this.state = this.idle();
+      } else {
+        this.state = this.findNewTarget();
+      }
+    } else if (this.state == 4) {
+      this.state = this.idle();
+    } else {
+      this.tryToFixSelf(); //invalid state!
+    }
+
+    this.maxListLength = 25;
+    addHistoryEntry(this, this.makeStateEntry(this), this.maxListLength, this.delta, this.isBorked);
+    this.checkHistory();
+    if(this.startup) {
+      //do Nothing
+    } else {
+      this.startup = this.theGame.timer.lastTimestamp;
+    }
   };
+
+  updateHealth() {
+    if(this.health < 0) {
+      this.state = 0;
+    } else {
+      //at the end of each minion's "turn", it heals depending on how much it went through.
+      //wandering heals most for example
+     passiveHeal(this, (this.state*2));
+    }
+
+    this.myHealthBar.updateMe();
+  }
+
+  //yes this wolf AI is INCREDABLY over-engineered, this is to GURANTEE that minions will ALWAYS be
+  //in some 'state' and so can be handled as such. note that this.state is NOT the actual state
+  //this.state is only the *representation* of the minion's state and thats all it CAN be.
+
+  attackEnemy() {
+    if(this.actionTime >= this.actionSpeed && this.target && (this.target.state != 0 || this.target.health > 0)) {
+      //we do still have a target to attack and it is alive.
+      let ent = this.target;
+      if(reach(this, ent)) {
+        //the target is alive and in range and we are ready to attack.
+        var damage = (this.attack + randomInt(this.attack)) - ent.defense
+        if(damage > 0) {
+          ent.health -= damage; //don't heal the target by dealing negitive damage!
+        }
+        this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
+        this.actionTime = 0;
+        return 1;
+      } else if (!reach(this, ent)) {
+        return 2;
+        //the target moved out of reach, so change to hunting state.
+      } else {
+        //this should not EVER happen!
+        return 3;
+      }
+    } else if (!this.target || !(this.target.state != 0 || this.target.health < 0)){
+      // the target has died (or broke)! find new target.
+      this.target = null;
+      return 4;
+    } else if (this.actionTime < this.actionSpeed) {
+      //do nothing cas we are not ready to attack yet.
+    } else {
+      //this should not EVER happen! this.target yet somehow not have valid stats.
+      return "attack_method targeting failed";
+    }
+  }
+
+  moveToTarget() {
+
+    if(this.target) {
+      let dist = distance(this, this.target);
+      this.velocity = {
+        x: (this.target.x - this.x)/dist * this.maxSpeed,
+        y: (this.target.y - this.y)/dist * this.maxSpeed
+      };
+
+      this.x += this.velocity.x * this.theGame.clockTick;
+      this.y += this.velocity.y * this.theGame.clockTick;
+      this.facing = getFacing(this.velocity);
+
+      if(this.target instanceof Minion) {
+        //do Nothing
+      } else {
+        this.target
+      }
+
+      if(reach(this, {x: this.target.x, y: this.target.y})) {
+        if(this.target instanceof Minion) {
+          //attack prey!
+          return 1;
+        } else {
+          //just a location, find new location.
+          this.target = null;
+          return 3;
+        }
+      } else {
+        //still not reached target so stay in current mode.
+        return 2;
+      }
+    } else if (!this.target || !canSee(this, this.target)){
+      //we lost the target or it went out of range.
+      this.target = null;
+      return 3;
+    }
+  }
+
+  findNewTarget() {
+    //first look around for enemys
+    let that = this;
+    if(this.intelligence >= 1){
+      //we know to attack baddies and thats it.
+
+      //create a list of enemys at moment of search, sort IN THE ARRAY by their distance
+      //to this minion and then shift() returns the closest enemy.
+      let closestEnemy = this.theGame.entities.filter(entity => {
+        return entity instanceof Minion;
+      }).sort(function(a,b) {
+        return (distance(that, a) - distance(that, b))
+      }).shift();
+
+      //if the closest is in visualRadius, target it, if not, then none of them are.
+      if(closestEnemy && distance(that, closestEnemy) < that.visualRadius) {
+        this.target = closestEnemy;
+      }
+    } else if (this.intelligence >= 2) {
+      //we are smart enough to not pick fights with enemys bigger then us.
+      let attackWeight = 3;
+      let defenseWeight = 2;
+      let maxHealthWeight = 1;
+      let totalWeight = attackWeight + defenseWeight + maxHealthWeight
+      this.target = this.theGame.entities.filter(entity => {
+        return (
+          entity instanceof Minion &&
+          (
+            ((entity.attack / that.attack) * that.attackWeight) +
+            ((entity.defense / that.defense) * that.defenseWeight) +
+            ((entity.maxHealth / that.maxHealth) * that.maxHealthWeight)
+          ) / (that.totalWeight) > 1
+          //if the target's average stats are too great relative to our own, don't try to engage it.
+          //(and weighting some more then others), this will sum up to more then 3.
+        );
+      }).sort(function(a,b) {
+        return (distance(that, a) - distance(that, b))
+      }).shift();
+
+      //if the closest is in visualRadius, target it, if not, then none of them are.
+      if(closestEnemy && distance(that, closestEnemy) < that.visualRadius) {
+        this.target = closestEnemy;
+      }
+    }
+
+    //we don't see any minions, pick location that which is proprotionally far to our
+    //intelligence. more intelligence makes the movement less erratic as a result
+    if(this.target) {
+      return 1;
+    } else {
+      this.target = generateTarget(this, this.visualRadius*this.intelligence/8);
+    }
+
+    if(this.target) {
+      return 2;
+    } else {
+      this.target = null;
+      return 4;
+    }
+  }
 
   idle() {
     //idle, wait till elapsedTime surpasses randomly decided wait-time.
     //note, wolves CAN fail to see prey when in this state since their "not paying attention".
-    if(!this.wait || this.wait <= 0) {
-      this.wait = Math.random(this.maxWait);
-      //decide how long to wait.
-      this.waitTill = this.theGame.timer.lastTimestamp + this.wait;
-      //find the timeStamp to wait till.
-
-      this.velocity = {x: 0, y: 0};
-      //don't move while idle.
-    } else if(this.waitTill && this.theGame.timer.lastTimestamp > this.waitTill) {
-      //we have waited long enough, start hunting!
-      this.wait = 0;
-      this.state = 2;
-    }
-  }
-
-  //looking for prey while moving towards target location (note target is a location here).
-  search() {
-    //looking for prey while moving towards target location (note target is a location here).
-    for (var i = 0; i < this.theGame.entities.length; i++) {
-      var ent = this.theGame.entities[i];
-      if (ent instanceof Minion && canSee(this, ent) && !(ent.state == 0)) {
-        //prey has been found!
-        this.target = ent;
-        //note, no prioritization currently implemented.
-        //use a findPriority(listOfSeenEntitys) method
-
-        if(distance(this, target) <= this.attackRange) {
-          //prey is in range!
-          this.state = 4;
-        } else {
-          //prey is NOT in range, move towards it!
-          this.state = 3;
-        }
-        return this.target;
-      }
-      //entity is not prey!
-    }
-    //no prey was found at all!
-
-    if(!this.target) {
-      //do not currently have a target, so generate new spot to search.
-      this.target = generateTarget(this);
-      if(this.target) {
-        //target location successfully generated, enter searching state.
-        console.log("2");
-        this.state = 2;
-      } else {
-        //failed to generate a target location.
-        //enter idle-state.
-        console.log("1");
-        this.state = 1;
+    if (this.actionTime >= this.actionSpeed){
+      //sleepy doggo!
+      this.theGame.addElement(new Score(this.theGame, this.center.x, this.y, "z", "grey"));
+      this.actionTime = 0;
+      this.exaustion -= (5 + (this.maxHealth)/100);
+      if(this.exaustion < randomInt(this.health/100)) {
+        this.state = this.findNewTarget();
+        this.exaustion = 0;
       }
     }
-    return this.target;
-  }
-
-  hunt() {
-    //we have prey, but its not in range!
-    if(target && canSee(this, this.target) && !(target.state == 0)) {
-      //prey is still visable and not dead, check if in range.
-      if(distance(this, this.target) < this.attackRange) {
-        //prey is in range, attack it!
-        this.state = 4;
-        velocity = params.ZERO; //don't move!
-        return this.target;
-        //try to keep track of the target by remembering its last location.
-      } else {
-        //prey is not yet in range, move towards it! (stay in state 3)
-        return this.target;
-      }
-    } else if (!target || target.state == 0){
-      //target has been lost, see if we search around more.
-      this.target = this.generateTarget(this);
-
-      //if a target was found, randomly decide to hunt again.
-      var decideToSearch = Math.random(1);
-      if(this.target && decideToSearch > 0.5) {
-        //start hunting.
-        this.state = 2;
-        return this.target;
-      } else {
-        //enter idle.
-        this.state = 1;
-        return this.target;
-      }
-    }
-    //hunt() breaks if it reachs this point.
-    return {x: this.x, y: this.y};
-  }
-
-  attack() {
-    if(this.target && this.target.state != 0 && this.target.health > 0) {
-      //attack prey!
-      var damage = attackTarget(this, this.target);
-      if(Math.floor(Math.random(damage/(1 +this.wolf_size)) > this.wolf_size)) {
-        this.grow();
-      }
-    } else {
-      //target was lost,
-    }
-  }
-
-  moveTowards(targetLocation) {
-    var dist = distance(this, targetLocation);
-    this.velocity = {
-      x: (targetLocation.x - this.x)/dist * this.maxSpeed,
-      y: (targetLocation.y - this.y)/dist * this.maxSpeed
-    };
-
-    this.x += this.velocity.x * this.theGame.clockTick;
-    this.y += this.velocity.y * this.theGame.clockTick;
-
-    this.facing = getFacing(this.velocity);
   }
 
   drawMinimap(ctx, mmX, mmY, mmW, mmH) {
@@ -291,28 +316,31 @@ class Wolf {
   grow(damage) {
     if(Math.floor(Math.random(damage/(1 + this.wolf_size)) > this.wolf_size)) {
       //the wolf grew!
-      //Stats
-      this.maxHealth = 50 + this.wolf_size*2;
+      this.wolf_size++;
+
+      //base stats.
+      this.maxHealth += 25 + 3*randomInt(2);
       this.health = this.maxHealth;
       this.regen = this.maxHealth/15;
-      this.defense = 0 + this.wolf_size/2;
-      this.attack = 3 + this.wolf_size;
-      this.counterAttack = this.attack*0.1;
-      this.agility = 1 + randomInt(3) - Math.floor(this.wolf_size/3);
-      this.intelligence = randomInt(this.wolf_size);
-      //maxWait is used for thhe max length a wolf will wait for before starting a search again.
-      this.maxWait = (this.agility+this.intelligence)/2;
-       //I have no idea if this is reasonable.
-      this.maxSpeed = 100 + Math.ceil(this.agility) * 25;
+      this.defense += 1 + randomInt(3);
+      this.attack += 1 + randomInt(3);
+      this.agility += 1 + randomInt(3);
+      this.intelligence += 1 + randomInt(3);
+
+      //derived stats.
+      //I have no idea if this is reasonable.
+      this.maxSpeed = 25 + Math.ceil(this.agility) * 15;
       //for wolves, intelligence determines how far they can see.
 
+      this.scale += 0.1;
       this.radius = this.baseWidth*this.scale/2;
       this.center = {
-        x: this.x + this.baseWidth*this.scale/2,
-        y: this.y + this.baseHeight*this.scale/2
+        x: this.x + this.radius,
+        y: this.y + this.radius
       }
+
       this.attackRange = this.radius*1.2; //give it a little extra range.
-      this.visualRadius = 50 * this.intelligence;
+      this.visualRadius = 50 + 25 * this.intelligence;
     }
   }
 
@@ -327,8 +355,14 @@ class Wolf {
       this.direction = 0;
     }
 
-    this.animations[this.direction][this.state].drawFrame(this.theGame.clockTick, ctx,
-      this.x - this.theCamera.x, this.y - this.theCamera.y, this.scale);
+    let temp = this.state;
+    if(temp < 1 || temp == 4 || !(temp)) {
+      temp = 0; //if we are dead, sleeping or broken, use "dead" animation.
+    } else if (temp != 1){
+      temp = 2;
+    }
+    this.animations[this.direction][temp].drawFrame(this.theGame.clockTick, ctx,
+      this.center.x - this.theCamera.x - this.radius, this.center.y - this.theCamera.y - this.radius*0.8, this.scale);
 
     if(params.DEBUG || this.isSelected || this.state < 0 || this.state > 4) {
       //display own radius.
@@ -397,6 +431,80 @@ class Wolf {
     ctx.restore();
 
 
+  }
+
+  // Load the animations for this entity.
+  loadAnimations() {
+      for (var i = 0; i < 4; i++) {
+          this.animations.push([]);
+      }
+
+      // Left
+      this.animations[0].push(new Animator(this.spritesheet, 512, 202, 64, 25, 1, 3, 0, false, true)); //dead
+      this.animations[0].push(new Animator(this.spritesheet, 320, 352, 64, 32, 5, 0.15, 0, false, true)); //attacking
+      this.animations[0].push(new Animator(this.spritesheet, 320, 288, 64, 32, 5, 0.15, 0, false, true)); //moving
+
+      // Right
+      this.animations[1].push(new Animator(this.spritesheet, 512, 9, 64, 25, 1, 3, 0, false, true)); //dead
+      this.animations[1].push(new Animator(this.spritesheet, 320, 160, 64, 32, 5, 0.15, 0, false, true)); //attacking
+      this.animations[1].push(new Animator(this.spritesheet, 320, 128, 64, 32, 5, 0.15, 0, false, true)); //moving
+
+      // Up
+      this.animations[2].push(new Animator(this.spritesheet, 260, 84, 25, 40, 1, 3, 0, false, true)); //dead
+      this.animations[2].push(new Animator(this.spritesheet, 164, 258, 25, 57, 5, 0.15, 7, false, true)); //attacking
+      this.animations[2].push(new Animator(this.spritesheet, 164, 134, 25, 57, 4, 0.15, 7, false, true)); //moving
+
+      // Down
+      this.animations[3].push(new Animator(this.spritesheet, 100, 79, 25, 49, 1, 3, 0, false, true)); //dead
+      this.animations[3].push(new Animator(this.spritesheet, 4, 256, 25, 64, 5, 0.15, 7, false, true)); //attacking
+      this.animations[3].push(new Animator(this.spritesheet, 4, 192, 25, 64, 5, 0.15, 7, false, true)); //moving
+  };
+
+  printHistory() {
+    let printNum = 0;
+    let startup = Math.round(this.startup/this.delta); //approximate time to start up
+    if(this.isBorked) {
+      printNum *= 2;
+    }
+
+    let history = this.stateHistory;
+    for(var i = 0; i < printNum; i++) {
+      let entry = history[history.length-1-i];
+      let string = "";
+      string += "time: " + (entry.time - startup) + ", ";
+      for(var j in entry) {
+        if(entry.hasOwnProperty(j) && j != "time") {
+          string += j + ": " + entry[j] + ", ";
+        }
+      }
+      console.log(string);
+    }
+  }
+
+  checkHistory() {
+    let printTime = this.theGame.timer.lastTimestamp;
+    if(this.waitTill == 0) {
+      this.waitTill = printTime + 2000;
+    } else if (this.waitTill < printTime) {
+      this.waitTill = 0;
+      this.amIStuck();
+    }
+  }
+
+  tryToFixSelf() {
+    this.target = null;
+    this.state = this.findNewTarget();
+    if(params.DEBUG) {
+      this.printHistory();
+    }
+  }
+
+  amIStuck() {
+    //later I will make this method check this minion if its stuck.
+    //for now it just prints out its state history.
+    if(this.isSelected && params.DEBUG) {
+      this.printHistory();
+    }
   }
 
   //this function puts together information on this entity's current state.

@@ -1,28 +1,26 @@
 class Button{
   constructor(
-    theObject, theHud, theGame,
+    theObject, theGame,
     myFunction, myArguments,
-    myText, myImage
+    myText, myColor
     //text which floats above the button.
     ){
 
-    Object.assign(this, {theObject, theHud, theGame, myFunction, myArguments, myText, myImage});
+    Object.assign(this, {theObject, theGame, myFunction, myArguments, myText, myColor});
 
-    theObject.myButtons.push(this);
-
+    this.theObject.myButtons.push(this);
+    this.debugOnly = false;
     //we might need to make the minion's handle their
     //own button updates btw.
-    this.myFunction = myFunction; //the function that is to be performed
-    this.myArguments = [];
-    this.myText = myText;
-    this.myColor = this.myColor; //default color.
   };
 
   updateMe() {
     if(this.debugOnly) {
       this.isVisable = params.DEBUG;
-    } else if(this.theObject.isSelectable) {
+    } else if(this.theObject.isSelected) {
       this.isVisable = this.theObject.isSelected;
+    } else {
+      this.isVisable = true;
     }
   }
 
@@ -33,7 +31,7 @@ class Button{
 
       if(isInXCoord && isInYCoord){ //check y-axis
         this.theObject.buttonWasClicked = true;
-        this.myFunction();
+        this.myFunction(this.myArguments);
         return true;
       }
     }
@@ -44,28 +42,20 @@ class Button{
   drawButton(ctx, x, y, w, h, image) {
     if(this.isVisable) {
       ctx.save();
-      ctx.font = 16 + 'px "Playfair Display SC"';
+      ctx.font = 14 + 'px "Playfair Display SC"';
       ctx.fillStyle = "white";
       ctx.fillText(this.myText,
-        x, y-2);
+        x+3, y+16);
       if(image) {
         ctx.drawImage(this.myImage, x, y, w, h);
       } else {
-        ctx.fillStyle = this.myColor;
-        ctx.fillRect(
-          this.x, this.y,
-          this.w, this.h
-        );
-      }
-
-      if(params.DEBUG) {
         ctx.lineWidth = 1;
-        ctx.strokeStyle= "red";
+        ctx.strokeStyle= this.myColor
         ctx.beginPath();
         ctx.strokeRect(
-          this.x - this.theGame.camera.x + this.ow-3,
-          this.y - this.theGame.camera.y + this.oh-3,
-          this.w+6, this.h+6
+          x - this.theGame.theCamera.x,
+          y - this.theGame.theCamera.y,
+          w, h
         );
         ctx.stroke();
       }

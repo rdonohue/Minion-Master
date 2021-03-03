@@ -3,6 +3,7 @@ class Tower {
       Object.assign(this, {theGame, x, y });
       this.myType = "TOWER";
       this.myFaction = "friendly";
+      this.description = "protects your minions and base"
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tower.png");
       this.elapsedTime = 0;
@@ -14,12 +15,12 @@ class Tower {
       //Stats
       this.health = 200;
       this.maxHealth = 200;
-      this.defense = 0.0;
-      this.attack = 1;
+      this.defense = 5;
+      this.attack = 5;
       this.projectileScale = 1;
 
       //Tower Vision
-      this.radius = 79;
+      this.radius = 35;
       this.visualRadius = 300;
 
       this.center = {

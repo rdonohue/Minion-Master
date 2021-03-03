@@ -68,10 +68,27 @@ function passiveHeal(critter, healingFactor) {
   }
 }
 
-function pickLocation(A) {
+function checkLocation(A, x, y, mapBuffer, dist) {
+  //that the location is within the map.
+  var left = x > mapBuffer;
+  var right = x < params.PLAY_WIDTH - params.CANVAS_WIDTH - mapBuffer;
+
+  var up = y > mapBuffer;
+  var down = y < params.PLAY_HEIGHT - params.CANVAS_HEIGHT - mapBuffer;
+
+  if(left && right && down && up) {
+    //the location is in the map.
+    return distance(A,{x:x,y:y})>dist;
+  } else {
+    //could not find valid location.
+    return false;
+  }
+};
+
+function generateTarget(A, dist) {
   temp = {
-    x: null,
-    y: null
+    x: A.x,
+    y: A.y
   }
   attempts = 0;
   maxAttempts = 10;
@@ -79,11 +96,13 @@ function pickLocation(A) {
     let x = A.x - A.visualRadius + randomInt(2*A.visualRadius);
     let y = A.y - A.visualRadius + randomInt(2*A.visualRadius);
     if( (x < params.PLAY_WIDTH - A.radius && x > A.radius) &&
-        (y < params.PLAY_HEIGHT - A.radius && y > A.radius)) {
+        (y < params.PLAY_HEIGHT - A.radius && y > A.radius) &&
+        (checkLocation(A,x,y,A.radius,dist))) {
       temp.x = x;
       temp.y = y;
     }
   }
+
   return temp;
 }
 

@@ -49,7 +49,7 @@ class Minion {
     this.regen = this.maxHealth/20;
     this.defense = minionStats.DEFENSE;
     this.attack = minionStats.ATTACK;
-    this.gatherRate = 10
+    this.gatherRate = 2
     this.agility = minionStats.AGILITY;
     this.intelligence = minionStats.INTELLIGENCE;
 
@@ -76,11 +76,6 @@ class Minion {
     this.myType = "MINION";
     this.myFaction = "friendly";
     this.description = "your loyal servent";
-
-    // Object.assign(this, this.name);
-    this.timeBetweenUpdates = 1/this.agility;
-    //this gives how long this minion will wait before moving.
-    //note that its the inverse of the given speed stat.
 
     this.timer = new Timer();
     this.timeSinceUpdate = 0;
@@ -283,7 +278,7 @@ class Minion {
   findNewTarget() {
     //first look around for enemys
     let that = this;
-    if(this.intelligence == 0 ) {
+    if(this.intelligence == 1 ) {
       //we are too dumb to attack anything.
     } else if (this.intelligence >= 1){
       //we know to attack baddies and thats it.
@@ -300,26 +295,31 @@ class Minion {
       if(closestEnemy && distance(that, closestEnemy) < that.visualRadius) {
         this.target = closestEnemy;
       }
-    } else if (this.intelligence > 1 && false) {
-      // //not yet functional!
-      // //we are smart enough to not attack enemys bigger then us.
-      // let attackWeight = 3;
-      // let defenseWeight = 2;
-      // let maxHealthWeight = 1;
-      // let totalWeight = attackWeight + defenseWeight + maxHealthWeight
-      // this.target = this.theGame.entities.filter(entity => {
-      //   return (
-      //     distance(this,entity) < this.visualRadius &&
-      //     entity.myFaction == "enemy" &&
-      //     (
-      //       ((entity.attack / that.attack) * that.attackWeight) +
-      //       ((entity.defense / that.defense) * that.defenseWeight) +
-      //       ((entity.maxHealth / that.maxHealth) * that.maxHealthWeight)
-      //     ) / (that.totalWeight) > 1
-      //     //if the target's average stats are too great relative to our own, don't try to engage it.
-      //     //(and weighting some more then others), this will sum up to more then 3.
-      //   );
-      // })
+    } else if (this.intelligence >= 2) {
+      //we are smart enough to not pick fights with enemys bigger then us.
+      let attackWeight = 3;
+      let defenseWeight = 2;
+      let maxHealthWeight = 1;
+      let totalWeight = attackWeight + defenseWeight + maxHealthWeight
+      this.target = this.theGame.entities.filter(entity => {
+        return (
+          entity.myFaction == "enemy" &&
+          (
+            ((entity.attack / that.attack) * that.attackWeight) +
+            ((entity.defense / that.defense) * that.defenseWeight) +
+            ((entity.maxHealth / that.maxHealth) * that.maxHealthWeight)
+          ) / (that.totalWeight) > 1
+          //if the target's average stats are too great relative to our own, don't try to engage it.
+          //(and weighting some more then others), this will sum up to more then 3.
+        );
+      }).sort(function(a,b) {
+        return (distance(that, a) - distance(that, b))
+      }).shift();
+
+      //if the closest is visualRadius, target it, if not, then none of them are.
+      if(closestEnemy && distance(that, closestEnemy) < that.visualRadius) {
+        this.target = closestEnemy;
+      }
     }
 
     //either stop here because we have our target,
@@ -328,7 +328,7 @@ class Minion {
       return 3;
     } else {
       //search for resources
-      if(this.intelligence > 0) {
+      if(this.intelligence > 1) {
         //we want to ignore bush's with less then 10% health left if we are not braindead.
         let closestHarvestable = this.theGame.entities.filter(entity => {
           return ( //don't over-harvest bushs by ignoring low-health bushs
@@ -358,17 +358,19 @@ class Minion {
       }
     }
 
-    //we don't see any enemys OR resources, pick random location in sight.
+    //we don't see any enemys OR resources, pick location that which is proprotionally far to our
+    //intelligence. more intelligence makes the movement less erratic as a result
     if(this.target) {
       return 3;
     } else {
-      this.target = pickLocation(this);
+      this.target = generateTarget(this, this.visualRadius*this.intelligence/8);
     }
 
     if(this.target) {
       return 3;
     } else {
-      return 4;
+      this.target = null;
+      return "failed to find target";
     }
   }
 
@@ -392,7 +394,6 @@ class Minion {
       this.direction = 0;
     } else {
       this.direction = 0;
-      this.state = "facing is null";
     }
 
     let tempAdjust = 70; //I'm not sure why the sprites are so off-center, but I'm doing this for now.
@@ -560,7 +561,7 @@ class Minion {
     this.target = null;
     this.state = this.findNewTarget();
     if(params.DEBUG) {
-      console.log("minion at: {" + this.center.x + "," + this.center.y + "} self fixing, changed to: " + this.state + " and targeting: "+ this.target);
+      //console.log("minion at: {" + this.center.x + "," + this.center.y + "} self fixing, changed to: " + this.state + " and targeting: "+ this.target.x + ", " + this.target.y);
     }
   }
 
