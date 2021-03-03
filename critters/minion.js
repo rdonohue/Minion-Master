@@ -243,10 +243,10 @@ class Minion {
             ent.health -= gather; //don't heal the target by dealing negitive gather!
             this.thePlayer.myRock += gather;
           } else if (ent instanceof Bush) {
-            if(this.intelligence == 0 || ent.health/ent.maxHealth > 0.1) { //make smarter minions not kill the food!
+            if(this.intelligence <= 1 || ent.health/ent.maxHealth > 0.1) { //make smarter minions not kill the food!
               ent.health -= gather; //don't heal the target by dealing negitive gather!
               this.thePlayer.myFood += gather;
-            } else if (ent.health/ent.maxHealth < 0.1 && this.intelligence > 0) {
+            } else if (ent.health/ent.maxHealth < 0.1 && this.intelligence > 1) {
               this.target = null;
               return 3; // the berries are low on food.
             }

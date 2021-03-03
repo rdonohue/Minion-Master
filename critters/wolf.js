@@ -207,12 +207,54 @@ class Wolf {
         this.myDeadAnimator.drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
     }
 
-    if(params.DEBUG || this.isSelected) {
-      ctx.strokeStyle = "red";
-      ctx.beginPath();
-      ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.radius, 0, 2*Math.PI);
+    if(this.target) {
+      ctx.save();
+      let radius;
+      if(this.target.myFaction === "enemy") {
+        //Attacking entity at location
+        let location = {
+          x: this.target.center.x,
+          y: this.target.center.y
+        }
+        ctx.strokeStyle = "red";
+        ctx.fillStyle = "red";
+        radius = this.target.radius
+      } else if (this.target.myFaction === "resource") {
+        //harvesting entity at location
+        let location = {
+          x: this.target.center.x,
+          y: this.target.center.y
+        }
+        ctx.strokeStyle = "blue";
+        ctx.fillStyle = "blue";
+        radius = this.target.radius
+      } else if (!(this.target.myType)) {
+        //searching for entity's at location
+        let location = {
+          x: this.target.x,
+          y: this.target.y
+        }
+        ctx.strokeStyle = "yellow";
+        ctx.fillStyle = "yellow";
+        radius = this.radius;
+      }
+      ctx.beginPath(); //draw own radius.
+      ctx.arc(location.x - this.theCamera.x, location.y - this.theCamera.y, radius, 0, 2*Math.PI);
+      ctx.stroke();
+      ctx.strokeRect( //draw rectangle around desired location
+        location.x - this.theCamera.x, location.y - this.theCamera.y,
+        radius*2, radius*2
+      )
+      ctx.stroke();
+      ctx.fillStyle = "yellow"; //display desired motion
+      ctx.fillText("moving to", location.x, location.y);
+      ctx.beginPath(); //draw line from own location to desired location.
+      ctx.moveTo(this.center.x, this.center.y);
+      ctx.lineTo(location.x, location.y);
       ctx.stroke();
     }
+    ctx.restore();
+  }
 
     if (this.facing == 0) {
       this.direction = 2;

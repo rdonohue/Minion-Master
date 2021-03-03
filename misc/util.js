@@ -154,7 +154,7 @@ var minionStats = {
   DEFENSE : 1.0,
   ATTACK : 12,
   AGILITY : 3,
-  INTELLIGENCE : 0,
+  INTELLIGENCE : 1,
 }
 
 var params = {

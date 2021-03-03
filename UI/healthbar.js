@@ -11,7 +11,7 @@ class HealthBar {
   };
 
   drawMe(ctx, stat, maxStat, type) {
-    if (stat < maxStat || params.DEBUG || entity.isSelected) {
+    if (stat < maxStat || params.DEBUG || this.entity.isSelected) {
       var ratio = stat / maxStat;
       let x = this.entity.x - this.theGame.theCamera.x;
       let y = this.entity.y - this.theGame.theCamera.y;
@@ -32,7 +32,7 @@ class HealthBar {
       } else {
         ctx.fillStyle = "red";
         ctx.fillText((stat + "/" + maxStat),
-          x, y
+          x, y + this.width
         );
       }
 

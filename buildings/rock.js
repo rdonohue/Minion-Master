@@ -2,9 +2,10 @@ class Rock {
   constructor(theGame, x, y, scale, spriteChoice) {
     Object.assign(this, { theGame, x, y, scale, spriteChoice })
     this.spritesheet = ASSET_MANAGER.getAsset("./sprites/trees_stones_bushes.png");
+
     this.health = 100;
     this.maxHealth = 100;
-    this.subHealth = 0;
+
     this.removeFromWorld = false;
     this.scale = 1;
     this.radius = 13*this.scale;
@@ -21,7 +22,7 @@ class Rock {
     this.healthbar = new HealthBar(this.theGame, this);
 
     this.center = {
-      x: this.x + this.radius - 1,
+      x: this.x + this.radius,
       y: this.y + this.radius
     }
     this.elapsedTime = 0;
