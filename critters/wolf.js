@@ -327,9 +327,76 @@ class Wolf {
       this.direction = 0;
     }
 
-    this.animations[this.direction][this.state].drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.camera.x,
-                                                              this.y - this.theGame.camera.y, this.scale);
-    this.myHealthBar.drawMe(ctx);
+    this.animations[this.direction][this.state].drawFrame(this.theGame.clockTick, ctx,
+      this.x - this.theCamera.x, this.y - this.theCamera.y, this.scale);
+
+    if(params.DEBUG || this.isSelected || this.state < 0 || this.state > 4) {
+      //display own radius.
+      ctx.save();
+      ctx.strokeStyle = "red";
+      ctx.beginPath();
+      ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.radius, 0, 2*Math.PI);
+      ctx.stroke();
+
+      //display visualRadius
+      ctx.strokeStyle = "yellow";
+      ctx.beginPath();
+      ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.visualRadius, 0, 2*Math.PI);
+      ctx.stroke();
+      ctx.restore();
+
+      if(this.target) {
+        ctx.save();
+        let radius;
+        if(this.target.myFaction === "enemy") {
+          //Attacking entity at location
+          let location = {
+            x: this.target.center.x,
+            y: this.target.center.y
+          }
+          ctx.strokeStyle = "red";
+          ctx.fillStyle = "red";
+          radius = this.target.radius
+        } else if (this.target.myFaction === "resource") {
+          //harvesting entity at location
+          let location = {
+            x: this.target.center.x,
+            y: this.target.center.y
+          }
+          ctx.strokeStyle = "blue";
+          ctx.fillStyle = "blue";
+          radius = this.target.radius
+        } else if (!(this.target.myType)) {
+          //searching for entity's at location
+          let location = {
+            x: this.target.x,
+            y: this.target.y
+          }
+          ctx.strokeStyle = "yellow";
+          ctx.fillStyle = "yellow";
+          radius = this.radius;
+        }
+        ctx.beginPath(); //draw own radius.
+        ctx.arc(location.x - this.theCamera.x, location.y - this.theCamera.y, radius, 0, 2*Math.PI);
+        ctx.stroke();
+        ctx.strokeRect( //draw rectangle around desired location
+          location.x - this.theCamera.x, location.y - this.theCamera.y,
+          radius*2, radius*2
+        )
+        ctx.stroke();
+        ctx.fillStyle = "yellow"; //display desired motion
+        ctx.fillText("moving to", location.x, location.y);
+        ctx.beginPath(); //draw line from own location to desired location.
+        ctx.moveTo(this.center.x, this.center.y);
+        ctx.lineTo(location.x, location.y);
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+    this.myHealthBar.drawMe(ctx, this.health, this.maxHealth, "health");
+    ctx.restore();
+
+
   }
 
   //this function puts together information on this entity's current state.
