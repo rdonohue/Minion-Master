@@ -56,26 +56,25 @@ class Wolfpatch {
     this.myHealthBar.drawMe(ctx, this.health, this.maxHealth, "health");
     this.myHealthBar.drawMe(ctx, this.elapsedTime, this.spawnTimer, "spawnTimer")
 
+    //wolfpatchs are drawn out of order unforutnetely.
     this.theGame.entities.filter(
       entity =>
-        distance(this.center,entity) < this.radius &&
-        entity.myType != "STINKY DOG FLOWERS"
+        entity.myType != "STINKY DOG FLOWERS" &&
+        ((entity.center.x - this.center.x) < (this.radius + entity.radius)) &&
+        ((entity.center.y - this.center.y) < (this.radius + entity.radius))
       ).forEach((entity) => { //have to re-draw entities above us :<
         entity.drawMe(ctx);
       }
     );
 
-
-
-    //wolfpatchs are drawn out of order unforutnetely.
-    // if(this.isSelected || params.DEBUG) {
-    //   ctx.save();
-    //   ctx.strokeStyle = "red";
-    //   ctx.beginPath(); //draw own radius.
-    //   ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.radius, 0, 2*Math.PI);
-    //   ctx.stroke();
-    //   ctx.restore();
-    // }
+    if(this.isSelected || params.DEBUG) {
+      ctx.save();
+      ctx.strokeStyle = "red";
+      ctx.beginPath(); //draw own radius.
+      ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.radius, 0, 2*Math.PI);
+      ctx.stroke();
+      ctx.restore();
+    }
   };
 
   chooseSprite() {
