@@ -29,6 +29,10 @@ class Projectile {
         this.elapsedTime = 0;
     };
 
+    drawMinimap(ctx, mmX, mmY, mmW, mmH) {
+      //do nothing;
+    }
+
     drawAngle(ctx, angle) {
         if (angle < 0 || angle > 359) return;
 
@@ -59,7 +63,7 @@ class Projectile {
         for (var i = 0; i < this.theGame.entities.length; i++) {
             var ent = this.theGame.entities[i];
             if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon) && collide(this, ent)) {
-                var damage = 10 * this.attackMod;
+                var damage = this.attackMod - ent.defense;
                 ent.health -= damage;
                 this.state = 0;
             }

@@ -71,8 +71,6 @@ class Wolf {
       this.isBorked = false;
       this.waitTill = 0;
 
-      this.actionTime = 0;
-      this.regenTime = 0;
       this.thePlayer = this.theCamera.thePlayer;
       this.myBirth = this.theGame.timer.lastTimestamp;
       this.tick = this.theGame.tickDuration;
@@ -81,6 +79,11 @@ class Wolf {
       this.myHealthBar = new HealthBar(this.theGame, this);
 
       this.exaustion = 0;
+
+      this.elapsedTime = 0;
+      this.actionTime = 0;
+      this.printTime = 0;
+      this.regenTime = 0;
   };
 
   // states
@@ -93,6 +96,7 @@ class Wolf {
     this.elapsedTime += this.theGame.clockTick;
     this.actionTime += this.theGame.clockTick;
     this.printTime += this.theGame.clockTick;
+    this.regenTime += this.theGame.clockTick;
 
     this.center = {
       x: this.x + this.radius,
@@ -140,12 +144,20 @@ class Wolf {
   };
 
   updateHealth() {
-    if(this.health < 0) {
+    if(this.health <= 0) {
       this.state = 0;
+      console.log("I'm dead! " +this.state);
     } else {
-      //at the end of each minion's "turn", it heals depending on how much it went through.
+      //at the end of each wolf's "turn", it heals depending on how much it went through.
       //wandering heals most for example
-     passiveHeal(this, (this.state*2));
+      if(this.regenTime > 1) {
+        if(this.isSelected) {
+          this.theGame.addElement(new Score(this.theGame, this.x, this.y - 10, passiveHeal(this, this.state/10), "teal"));
+        } else {
+          passiveHeal(this, this.state/10);
+        }
+        this.regenTime = 0;
+      }
     }
 
     this.myHealthBar.updateMe();
@@ -156,31 +168,32 @@ class Wolf {
   //this.state is only the *representation* of the minion's state and thats all it CAN be.
 
   attackEnemy() {
-    if(this.actionTime >= this.actionSpeed && this.target && (this.target.state != 0 || this.target.health > 0)) {
+    if(this.target && this.target.state != 0 && this.target.health > 0) {
       //we do still have a target to attack and it is alive.
       let ent = this.target;
       if(reach(this, ent)) {
-        //the target is alive and in range and we are ready to attack.
-        var damage = (this.attack + randomInt(this.attack)) - ent.defense
-        if(damage > 0) {
-          ent.health -= damage; //don't heal the target by dealing negitive damage!
+        //the target is alive and in range
+        if(this.actionTime >= this.actionSpeed) {
+          var damage = (this.attack + randomInt(this.attack)) - ent.defense
+          if(damage > 0) {
+            ent.health -= damage; //don't heal the target by dealing negitive damage!
+          }
+          console.log(damage);
+          console.log("d: "+ ent.defense);
+          this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
+          this.actionTime = 0;
+          return 1;
+        } else {
+          return 1;
         }
-        this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
-        this.actionTime = 0;
-        return 1;
       } else if (!reach(this, ent)) {
         return 2;
         //the target moved out of reach, so change to hunting state.
-      } else {
-        //this should not EVER happen!
-        return 3;
       }
-    } else if (!this.target || !(this.target.state != 0 || this.target.health < 0)){
+    } else if (!this.target || this.target.state == 0 || this.target.health <= 0){
       // the target has died (or broke)! find new target.
       this.target = null;
       return 4;
-    } else if (this.actionTime < this.actionSpeed) {
-      //do nothing cas we are not ready to attack yet.
     } else {
       //this should not EVER happen! this.target yet somehow not have valid stats.
       return "attack_method targeting failed";
@@ -276,12 +289,10 @@ class Wolf {
     if(this.target) {
       return 1;
     } else {
-      console.log("b")
       this.target = generateTarget(this);
     }
 
     if(this.target) {
-      console.log(this.target);
       return 2;
     } else {
       this.target = null;

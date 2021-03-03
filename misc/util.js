@@ -63,20 +63,22 @@ function checkFor(A, faction) {
 function passiveHeal(critter, healingFactor) {
   //healing factor is dependent on if the critter is exerting itself.
   if(critter.health < critter.maxHealth) {
-    critter.health += critter.regen*healingFactor;
-    if(critter.health > critter.maxHealth) {
+    let heal = critter.regen*healingFactor;
+    if(critter.health + heal > critter.maxHealth) {
       //we are maxed out.
-      critter.health = critter.maxHealth;
+      heal = critter.maxHealth-critter.health;
     }
+    critter.health += heal;
+    return Math.round(heal);
   }
 }
 
 function generateTarget(A) {
-  let tx;
-  let ty;
+  let tx = A.x;
+  let ty = A.y;
   attempts = 0;
   maxAttempts = 10;
-  while((!tx && !ty) && attempts++ < maxAttempts) {
+  while((tx == A.x && ty == A.y) && attempts++ < maxAttempts) {
     let x = A.x - A.visualRadius + randomInt(2*A.visualRadius);
     let y = A.y - A.visualRadius + randomInt(2*A.visualRadius);
     if( (x < params.PLAY_WIDTH - A.radius && x > A.radius) &&
@@ -84,7 +86,6 @@ function generateTarget(A) {
       tx = x;
       ty = y;
     }
-    console.log(attempts);
   }
   return {x: tx, y: ty};
 }

@@ -50,11 +50,11 @@ class Minion {
     this.health = minionStats.HEALTH;
     this.maxHealth = minionStats.HEALTH;
     this.regen = this.maxHealth/20;
-    this.defense = minionStats.DEFENSE;
+    this.defense = 1;
     this.attack = minionStats.ATTACK;
     this.gatherRate = 2
     this.agility = minionStats.AGILITY;
-    this.intelligence = minionStats.INTELLIGENCE;
+    this.intelligence = minionStats.INTELLIGENCE+1;
 
     this.maxSpeed = this.agility*50;
     this.actionSpeed = 3/this.agility
@@ -87,7 +87,6 @@ class Minion {
     this.waitTill = 0;
 
     this.actionTime = 0;
-    this.regenTime = 0;
     this.thePlayer = this.theCamera.thePlayer;
     this.myBirth = this.theGame.timer.lastTimestamp;
     this.tick = this.theGame.tickDuration;
@@ -97,6 +96,7 @@ class Minion {
     this.elapsedTime = 0;
     this.actionTime = 0;
     this.printTime = 0;
+    this.regenTime = 0;
   };
 
   //the move-speed is still staggered a bit, that might be because of async
@@ -105,6 +105,7 @@ class Minion {
     this.elapsedTime += this.theGame.clockTick;
     this.actionTime += this.theGame.clockTick;
     this.printTime += this.theGame.clockTick;
+    this.regenTime += this.theGame.clockTick;
 
     this.center = {
       x: this.x + this.baseWidth*this.scale/2,
@@ -149,11 +150,19 @@ class Minion {
 
   updateHealth() {
     if(this.health < 0) {
+      console.log("I'm dead! " +this.state);
       this.state = 0;
     } else {
       //at the end of each minion's "turn", it heals depending on how much it went through.
       //wandering heals most for example
-     passiveHeal(this, 1/(this.state*2));
+      if(this.regenTime > 1) {
+        if(this.isSelected) {
+          this.theGame.addElement(new Score(this.theGame, this.x, this.y - 10, passiveHeal(this, this.state/10), "teal"));
+        } else {
+          passiveHeal(this, this.state/10);
+        }
+        this.regenTime = 0;
+      }
     }
 
     this.myHealthBar.updateMe();
@@ -352,11 +361,17 @@ class Minion {
             (entity instanceof Bush && entity.health/entity.maxHealth > 0.1)
           )
         }).sort(function(a,b) {
-          return (distance(that, a) - distance(that, b))
+          if(!a || !b) {
+            return false;
+          } else {
+            return (distance(that, a) - distance(that, b))
+          }
         }).shift();
 
         //if the closest is visualRadius, target it, if not, then none of them are.
-        this.target = (distance(that, closestHarvestable) < that.visualRadius ? closestHarvestable : null);
+        if(closestHarvestable && distance(that, closestHarvestable) < that.visualRadius) {
+          this.target = closestHarvestable;
+        }
       } else {
         //we are littearlly braindead and don't know better.
         let closestHarvestable = this.theGame.entities.filter(entity => {
@@ -364,7 +379,11 @@ class Minion {
             entity instanceof Rock || entity instanceof Bush
           )
         }).sort(function(a,b) { //sort by distance to this minion.
-          return (distance(that, a) - distance(that, b))
+          if(!a || !b) {
+            return false;
+          } else {
+            return (distance(that, a) - distance(that, b))
+          }
         }).shift();
 
         //if the closest is visualRadius, target it, if not, then none of them are.

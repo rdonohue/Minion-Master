@@ -60,7 +60,7 @@ class Wolfpatch {
     //wolfpatchs are drawn out of order unforutnetely.
     this.theGame.entities.filter(
       entity => {
-        return (entity && entity.myType != "STINKY DOG FLOWERS" &&
+        return (entity && entity.center && entity.myType != "STINKY DOG FLOWERS" &&
             ((entity.center.x - this.center.x) < (this.radius + entity.radius)) &&
             ((entity.center.y - this.center.y) < (this.radius + entity.radius)))
       }
