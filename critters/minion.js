@@ -84,7 +84,7 @@ class Minion {
 
     this.timer = new Timer();
     this.timeSinceUpdate = 0;
-    this.oldTargetList = [];
+    this.stateHistory = [];
     this.tryToFix = false;
 
     this.actionTime = 0;
@@ -130,7 +130,8 @@ class Minion {
       this.tryToFixSelf();
     }
 
-    this.targetListMaintenence();
+    this.historyMaintenence(5);
+    this.checkHistory();
   };
 
   updateHealth() {
@@ -518,75 +519,48 @@ class Minion {
     ctx.restore();
   }
 
-  targetListMaintenence() {
-    let target = {
-      oldTarget: this.target,
-      type: null,
-      health: null,
-      loc: null,
+  //method used for AI-debugging.
+  historyMaintenence(lengthOfList, debugLength) {
+    if(lengthOfList <= 0 && debugLength <= 0) {
+      return;
+    }
+
+    let entry = {
+      state: this.state,
+      health: this.health,
       ownLoc: {
         x: this.center.x,
         y: this.center.y
-      }
+      },
+      ownVelocity: null,
+
+      targetType: null,
+      targetHealth: null,
+      targetLoc: null
     };
 
     if(this.target) {
       //if we have a target, record certain characteristics of it.
+      entry.targetLoc = {
+        x: this.target.x,
+        y: this.target.y
+      }
       if(this.target.myType) {
-        target.type = this.target.myType;
-      }
-      if(this.target.health) {
-        target.health = this.target.health;
-      }
-      if(this.target.x && this.target.y) {
-        target.loc.x = this.target.x;
-        target.loc.y = this.target.y;
+        //if the target is also a entity, record more.
+        entry.targetType = this.target.myType;
+        entry.targetHealth = this.target.health;
       }
     }
 
-    this.oldTargetList.push(target);
+    this.stateHistory.push(entry);
     let reoccurance = 0;
-    let listLength = 5; //try to maintain list length to this amount.
-    if(this.oldTargetList.length > listLength) {
-      //we want to maintain a list of the last bunch of targets for debugging purposes
-      for(var i = 0; i < this.oldTargetList.length; i++) {
-        //see how many entitys are "similar" to the current target.
-        if(this.target) {
-          //we have a current target, so compare "propertys"
-          if(this.target.myType) {
-            //it is a proper entity.
-
-          } else {
-
-          }
-        } else {
-          //we don't have a location atm, so just compare old locations.
-        }
-      }
-
-      if(reoccurance/this.debugMe.lenght > 0.90) {
-        //the target seems to keep reoccuring, check to see if we are at least moving
-
-        if(distance(this.debugMe[0].location, this.location) > this.radius) {
-          //we are just moving a long distance.
-          this.debugMe.shift();
-        } else if (this.target && this.debugMe[0].target == this.target){
-          //we are just interacting with a entity, check to see if its health is changing.
-          if(this.debugMe[0].target.health < this.target.health) {
-            this.debuggerFunction();
-            if(this.debugMe.length > listLength*2) {
-              //if we are possably stuck, we should keep a longer debugger list.
-              this.debugMe.shift();
-            }
-          } else {
-            this.debugMe.shift();
-          }
-        }
-      } else {
-        //we have a low reoccurance of the target, so just maintain list.
-        this.debugMe.shift();
+    let history = this.stateHistory;
+    if(history.length > lengthOfList) {
+      if(this.tryToFix && history.length > debugLength){
+        history.shift();
       }
     }
+
   }
 
   debuggerFunction() {
@@ -617,6 +591,10 @@ class Minion {
         tryToFixSelf();
       }
     }
+  }
+
+  checkHistory() {
+
   }
 
   tryToFixSelf() {
