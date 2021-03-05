@@ -100,8 +100,8 @@ class Bush {
     this.maxHealth = 100;
     this.subHealth = 0;
     this.removeFromWorld = false;
-    this.radius = Math.floor(this.w / 2);
-    this.visualRadius = 100;
+    this.radius = 5;
+    this.visualRadius = 10;
 
     this.healthbar = new HealthBar(this.game, this);
 
@@ -141,8 +141,8 @@ class Rock {
     this.maxHealth = 100;
     this.subHealth = 0;
     this.removeFromWorld = false;
-    this.radius = 20;
-    this.visualRadius = 100;
+    this.radius = 5;
+    this.visualRadius = 10;
     this.ready = true;
 
     this.healthbar = new HealthBar(this.game, this);
