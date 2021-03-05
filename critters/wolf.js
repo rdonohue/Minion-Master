@@ -149,7 +149,6 @@ class Wolf {
   updateHealth() {
     if(this.health <= 0) {
       this.state = 0;
-      console.log("I'm dead! " +this.state);
     } else {
       //at the end of each wolf's "turn", it heals depending on how much it went through.
       //wandering heals most for example

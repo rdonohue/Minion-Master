@@ -399,14 +399,12 @@ class Minion {
     //we don't see any enemys OR resources, pick location that which is proprotionally far to our
     //intelligence. more intelligence makes the movement less erratic as a result
     if(this.target) {
-      console.log("resource");
       return 3;
     } else {
       this.target = generateTarget(this);
     }
 
     if(this.target) {
-      console.log("ran loc");
       return 3;
     } else {
       this.target = null;
