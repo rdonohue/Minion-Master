@@ -117,25 +117,32 @@ class Wolf {
     //4-->idle
 
     this.updateHealth();
-    if(this.health<=0) {
-      return;
+    if(this.health > 0) {
+      // this.exhaustion += randomInt(this.agility/this.state);
+      if(this.actionTime >= this.actionSpeed) {
+        if(this.state == 1) {
+          this.state = this.attackEnemy();
+        }
+        this.actionTime = 0;
+      } else {
+        if (this.state == 2) {
+          this.state = this.moveToTarget();
+        } else if (this.state == 3) {
+          // if(Math.random(this.exhaustion) > this.wolf_size) {
+          //   this.state = this.idle();
+          // } else {
+          this.state = this.findNewTarget();
+            // }
+        } else if (this.state == 4) {
+          this.state = this.idle();
+        } else if (this.state == 1) {
+          this.velocity = {
+            x: 0,
+            y: 0
+          }
+        }
+      }
     }
-    // this.exhaustion += randomInt(this.agility/this.state);
-
-    if(this.state == 1) {
-      this.state = this.attackEnemy();
-    } else if (this.state == 2) {
-      this.state = this.moveToTarget();
-    } else if (this.state == 3) {
-      // if(Math.random(this.exhaustion) > this.wolf_size) {
-      //   this.state = this.idle();
-      // } else {
-        this.state = this.findNewTarget();
-      // }
-    } else if (this.state == 4) {
-      this.state = this.idle();
-    }
-
     this.maxListLength = 25;
     addHistoryEntry(this, this.makeStateEntry(this), this.maxListLength, this.delta, this.isBorked);
     this.checkHistory();
@@ -171,29 +178,25 @@ class Wolf {
   //this.state is only the *representation* of the minion's state and thats all it CAN be.
 
   attackEnemy() {
-    if(this.target && this.target.state != 0 && this.target.health > 0) {
+    if(this.target) {
       //we do still have a target to attack and it is alive.
       let ent = this.target;
-      if(reach(this, ent)) {
-        //the target is alive and in range
-        if(this.actionTime >= this.actionSpeed) {
-          var damage = (this.attack + randomInt(this.attack)) - ent.defense
-          if(damage > 0) {
-            ent.health -= damage; //don't heal the target by dealing negitive damage!
-          }
-          console.log(damage);
-          console.log("d: "+ ent.defense);
-          this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
-          this.actionTime = 0;
-          return 1;
-        } else {
-          return 1;
+      if((ent.state != 0 || ent.health > 0) && reach(this, ent)) {
+        //the target is alive and in range and we are ready to attack.
+        var damage = (this.attack + randomInt(this.attack)) - ent.defense
+        if(damage > 0) {
+          ent.health -= damage; //don't heal the target by dealing negitive damage!
         }
-      } else if (!reach(this, ent)) {
-        return 2;
-        //the target moved out of reach, so change to hunting state.
+        this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
+        return 1;
+      } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {
+        return 3;
+        //the target moved out of reach, so change to searching state.
+      } else {
+        //this should not EVER happen!
+        return "attack_method entity_handling failure";
       }
-    } else if (!this.target || this.target.state == 0 || this.target.health <= 0){
+    } else if (!this.target || !(this.target.state != 0 || this.target.health < 0)){
       // the target has died (or broke)! find new target.
       this.target = null;
       return 4;
@@ -287,12 +290,34 @@ class Wolf {
       }
     }
 
-    //we don't see any minions, pick location that which is proprotionally far to our
-    //intelligence. more intelligence makes the movement less erratic as a result
+    //we don't see any minions, pick location
     if(this.target) {
       return 1;
     } else {
-      this.target = generateTarget(this);
+      if(this.intelligence <= 1) {
+        this.target = generateTarget(this);
+      } else {
+        //if we are not a young pup, we know to stay away from towers.
+        let tower = this.theGame.entities.filter(entity => {
+          return (entity instanceof Tower)
+        }).sort(function(a,b) {
+          if(!a || !b) {
+            return false;
+          } else {
+            return (distance(that, a) - distance(that, b))
+          }
+        }).shift();
+
+        if(tower && distance(this, tower) < tower.visualRadius) {
+          let runtowards = {
+            x: this.x - (tower.x - this.x), //the point opposite of the tower relative to us.
+            y: this.y - (tower.y - this.y)
+          }
+          this.target = runtowards
+        } else {
+          this.target = generateTarget(this);
+        }
+      }
     }
 
     if(this.target) {

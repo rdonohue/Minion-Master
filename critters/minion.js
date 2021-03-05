@@ -126,28 +126,38 @@ class Minion {
     //4-->searching for enemy/resource (moving),
 
     this.updateHealth();
-    if(this.health <= 0) {
-      return;
-    }
-    if(this.state == 1) {
-      this.state = this.attackEnemy();
-    } else if (this.state == 2) {
-      this.state = this.gatherResources();
-    } else if (this.state == 3) {
-      this.state = this.moveToTarget();
-    } else if (this.state == 4 || !this.target) {
-      this.state = this.findNewTarget();
-    } else {
-      this.tryToFixSelf(); //invalid state!
-    }
+    if(this.health > 0) {
+      if(this.actionTime >= this.actionSpeed) {
+        if(this.state == 1) {
+          this.state = this.attackEnemy();
+        } else if (this.state == 2) {
+          this.state = this.gatherResources();
+        }
+        this.actionTime = 0;
+      } else {
+        if (this.state == 3) {
+          this.state = this.moveToTarget();
+        } else if (this.state == 4) {
+          this.state = this.findNewTarget();
+        } else if (this.state == 1 || this.state == 2) {
+          this.velocity = {
+            x: 0,
+            y: 0
+          }
+        } else {
+          this.tryToFixSelf(); //invalid state!
+        }
 
-    this.maxListLength = 25;
-    addHistoryEntry(this, this.makeStateEntry(this), this.maxListLength, this.delta, this.isBorked);
-    this.checkHistory();
-    if(this.startup) {
-      //do Nothing
-    } else {
-      this.startup = this.theGame.timer.lastTimestamp;
+      }
+
+      this.maxListLength = 25;
+      addHistoryEntry(this, this.makeStateEntry(this), this.maxListLength, this.delta, this.isBorked);
+      this.checkHistory();
+      if(this.startup) {
+        //do Nothing
+      } else {
+        this.startup = this.theGame.timer.lastTimestamp;
+      }
     }
   };
 
@@ -176,7 +186,7 @@ class Minion {
   //this.state is only the *representation* of the minion's state and thats all it CAN be.
 
   attackEnemy() {
-    if(this.actionTime >= this.actionSpeed && this.target && (this.target.state != 0)) {
+    if(this.target) {
       //we do still have a target to attack and it is alive.
       let ent = this.target;
       if((ent.state != 0 || ent.health > 0) && reach(this, ent)) {
@@ -186,7 +196,6 @@ class Minion {
           ent.health -= damage; //don't heal the target by dealing negitive damage!
         }
         this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
-        this.actionTime = 0;
         return 1;
       } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {
         return 3;
@@ -199,8 +208,6 @@ class Minion {
       // the target has died (or broke)! find new target.
       this.target = null;
       return 4;
-    } else if (this.actionTime < this.actionSpeed) {
-      //do nothing cas we are not ready to attack yet.
     } else {
       //this should not EVER happen! this.target yet somehow not have valid stats.
       return "attack_method targeting failed";
@@ -208,7 +215,7 @@ class Minion {
   }
 
   gatherResources() {
-    if(this.actionTime >= this.actionSpeed && this.target && (this.target.health > 0)) {
+    if(this.target) {
       //we do still have a target to attack and it is alive and we are ready to attack.
       let ent = this.target;
       if((ent.state != 0 || ent.health > 0) && reach(this, ent)) {
@@ -250,9 +257,6 @@ class Minion {
       // the target has died (or broke)! find new target.
       this.target = null;
       return 4;
-    } else if (this.actionTime < this.actionSpeed) {
-      //do nothing cas we are not ready to attack yet.
-      return 2;
     } else {
       //this should not EVER happen! this.target yet somehow not have valid stats.
       return "gather_method targeting failed";
