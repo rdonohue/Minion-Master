@@ -10,6 +10,7 @@ class Button{
 
     this.theObject.myButtons.push(this);
     this.debugOnly = false;
+    this.theCamera = this.theGame.theCamera
     //we might need to make the minion's handle their
     //own button updates btw.
   };
@@ -26,8 +27,8 @@ class Button{
 
   checkButton(theClick, x, y, w, h) {
     if(theClick && this.isVisable) {
-      var isInXCoord = theClick.x > x && theClick.x < x + w;
-      var isInYCoord = theClick.y > y && theClick.y < y + h;
+      var isInXCoord = theClick.x > x - this.theCamera.x && theClick.y - this.theCamera.y < x + w;
+      var isInYCoord = theClick.y > y - this.theCamera.y && theClick.y - this.theCamera.y < y + h;
 
       if(isInXCoord && isInYCoord){ //check y-axis
         this.theObject.buttonWasClicked = true;
@@ -47,14 +48,14 @@ class Button{
       ctx.fillText(this.myText,
         x+3, y+16);
       if(image) {
-        ctx.drawImage(this.myImage, x, y, w, h);
+        ctx.drawImage(this.myImage, x , y , w, h);
       } else {
         ctx.lineWidth = 1;
         ctx.strokeStyle= this.myColor
         ctx.beginPath();
         ctx.strokeRect(
-          x - this.theGame.theCamera.x,
-          y - this.theGame.theCamera.y,
+          x,
+          y,
           w, h
         );
         ctx.stroke();

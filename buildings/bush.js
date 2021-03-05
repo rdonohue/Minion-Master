@@ -70,7 +70,7 @@ class Bush {
       ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.radius, 0, 2*Math.PI);
       ctx.fillStyle = "red";
       ctx.font = '16px "Playfair Display SC'
-      ctx.fillText(Math.round(this.subHealth) + "/" + this.regenTimer, this.x - this.radius/3, this.y + this.radius*3);
+      ctx.fillText(Math.round(this.subHealth) + "/" + this.regenTimer, this.x - this.radius/3 - this.theGame.theCamera.x , this.y + this.radius*3 - - this.theGame.theCamera.y);
       ctx.stroke();
       ctx.restore();
     }

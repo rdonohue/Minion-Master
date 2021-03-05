@@ -126,6 +126,9 @@ class Minion {
     //4-->searching for enemy/resource (moving),
 
     this.updateHealth();
+    if(this.health <= 0) {
+      return;
+    }
     if(this.state == 1) {
       this.state = this.attackEnemy();
     } else if (this.state == 2) {
@@ -173,7 +176,7 @@ class Minion {
   //this.state is only the *representation* of the minion's state and thats all it CAN be.
 
   attackEnemy() {
-    if(this.actionTime >= this.actionSpeed && this.target && (this.target.state != 0 || this.target.health > 0)) {
+    if(this.actionTime >= this.actionSpeed && this.target && (this.target.state != 0)) {
       //we do still have a target to attack and it is alive.
       let ent = this.target;
       if((ent.state != 0 || ent.health > 0) && reach(this, ent)) {

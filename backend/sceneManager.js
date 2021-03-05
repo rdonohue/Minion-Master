@@ -52,6 +52,10 @@ class SceneManager {
     this.theGame.spawnMe("wolf", 350, 350);
     this.theGame.spawnMe("wolf", 150, 150);
     this.theGame.spawnMe("wolf", 350, 350);
+    this.theGame.spawnMe("wolf", 150, 150);
+    this.theGame.spawnMe("wolf", 350, 350);
+    this.theGame.spawnMe("wolf", 150, 150);
+    this.theGame.spawnMe("wolf", 350, 350);
   }
 
   update() {

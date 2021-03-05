@@ -115,6 +115,9 @@ class Wolf {
     //4-->idle
 
     this.updateHealth();
+    if(this.health<=0) {
+      return;
+    }
     this.exaustion += randomInt(this.agility/this.state);
 
     if(this.state == 1) {

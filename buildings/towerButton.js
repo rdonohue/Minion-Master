@@ -32,6 +32,7 @@ constructor(theGame, x, y) {
 	};
 
   drawBox(ctx) {
+		ctx.save();
 		if (this.mouseover) {
 			ctx.strokeStyle = "White";
 			ctx.setLineDash([4,2]);
@@ -44,6 +45,9 @@ constructor(theGame, x, y) {
       ctx.strokeStyle = "White";
       ctx.strokeRect(this.x, this.y, this.buttonWidth, this.buttonHeight);
     }
+		ctx.fillStyle = "white";
+		ctx.fillText("Tower:  100 rock", this.x + 2, this.y + 16);
+		ctx.restore();
   };
 
   drawText(ctx) {
