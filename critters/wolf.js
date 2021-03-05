@@ -44,6 +44,8 @@ class Wolf {
       this.intelligence = 1 + randomInt(1);
       // }
 
+      this.actionSpeed = 3/this.agility
+
       //derived stats {
       //I have no idea if this is reasonable.
       this.maxSpeed = 25 + Math.ceil(this.agility) * 15;
@@ -186,6 +188,8 @@ class Wolf {
           damage = 0 //don't heal the target by dealing negitive damage!
         }
         ent.health -= damage; //don't heal the target by dealing negitive damage!
+        this.grow(damage);
+        console.log(damage);
         this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
         return 1;
       } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {
@@ -333,15 +337,22 @@ class Wolf {
   idle() {
     //idle, wait till elapsedTime surpasses randomly decided wait-time.
     //note, wolves CAN fail to see prey when in this state since their "not paying attention".
-    if (this.actionTime >= this.actionSpeed){
+    // if (this.actionTime >= this.actionSpeed){
       //sleepy doggo!
-      this.theGame.addElement(new Score(this.theGame, this.center.x, this.y, "z", "grey"));
-      this.actionTime = 0;
-      this.exhaustion -= (5 + (this.maxHealth)/100);
-      if(this.exhaustion < randomInt(this.health/100)) {
-        this.state = this.findNewTarget();
-        this.exhaustion = 0;
-      }
+      // this.theGame.addElement(new Score(this.theGame, this.center.x, this.y, "z", "grey"));
+      // this.actionTime = 0;
+      // this.exhaustion -= (5 + (this.maxHealth)/100);
+      // if(this.exhaustion < randomInt(this.health/100)) {
+        // this.state = this.findNewTarget();
+    //     this.exhaustion = 0;
+    //   }
+    // }
+
+    if(this.waitTill == 0) {
+      this.waitTill = this.theGame.timer.lastTimestamp + randomInt(3);
+    } else if (this.waitTill < this.theGame.timer.lastTimestamp) {
+      this.waitTill = 0;
+      this.state = 3; //we have waited long enough.
     }
   }
 

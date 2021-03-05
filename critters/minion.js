@@ -192,9 +192,10 @@ class Minion {
       if((ent.state != 0 || ent.health > 0) && reach(this, ent)) {
         //the target is alive and in range and we are ready to attack.
         var damage = (this.attack + randomInt(this.attack)) - ent.defense
-        if(damage > 0) {
-          ent.health -= damage; //don't heal the target by dealing negitive damage!
+        if(damage < 0) {
+          damage = 0 //don't heal the target by dealing negitive damage!
         }
+        ent.health -= damage; //don't heal the target by dealing negitive damage!
         this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
         return 1;
       } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {
