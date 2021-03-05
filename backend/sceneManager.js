@@ -43,7 +43,7 @@ class SceneManager {
 
     this.theGame.spawnMe("castle", castleX, castleY);
 
-    this.resources = new Resources(this.theGame, 15, 15, 3);
+    this.resources = new Resources(this.theGame, 8, 8, 3);
 
     this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
     // this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
