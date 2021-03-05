@@ -61,16 +61,17 @@ function checkFor(A, faction) {
 
 //this function handles most critters passive healing
 function passiveHeal(critter, healingFactor) {
+  let heal = 0;
   //healing factor is dependent on if the critter is exerting itself.
   if(critter.health < critter.maxHealth) {
-    let heal = critter.regen*healingFactor;
+    heal = critter.regen*healingFactor;
     if(critter.health + heal > critter.maxHealth) {
       //we are maxed out.
       heal = critter.maxHealth-critter.health;
     }
-    critter.health += heal;
-    return Math.round(heal);
   }
+  critter.health += heal;
+  return Math.round(heal);
 }
 
 function generateTarget(A) {

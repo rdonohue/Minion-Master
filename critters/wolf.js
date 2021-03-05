@@ -153,8 +153,9 @@ class Wolf {
       //at the end of each wolf's "turn", it heals depending on how much it went through.
       //wandering heals most for example
       if(this.regenTime > 1) {
-        if(this.isSelected) {
-          this.theGame.addElement(new Score(this.theGame, this.x, this.y - 10, passiveHeal(this, this.state/10), "teal"));
+        let heal = passiveHeal(this, this.state/10);
+        if(this.isSelected && heal > 0) {
+          this.theGame.addElement(new Score(this.theGame, this.x, this.y - 10, heal, "teal"));
         } else {
           passiveHeal(this, this.state/10);
         }
