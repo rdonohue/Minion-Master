@@ -240,11 +240,11 @@ class Minion {
             this.target = null;
             return 4; //somehow not a resource!.
           }
+          this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, gather, "blue"));
+          this.actionTime = 0;
         } else {
           //failed to harvest!
         }
-        this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, gather, "blue"));
-        this.actionTime = 0;
         return 2; //keep gathering.
       } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {
         //the target moved out of range, so change to hunt-mode.
