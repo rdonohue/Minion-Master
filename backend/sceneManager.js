@@ -6,7 +6,7 @@ class SceneManager {
 
       this.theMiniMap = new MiniMap(this.theGame, 1024, 576, 256);
       this.theHud = new Hud(this.theGame, 1024, 0, 256);
-      this.thePlayer = new Player(this.theGame, 100, 150, 5, 3, 0, 0);
+      this.thePlayer = new Player(this.theGame, 100, 150, 15, 3, 0, 0);
 
       this.maxCamSpeed = 45;
       this.baseCamSpeed = 0;

@@ -25,10 +25,12 @@ class Button{
     }
   }
 
-  checkButton(theClick, x, y, w, h) {
-    if(theClick && this.isVisable) {
-      var isInXCoord = theClick.x > x - this.theCamera.x && theClick.y - this.theCamera.y < x + w;
-      var isInYCoord = theClick.y > y - this.theCamera.y && theClick.y - this.theCamera.y < y + h;
+  checkButton(x, y, w, h) {
+    if(this.isVisable) {
+      let theClick = this.theGame.click;
+      console.log(w + ", " + h);
+      var isInXCoord = theClick.x > x && theClick.x < x + w;
+      var isInYCoord = theClick.y > y && theClick.y < y + h;
 
       if(isInXCoord && isInYCoord){ //check y-axis
         this.theObject.buttonWasClicked = true;

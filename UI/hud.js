@@ -13,7 +13,9 @@ class Hud{
     this.towerButton.updateMe();
     for(var i = 0; i < this.myButtons.length; i++) {
       this.myButtons[i].updateMe();
-      this.myButtons[i].checkButton(this.theGame.click, 1038, 97 +45*i + 45, 63, 22);
+      if(this.theGame.click) {
+        this.myButtons[i].checkButton(1038, 97 +45*i + 45, 63, 22);
+      }
     }
   };
 
