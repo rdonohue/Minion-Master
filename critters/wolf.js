@@ -190,7 +190,7 @@ class Wolf {
         this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
         return 1;
       } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {
-        return 3;
+        return 2;
         //the target moved out of reach, so change to searching state.
       } else {
         //this should not EVER happen!
@@ -207,9 +207,18 @@ class Wolf {
   }
 
   moveToTarget() {
+    var that = this;
 
-    if(this.target) {
-      let dist = distance(this, this.target);
+    if(this.target && this.target.x != this.x && this.target.y != this.y) {
+      let b = this.target;
+      // console.log(b);
+      // console.log(this.center);
+      var dist = Math.sqrt(
+        (that.x - b.x) * (that.x - b.x) +
+        (that.y - b.y) * (that.y - b.y)
+      );
+
+      //console.log(this + " is moving to: "+ this.target.x + ", " + this.target.y + ", " + dist);
       this.velocity = {
         x: (this.target.x - this.x)/dist * this.maxSpeed,
         y: (this.target.y - this.y)/dist * this.maxSpeed
@@ -219,15 +228,8 @@ class Wolf {
       this.y += this.velocity.y * this.theGame.clockTick;
       this.facing = getFacing(this.velocity);
 
-      if(this.target instanceof Minion) {
-        //do Nothing
-      } else {
-        this.target
-      }
-
-      if(reach(this, {x: this.target.x, y: this.target.y})) {
+      if(reach(this, this.target)) {
         if(this.target instanceof Minion) {
-          //attack prey!
           return 1;
         } else {
           //just a location, find new location.
@@ -238,10 +240,11 @@ class Wolf {
         //still not reached target so stay in current mode.
         return 2;
       }
-    } else if (!this.target || !canSee(this, this.target)){
-      //we lost the target or it went out of range.
+    } else {
+      //!this.target || !canSee(this, this.target)
+      //we lost the target or it went out of range or its our own location
       this.target = null;
-      return 3;
+      return 4;
     }
   }
 

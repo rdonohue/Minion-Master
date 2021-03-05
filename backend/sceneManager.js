@@ -48,11 +48,11 @@ class SceneManager {
     this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
     // this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
     // this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
-    this.theGame.spawnMe("wolf", 150, 150);
+    this.theGame.spawnMe("wolf", 550, 550);
     this.theGame.spawnMe("wolf", 350, 350);
-    this.theGame.spawnMe("wolf", 150, 150);
+    this.theGame.spawnMe("wolf", 750, 750);
     this.theGame.spawnMe("wolf", 350, 350);
-    this.theGame.spawnMe("wolf", 150, 150);
+    this.theGame.spawnMe("wolf", 950, 950);
     this.theGame.spawnMe("wolf", 350, 350);
     this.theGame.spawnMe("wolf", 150, 150);
     this.theGame.spawnMe("wolf", 350, 350);
