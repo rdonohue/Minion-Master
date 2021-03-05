@@ -266,7 +266,7 @@ class Wolf {
       if(closestEnemy && distance(that, closestEnemy) < that.visualRadius) {
         this.target = closestEnemy;
       }
-    } else if (this.intelligence >= 2) {
+    } else if (this.intelligence >= 3) {
       //we are smart enough to not pick fights with enemys bigger then us.
       let attackWeight = 3;
       let defenseWeight = 2;

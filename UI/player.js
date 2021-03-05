@@ -154,7 +154,7 @@ class Player {
       ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';
       if(this.selected) {
         if(this.selected.health && this.selected.maxHealth) {
-          ctx.fillText("HEALTH: " + this.selected.health + "/" + this.selected.maxHealth, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.2);
+          ctx.fillText("HEALTH: " + Math.round(this.selected.health) + "/" + Math.round(this.selected.maxHealth), 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.2);
         }
         if(this.selected.defense) {
           ctx.fillText("DEF: " + this.selected.defense, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.0);
