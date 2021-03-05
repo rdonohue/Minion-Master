@@ -120,7 +120,7 @@ class Wolf {
     if(this.health<=0) {
       return;
     }
-    this.exaustion += randomInt(this.agility/this.state);
+    // this.exhaustion += randomInt(this.agility/this.state);
 
     if(this.state == 1) {
       this.state = this.attackEnemy();
