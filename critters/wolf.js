@@ -18,10 +18,17 @@ class Wolf {
       this.loadAnimations();
 
       this.direction = 0; // 0 = left, 1 = right, 2 = up, 3 = down
-      this.state = 4;
+
+      // states
+      // 0: dead, not moving
+      // 1: attacking prey. NOT MOVING.
+      // 2: hunting prey. moving towards prey.
+      // 3: searching for prey, actually looking for prey, moving.
+      // 4: idle/waiting, not moving.
+      this.state = 3;
+
       this.baseWidth = 64;
       this.baseHeight = 24;
-
       this.target = null;
 
       //wolf_size is how big a wolf is, they generally start small.
@@ -78,7 +85,7 @@ class Wolf {
       this.startup = null;
       this.myHealthBar = new HealthBar(this.theGame, this);
 
-      this.exaustion = 0;
+      this.exhaustion = 0;
 
       this.elapsedTime = 0;
       this.actionTime = 0;
@@ -86,12 +93,7 @@ class Wolf {
       this.regenTime = 0;
   };
 
-  // states
-  // 0: dead, not moving
-  // 1: attacking prey. NOT MOVING.
-  // 2: hunting prey. moving towards prey.
-  // 3: searching for prey, actually looking for prey, moving.
-  // 4: idle/waiting, not moving.
+
   updateMe() {
     this.elapsedTime += this.theGame.clockTick;
     this.actionTime += this.theGame.clockTick;
@@ -115,22 +117,20 @@ class Wolf {
     //4-->idle
 
     this.updateHealth();
-    this.exaustion += randomInt(this.agility/this.state);
+    this.exhaustion += randomInt(this.agility/this.state);
 
     if(this.state == 1) {
       this.state = this.attackEnemy();
     } else if (this.state == 2) {
       this.state = this.moveToTarget();
     } else if (this.state == 3) {
-      // if(Math.random(this.exaustion) > this.wolf_size) {
+      // if(Math.random(this.exhaustion) > this.wolf_size) {
       //   this.state = this.idle();
       // } else {
         this.state = this.findNewTarget();
       // }
     } else if (this.state == 4) {
       this.state = this.idle();
-    } else {
-      this.tryToFixSelf(); //invalid state!
     }
 
     this.maxListLength = 25;
@@ -307,10 +307,10 @@ class Wolf {
       //sleepy doggo!
       this.theGame.addElement(new Score(this.theGame, this.center.x, this.y, "z", "grey"));
       this.actionTime = 0;
-      this.exaustion -= (5 + (this.maxHealth)/100);
-      if(this.exaustion < randomInt(this.health/100)) {
+      this.exhaustion -= (5 + (this.maxHealth)/100);
+      if(this.exhaustion < randomInt(this.health/100)) {
         this.state = this.findNewTarget();
-        this.exaustion = 0;
+        this.exhaustion = 0;
       }
     }
   }
