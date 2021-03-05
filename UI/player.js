@@ -144,7 +144,7 @@ class Player {
       ctx.fillText(this.targetType + " ("+this.selected.description+")", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2);
       if(params.DEBUG) {
         if(this.selected.target && this.selected.target.myType) {
-          ctx.fillText("target: "+this.selected.target.myType + "{"+this.selected.target.health + "/"+this.selected.target.maxHealth+"}", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2.5);
+          ctx.fillText("target: "+this.selected.target.myType + "{"+Math.round(this.selected.target.health) + "/"+Math.round(this.selected.target.maxHealth)+"}", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2.5);
         } else if (this.selected.target) {
           ctx.fillText("target: {"+Math.round(this.selected.target.x) + ", " +Math.round(this.selected.target.y) + "}", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2.5);
         }

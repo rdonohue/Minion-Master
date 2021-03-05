@@ -119,10 +119,8 @@ class Wolf {
     this.updateHealth();
     if(this.health > 0) {
       // this.exhaustion += randomInt(this.agility/this.state);
-      if(this.actionTime >= this.actionSpeed) {
-        if(this.state == 1) {
-          this.state = this.attackEnemy();
-        }
+      if(this.state == 1 && this.actionTime >= this.actionSpeed) {
+        this.state = this.attackEnemy();
         this.actionTime = 0;
       } else {
         if (this.state == 2) {
@@ -133,7 +131,7 @@ class Wolf {
           // } else {
           this.state = this.findNewTarget();
             // }
-        } else if (this.state == 4) {
+        } if (this.state == 4) {
           this.state = this.idle();
         } else if (this.state == 1) {
           this.velocity = {
@@ -184,9 +182,10 @@ class Wolf {
       if((ent.state != 0 || ent.health > 0) && reach(this, ent)) {
         //the target is alive and in range and we are ready to attack.
         var damage = (this.attack + randomInt(this.attack)) - ent.defense
-        if(damage > 0) {
-          ent.health -= damage; //don't heal the target by dealing negitive damage!
+        if(damage < 0) {
+          damage = 0 //don't heal the target by dealing negitive damage!
         }
+        ent.health -= damage; //don't heal the target by dealing negitive damage!
         this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
         return 1;
       } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {
@@ -434,15 +433,6 @@ class Wolf {
           }
           ctx.strokeStyle = "red";
           ctx.fillStyle = "red";
-          radius = this.target.radius
-        } else if (this.target.myFaction === "resource") {
-          //harvesting entity at location
-          let location = {
-            x: this.target.center.x,
-            y: this.target.center.y
-          }
-          ctx.strokeStyle = "blue";
-          ctx.fillStyle = "blue";
           radius = this.target.radius
         } else if (!(this.target.myType)) {
           //searching for entity's at location
