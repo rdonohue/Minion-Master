@@ -10,6 +10,8 @@ class Button{
 
     this.theObject.myButtons.push(this);
     this.debugOnly = false;
+    this.mouseover = false;
+    this.dashOffset = 0;
     this.theCamera = this.theGame.theCamera
     //we might need to make the minion's handle their
     //own button updates btw.
@@ -43,24 +45,46 @@ class Button{
   }
 
   drawButton(ctx, x, y, w, h, image) {
+
+    if (this.theGame.mouse) {
+			let xMove = this.theGame.mouse.x
+	    let yMove = this.theGame.mouse.y
+	    if ((xMove >= x && xMove <= x + w) && (yMove >= y && yMove <= y + h)) {
+	      this.mouseover = true;
+	    } else {
+	      this.mouseover = false;
+	    }
+		}
+
     if(this.isVisable) {
       ctx.save();
       ctx.font = 14 + 'px "Playfair Display SC"';
       ctx.fillStyle = "white";
       ctx.fillText(this.myText,
-        x+3, y+16);
+        x + 3, y + 16);
       if(image) {
-        ctx.drawImage(this.myImage, x , y , w, h);
-      } else {
-        ctx.lineWidth = 1;
-        ctx.strokeStyle= this.myColor
-        ctx.beginPath();
+        ctx.drawImage(this.myImage, x, y, w, h);
+      } else if (this.mouseover) {
+        this.dashOffset += 0.15;
+    		if (this.dashOffset > 16) {
+    			this.dashOffset = 0;
+    		}
+        ctx.strokeStyle = this.myColor;
+  			ctx.setLineDash([4,2]);
+        ctx.lineDashOffset = -this.dashOffset;
         ctx.strokeRect(
           x,
           y,
           w, h
         );
-        ctx.stroke();
+      } else {
+        ctx.lineWidth = 1;
+        ctx.strokeStyle= this.myColor
+        ctx.strokeRect(
+          x,
+          y,
+          w, h
+        );
       }
       ctx.restore();
     }

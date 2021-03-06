@@ -38,7 +38,7 @@ class Hud{
     new Button(
       that, that.theGame,
       that.spawnMinion, [that.minionCost],
-      " minion    50 food", "white"
+      "Minion:    50 food", "white"
     )
   }
 

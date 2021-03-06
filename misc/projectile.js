@@ -66,6 +66,8 @@ class Projectile {
                 var damage = this.attackMod - ent.defense;
                 ent.health -= damage;
                 this.state = 0;
+
+                this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "#FF9900"));
             }
         }
 
