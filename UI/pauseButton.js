@@ -61,7 +61,7 @@ constructor(theGame, x, y) {
 		ctx.font = "16px Playfair Display SC";
 		let subtitle = "Click to Continue Game";
 		xCenter = (params.CANVAS_WIDTH - (this.theGame.ctx.measureText(subtitle).width)) / 2;
-		ctx.fillText(subtitle, xCenter, 650 / 2);
+		ctx.fillText(subtitle, xCenter, 675 / 2);
 	};
 
   updateMe() {
