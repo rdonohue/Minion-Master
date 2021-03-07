@@ -1,9 +1,12 @@
 class Projectile {
-    constructor(game, x, y, target, attackMod, scale) {
-        Object.assign(this, { game, x, y, target, attackMod, scale});
+    constructor(theGame, x, y, target, attackMod, scale) {
+        Object.assign(this, { theGame, x, y, target, attackMod, scale});
+        this.radius = 12;
         this.smooth = false;
         this.myType = "arrow";
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/arrow.png");
+
+        this.state = 1;
 
         var dist = distance(this, this.target);
         this.maxSpeed = 400; // pixels per second
@@ -25,6 +28,10 @@ class Projectile {
 
         this.elapsedTime = 0;
     };
+
+    drawMinimap(ctx, mmX, mmY, mmW, mmH) {
+      //do nothing;
+    }
 
     drawAngle(ctx, angle) {
         if (angle < 0 || angle > 359) return;
@@ -50,15 +57,17 @@ class Projectile {
     };
 
     updateMe() {
-        this.x += this.velocity.x * this.game.clockTick;
-        this.y += this.velocity.y * this.game.clockTick;
+        this.x += this.velocity.x * this.theGame.clockTick;
+        this.y += this.velocity.y * this.theGame.clockTick;
 
-        for (var i = 0; i < this.game.entities.length; i++) {
-            var ent = this.game.entities[i];
+        for (var i = 0; i < this.theGame.entities.length; i++) {
+            var ent = this.theGame.entities[i];
             if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon) && collide(this, ent)) {
-                var damage = 10 * this.attackMod;
+                var damage = this.attackMod - ent.defense;
                 ent.health -= damage;
-                this.removeFromWorld = true;
+                this.state = 0;
+
+                this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "#FF9900"));
             }
         }
 
@@ -76,11 +85,11 @@ class Projectile {
             //this.drawAngle(ctx, degrees);
         } else {
             if (this.facing < 5) {
-                this.animations[this.facing].drawFrame(this.game.clockTick, ctx, (this.x - xOffset) - this.game.camera.x, (this.y - yOffset) - this.game.camera.y, this.scale);
+                this.animations[this.facing].drawFrame(this.theGame.clockTick, ctx, (this.x - xOffset) - this.theGame.theCamera.x, (this.y - yOffset) - this.theGame.theCamera.y, this.scale);
             } else {
                 ctx.save();
                 ctx.scale(-1, 1);
-                this.animations[8 - this.facing].drawFrame(this.game.clockTick, ctx, -(this.x) - 32 + xOffset + this.game.camera.x, (this.y - yOffset) - this.game.camera.y, this.scale);
+                this.animations[8 - this.facing].drawFrame(this.theGame.clockTick, ctx, -(this.x) - 32 + xOffset + this.theGame.theCamera.x, (this.y - yOffset) - this.theGame.theCamera.y, this.scale);
                 ctx.restore();
             }
         }

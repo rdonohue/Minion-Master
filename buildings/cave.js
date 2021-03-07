@@ -2,7 +2,9 @@ class Cave {
     constructor(game, x, y) {
       Object.assign(this, { game, x, y });
 
-      this.myType = "cave";
+      this.myType = "OGRE-CAVE";
+      this.myFaction = "enemy";
+      this.description = "ogres will wait to come out..."
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/cave.png");
       this.caveAnim = new Animator(this.spritesheet, 0, 0, 2714, 1762, 1, 1, 0, false, true);
@@ -11,8 +13,7 @@ class Cave {
       this.scale = 0.07;
       this.radius = 20;
 
-      this.healthbar = new HealthBar(this.game, this);
-
+      this.myHealthBar = new HealthBar(this.game, this);
 
       //Stats
       this.health = 200;

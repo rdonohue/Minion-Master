@@ -17,23 +17,27 @@
     <script type="text/javascript" src="./backend/gameengine.js"></script>
     <script type="text/javascript" src="./backend/sceneManager.js"></script>
 
+    <script type="text/javascript" src="./buildings/bush.js"></script>
     <script type="text/javascript" src="./buildings/cave.js"></script>
     <script type="text/javascript" src="./buildings/tower.js"></script>
     <script type="text/javascript" src="./buildings/towerButton.js"></script>
     <script type="text/javascript" src="./buildings/homebase.js"></script>
     <script type="text/javascript" src="./buildings/resources.js"></script>
+    <script type="text/javascript" src="./buildings/rock.js"></script>
+    <script type="text/javascript" src="./buildings/wolfpatch.js"></script>
 
     <script type="text/javascript" src="./critters/minion.js"></script>
     <script type="text/javascript" src="./critters/wolf.js"></script>
     <script type="text/javascript" src="./critters/ogre.js"></script>
     <script type="text/javascript" src="./critters/dragon.js"></script>
 
-    <script type="text/javascript" src="./frontend/animator.js"></script>
-    <script type="text/javascript" src="./frontend/health.js"></script>
-    <script type="text/javascript" src="./frontend/HUD.js"></script>
-    <script type="text/javascript" src="./frontend/MiniMap.js"></script>
-    <script type="text/javascript" src="./frontend/player.js"></script>
-    <script type="text/javascript" src="./frontend/UI.js"></script>
+    <script type="text/javascript" src="./UI/animator.js"></script>
+    <script type="text/javascript" src="./UI/button.js"></script>
+    <script type="text/javascript" src="./UI/pauseButton.js"></script>
+    <script type="text/javascript" src="./UI/healthbar.js"></script>
+    <script type="text/javascript" src="./UI/hud.js"></script>
+    <script type="text/javascript" src="./UI/MiniMap.js"></script>
+    <script type="text/javascript" src="./UI/player.js"></script>
 
     <script type="text/javascript" src="./misc/background.js"></script>
     <script type="text/javascript" src="./misc/projectile.js"></script>
@@ -46,26 +50,15 @@
 
 </head>
 <body>
-
-
-  <link rel="stylesheet" type="text/css" href="dropdown.css" />
-
   <canvas id="gameWorld" width="1280" height="768" style="background: #777; border: 1px solid black" tabindex="0" autofocus></canvas>
 
-  <!-- <div class="menudrop">
-    <button onclick="menuFunction()" class="dropbtn">Game Menu</button>
-      <div id="myDropdown" class="dropdown-content">
-        <a href="#debug" id="debug">Debug ON</a>
-        <a href="#info">Unit Info</a>
-      </div>
-  </div> -->
   <div>
+    <input type="checkbox" id="debug"> Debug </input>
       <br />
       <p>Use the WASD keys to shift UP, LEFT, DOWN, and RIGHT, respectively.
          <br><br>The arrow keys also function this way
        </p>
        <br>
-      <input type="checkbox" id="debug" checked> Debug </input>
   </div>
 
 </body>

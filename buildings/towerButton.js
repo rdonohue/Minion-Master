@@ -1,10 +1,12 @@
 class TowerButton {
-constructor(game, x, y) {
-		Object.assign(this, {game, x, y});
+constructor(theGame, x, y) {
+		Object.assign(this, {theGame, x, y});
 
 		this.selected = false;
 		this.mouseover = false;
 		this.placing = false;
+
+		this.rockCost = 100
 
 		this.buttonWidth = 63;
 		this.buttonHeight = 22;
@@ -20,13 +22,13 @@ constructor(game, x, y) {
 		}
 		this.drawBox(ctx);
 		this.drawText(ctx);
-		//Draw tower for placement.
 		this.placeTower(ctx);
 		this.setTower();
 		ctx.restore();
 	};
 
   drawBox(ctx) {
+		ctx.save();
 		if (this.mouseover) {
 			ctx.strokeStyle = "White";
 			ctx.setLineDash([4,2]);
@@ -39,12 +41,13 @@ constructor(game, x, y) {
       ctx.strokeStyle = "White";
       ctx.strokeRect(this.x, this.y, this.buttonWidth, this.buttonHeight);
     }
+		ctx.restore();
   };
 
   drawText(ctx) {
 		ctx.save();
     ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
-    ctx.strokeStyle = "White";
+    ctx.fillStyle = "White";
     ctx.fillText("Tower", this.x + 4, this.y + 16);
 		ctx.restore();
   };
@@ -53,45 +56,61 @@ constructor(game, x, y) {
  * Draws a tower over the mouse for tower placement.
  */
 	placeTower(ctx) {
-		if (this.game.mouse && this.selected) {
-			let mouse = this.game.mouse;
+		if (this.theGame.mouse && this.selected) {
+			let mouse = this.theGame.mouse;
 			if ( (mouse.x < params.CANVAS_WIDTH && mouse.x > 20)
 				 && (mouse.y < params.CANVAS_HEIGHT && mouse.y > 20) ) {
-				 ctx.globalAlpha = 0.25;
-				 const xCenter = 52.5 / 2;
-				 const yCenter = 34.5 / 2;
+				ctx.globalAlpha = 0.25;
+				const xCenter = 52.5 / 2;
+				const yCenter = 34.5 / 2;
 
-				 // Subtracting x/yCenter from the origin point paints the tower's center where the user clicks.
-				 var x = mouse.x - xCenter;
-				 var y = mouse.y - yCenter;
-				 ctx.save();
-				 ctx.beginPath();
-				 ctx.arc(x + xCenter, y + yCenter, 300, 0, 2*Math.PI);
-				 ctx.setLineDash([10,5]);
-				 ctx.stroke();
-				 ctx.drawImage(this.spritesheet, 0, 0, 105, 138, x, y, 52.5, 69);
-				 ctx.restore();
-				 this.placing = true;
+				// Subtracting x/yCenter from the origin point paints the tower's center where the user clicks.
+				var x = mouse.x - xCenter;
+				var y = mouse.y - yCenter;
+				ctx.save();
+				ctx.beginPath();
+				ctx.arc(x + xCenter, y + yCenter, 300, 0, 2*Math.PI);
+				ctx.setLineDash([10,5]);
+				ctx.stroke();
+				ctx.drawImage(this.spritesheet, 0, 0, 105, 138, x, y, 52.5, 69);
+				ctx.restore();
+				if(this.theGame.theSM.thePlayer.myRock >= this.rockCost) {
+					this.placing = true;
+				} else if (this.theGame.theSM.thePlayer.myRock < this.rockCost) {
+					this.theGame.theSM.thePlayer.myRockColor = "orange";
+					ctx.save();
+					ctx.fillStyle = "orange";
+					ctx.globalAlpha = 1;
+			 		ctx.fillText("Your short on rock!", mouse.x - 3*xCenter, mouse.y - yCenter);
+					ctx.restore();
+				}
+
 			}
 		}
 	};
 
 	setTower() {
-		if (this.game.click) {
-			let click = this.game.click;
-			if (this.placing &&
-			 	 (click.x > 0 && click.x < params.CANVAS_WIDTH) &&
-			 	 (click.y > 0 && click.y < params.CANVAS_HEIGHT) ) {
-						this.game.spawnMe("tower", click.x + this.game.camera.x, click.y + this.game.camera.y);
-						this.placing = false;
-				 }
+		if (this.theGame.click) {
+			if(this.theGame.theSM.thePlayer.myRock >= this.rockCost && this.placing) {
+				this.theGame.theSM.thePlayer.myRock -= this.rockCost;
+				let click = this.theGame.click;
+				if (this.placing &&
+					 (click.x > 0 && click.x < params.CANVAS_WIDTH) &&
+					 (click.y > 0 && click.y < params.CANVAS_HEIGHT) ) {
+							this.theGame.spawnMe("tower", click.x + this.theGame.theCamera.x, click.y + this.theGame.theCamera.y);
+							this.placing = false;
+					 }
+				} else if (this.placing){
+ 					this.theGame.theSM.thePlayer.myRockColor = "orange";
+					this.placing = false;
+ 				}
 		}
 	};
 
   updateMe() {
-		if (this.game.mouse) {
-			let xMove = this.game.mouse.x
-	    let yMove = this.game.mouse.y
+		if (this.theGame.mouse) {
+			let xMove = this.theGame.mouse.x
+	    let yMove = this.theGame.mouse.y
 	    if ((xMove >= this.x && xMove <= this.x + this.buttonWidth) && (yMove >= this.y && yMove <= this.y + this.buttonHeight)) {
 	      this.mouseover = true;
 	    } else {
@@ -99,9 +118,9 @@ constructor(game, x, y) {
 	    }
 		}
 
-		if (this.game.click) {
-			let xClick = this.game.click.x
-	    let yClick = this.game.click.y
+		if (this.theGame.click) {
+			let xClick = this.theGame.click.x
+	    let yClick = this.theGame.click.y
 	    if ((xClick >= this.x && xClick <= this.x + this.buttonWidth) && (yClick >= this.y && yClick <= this.y + this.buttonHeight)) {
 	      this.selected = true;
 	    } else {

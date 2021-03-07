@@ -1,49 +1,56 @@
 class Tower {
-  constructor(game, x, y) {
-      Object.assign(this, {game, x, y });
-      this.myType = "tower";
+  constructor(theGame, x, y) {
+      Object.assign(this, {theGame, x, y });
+      this.myType = "TOWER";
+      this.myFaction = "friendly";
+      this.description = "protects your minions and base"
 
       this.spritesheet = ASSET_MANAGER.getAsset("./sprites/tower.png");
       this.elapsedTime = 0;
-      this.state = 0;  // 0 = idle, 1 = destroyed
+      this.state = 1;  // 1 = idle, 0 = destroyed
       this.upgradeAmount = 1; // 1 being the initial spawned upgrade state of a tower.
 
-      this.healthbar = new HealthBar(this.game, this);
+      this.healthbar = new HealthBar(this.theGame, this);
 
       //Stats
       this.health = 200;
       this.maxHealth = 200;
-      this.defense = 0.0;
-      this.attack = 1;
+      this.defense = 10;
+      this.attack = 35;
       this.projectileScale = 1;
+
+      //Tower Vision
+      this.radius = 35;
+      this.visualRadius = 300;
+
+      this.center = {
+        x: this.x,
+				y: this.y + 34.5 / 2
+      }
 
       //Fire Rate of Tower
       this.agility = 1;
 
-      //Tower Vision
-      this.radius = 79;
-      this.visualRadius = 300;
-
-      this.dead = false;
-      this.removeFromWorld = false;
+      this.theCamera = this.theGame.theSM;
+      this.thePlayer = this.theCamera.thePlayer;
   };
 
   updateMe() {
-    this.elapsedTime += this.game.clockTick;
-    for (var i = 0; i < this.game.entities.length; i++) {
-        var ent = this.game.entities[i];
-        if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon)
-              && canSee(this, ent) && this.elapsedTime > 1 / this.agility) {
+    this.elapsedTime += this.theGame.clockTick;
+    for (var i = 0; i < this.theGame.entities.length; i++) {
+        var ent = this.theGame.entities[i];
+        if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon) &&
+              canSee(this, ent) && this.elapsedTime > 1 / this.agility) {
             this.elapsedTime = 0;
-            this.game.addEntity(new Projectile(this.game, this.x, this.y, ent, this.attack, this.projectileScale));
+            this.theGame.addEntity(new Projectile(this.theGame, this.x, this.y, ent, this.attack, this.projectileScale));
         }
     }
 
     if (this.health <= 0) {
-      this.state = 1;
-      this.dead = true;
-      this.removeFromWorld = true;
+      this.state = 0;
     }
+
+    this.isSelected = (this.thePlayer.selected == this);
   };
 
 
@@ -67,7 +74,7 @@ class Tower {
    * @upgradeAmount: The stage of upgrade the tower is currently at. (ryan: I think 3 is probably the max amount of upgrades if this is a good idea.)
    */
   upgradeOffense(upgradeAmount) {
-    if (this.game.player.selectedAttackUP) {
+    if (this.theGame.player.selectedAttackUP) {
       this.attack++;
       this.projectileScale += 0.5;
       this.agility += 0.5;
@@ -82,7 +89,7 @@ class Tower {
    * @upgradeAmount: The stage of upgrade the tower is currently at. (ryan: I think 3 is probably the max amount of upgrades if this is a good idea.)
    */
   upgradeDefense(upgradeAmount) {
-    if (this.game.player.selectedDefenseUP) {
+    if (this.theGame.player.selectedDefenseUP) {
       this.defense += 1;
       this.maxHealth += this.maxHealth * (upgradeAmount * 0.2);
       this.visualRadius += this.visualRadius * (0.5 / upgradeAmount);
@@ -94,18 +101,39 @@ class Tower {
     const yCenter = 34.5 / 2;
 
     // Subtracting x/yCenter from the origin point paints the tower's center where the user clicks.
-    var x = this.x - xCenter - this.game.camera.x;
-    var y = this.y - yCenter - this.game.camera.y;
+    var x = this.x - xCenter - this.theGame.theCamera.x;
+    var y = this.y - yCenter - this.theGame.theCamera.y;
 
     ctx.drawImage(this.spritesheet, 0, 0, 105, 138, x, y, 52.5, 69);
 
-    this.healthbar.drawMe(ctx);
+    if(params.DEBUG || this.isSelected || this.state < 0 || this.state > 4) {
+      ctx.save();
+      ctx.strokeStyle = "red";
+      ctx.beginPath();
+      ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.radius, 0, 2*Math.PI);
+      ctx.stroke();
+
+      ctx.strokeStyle = "yellow";
+      ctx.beginPath();
+      ctx.arc(this.center.x - this.theCamera.x, this.center.y - this.theCamera.y, this.visualRadius, 0, 2*Math.PI);
+      ctx.stroke();
+      ctx.restore();
+    }
 
     // Did this to test centering of the sprite on the draw point.
     // ctx.strokeStyle = "Pink";
     // ctx.strokeRect(x, y, 52.5, 69);
 
-      //don't forget to subtract this.game.camera.x and this.game.camera.y from the respective coordinates.
+      //don't forget to subtract this.theGame.theCamera.x and this.theGame.theCamera.y from the respective coordinates.
   };
+
+  drawMinimap(ctx, mmX, mmY, mmW, mmH) {
+    let x = mmX + (this.center.x)*(mmW/params.PLAY_WIDTH);
+    let y = mmY + (this.center.y)*(mmH/params.PLAY_HEIGHT);
+    ctx.save();
+    ctx.strokeStyle = "grey";
+    ctx.strokeRect(x, y, 1, 1);
+    ctx.restore();
+  }
 
 };
