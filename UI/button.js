@@ -30,7 +30,7 @@ class Button{
   checkButton(x, y, w, h) {
     if(this.isVisable) {
       let theClick = this.theGame.click;
-      console.log(w + ", " + h);
+      // console.log(w + ", " + h);
       var isInXCoord = theClick.x > x && theClick.x < x + w;
       var isInYCoord = theClick.y > y && theClick.y < y + h;
 
@@ -40,7 +40,6 @@ class Button{
         return true;
       }
     }
-    //do nothing.
     return false;
   }
 

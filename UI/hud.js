@@ -4,6 +4,7 @@ class Hud{
     Object.assign(this, { theGame, x, y, w });
 
     this.towerButton = new TowerButton(this.theGame, 1038, 97);
+    this.pauseButton = new PauseButton(this.theGame, 1038, 537);
     this.minionCost = 50; //not really where this should be defined but whatever.
     this.myButtons = [];
     this.createButtons();
@@ -11,6 +12,7 @@ class Hud{
 
   updateMe() {
     this.towerButton.updateMe();
+    this.pauseButton.updateMe();
     for(var i = 0; i < this.myButtons.length; i++) {
       this.myButtons[i].updateMe();
       if(this.theGame.click) {
@@ -27,6 +29,7 @@ class Hud{
     ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
 
     this.towerButton.drawMe(ctx);
+    this.pauseButton.drawMe(ctx);
 
     for(var i = 0; i < this.myButtons.length; i++) {
       this.myButtons[i].drawButton(ctx, 1038, 97 +45*i + 45, 63, 22, null);

@@ -184,7 +184,6 @@ var params = {
   PLAY_WIDTH : 1024*2,
   PLAY_HEIGHT : 768*2,
   BASE_SPD : 0.25,
-  BLOCKWIDTH : 48  //temporary
 };
 
 // creates an alias for requestAnimationFrame for backwards compatibility

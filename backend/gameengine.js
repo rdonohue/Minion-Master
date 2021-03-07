@@ -112,20 +112,22 @@ class GameEngine {
   update() {
     var entitiesCount = this.entities.length;
     var elementsCount = this.elements.length;
+    
+    if (!this.theSM.paused) {
+      for (var i = 0; i < elementsCount; i++) {
+        var element = this.elements[i];
 
-    for (var i = 0; i < elementsCount; i++) {
-      var element = this.elements[i];
-
-      if(element.state != 0) {
-        element.updateMe();
+        if(element.state != 0) {
+          element.updateMe();
+        }
       }
-    }
 
-    for (var i = 0; i < entitiesCount; i++) {
-      var entity = this.entities[i];
+      for (var i = 0; i < entitiesCount; i++) {
+        var entity = this.entities[i];
 
-      if (entity.state != 0) {
-        entity.updateMe();
+        if (entity.state != 0) {
+          entity.updateMe();
+        }
       }
     }
     this.theSM.update();

@@ -7,9 +7,6 @@ constructor(theGame, x, y) {
 		this.placing = false;
 
 		this.rockCost = 100
-		//note, till this is re-factored, the ACTUAL cost to the
-		//player will be twice this due to setTower seemingly called twice to
-		//create the tower.
 
 		this.buttonWidth = 63;
 		this.buttonHeight = 22;
@@ -25,7 +22,6 @@ constructor(theGame, x, y) {
 		}
 		this.drawBox(ctx);
 		this.drawText(ctx);
-		//Draw tower for placement.
 		this.placeTower(ctx);
 		this.setTower();
 		ctx.restore();
@@ -45,15 +41,13 @@ constructor(theGame, x, y) {
       ctx.strokeStyle = "White";
       ctx.strokeRect(this.x, this.y, this.buttonWidth, this.buttonHeight);
     }
-		ctx.fillStyle = "white";
-		ctx.fillText("Tower:  100 rock", this.x + 2, this.y + 16);
 		ctx.restore();
   };
 
   drawText(ctx) {
 		ctx.save();
     ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
-    ctx.strokeStyle = "White";
+    ctx.fillStyle = "White";
     ctx.fillText("Tower", this.x + 4, this.y + 16);
 		ctx.restore();
   };

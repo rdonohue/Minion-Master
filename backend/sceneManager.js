@@ -16,8 +16,10 @@ class SceneManager {
       this.moveDown = this.baseCamSpeed;
       this.moveLeft = this.baseCamSpeed;
       this.moveUp = this.baseCamSpeed;
+      this.paused = false;
 
       this.createLevel();
+      //this.startScreen();
       this.populateLevel();
   };
 
@@ -51,11 +53,11 @@ class SceneManager {
     this.theGame.spawnMe("wolf", 550, 550);
     this.theGame.spawnMe("wolf", 350, 350);
     this.theGame.spawnMe("wolf", 750, 750);
-    this.theGame.spawnMe("wolf", 350, 350);
-    this.theGame.spawnMe("wolf", 950, 950);
-    this.theGame.spawnMe("wolf", 350, 350);
-    this.theGame.spawnMe("wolf", 150, 150);
-    this.theGame.spawnMe("wolf", 350, 350);
+    // this.theGame.spawnMe("wolf", 350, 350);
+    // this.theGame.spawnMe("wolf", 950, 950);
+    // this.theGame.spawnMe("wolf", 350, 350);
+    // this.theGame.spawnMe("wolf", 150, 150);
+    // this.theGame.spawnMe("wolf", 350, 350);
   }
 
   update() {
@@ -64,11 +66,10 @@ class SceneManager {
     this.theHud.updateMe();
     this.theMiniMap.updateMe();
     this.thePlayer.updateMe();
-
     this.updateCamera();
   };
 
-  updateCamera(){
+  updateCamera() {
     var mapBorder = 0;
 
     //Check for play area edge
