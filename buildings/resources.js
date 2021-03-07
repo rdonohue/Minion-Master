@@ -65,46 +65,6 @@ class Resources {
         x: dx,
         y: dy
       }
-
-    }
-
-};
-
-class Bush {
-  constructor(game, sx, sy, sw, sh, x, y) {
-    Object.assign(this, { game, sx, sy, sw, sh, x, y})
-    if (x == undefined || y == undefined) {
-      x = 0;
-      y = 0;
-    }
-
-    this.myType = "resource";
-
-    this.health = 100;
-    this.maxHealth = 100;
-    this.subHealth = 0;
-    this.removeFromWorld = false;
-    this.radius = 5;
-    this.visualRadius = 10;
-    this.ready = true;
-
-    this.healthbar = new HealthBar(this.game, this);
-    this.elapsedTime = 0;
-    this.dead = false;
-  };
-
-  updateMe() {
-      this.elapsedTime += this.game.clockTick;
-      if (this.subHealth == 100) {
-          this.dead = false;
-          this.health = this.subHealth;
-          this.subHealth = 0;
-      }
-      if (this.elapsedTime > 1.6 && this.health <= 0 && this.subHealth < this.health) {
-          this.dead = true;
-          this.subHealth += 5;
-          this.elapsedTime = 0;
-
       if (distance(center, this.theGame.theBase.center) < minDistanceFromBase) {
         failedAttempts++;
       } else {
@@ -122,9 +82,7 @@ class Bush {
         this.theGame.addEntity(newEntity);
         spawningOptions.push(newEntity);
         num--;
-
       }
     }
-
   };
 };
