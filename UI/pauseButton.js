@@ -49,15 +49,9 @@ constructor(theGame, x, y) {
 	 * Draws a faded pause screen over the canvas.
 	 */
 	pauseScreen(ctx) {
-		ctx.beginPath();
 		ctx.globalAlpha = 0.5;
 		ctx.fillStyle = "black";
-		ctx.fillRect(
-			0,
-			0,
-			params.CANVAS_WIDTH,
-			params.CANVAS_HEIGHT
-		);
+		ctx.fillRect(0, 0, params.CANVAS_WIDTH, params.CANVAS_HEIGHT);
 		ctx.globalAlpha = 1;
 		ctx.fillStyle = "white";
 		ctx.font = "64px Playfair Display SC";
@@ -67,8 +61,7 @@ constructor(theGame, x, y) {
 		ctx.font = "16px Playfair Display SC";
 		let subtitle = "Click to Continue Game";
 		xCenter = (params.CANVAS_WIDTH - (this.theGame.ctx.measureText(subtitle).width)) / 2;
-		ctx.fillText(subtitle, xCenter, 700 / 2);
-		ctx.closePath();
+		ctx.fillText(subtitle, xCenter, 650 / 2);
 	};
 
   updateMe() {
