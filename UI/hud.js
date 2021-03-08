@@ -43,6 +43,15 @@ class Hud{
       that.spawnMinion, [that.minionCost],
       " Minion    50 Food", "white"
     )
+
+    new Button(
+      that, that.theGame,
+      () => {
+        if (this.theGame.theSM.thePlayer.myFood > 1000) this.theGame.theSM.victory = true;
+      },
+      null,
+      "Victory    1000 Food", "white"
+    )
   }
 
   spawnMinion(args) {
