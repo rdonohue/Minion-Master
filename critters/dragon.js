@@ -2,6 +2,10 @@ class Dragon {
     constructor(game, x, y) {
         Object.assign(this, { game, x, y });
 
+        this.isSelected = false;
+        this.description = "It's a dragon, RUN!";
+        this.myFaction = "dragon";
+
         this.downSheet = ASSET_MANAGER.getAsset("./sprites/reddragonflydown.png");
         this.leftSheet = ASSET_MANAGER.getAsset("./sprites/reddragonflyleft.png");
         this.rightSheet = ASSET_MANAGER.getAsset("./sprites/reddragonflyright.png");
@@ -19,6 +23,13 @@ class Dragon {
         this.radius = 20;
         this.visualRadius = 190;
         this.state = 0;
+
+        this.center = {
+          x: this.x + this.radius,
+          y: this.y + this.radius
+        }
+
+        this.isSelected = (this.theGame.theCamera.thePlayer.selected == this);
 
         this.healthbar = new HealthBar(this.game, this);
 
@@ -96,6 +107,11 @@ class Dragon {
             { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
       }
 
+      this.center = {
+        x: this.x + this.radius,
+        y: this.y + this.radius
+      }
+
       if (this.health <= 0) {
           this.state = 2;
           this.dead = true;
@@ -118,8 +134,8 @@ class Dragon {
               combat = true;
               if (this.elapsedTime > (0.2 / this.agility) && !collide(this, ent)) {
                   this.elapsedTime = 0;
-                  this.game.addEntity(new Fireball(this.game, this.currentAnim.width / 2 + this.x - this.game.camera.x,
-                    this.currentAnim.height / 2 + this.y - this.game.camera.y, ent, this.attack, this.projectileScale));
+                  this.game.addEntity(new Fireball(this.game, this.currentAnim.width / 2 + this.x - this.game.theCamera.x,
+                    this.currentAnim.height / 2 + this.y - this.game.theCamera.y, ent, this.attack, this.projectileScale));
               }
           }
           if ((ent instanceof Minion || ent instanceof Tower || ent instanceof HomeBase
@@ -168,8 +184,8 @@ class Dragon {
         this.direction = 0;
       }
 
-      this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x,
-                                                            this.y - this.game.camera.y, this.scale);
+      this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.x - this.game.theCamera.x,
+                                                            this.y - this.game.theCamera.y, this.scale);
       this.currentAnim = this.animations[this.state][this.direction];
 
       this.healthbar.drawMe(ctx);

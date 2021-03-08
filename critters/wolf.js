@@ -189,7 +189,6 @@ class Wolf {
         }
         ent.health -= damage; //don't heal the target by dealing negitive damage!
         this.grow(damage);
-        console.log(damage);
         this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
         return 1;
       } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {

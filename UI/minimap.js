@@ -11,7 +11,7 @@ class MiniMap {
 
     drawMe(ctx) {
         for (var i = 0; i < this.theGame.entities.length; i++) {
-          this.theGame.entities[i].drawMinimap(ctx, this.x, this.y, this.w, this.h);
+          //this.theGame.entities[i].drawMinimap(ctx, this.x, this.y, this.w, this.h);
         }
         this.theGame.theSM.drawCamera(ctx, this.x, this.y, this.w, this.h);
 

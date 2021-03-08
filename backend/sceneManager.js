@@ -26,6 +26,9 @@ class SceneManager {
       this.createLevel();
       ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item_2.mp3");
       // this.populateLevel();
+
+      this.caveTimer = 0;
+      this.dragonTimer = 59000;
   };
 
   createLevel() {
@@ -60,13 +63,8 @@ class SceneManager {
     // this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
     // this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
     this.theGame.spawnMe("wolf", 550, 550);
-    this.theGame.spawnMe("wolf", 350, 350);
-    this.theGame.spawnMe("wolf", 750, 750);
-    // this.theGame.spawnMe("wolf", 350, 350);
-    // this.theGame.spawnMe("wolf", 950, 950);
-    // this.theGame.spawnMe("wolf", 350, 350);
-    // this.theGame.spawnMe("wolf", 150, 150);
-    // this.theGame.spawnMe("wolf", 350, 350);
+    this.theGame.spawnMe("ogre", 350, 350);
+    this.theGame.spawnMe("cave", 250, 250);
   }
 
   update() {
@@ -82,6 +80,22 @@ class SceneManager {
       this.theMiniMap.updateMe();
       this.thePlayer.updateMe();
       this.updateCamera();
+    }
+
+    if(this.caveTimer >= 60000) {
+      this.theGame.spawnMe("cave", params.PLAY_WIDTH/4 - 150 + randomInt(150), 1800);
+      this.caveTimer = 0;
+      //spawn cave every 30 second's
+    } else {
+      this.caveTimer += this.theGame.clockTick;
+    }
+
+    if(this.dragonTimer >= 60000) {
+      this.theGame.entities.addEntity(new Dragon(params.PLAY_WIDTH/4 - 150 + randomInt(150), 1800));
+      this.dragonTimer = -1;
+      //spawn dragon at 2 minutes
+    } else if (this.dragonTimer != -1) {
+      this.dragonTimer += this.theGame.clockTick;
     }
   };
 

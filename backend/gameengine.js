@@ -112,7 +112,7 @@ class GameEngine {
   update() {
     var entitiesCount = this.entities.length;
     var elementsCount = this.elements.length;
-    
+
     if (!this.theSM.paused) {
       for (var i = 0; i < elementsCount; i++) {
         var element = this.elements[i];
@@ -125,7 +125,7 @@ class GameEngine {
       for (var i = 0; i < entitiesCount; i++) {
         var entity = this.entities[i];
 
-        if (entity.state != 0) {
+        if (entity.state != 0 || (entity instanceof Ogre || entity instanceof Dragon)) {
           entity.updateMe();
         }
       }
@@ -134,7 +134,7 @@ class GameEngine {
 
     for (var i = entitiesCount - 1; i >= 0; --i) {
       var entity = this.entities[i];
-      if (entity.state == 0) {
+      if ((entity.state == 0 && !(entity instanceof Ogre || entity instanceof Dragon ))  || ((entity instanceof Ogre || entity instanceof Dragon ) && entity.removeFromWorld)) {
         this.entities.splice(i, 1);
       }
     }

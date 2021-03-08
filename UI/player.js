@@ -174,117 +174,117 @@ class Player {
       }
       ctx.restore();
 
-      if(this.selected.myFaction == "friendly") {
-        ctx.save();
-        ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';
-
-        if(this.selected.health) {
-          ctx.strokeStyle = "Goldenrod";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
-          ctx.stroke();
-
-          ctx.strokeStyle = "Pink";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
-          ctx.stroke();
-
-          ctx.strokeStyle = "Goldenrod";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
-          ctx.stroke();
-
-          ctx.fillText("HEALTH", params.TILE_W_H * 2.55, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
-          ctx.drawImage(this.HealthButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 2.75,
-                        params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
-          ctx.fillText("UPGRADE!", params.TILE_W_H * 2.45, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
-        }
-
-        //Defense Stat UI
-        if(this.selected.defense) {
-          ctx.strokeStyle = "Goldenrod";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 4.25 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
-          ctx.stroke();
-          ctx.strokeStyle = "Pink";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 4.25 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
-          ctx.stroke();
-          ctx.strokeStyle = "Goldenrod";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 4.25 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
-          ctx.stroke();
-
-          ctx.fillText("DEF", params.TILE_W_H * 4.30, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
-          ctx.drawImage(this.DefButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 4.25,
-                        params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
-          ctx.fillText("UPGRADE!", params.TILE_W_H * 4.0, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
-        }
-
-        //Attack Stat UI
-        if(this.selected.attack) {
-          ctx.strokeStyle = "Goldenrod";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 5.7 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
-          ctx.stroke();
-          ctx.strokeStyle = "Pink";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 5.7 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
-          ctx.stroke();
-          ctx.strokeStyle = "Goldenrod";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 5.7 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
-          ctx.stroke();
-
-          ctx.fillText("ATK", params.TILE_W_H * 5.7, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
-          ctx.drawImage(this.AtkButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 5.7,
-                        params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
-          ctx.fillText("UPGRADE!", params.TILE_W_H * 5.4, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
-        }
-
-        if(this.selected.agility) {
-          //Agility Stat UI
-          ctx.strokeStyle = "Goldenrod";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 7.1 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
-          ctx.stroke();
-          ctx.strokeStyle = "Pink";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 7.1 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
-          ctx.stroke();
-          ctx.strokeStyle = "Goldenrod";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 7.1 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
-          ctx.stroke();
-
-          ctx.fillText("AGI", params.TILE_W_H * 7.1, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
-          ctx.drawImage(this.AgiButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 7.1,
-                        params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
-          ctx.fillText("UPGRADE!", params.TILE_W_H * 6.8, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
-        }
-
-        //Intellect Stat UI
-        if(this.selected.intelligence) {
-          ctx.strokeStyle = "Goldenrod";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 8.5 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
-          ctx.stroke();
-          ctx.strokeStyle = "Pink";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 8.5 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
-          ctx.stroke();
-          ctx.strokeStyle = "Goldenrod";
-          ctx.beginPath();
-          ctx.arc(params.TILE_W_H * 8.5 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
-          ctx.stroke();
-
-          ctx.fillText("INT", params.TILE_W_H * 8.5, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
-          ctx.drawImage(this.IntButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 8.5,
-                        params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
-          ctx.fillText("UPGRADE!", params.TILE_W_H * 8.2, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
-        }
-        ctx.restore();
-      }
+      // if(this.selected.myFaction == "friendly") {
+      //   ctx.save();
+      //   ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';
+      //
+      //   if(this.selected.health) {
+      //     ctx.strokeStyle = "Goldenrod";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //
+      //     ctx.strokeStyle = "Pink";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //
+      //     ctx.strokeStyle = "Goldenrod";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //
+      //     ctx.fillText("HEALTH", params.TILE_W_H * 2.55, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
+      //     ctx.drawImage(this.HealthButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 2.75,
+      //                   params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
+      //     ctx.fillText("UPGRADE!", params.TILE_W_H * 2.45, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
+      //   }
+      //
+      //   //Defense Stat UI
+      //   if(this.selected.defense) {
+      //     ctx.strokeStyle = "Goldenrod";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 4.25 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //     ctx.strokeStyle = "Pink";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 4.25 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //     ctx.strokeStyle = "Goldenrod";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 4.25 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //
+      //     ctx.fillText("DEF", params.TILE_W_H * 4.30, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
+      //     ctx.drawImage(this.DefButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 4.25,
+      //                   params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
+      //     ctx.fillText("UPGRADE!", params.TILE_W_H * 4.0, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
+      //   }
+      //
+      //   //Attack Stat UI
+      //   if(this.selected.attack) {
+      //     ctx.strokeStyle = "Goldenrod";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 5.7 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //     ctx.strokeStyle = "Pink";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 5.7 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //     ctx.strokeStyle = "Goldenrod";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 5.7 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //
+      //     ctx.fillText("ATK", params.TILE_W_H * 5.7, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
+      //     ctx.drawImage(this.AtkButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 5.7,
+      //                   params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
+      //     ctx.fillText("UPGRADE!", params.TILE_W_H * 5.4, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
+      //   }
+      //
+      //   if(this.selected.agility) {
+      //     //Agility Stat UI
+      //     ctx.strokeStyle = "Goldenrod";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 7.1 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //     ctx.strokeStyle = "Pink";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 7.1 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //     ctx.strokeStyle = "Goldenrod";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 7.1 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //
+      //     ctx.fillText("AGI", params.TILE_W_H * 7.1, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
+      //     ctx.drawImage(this.AgiButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 7.1,
+      //                   params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
+      //     ctx.fillText("UPGRADE!", params.TILE_W_H * 6.8, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
+      //   }
+      //
+      //   //Intellect Stat UI
+      //   if(this.selected.intelligence) {
+      //     ctx.strokeStyle = "Goldenrod";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 8.5 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //     ctx.strokeStyle = "Pink";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 8.5 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //     ctx.strokeStyle = "Goldenrod";
+      //     ctx.beginPath();
+      //     ctx.arc(params.TILE_W_H * 8.5 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
+      //     ctx.stroke();
+      //
+      //     ctx.fillText("INT", params.TILE_W_H * 8.5, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
+      //     ctx.drawImage(this.IntButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 8.5,
+      //                   params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
+      //     ctx.fillText("UPGRADE!", params.TILE_W_H * 8.2, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
+      //   }
+      //   ctx.restore();
+      // }
     }
   }
 }
