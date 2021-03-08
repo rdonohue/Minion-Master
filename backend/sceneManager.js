@@ -8,6 +8,9 @@ class SceneManager {
       this.theHud = new Hud(this.theGame, 1024, 0, 256);
       this.thePlayer = new Player(this.theGame, 100, 150, 5, 3, 0, 0);
 
+      // Credits to: https://vnitti.itch.io/grassy-mountains-parallax-background
+      this.startbg = ASSET_MANAGER.getAsset("./sprites/start_bg.png");
+
       this.maxCamSpeed = 45;
       this.baseCamSpeed = 0;
       this.acceleration = 2/3; //accelerationFactor.
@@ -17,13 +20,13 @@ class SceneManager {
       this.moveLeft = this.baseCamSpeed;
       this.moveUp = this.baseCamSpeed;
       this.paused = false;
+      this.title = true;
 
       this.createLevel();
-      //this.startScreen();
-      this.populateLevel();
+      // this.populateLevel();
   };
 
-  createLevel(){
+  createLevel() {
     //let castle = new HomeBase(theGameEngine, 500, 300, 430, 461);
     let corners = new Grasscorner(this.theGame, 0, 0);
     let vertwalls = new Vertwall(this.theGame, 0, params.TILE_W_H);
@@ -36,7 +39,11 @@ class SceneManager {
     this.theGame.addElement(intGrass);
   }
 
-  populateLevel(){
+  startGame() {
+    this.populateLevel();
+  }
+
+  populateLevel() {
     let castleX = params.PLAY_WIDTH/2 - 150 + randomInt(150);
     let castleY = params.PLAY_HEIGHT/2 - 150 + randomInt(150);
 
@@ -63,10 +70,17 @@ class SceneManager {
   update() {
     params.DEBUG = document.getElementById("debug").checked;
 
-    this.theHud.updateMe();
-    this.theMiniMap.updateMe();
-    this.thePlayer.updateMe();
-    this.updateCamera();
+    if (this.title && this.theGame.click) {
+      if (this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350) {
+        this.title = false;
+        this.startGame();
+      }
+    } else {
+      this.theHud.updateMe();
+      this.theMiniMap.updateMe();
+      this.thePlayer.updateMe();
+      this.updateCamera();
+    }
   };
 
   updateCamera() {
@@ -136,8 +150,24 @@ class SceneManager {
   }
 
   draw(ctx) {
-    this.theMiniMap.drawMe(ctx);
-    this.theHud.drawMe(ctx);
-    this.thePlayer.drawMe(ctx);
+    if (this.title) {
+      ctx.save();
+      ctx.drawImage(this.startbg, 0, 0, 384, 216, 0, 0, 1280, 768);
+      ctx.fillStyle = "White";
+  		ctx.font = 64 + 'px "Press Start 2P"';
+  		let title = "MINION MASTER";
+  		let xCenter = (1280 - (ctx.measureText(title).width)) / 2;
+  		ctx.fillText(title, xCenter, 125);
+  		ctx.font = 48 + 'px "Press Start 2P"';
+      ctx.fillStyle = this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350 ? "Orange" : "White";
+  		let subtitle = "Start Game";
+  		xCenter = (1280 - (ctx.measureText(subtitle).width)) / 2;
+  		ctx.fillText(subtitle, xCenter, 350);
+      ctx.restore();
+    } else {
+      this.theMiniMap.drawMe(ctx);
+      this.theHud.drawMe(ctx);
+      this.thePlayer.drawMe(ctx);
+    }
   };
 };

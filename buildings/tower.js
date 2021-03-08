@@ -119,12 +119,6 @@ class Tower {
       ctx.stroke();
       ctx.restore();
     }
-
-    // Did this to test centering of the sprite on the draw point.
-    // ctx.strokeStyle = "Pink";
-    // ctx.strokeRect(x, y, 52.5, 69);
-
-      //don't forget to subtract this.theGame.theCamera.x and this.theGame.theCamera.y from the respective coordinates.
   };
 
   drawMinimap(ctx, mmX, mmY, mmW, mmH) {
