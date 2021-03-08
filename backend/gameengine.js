@@ -16,6 +16,8 @@ class GameEngine {
       this.down = false;
 
       this.tickDuration = 0.1;
+
+      this.notDead = true;
   };
 
   init(ctx) {
@@ -113,7 +115,7 @@ class GameEngine {
     var entitiesCount = this.entities.length;
     var elementsCount = this.elements.length;
 
-    if (!this.theSM.paused) {
+    if (!this.theSM.paused && this.notDead) {
       for (var i = 0; i < elementsCount; i++) {
         var element = this.elements[i];
 

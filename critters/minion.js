@@ -189,7 +189,7 @@ class Minion {
     if(this.target) {
       //we do still have a target to attack and it is alive.
       let ent = this.target;
-      if((ent.state != 0 || ent.health > 0 || ((entity instanceof Ogre || entity instanceof Dragon ) && !entity.removeFromWorld)) && reach(this, ent)) {
+      if((ent.state != 0 || ent.health > 0 || ((ent instanceof Ogre || ent instanceof Dragon ) && !ent.removeFromWorld)) && reach(this, ent)) {
         //the target is alive and in range and we are ready to attack.
         var damage = (this.attack + randomInt(this.attack)) - ent.defense
         if(damage < 0) {
@@ -198,14 +198,14 @@ class Minion {
         ent.health -= damage; //don't heal the target by dealing negitive damage!
         this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
         return 1;
-      } else if ((ent.state != 0 || ent.health > 0 || ((entity instanceof Ogre || entity instanceof Dragon ) && !entity.removeFromWorld)) && !reach(this, ent)) {
+      } else if ((ent.state != 0 || ent.health > 0 || ((ent instanceof Ogre || ent instanceof Dragon ) && !ent.removeFromWorld)) && !reach(this, ent)) {
         return 3;
         //the target moved out of reach, so change to searching state.
       } else {
         //this should not EVER happen!
         return "attack_method entity_handling failure";
       }
-    } else if (!this.target || !(this.target.state != 0 || this.target.health < 0 || ((entity instanceof Ogre || entity instanceof Dragon ) && entity.removeFromWorld))){
+    } else if (!this.target || !(this.target.state != 0 || this.target.health < 0 || ((ent instanceof Ogre || ent instanceof Dragon ) && ent.removeFromWorld))){
       // the target has died (or broke)! find new target.
       this.target = null;
       return 4;

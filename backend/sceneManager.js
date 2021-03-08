@@ -29,6 +29,8 @@ class SceneManager {
 
       this.caveTimer = 0;
       this.dragonTimer = 59000;
+
+      this.start = false;
   };
 
   createLevel() {
@@ -96,6 +98,12 @@ class SceneManager {
       //spawn dragon at 2 minutes
     } else if (this.dragonTimer != -1) {
       this.dragonTimer += this.theGame.clockTick;
+    }
+
+    if(!this.theGame.theBase && !this.paused && !this.title) {
+      this.theGame.notDead = false;
+    } else {
+      this.theGame.notDead = true;
     }
   };
 
@@ -198,10 +206,31 @@ class SceneManager {
   		xCenter = (1280 - (ctx.measureText(subtitle).width)) / 2;
   		ctx.fillText(subtitle, xCenter, 350);
       ctx.restore();
-    } else {
+    } else if (this.theGame.notDead){
       this.theMiniMap.drawMe(ctx);
       this.theHud.drawMe(ctx);
       this.thePlayer.drawMe(ctx);
+    } else if (!this.theGame.notDead){
+      this.theMiniMap.drawMe(ctx);
+      this.theHud.drawMe(ctx);
+      this.thePlayer.drawMe(ctx);
+      if (this.endMusic < 1) {
+        ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item.mp3");
+        this.endMusic++;
+      }
+      ctx.save();
+      ctx.drawImage(this.startbg, 0, 0, 384, 216, 0, 0, 1280, 768);
+      ctx.fillStyle = "White";
+  		ctx.font = 64 + 'px "Press Start 2P"';
+  		let title = "YOU'VE LOST!!";
+  		let xCenter = (1280 - (ctx.measureText(title).width)) / 2;
+  		ctx.fillText(title, xCenter, 125);
+  		ctx.font = 48 + 'px "Press Start 2P"';
+      ctx.fillStyle = this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350 ? "Orange" : "White";
+  		let subtitle = "Play Again?";
+  		xCenter = (1280 - (ctx.measureText(subtitle).width)) / 2;
+  		ctx.fillText(subtitle, xCenter, 350);
+      ctx.restore();
     }
   };
 };
