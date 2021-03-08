@@ -19,6 +19,7 @@ ASSET_MANAGER.queueDownload("./sprites/tower.png");
 ASSET_MANAGER.queueDownload("./sprites/Arrow.png");
 ASSET_MANAGER.queueDownload("./sprites/ground_sprites.png");
 ASSET_MANAGER.queueDownload("./sprites/trees_stones_bushes.png");
+ASSET_MANAGER.queueDownload("./sprites/start_bg.png");
 
 ASSET_MANAGER.queueDownload("./sprites/button_Attack.png");
 ASSET_MANAGER.queueDownload("./sprites/button_Agi.png");
