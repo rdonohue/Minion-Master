@@ -47,7 +47,7 @@ class Hud{
     new Button(
       that, that.theGame,
       () => {
-        this.theGame.theSM.victory = true;
+        if (this.theGame.theSM.thePlayer.myFood > 1000) this.theGame.theSM.victory = true;
       },
       null,
       "Victory    1000 Food", "white"
