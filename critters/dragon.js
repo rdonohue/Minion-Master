@@ -189,5 +189,16 @@ class Dragon {
       this.currentAnim = this.animations[this.state][this.direction];
 
       this.healthbar.drawMe(ctx);
+
+      if(params.DEBUG || this.isSelected) {
+        ctx.save();
+        ctx.strokeStyle = "red";
+        ctx.beginPath();
+        ctx.arc(this.center.x - this.theGame.theCamera.x, this.center.y - this.theGame.theCamera.y, this.radius*0.8, 0, 2*Math.PI);
+        ctx.fillStyle = "red";
+        ctx.font = '16px "Playfair Display SC'
+        ctx.stroke();
+        ctx.restore();
+      }
     };
 };

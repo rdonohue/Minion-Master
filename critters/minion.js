@@ -66,7 +66,7 @@ class Minion {
 
     this.baseWidth = 32;
     this.baseHeight = 32;
-    this.radius = this.baseWidth/2*this.scale;
+    this.radius = this.baseWidth/2*this.scale*1.5;
     this.center = {
       x: this.x + this.baseWidth*this.scale/2,
       y: this.y + this.baseHeight*this.scale/2
@@ -108,8 +108,8 @@ class Minion {
     this.regenTime += this.theGame.clockTick;
 
     this.center = {
-      x: this.x + this.baseWidth*this.scale/2,
-      y: this.y + this.baseHeight*this.scale/2
+      x: this.x + this.baseWidth*this.scale/2+15,
+      y: this.y + this.baseHeight*this.scale/2+15
     }
 
     this.facing = getFacing(this.velocity);

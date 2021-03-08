@@ -117,6 +117,9 @@ class Wolf {
     //2-->moving to target (moving),
     //3-->searching for enemy/resource (moving),
     //4-->idle
+    if(this.state == undefined) {
+      this.state = this.findNewTarget();
+    }
 
     this.updateHealth();
     if(this.health > 0) {
@@ -133,13 +136,15 @@ class Wolf {
           // } else {
           this.state = this.findNewTarget();
             // }
-        } if (this.state == 4) {
+        } else if (this.state == 4) {
           this.state = this.idle();
         } else if (this.state == 1) {
           this.velocity = {
             x: 0,
             y: 0
           }
+        } else {
+          this.state = this.idle();
         }
       }
     }
@@ -347,12 +352,13 @@ class Wolf {
     //   }
     // }
 
-    if(this.waitTill == 0) {
-      this.waitTill = this.theGame.timer.lastTimestamp + randomInt(3);
-    } else if (this.waitTill < this.theGame.timer.lastTimestamp) {
-      this.waitTill = 0;
-      this.state = 3; //we have waited long enough.
-    }
+    this.state = 3;
+    // if(this.waitTill == 0) {
+    //   this.waitTill = this.theGame.timer.lastTimestamp + randomInt(3);
+    // } else if (this.waitTill < this.theGame.timer.lastTimestamp) {
+    //   this.waitTill = 0;
+    //   this.state = 3; //we have waited long enough.
+    // }
   }
 
   drawMinimap(ctx, mmX, mmY, mmW, mmH) {
