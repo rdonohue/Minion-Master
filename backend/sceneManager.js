@@ -66,7 +66,8 @@ class SceneManager {
     // this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
     this.theGame.spawnMe("wolf", 550, 550);
     // this.theGame.spawnMe("ogre", 350, 350);
-    // this.theGame.spawnMe("cave", 250, 250);
+    this.theGame.spawnMe("cave", 250, 250);
+    this.theGame.spawnMe("cave", 1050, 250);
   }
 
   update() {
@@ -85,20 +86,20 @@ class SceneManager {
     }
 
     if(this.caveTimer >= 1000) {
-      this.theGame.spawnMe("cave", params.PLAY_WIDTH/4 - 150 + randomInt(150), 300);
+      this.theGame.spawnMe("cave", 150 + randomInt(150), 300);
       this.caveTimer = 0;
       //spawn cave every 30 second's
     } else {
       this.caveTimer += this.theGame.clockTick;
     }
 
-    if(this.dragonTimer >= 2000) {
-      this.theGame.entities.addEntity(new Dragon(params.PLAY_WIDTH/4 - 150 + randomInt(150), 300));
-      this.dragonTimer = -1;
-      //spawn dragon at 2 minutes
-    } else if (this.dragonTimer != -1) {
-      this.dragonTimer += this.theGame.clockTick;
-    }
+    // if(this.dragonTimer >= 0) {
+    //   this.theGame.spawnMe("dragon", params.PLAY_WIDTH - 150 - randomInt(150), 300);
+    //   this.dragonTimer = -1;
+    //   //spawn dragon at 2 minutes
+    // } else if (this.dragonTimer != -1) {
+    //   this.dragonTimer += this.theGame.clockTick;
+    // }
 
     if(this.theGame.theBase && this.theGame.theBase.health <= 0) {
       this.theGame.notDead = false;

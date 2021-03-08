@@ -308,8 +308,8 @@ class Wolf {
         this.target = generateTarget(this);
       } else {
         //if we are not a young pup, we know to stay away from towers.
-        let tower = this.theGame.entities.filter(entity => {
-          return (entity instanceof Tower)
+        let scary = this.theGame.entities.filter(entity => {
+          return (entity instanceof Tower || entity instanceof Dragon)
         }).sort(function(a,b) {
           if(!a || !b) {
             return false;
@@ -318,10 +318,10 @@ class Wolf {
           }
         }).shift();
 
-        if(tower && distance(this, tower) < tower.visualRadius) {
+        if(scary && distance(this, scary) < scary.visualRadius) {
           let runtowards = {
-            x: this.x - (tower.x - this.x), //the point opposite of the tower relative to us.
-            y: this.y - (tower.y - this.y)
+            x: this.x - (scary.x - this.x), //the point opposite of the tower relative to us.
+            y: this.y - (scary.y - this.y)
           }
           this.target = runtowards
         } else {

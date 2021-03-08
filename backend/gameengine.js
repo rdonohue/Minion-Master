@@ -65,6 +65,10 @@ class GameEngine {
           let cave = new Cave(this, x, y);
           this.addEntity(cave, x, y);
           break;
+        case "dragon":
+          let dragon = new Dragon(this, x, y);
+          this.addEntity(dragon, x, y);
+          break;
         //case "berry":
         //  let berry = new BerryBush(this, x, y);
         //  this.addEntity(berry);
