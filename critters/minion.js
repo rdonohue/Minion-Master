@@ -97,6 +97,9 @@ class Minion {
     this.actionTime = 0;
     this.printTime = 0;
     this.regenTime = 0;
+
+    this.myButtons = [];
+    this.createButtons();
   };
 
   //the move-speed is still staggered a bit, that might be because of async
@@ -124,6 +127,11 @@ class Minion {
     //2-->gathering resource.
     //3-->moving to target (moving),
     //4-->searching for enemy/resource (moving),
+    //if (this.isSelected) {
+        //for (var i = 0; i < this.myButtons.length(); i++) {
+            //this.myButtons[i].checkButton();
+        //}
+    //}
 
     this.updateHealth();
     if(this.health > 0) {
@@ -161,6 +169,70 @@ class Minion {
     }
   };
 
+  // The next five methods upgrade___ returns 1 if successful, -1 otherwise.
+  // Function for health upgrade button
+  upgradeHealth(heal) {
+      var cost = -1;
+      if (this.thePlayer.myFood >= 15) {
+          this.thePlayer.myFood -= 15;
+          heal += Math.floor(heal * 0.3);
+          cost = 1;
+      }
+      return cost;
+  };
+
+  // Function for agility upgrade button
+  upgradeAgility(agile) {
+      var cost = -1;
+      if (this.thePlayer.myFood >= 10) {
+          this.thePlayer.myFood -= 10;
+          agile += Math.floor(agile * 0.3);
+          cost = 1;
+      }
+      return cost;
+  };
+
+  // Function for defense upgrade button
+  upgradeDefense(def) {
+      var cost = -1;
+      if (this.thePlayer.myFood >= 25) {
+          this.thePlayer.myFood -= 25;
+          def += Math.floor(def * 0.2);
+          cost = 1;
+      }
+      return cost;
+  };
+
+  // Function for attack upgrade button
+  upgradeAttack(att) {
+      var cost = -1;
+      if (this.thePlayer.myFood >= 25) {
+          this.thePlayer.myFood -= 25;
+          att += Math.floor(att * 0.2);
+          cost = 1;
+      }
+      return cost;
+  };
+
+  // Function for intelligence upgrade button
+  upgradeIntel(intel) {
+      var cost = -1;
+      if (this.thePlayer.myFood >= 10) {
+          this.thePlayer.myFood -= 10;
+          intel += Math.floor(intel * 0.3);
+          cost = 1;
+      }
+      return cost;
+  };
+
+  createButtons() {
+      this.myButtons.push(new Button(this, this.theGame, this.upgradeHealth, this.health, "health", "Red"));
+      this.myButtons.push(new Button(this, this.theGame, this.upgradeAgility, this.agility, "agility", "Green"));
+      this.myButtons.push(new Button(this, this.theGame, this.upgradeDefense, this.defense, "defense", "Gray"));
+      this.myButtons.push(new Button(this, this.theGame, this.upgradeAttack, this.attack, "attack", "Yellow"));
+      this.myButtons.push(new Button(this, this.theGame, this.upgradeIntel, this.intelligence, "intelligence", "Blue"));
+  };
+
   updateHealth() {
     if(this.health <= 0) {
       this.state = 0;
@@ -179,7 +251,7 @@ class Minion {
     }
 
     this.myHealthBar.updateMe();
-  }
+  };
 
   //yes this minion AI is INCREDABLY over-engineered, this is to GURANTEE that minions will ALWAYS be
   //in some 'state' and so can be handled as such. note that this.state is NOT the actual state
