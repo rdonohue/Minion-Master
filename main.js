@@ -31,6 +31,7 @@ ASSET_MANAGER.queueDownload("./sprites/arrow.png");
 ASSET_MANAGER.queueDownload("./sprites/spicy.png");
 
 //Sounds
+ASSET_MANAGER.queueDownload("./sounds/Mega_Man_7_Special_Item.mp3");
 ASSET_MANAGER.queueDownload("./sounds/Mega_Man_7_Special_Item_2.mp3");
 
 

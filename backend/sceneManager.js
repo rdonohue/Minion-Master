@@ -10,7 +10,6 @@ class SceneManager {
 
       // Credits to: https://vnitti.itch.io/grassy-mountains-parallax-background
       this.startbg = ASSET_MANAGER.getAsset("./sprites/start_bg.png");
-      this.titleMusic = ASSET_MANAGER.getAsset("./sounds/Mega_Man_7_Special_Item_2.mp3");
 
       this.maxCamSpeed = 45;
       this.baseCamSpeed = 0;
@@ -22,6 +21,7 @@ class SceneManager {
       this.moveUp = this.baseCamSpeed;
       this.paused = false;
       this.title = true;
+      this.endMusic = 0;
 
       this.createLevel();
       ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item_2.mp3");
@@ -163,6 +163,24 @@ class SceneManager {
   		ctx.font = 48 + 'px "Press Start 2P"';
       ctx.fillStyle = this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350 ? "Orange" : "White";
   		let subtitle = "Start Game";
+  		xCenter = (1280 - (ctx.measureText(subtitle).width)) / 2;
+  		ctx.fillText(subtitle, xCenter, 350);
+      ctx.restore();
+    } else if (this.victory) {
+      if (this.endMusic < 1) {
+        ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item.mp3");
+        this.endMusic++;
+      }
+      ctx.save();
+      ctx.drawImage(this.startbg, 0, 0, 384, 216, 0, 0, 1280, 768);
+      ctx.fillStyle = "White";
+  		ctx.font = 64 + 'px "Press Start 2P"';
+  		let title = "YOU'VE WON!";
+  		let xCenter = (1280 - (ctx.measureText(title).width)) / 2;
+  		ctx.fillText(title, xCenter, 125);
+  		ctx.font = 48 + 'px "Press Start 2P"';
+      ctx.fillStyle = this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350 ? "Orange" : "White";
+  		let subtitle = "Play Again?";
   		xCenter = (1280 - (ctx.measureText(subtitle).width)) / 2;
   		ctx.fillText(subtitle, xCenter, 350);
       ctx.restore();
