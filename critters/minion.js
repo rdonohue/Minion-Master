@@ -66,7 +66,7 @@ class Minion {
 
     this.baseWidth = 32;
     this.baseHeight = 32;
-    this.radius = this.baseWidth/2*this.scale;
+    this.radius = this.baseWidth/2*this.scale*1.5;
     this.center = {
       x: this.x + this.baseWidth*this.scale/2,
       y: this.y + this.baseHeight*this.scale/2
@@ -111,8 +111,8 @@ class Minion {
     this.regenTime += this.theGame.clockTick;
 
     this.center = {
-      x: this.x + this.baseWidth*this.scale/2,
-      y: this.y + this.baseHeight*this.scale/2
+      x: this.x + this.baseWidth*this.scale/2+15,
+      y: this.y + this.baseHeight*this.scale/2+15
     }
 
     this.facing = getFacing(this.velocity);
@@ -259,9 +259,13 @@ class Minion {
 
   attackEnemy() {
     if(this.target) {
+      this.target = null;
+      this.state = 3
+    }
+    if(this.target) {
       //we do still have a target to attack and it is alive.
       let ent = this.target;
-      if((ent.state != 0 || ent.health > 0) && reach(this, ent)) {
+      if((ent.state != 0 || ent.health > 0 || ((ent instanceof Ogre || ent instanceof Dragon ) && !ent.removeFromWorld)) && reach(this, ent)) {
         //the target is alive and in range and we are ready to attack.
         var damage = (this.attack + randomInt(this.attack)) - ent.defense
         if(damage < 0) {
@@ -270,14 +274,14 @@ class Minion {
         ent.health -= damage; //don't heal the target by dealing negitive damage!
         this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
         return 1;
-      } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {
+      } else if ((ent.state != 0 || ent.health > 0 || ((ent instanceof Ogre || ent instanceof Dragon ) && !ent.removeFromWorld)) && !reach(this, ent)) {
         return 3;
         //the target moved out of reach, so change to searching state.
       } else {
         //this should not EVER happen!
         return "attack_method entity_handling failure";
       }
-    } else if (!this.target || !(this.target.state != 0 || this.target.health < 0)){
+    } else if (!this.target || !(this.target.state != 0 || this.target.health < 0 || ((ent instanceof Ogre || ent instanceof Dragon ) && ent.removeFromWorld))){
       // the target has died (or broke)! find new target.
       this.target = null;
       return 4;

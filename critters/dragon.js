@@ -1,6 +1,11 @@
 class Dragon {
-    constructor(game, x, y) {
-        Object.assign(this, { game, x, y });
+    constructor(theGame, x, y) {
+        Object.assign(this, { theGame, x, y });
+        this.theCamera = this.theGame.theSM;
+
+        this.isSelected = false;
+        this.description = "It's a dragon, RUN!";
+        this.myFaction = "dragon";
 
         this.downSheet = ASSET_MANAGER.getAsset("./sprites/reddragonflydown.png");
         this.leftSheet = ASSET_MANAGER.getAsset("./sprites/reddragonflyleft.png");
@@ -16,11 +21,18 @@ class Dragon {
         this.facing = 0;
         this.state = 0;
 
-        this.radius = 20;
+        this.radius = 70;
         this.visualRadius = 190;
         this.state = 0;
 
-        this.healthbar = new HealthBar(this.game, this);
+        this.center = {
+          x: this.x + this.radius,
+          y: this.y + this.radius
+        }
+
+        this.isSelected = (this.theGame.theCamera.thePlayer.selected == this);
+
+        this.healthbar = new HealthBar(this.theGame, this);
 
         this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
           { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
@@ -60,7 +72,6 @@ class Dragon {
         this.elapsedTime = 0;
 
         this.currentAnim = this.animations[this.state][this.direction];
-        this.radius = 20;
         this.visualRadius = 190;
 
     };
@@ -85,7 +96,7 @@ class Dragon {
     };
 
     updateMe() {
-      this.elapsedTime += this.game.clockTick;
+      this.elapsedTime += this.theGame.clockTick;
       var dist = distance(this, this.target);
 
       if (this.targetID >= this.path.length - 1) {
@@ -94,6 +105,13 @@ class Dragon {
             { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
             { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
             { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+      }
+
+      this.isSelected = (this.theGame.theSM.thePlayer.selected == this);
+
+      this.center = {
+        x: this.x + this.radius,
+        y: this.y + this.radius
       }
 
       if (this.health <= 0) {
@@ -110,20 +128,20 @@ class Dragon {
       }
 
       var combat = false;
-      for (var i = 0; i < this.game.entities.length; i++) {
-          var ent = this.game.entities[i];
-          if ((ent instanceof Minion || ent instanceof Tower || ent instanceof HomeBase
-            || ent instanceof Wolf || ent instanceof Ogre) && canSee(this, ent)) {
+      for (var i = 0; i < this.theGame.entities.length; i++) {
+          var ent = this.theGame.entities[i];
+          if ((ent.myFaction != "dragon" || ent.myFaction != "resource") && canSee(this, ent)) {
               this.target = ent;
               combat = true;
-              if (this.elapsedTime > (0.2 / this.agility) && !collide(this, ent)) {
-                  this.elapsedTime = 0;
-                  this.game.addEntity(new Fireball(this.game, this.currentAnim.width / 2 + this.x - this.game.camera.x,
-                    this.currentAnim.height / 2 + this.y - this.game.camera.y, ent, this.attack, this.projectileScale));
-              }
+              // if (this.elapsedTime > (0.2 / this.agility) && !collide(this, ent)) {
+              //     this.elapsedTime = 0;
+              //     this.theGame.addEntity(new Fireball(this.theGame,
+              //       this.x - this.theGame.theCamera.x,
+              //       this.y - this.theGame.theCamera.y,
+              //       ent, this.attack/20, this.projectileScale));
+              // }
           }
-          if ((ent instanceof Minion || ent instanceof Tower || ent instanceof HomeBase
-            || ent instanceof Wolf || ent instanceof Ogre) && collide(this, ent) && !ent.dead) {
+          if ((ent.myFaction != "dragon" || ent.myFaction != "resource") && collide(this, ent) && !ent.dead) {
             if (this.state === 0) {
                 this.state = 1;
                 this.elapsedTime = 0;
@@ -133,7 +151,7 @@ class Dragon {
                     damage = 0;
                 }
                 ent.health -= damage;
-                this.game.addEntity(new Score(this.game, ent.x, ent.y - 10, damage, "Red"));
+                this.theGame.addEntity(new Score(this.theGame, ent.x, ent.y - 10, damage, "Red"));
                 this.elapsedTime = 0;
             }
           }
@@ -148,8 +166,8 @@ class Dragon {
         dist = distance(this, this.target);
         this.velocity = { x: (this.target.x - this.x)/dist * this.maxSpeed,
           y: (this.target.y - this.y) / dist * this.maxSpeed};
-        this.x += this.velocity.x * this.game.clockTick;
-        this.y += this.velocity.y * this.game.clockTick;
+        this.x += this.velocity.x * this.theGame.clockTick;
+        this.y += this.velocity.y * this.theGame.clockTick;
       }
     };
 
@@ -168,10 +186,21 @@ class Dragon {
         this.direction = 0;
       }
 
-      this.animations[this.state][this.direction].drawFrame(this.game.clockTick, ctx, this.x - this.game.camera.x,
-                                                            this.y - this.game.camera.y, this.scale);
+      this.animations[this.state][this.direction].drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x,
+                                                            this.y - this.theGame.theCamera.y, this.scale);
       this.currentAnim = this.animations[this.state][this.direction];
 
       this.healthbar.drawMe(ctx);
+
+      if(params.DEBUG || this.isSelected) {
+        ctx.save();
+        ctx.strokeStyle = "red";
+        ctx.beginPath();
+        ctx.arc(this.center.x - this.theGame.theCamera.x, this.center.y - this.theGame.theCamera.y, this.radius*0.8, 0, 2*Math.PI);
+        ctx.fillStyle = "red";
+        ctx.font = '16px "Playfair Display SC'
+        ctx.stroke();
+        ctx.restore();
+      }
     };
 };

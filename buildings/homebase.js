@@ -39,7 +39,8 @@ class HomeBase {
 
   updateMe() {
     if (this.health <= 0) {
-        this.state = 0;
+      this.theGame.theSM.notDead = false;
+        this.state = -1;
     }
 
     this.isSelected = (this.thePlayer.selected == this);
@@ -52,16 +53,19 @@ class HomeBase {
   };
 
   drawMe(ctx) {
-    this.animations[0].drawFrame(this.theGame.clockTick, ctx, this.x - this.camera.x, this.y - this.camera.y, this.scale);
+    if(this.state == 1) {
 
-    if(params.DEBUG || this.isSelected) {
-      ctx.strokeStyle = "red";
-      ctx.beginPath();
-      ctx.arc(this.center.x - this.camera.x, this.center.y - this.camera.y, this.radius, 0, 2*Math.PI);
-      ctx.stroke();
+      this.animations[0].drawFrame(this.theGame.clockTick, ctx, this.x - this.camera.x, this.y - this.camera.y, this.scale);
+
+      if(params.DEBUG || this.isSelected) {
+        ctx.strokeStyle = "red";
+        ctx.beginPath();
+        ctx.arc(this.center.x - this.camera.x, this.center.y - this.camera.y, this.radius, 0, 2*Math.PI);
+        ctx.stroke();
+      }
+
+      this.myHealthBar.drawMe(ctx, this.health, this.maxHealth, "health");
     }
-
-    this.myHealthBar.drawMe(ctx, this.health, this.maxHealth, "health");
   };
 
   drawMinimap(ctx, mmX, mmY, mmW, mmH) {

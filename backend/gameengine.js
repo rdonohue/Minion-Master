@@ -16,6 +16,8 @@ class GameEngine {
       this.down = false;
 
       this.tickDuration = 0.1;
+
+      this.notDead = true;
   };
 
   init(ctx) {
@@ -62,6 +64,10 @@ class GameEngine {
         case "cave":
           let cave = new Cave(this, x, y);
           this.addEntity(cave, x, y);
+          break;
+        case "dragon":
+          let dragon = new Dragon(this, x, y);
+          this.addEntity(dragon, x, y);
           break;
         //case "berry":
         //  let berry = new BerryBush(this, x, y);
@@ -112,8 +118,8 @@ class GameEngine {
   update() {
     var entitiesCount = this.entities.length;
     var elementsCount = this.elements.length;
-    
-    if (!this.theSM.paused) {
+
+    if (!this.theSM.paused && this.notDead) {
       for (var i = 0; i < elementsCount; i++) {
         var element = this.elements[i];
 
@@ -125,7 +131,7 @@ class GameEngine {
       for (var i = 0; i < entitiesCount; i++) {
         var entity = this.entities[i];
 
-        if (entity.state != 0) {
+        if (entity.state != 0 || (entity instanceof Ogre || entity instanceof Dragon)) {
           entity.updateMe();
         }
       }
@@ -134,7 +140,7 @@ class GameEngine {
 
     for (var i = entitiesCount - 1; i >= 0; --i) {
       var entity = this.entities[i];
-      if (entity.state == 0) {
+      if ((entity.state == 0 && !(entity instanceof Ogre || entity instanceof Dragon ))  || ((entity instanceof Ogre || entity instanceof Dragon ) && entity.removeFromWorld)) {
         this.entities.splice(i, 1);
       }
     }

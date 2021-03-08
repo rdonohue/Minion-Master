@@ -117,6 +117,9 @@ class Wolf {
     //2-->moving to target (moving),
     //3-->searching for enemy/resource (moving),
     //4-->idle
+    if(this.state == undefined) {
+      this.state = this.findNewTarget();
+    }
 
     this.updateHealth();
     if(this.health > 0) {
@@ -133,13 +136,15 @@ class Wolf {
           // } else {
           this.state = this.findNewTarget();
             // }
-        } if (this.state == 4) {
+        } else if (this.state == 4) {
           this.state = this.idle();
         } else if (this.state == 1) {
           this.velocity = {
             x: 0,
             y: 0
           }
+        } else {
+          this.state = this.idle();
         }
       }
     }
@@ -189,7 +194,6 @@ class Wolf {
         }
         ent.health -= damage; //don't heal the target by dealing negitive damage!
         this.grow(damage);
-        console.log(damage);
         this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
         return 1;
       } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {
@@ -304,8 +308,8 @@ class Wolf {
         this.target = generateTarget(this);
       } else {
         //if we are not a young pup, we know to stay away from towers.
-        let tower = this.theGame.entities.filter(entity => {
-          return (entity instanceof Tower)
+        let scary = this.theGame.entities.filter(entity => {
+          return (entity instanceof Tower || entity instanceof Dragon)
         }).sort(function(a,b) {
           if(!a || !b) {
             return false;
@@ -314,10 +318,10 @@ class Wolf {
           }
         }).shift();
 
-        if(tower && distance(this, tower) < tower.visualRadius) {
+        if(scary && distance(this, scary) < scary.visualRadius) {
           let runtowards = {
-            x: this.x - (tower.x - this.x), //the point opposite of the tower relative to us.
-            y: this.y - (tower.y - this.y)
+            x: this.x - (scary.x - this.x), //the point opposite of the tower relative to us.
+            y: this.y - (scary.y - this.y)
           }
           this.target = runtowards
         } else {
@@ -348,12 +352,13 @@ class Wolf {
     //   }
     // }
 
-    if(this.waitTill == 0) {
-      this.waitTill = this.theGame.timer.lastTimestamp + randomInt(3);
-    } else if (this.waitTill < this.theGame.timer.lastTimestamp) {
-      this.waitTill = 0;
-      this.state = 3; //we have waited long enough.
-    }
+    this.state = 3;
+    // if(this.waitTill == 0) {
+    //   this.waitTill = this.theGame.timer.lastTimestamp + randomInt(3);
+    // } else if (this.waitTill < this.theGame.timer.lastTimestamp) {
+    //   this.waitTill = 0;
+    //   this.state = 3; //we have waited long enough.
+    // }
   }
 
   drawMinimap(ctx, mmX, mmY, mmW, mmH) {

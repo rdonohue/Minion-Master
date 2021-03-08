@@ -46,9 +46,9 @@ constructor(theGame, x, y) {
 
   drawText(ctx) {
 		ctx.save();
-    ctx.font = params.TILE_W_H/4 + 'px "Playfair Display SC"';
+    ctx.font = 16 + 'px "Playfair Display SC"';
     ctx.fillStyle = "White";
-    ctx.fillText("Tower", this.x + 4, this.y + 16);
+    ctx.fillText("Tower    100 Rock", this.x + 4, this.y + 16);
 		ctx.restore();
   };
 

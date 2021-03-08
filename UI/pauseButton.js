@@ -64,6 +64,8 @@ constructor(theGame, x, y) {
 		ctx.fillText(subtitle, xCenter, 675 / 2);
 	};
 
+	drawMinimap() {}
+
   updateMe() {
 		if (this.theGame.mouse) {
 			let xMove = this.theGame.mouse.x

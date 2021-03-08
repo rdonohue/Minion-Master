@@ -1,6 +1,6 @@
 class Fireball {
-    constructor(game, x, y, target, attackMod, scale) {
-        Object.assign(this, { game, x, y, target, attackMod, scale});
+    constructor(theGame, x, y, target, attackMod, scale) {
+        Object.assign(this, { theGame, x, y, target, attackMod, scale});
         this.radius = 12;
         this.smooth = false;
 
@@ -58,19 +58,29 @@ class Fireball {
     };
 
     updateMe() {
-        this.x += this.velocity.x * this.game.clockTick;
-        this.y += this.velocity.y * this.game.clockTick;
+      this.elapsedTime += this.theGame.clockTick;
+      if(this.elapsedTime > 1000) {
+        this.state = 0;
+      }
 
-        for (var i = 0; i < this.game.entities.length; i++) {
-            var ent = this.game.entities[i];
-            if ((ent instanceof Minion || ent instanceof Tower || ent instanceof HomeBase) && collide(this, ent)) {
-                var damage = this.attackMod;
-                ent.health -= damage;
-                this.removeFromWorld = true;
-            }
-        }
+      this.x += this.velocity.x * this.theGame.clockTick;
+      this.y += this.velocity.y * this.theGame.clockTick;
 
-        this.facing = getFacing(this.velocity);
+      for (var i = 0; i < this.theGame.entities.length; i++) {
+          var ent = this.theGame.entities[i];
+          if (!ent instanceof Dragon && collide(this, ent)) {
+              var damage = this.attackMod - ent.defense;
+              if(damage < 0) {
+                damage = 0
+              }
+              ent.health -= damage;
+              if(ent.health < 0) {
+                ent.state = 0;
+              }
+          }
+      }
+
+      this.facing = getFacing(this.velocity);
     };
 
     drawMe(ctx) {
@@ -85,15 +95,15 @@ class Fireball {
         } else if (this.facing > 4) {
           this.direction = 0;
         }
-        
+
         if (this.smooth) {
             let angle = Math.atan2(this.velocity.y , this.velocity.x);
             if (angle < 0) angle += Math.PI * 2;
             let degrees = Math.floor(angle / Math.PI / 2 * 360);
             this.drawAngle(ctx, degrees);
         } else {
-            this.animations[this.direction].drawFrame(this.game.clockTick, ctx, (this.x - xOffset) - this.game.camera.x,
-                                                      (this.y - yOffset) - this.game.camera.y, this.scale);
+            this.animations[this.direction].drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theSM.x,
+                                                      this.y - this.theGame.theSM.y, this.scale);
         }
     };
 };

@@ -7,7 +7,10 @@ class SceneManager {
 
       this.theMiniMap = new MiniMap(this.theGame, 1024, 576, 256);
       this.theHud = new Hud(this.theGame, 1024, 0, 256);
-      this.thePlayer = new Player(this.theGame, 100, 150, 5, 3, 0, 0);
+      this.thePlayer = new Player(this.theGame, 50, 50, 5, 3, 0, 0);
+
+      // Credits to: https://vnitti.itch.io/grassy-mountains-parallax-background
+      this.startbg = ASSET_MANAGER.getAsset("./sprites/start_bg.png");
 
       this.maxCamSpeed = 45;
       this.baseCamSpeed = 0;
@@ -18,13 +21,20 @@ class SceneManager {
       this.moveLeft = this.baseCamSpeed;
       this.moveUp = this.baseCamSpeed;
       this.paused = false;
+      this.title = true;
+      this.endMusic = 0;
 
       this.createLevel();
-      //this.startScreen();
-      this.populateLevel();
+      ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item_2.mp3");
+      // this.populateLevel();
+
+      this.caveTimer = 0;
+      this.dragonTimer = 0;
+
+      this.start = false;
   };
 
-  createLevel(){
+  createLevel() {
     //let castle = new HomeBase(theGameEngine, 500, 300, 430, 461);
     let corners = new Grasscorner(this.theGame, 0, 0);
     let vertwalls = new Vertwall(this.theGame, 0, params.TILE_W_H);
@@ -37,7 +47,11 @@ class SceneManager {
     this.theGame.addElement(intGrass);
   }
 
-  populateLevel(){
+  startGame() {
+    this.populateLevel();
+  }
+
+  populateLevel() {
     let castleX = params.PLAY_WIDTH/2 - 150 + randomInt(150);
     let castleY = params.PLAY_HEIGHT/2 - 150 + randomInt(150);
 
@@ -52,22 +66,47 @@ class SceneManager {
     // this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
     // this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
     this.theGame.spawnMe("wolf", 550, 550);
-    this.theGame.spawnMe("wolf", 350, 350);
-    this.theGame.spawnMe("wolf", 750, 750);
-    // this.theGame.spawnMe("wolf", 350, 350);
-    // this.theGame.spawnMe("wolf", 950, 950);
-    // this.theGame.spawnMe("wolf", 350, 350);
-    // this.theGame.spawnMe("wolf", 150, 150);
-    // this.theGame.spawnMe("wolf", 350, 350);
+    // this.theGame.spawnMe("ogre", 350, 350);
+    this.theGame.spawnMe("cave", 250, 250);
+    this.theGame.spawnMe("cave", 1050, 250);
   }
 
   update() {
     params.DEBUG = document.getElementById("debug").checked;
 
-    this.theHud.updateMe();
-    this.theMiniMap.updateMe();
-    this.thePlayer.updateMe();
-    this.updateCamera();
+    if (this.title && this.theGame.click) {
+      if (this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350) {
+        this.title = false;
+        this.startGame();
+      }
+    } else {
+      this.theHud.updateMe();
+      this.theMiniMap.updateMe();
+      this.thePlayer.updateMe();
+      this.updateCamera();
+    }
+
+    if(this.caveTimer >= 1000) {
+      this.theGame.spawnMe("cave", 150 + randomInt(150), 300);
+      this.caveTimer = 0;
+      //spawn cave every 30 second's
+    } else {
+      this.caveTimer += this.theGame.clockTick;
+    }
+
+    // if(this.dragonTimer >= 0) {
+    //   this.theGame.spawnMe("dragon", params.PLAY_WIDTH - 150 - randomInt(150), 300);
+    //   this.dragonTimer = -1;
+    //   //spawn dragon at 2 minutes
+    // } else if (this.dragonTimer != -1) {
+    //   this.dragonTimer += this.theGame.clockTick;
+    // }
+
+    if(this.theGame.theBase && this.theGame.theBase.health <= 0) {
+      this.theGame.notDead = false;
+    } else if (this.theGame.theBase && this.theGame.theBase.health > 0){
+      this.theGame.notDead = true;
+    }
   };
 
   updateCamera() {
@@ -137,9 +176,64 @@ class SceneManager {
   }
 
   draw(ctx) {
-    this.theMiniMap.drawMe(ctx);
-    this.theHud.drawMe(ctx);
-    this.thePlayer.drawMe(ctx);
+    if (this.title) {
+      ctx.save();
+      ctx.drawImage(this.startbg, 0, 0, 384, 216, 0, 0, 1280, 768);
+      ctx.fillStyle = "White";
+  		ctx.font = 64 + 'px "Press Start 2P"';
+  		let title = "MINION MASTER";
+  		let xCenter = (1280 - (ctx.measureText(title).width)) / 2;
+  		ctx.fillText(title, xCenter, 125);
+  		ctx.font = 48 + 'px "Press Start 2P"';
+      ctx.fillStyle = this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350 ? "Orange" : "White";
+  		let subtitle = "Start Game";
+  		xCenter = (1280 - (ctx.measureText(subtitle).width)) / 2;
+  		ctx.fillText(subtitle, xCenter, 350);
+      ctx.restore();
+    } else if (this.victory) {
+      if (this.endMusic < 1) {
+        ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item.mp3");
+        this.endMusic++;
+      }
+      ctx.save();
+      ctx.drawImage(this.startbg, 0, 0, 384, 216, 0, 0, 1280, 768);
+      ctx.fillStyle = "White";
+  		ctx.font = 64 + 'px "Press Start 2P"';
+  		let title = "YOU'VE WON!";
+  		let xCenter = (1280 - (ctx.measureText(title).width)) / 2;
+  		ctx.fillText(title, xCenter, 125);
+  		ctx.font = 48 + 'px "Press Start 2P"';
+      ctx.fillStyle = this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350 ? "Orange" : "White";
+  		let subtitle = "Play Again?";
+  		xCenter = (1280 - (ctx.measureText(subtitle).width)) / 2;
+  		// ctx.fillText(subtitle, xCenter, 350);
+      ctx.restore();
+    } else if (this.theGame.notDead){
+      this.theMiniMap.drawMe(ctx);
+      this.theHud.drawMe(ctx);
+      this.thePlayer.drawMe(ctx);
+    } else if (!this.theGame.notDead){
+      this.theMiniMap.drawMe(ctx);
+      this.theHud.drawMe(ctx);
+      this.thePlayer.drawMe(ctx);
+      if (this.endMusic < 1) {
+        ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item.mp3");
+        this.endMusic++;
+      }
+      ctx.save();
+      ctx.drawImage(this.startbg, 0, 0, 384, 216, 0, 0, 1280, 768);
+      ctx.fillStyle = "White";
+  		ctx.font = 64 + 'px "Press Start 2P"';
+  		let title = "YOU'VE LOST!!";
+  		let xCenter = (1280 - (ctx.measureText(title).width)) / 2;
+  		ctx.fillText(title, xCenter, 125);
+  		ctx.font = 48 + 'px "Press Start 2P"';
+      ctx.fillStyle = this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350 ? "Orange" : "White";
+  		let subtitle = "Play Again?";
+  		xCenter = (1280 - (ctx.measureText(subtitle).width)) / 2;
+  		// ctx.fillText(subtitle, xCenter, 350);
+      ctx.restore();
+    }
   };
 
 };
