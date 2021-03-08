@@ -10,6 +10,7 @@ class SceneManager {
 
       // Credits to: https://vnitti.itch.io/grassy-mountains-parallax-background
       this.startbg = ASSET_MANAGER.getAsset("./sprites/start_bg.png");
+      this.titleMusic = ASSET_MANAGER.getAsset("./sounds/Mega_Man_7_Special_Item_2.mp3");
 
       this.maxCamSpeed = 45;
       this.baseCamSpeed = 0;
@@ -23,6 +24,7 @@ class SceneManager {
       this.title = true;
 
       this.createLevel();
+      ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item_2.mp3");
       // this.populateLevel();
   };
 

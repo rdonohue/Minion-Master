@@ -29,6 +29,11 @@ ASSET_MANAGER.queueDownload("./sprites/button_Int.png");
 ASSET_MANAGER.queueDownload("./sprites/tower.png");
 ASSET_MANAGER.queueDownload("./sprites/arrow.png");
 ASSET_MANAGER.queueDownload("./sprites/spicy.png");
+
+//Sounds
+ASSET_MANAGER.queueDownload("./sounds/Mega_Man_7_Special_Item_2.mp3");
+
+
 ASSET_MANAGER.downloadAll(function () {
 	var gameEngine = new GameEngine();
 
