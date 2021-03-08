@@ -21,6 +21,8 @@ class Cave {
         y: this.y + this.radius*this.scale
       }
 
+      this.isSelected = false
+
       //Stats
       this.health = 200;
       this.defense = 0.0;

@@ -34,10 +34,10 @@ class Ogre {
           y: (this.target.y - this.y) / dist * this.maxSpeed};
 
         //Stats
-        this.health = minionStats.HEALTH;
-        this.maxHealth = minionStats.HEALTH;
-        this.defense = minionStats.DEFENSE;
-        this.attack = minionStats.ATTACK;
+        this.health = minionStats.HEALTH*2;
+        this.maxHealth = minionStats.HEALTH*2;
+        this.defense = minionStats.DEFENSE*2;
+        this.attack = minionStats.ATTACK*1.5;
         this.agility = minionStats.AGILITY;
         this.intelligence = minionStats.INTELLIGENCE;
 
@@ -107,7 +107,7 @@ class Ogre {
               this.target = ent;
               combat = true;
           }
-          if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && collide(this, ent) && !ent.dead) {
+          if ((ent instanceof Minion || ent instanceof HomeBase || ent instanceof Tower) && collide(this, ent) && !ent.state == 0) {
             if (this.state === 0) {
                 this.state = 1;
                 this.elapsedTime = 0;
@@ -160,7 +160,7 @@ class Ogre {
       if (this.direction == 0) {
         this.animations[this.state].drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
       } else {
-        this.animations[this.state].drawFrame(this.theGame.clockTick, ctx, -(this.x + this.theGame.theCamera.x) - w, this.y - 80 - this.theGame.theCamera.y, this.scale);
+        this.animations[this.state].drawFrame(this.theGame.clockTick, ctx, this.x - this.theGame.theCamera.x, this.y - this.theGame.theCamera.y, this.scale);
       }
 
       this.currentAnim = this.animations[this.state];

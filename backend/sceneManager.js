@@ -6,7 +6,7 @@ class SceneManager {
 
       this.theMiniMap = new MiniMap(this.theGame, 1024, 576, 256);
       this.theHud = new Hud(this.theGame, 1024, 0, 256);
-      this.thePlayer = new Player(this.theGame, 100, 150, 5, 3, 0, 0);
+      this.thePlayer = new Player(this.theGame, 50, 50, 5, 3, 0, 0);
 
       // Credits to: https://vnitti.itch.io/grassy-mountains-parallax-background
       this.startbg = ASSET_MANAGER.getAsset("./sprites/start_bg.png");
@@ -100,9 +100,9 @@ class SceneManager {
       this.dragonTimer += this.theGame.clockTick;
     }
 
-    if(!this.theGame.theBase && !this.paused && !this.title) {
+    if(this.theGame.theBase && this.theGame.theBase.health <= 0) {
       this.theGame.notDead = false;
-    } else {
+    } else if (this.theGame.theBase && this.theGame.theBase.health > 0){
       this.theGame.notDead = true;
     }
   };
@@ -204,7 +204,7 @@ class SceneManager {
       ctx.fillStyle = this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350 ? "Orange" : "White";
   		let subtitle = "Play Again?";
   		xCenter = (1280 - (ctx.measureText(subtitle).width)) / 2;
-  		ctx.fillText(subtitle, xCenter, 350);
+  		// ctx.fillText(subtitle, xCenter, 350);
       ctx.restore();
     } else if (this.theGame.notDead){
       this.theMiniMap.drawMe(ctx);
@@ -229,7 +229,7 @@ class SceneManager {
       ctx.fillStyle = this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350 ? "Orange" : "White";
   		let subtitle = "Play Again?";
   		xCenter = (1280 - (ctx.measureText(subtitle).width)) / 2;
-  		ctx.fillText(subtitle, xCenter, 350);
+  		// ctx.fillText(subtitle, xCenter, 350);
       ctx.restore();
     }
   };

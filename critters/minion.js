@@ -187,6 +187,10 @@ class Minion {
 
   attackEnemy() {
     if(this.target) {
+      this.target = null;
+      this.state = 3
+    }
+    if(this.target) {
       //we do still have a target to attack and it is alive.
       let ent = this.target;
       if((ent.state != 0 || ent.health > 0 || ((ent instanceof Ogre || ent instanceof Dragon ) && !ent.removeFromWorld)) && reach(this, ent)) {

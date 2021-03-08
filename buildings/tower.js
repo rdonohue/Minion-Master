@@ -15,7 +15,7 @@ class Tower {
       //Stats
       this.health = 200;
       this.maxHealth = 200;
-      this.defense = 10;
+      this.defense = 3;
       this.attack = 35;
       this.projectileScale = 1;
 

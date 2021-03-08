@@ -50,7 +50,7 @@ class Animator {
         ctx.drawImage(this.spritesheet,
             this.xStart + xindex * (this.width + this.framePadding), this.yStart + yindex * (this.height + this.framePadding), //source from sheet
             this.width, this.height,
-            x, y,
+            x-25, y-25,
             this.width * scale,
             this.height * scale);
     };
