@@ -188,7 +188,7 @@ class Minion {
       var cost = -1;
       if (this.thePlayer.myFood >= 10) {
           this.thePlayer.myFood -= 10;
-          agile += Math.floor(agile * 0.3);
+          this.agility += Math.floor(agile * 0.3);
           cost = 1;
       }
       return cost;
@@ -199,7 +199,7 @@ class Minion {
       var cost = -1;
       if (this.thePlayer.myFood >= 25) {
           this.thePlayer.myFood -= 25;
-          def += Math.floor(def * 0.2);
+          this.defense += Math.floor(def * 0.2);
           cost = 1;
       }
       return cost;
@@ -210,7 +210,7 @@ class Minion {
       var cost = -1;
       if (this.thePlayer.myFood >= 25) {
           this.thePlayer.myFood -= 25;
-          att += Math.floor(att * 0.2);
+          this.attack += Math.floor(att * 0.2);
           cost = 1;
       }
       return cost;
@@ -221,7 +221,7 @@ class Minion {
       var cost = -1;
       if (this.thePlayer.myFood >= 10) {
           this.thePlayer.myFood -= 10;
-          intel += Math.floor(intel * 0.3);
+          this.intelligence += Math.floor(intel * 0.3);
           cost = 1;
       }
       return cost;
@@ -646,7 +646,7 @@ class Minion {
     ctx.strokeStyle = "orange";
     ctx.strokeRect(x, y, 1, 1);
     ctx.restore();
-  }
+  };
 
   printHistory() {
     let printNum = 0;

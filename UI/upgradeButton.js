@@ -47,7 +47,7 @@ class UpgradeButton {
 		ctx.save();
     ctx.font = 16 + 'px "Playfair Display SC"';
     ctx.fillStyle = "White";
-    ctx.fillText(this.type + "    50 Food", this.x + 4, this.y + 16);
+    ctx.fillText(this.type + "    90 Food", this.x + 4, this.y + 16);
 		ctx.restore();
   };
 
