@@ -79,7 +79,7 @@ class GameEngine {
 
   addElement(element){
     this.elements.push(element);
-  }
+  };
 
   draw() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
@@ -90,7 +90,7 @@ class GameEngine {
       this.entities[i].drawMe(this.ctx);
     }
     this.theSM.draw(this.ctx);
-  }
+  };
 
   update() {
     var entitiesCount = this.entities.length;

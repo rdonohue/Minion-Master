@@ -1,10 +1,5 @@
 class Button {
-  constructor(
-    theObject, theGame,
-    myFunction, myArguments,
-    myText, myColor
-    //text which floats above the button.
-    ){
+  constructor(theObject, theGame, myFunction, myArguments, myText, myColor) {
 
     Object.assign(this, {theObject, theGame, myFunction, myArguments, myText, myColor});
 
