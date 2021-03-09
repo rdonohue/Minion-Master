@@ -69,35 +69,11 @@ class GameEngine {
           let dragon = new Dragon(this, x, y);
           this.addEntity(dragon, x, y);
           break;
-        //case "berry":
-        //  let berry = new BerryBush(this, x, y);
-        //  this.addEntity(berry);
-        //  break;
     }
   };
 
   addEntity(entity) {
     this.entities.push(entity);
-    // this.entities.forEach((other) => {
-    //   if(collide(entity, other)) {
-    //     this.addEntity(entity, x + 5, y + 5);
-    //   }
-    // });
-    // if(
-    //   x > this.mapWidth-entity.radius  ||
-    //   y > this.mapHeight-entity.radius ||
-    //   x < 0 + entity.radius ||
-    //   y < 0 + entity.radius
-    // ){
-    //   console.log("new entity: " + entity.myType + " is off the map!");
-    // } else {
-    //   this.entities.forEach((other) => {
-    //     if(collide(entity, other)) {
-    //       this.addEntity(entity, x + 5, y + 5);
-    //     }
-    //   });
-    // }
-    //we want to make sure that any new entities are not colliding with any already present entitys.
   };
 
   addElement(element){

@@ -35,6 +35,7 @@ class Minion {
     // Pick Up
     this.leftPick = new Animator(this.pickUp, 0, 0, 64, 64, 5, 0.25, 0, false, true);
     this.rightPick = new Animator(this.pickUp, 0, 0, 64, 64, 5, 0.25, 0, false, true);
+    this.ctx = null;
 
     this.animations = [];
     this.loadAnimations();
@@ -98,8 +99,14 @@ class Minion {
     this.printTime = 0;
     this.regenTime = 0;
 
-    this.myButtons = [];
-    this.createButtons();
+    this.healthValid = false;
+    this.agileValid = false;
+    this.defValid = false;
+    this.atkValid = false;
+    this.intValid = false;
+
+    // this.myButtons = [];
+    // this.createButtons();
   };
 
   //the move-speed is still staggered a bit, that might be because of async
@@ -127,11 +134,6 @@ class Minion {
     //2-->gathering resource.
     //3-->moving to target (moving),
     //4-->searching for enemy/resource (moving),
-    //if (this.isSelected) {
-        //for (var i = 0; i < this.myButtons.length(); i++) {
-            //this.myButtons[i].checkButton();
-        //}
-    //}
 
     this.updateHealth();
     if(this.health > 0) {
@@ -175,7 +177,7 @@ class Minion {
       var cost = -1;
       if (this.thePlayer.myFood >= 15) {
           this.thePlayer.myFood -= 15;
-          heal += Math.floor(heal * 0.3);
+          this.maxHealth += Math.floor(heal * 0.3);
           cost = 1;
       }
       return cost;
@@ -225,13 +227,13 @@ class Minion {
       return cost;
   };
 
-  createButtons() {
-      this.myButtons.push(new Button(this, this.theGame, this.upgradeHealth, this.health, "health", "Red"));
-      this.myButtons.push(new Button(this, this.theGame, this.upgradeAgility, this.agility, "agility", "Green"));
-      this.myButtons.push(new Button(this, this.theGame, this.upgradeDefense, this.defense, "defense", "Gray"));
-      this.myButtons.push(new Button(this, this.theGame, this.upgradeAttack, this.attack, "attack", "Yellow"));
-      this.myButtons.push(new Button(this, this.theGame, this.upgradeIntel, this.intelligence, "intelligence", "Blue"));
-  };
+  // createButtons() {
+  //     this.myButtons.push(new Button(this, this.theGame, this.upgradeHealth, this.health, "health", "Red"));
+  //     this.myButtons.push(new Button(this, this.theGame, this.upgradeAgility, this.agility, "agility", "Green"));
+  //     this.myButtons.push(new Button(this, this.theGame, this.upgradeDefense, this.defense, "defense", "Gray"));
+  //     this.myButtons.push(new Button(this, this.theGame, this.upgradeAttack, this.attack, "attack", "Yellow"));
+  //     this.myButtons.push(new Button(this, this.theGame, this.upgradeIntel, this.intelligence, "intelligence", "Blue"));
+  // };
 
   updateHealth() {
     if(this.health <= 0) {
@@ -494,6 +496,7 @@ class Minion {
   }
 
   drawMe(ctx) {
+    this.ctx = ctx;
     let temp;
     if (this.state == 3 || this.state == 4) {
       temp = 0;

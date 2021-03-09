@@ -1,4 +1,4 @@
-class Button{
+class Button {
   constructor(
     theObject, theGame,
     myFunction, myArguments,
@@ -71,19 +71,11 @@ class Button{
         ctx.strokeStyle = this.myColor;
   			ctx.setLineDash([4,2]);
         ctx.lineDashOffset = -this.dashOffset;
-        ctx.strokeRect(
-          x,
-          y,
-          w, h
-        );
+        ctx.strokeRect(x, y, w, h);
       } else {
         ctx.lineWidth = 1;
         ctx.strokeStyle= this.myColor
-        ctx.strokeRect(
-          x,
-          y,
-          w, h
-        );
+        ctx.strokeRect(x, y, w, h);
       }
       ctx.restore();
     }

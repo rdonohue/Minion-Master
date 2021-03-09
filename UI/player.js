@@ -134,6 +134,9 @@ class Player {
 
     ctx.fillText("BUILD MENU", params.CANVAS_WIDTH + 78, 82);
     ctx.strokeRect(params.CANVAS_WIDTH + 76, 66, 102, 20);
+
+    ctx.fillText("MINON UPGRADES", params.CANVAS_WIDTH + 78, 232);
+    ctx.strokeRect(params.CANVAS_WIDTH + 76, 218, 145, 20);
   }
 
   drawSelectedInfo(ctx) {
@@ -141,7 +144,7 @@ class Player {
     if (this.selected) {
       ctx.save();
       ctx.font = params.TILE_W_H/4 + 'px "Press Start 2P"';
-      ctx.fillText(this.targetType + " ("+this.selected.description+")", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2);
+      ctx.fillText(this.targetType + " (" + this.selected.description + ")", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2);
       if(params.DEBUG) {
         if(this.selected.target && this.selected.target.myType) {
           ctx.fillText("target: "+this.selected.target.myType + "{"+Math.round(this.selected.target.health) + "/"+Math.round(this.selected.target.maxHealth)+"}", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 2.5);
@@ -152,22 +155,20 @@ class Player {
       ctx.fillText("STATS: ", 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5);
 
       ctx.font =  params.TILE_W_H/7 + 'px "Press Start 2P"';
-      if(this.selected) {
-        if(this.selected.health && this.selected.maxHealth) {
+      if (this.selected.health && this.selected.maxHealth) {
           ctx.fillText("HEALTH: " + Math.round(this.selected.health) + "/" + Math.round(this.selected.maxHealth), 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.2);
-        }
-        if(this.selected.defense) {
+      }
+      if(this.selected.defense) {
           ctx.fillText("DEF: " + this.selected.defense, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.0);
-        }
-        if(this.selected.attack) {
+      }
+      if(this.selected.attack) {
           ctx.fillText("ATK: " + this.selected.attack, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.8);
-        }
-        if(this.selected.agility) {
+      }
+      if(this.selected.agility) {
           ctx.fillText("AGI: " + this.selected.agility, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.6);
-        }
-        if(this.selected.intelligence) {
+      }
+      if(this.selected.intelligence) {
           ctx.fillText("INT: " + this.selected.intelligence, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.4);
-        }
       }
       if(params.DEBUG) {
         ctx.fillText("State: " + this.selected.state, 16, params.CANVAS_HEIGHT - params.TILE_W_H * 0.2);
@@ -183,22 +184,23 @@ class Player {
       //     ctx.beginPath();
       //     ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 22, 0, 2*Math.PI);
       //     ctx.stroke();
-      //
-      //     ctx.strokeStyle = "Pink";
-      //     ctx.beginPath();
-      //     ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
-      //     ctx.stroke();
-      //
-      //     ctx.strokeStyle = "Goldenrod";
-      //     ctx.beginPath();
-      //     ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
-      //     ctx.stroke();
-      //
-      //     ctx.fillText("HEALTH", params.TILE_W_H * 2.55, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
-      //     ctx.drawImage(this.HealthButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 2.75,
-      //                   params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
-      //     ctx.fillText("UPGRADE!", params.TILE_W_H * 2.45, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
+
+          // ctx.strokeStyle = "Pink";
+          // ctx.beginPath();
+          // ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 21, 0, 2*Math.PI);
+          // ctx.stroke();
+          //
+          // ctx.strokeStyle = "Goldenrod";
+          // ctx.beginPath();
+          // ctx.arc(params.TILE_W_H * 2.75 + 16, params.CANVAS_HEIGHT - params.TILE_W_H * 1.5 + 16, 23, 0, 2*Math.PI);
+          // ctx.stroke();
+
+          // ctx.fillText("HEALTH", params.TILE_W_H * 2.55, params.CANVAS_HEIGHT - params.TILE_W_H * 1.65);
+          // ctx.drawImage(this.HealthButt, 0, 0, params.TILE_W_H / 2, params.TILE_W_H / 2, params.TILE_W_H * 2.75,
+          //               params.CANVAS_HEIGHT - params.TILE_W_H * 1.5, params.TILE_W_H / 2, params.TILE_W_H / 2);
+          // ctx.fillText("UPGRADE!", params.TILE_W_H * 2.45, params.CANVAS_HEIGHT - params.TILE_W_H * 0.65);
       //   }
+      // }
       //
       //   //Defense Stat UI
       //   if(this.selected.defense) {
