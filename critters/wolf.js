@@ -117,6 +117,7 @@ class Wolf {
     //2-->moving to target (moving),
     //3-->searching for enemy/resource (moving),
     //4-->idle
+
     if(this.state == undefined) {
       this.state = this.findNewTarget();
     }
@@ -144,7 +145,8 @@ class Wolf {
             y: 0
           }
         } else {
-          this.state = this.idle();
+          //this.state = this.idle();
+          this.tryToFixSelf();
         }
       }
     }
@@ -184,9 +186,11 @@ class Wolf {
 
   attackEnemy() {
     if(this.target) {
+      this.state = 2;
       //we do still have a target to attack and it is alive.
       let ent = this.target;
-      if((ent.state != 0 || ent.health > 0) && reach(this, ent)) {
+      if (ent.state != 0 && ent.health > 0 && (ent instanceof Minion || ent instanceof Dragon)
+        && !ent.removeFromWorld && reach(this, ent)) {
         //the target is alive and in range and we are ready to attack.
         var damage = (this.attack + randomInt(this.attack)) - ent.defense
         if(damage < 0) {
@@ -196,17 +200,19 @@ class Wolf {
         this.grow(damage);
         this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
         return 1;
-      } else if ((ent.state != 0 || ent.health > 0) && !reach(this, ent)) {
+      } else if (ent.state != 0 && ent.health > 0 && (ent instanceof Minion || ent instanceof Dragon)
+        && !ent.removeFromWorld && !reach(this, ent)) {
         return 2;
         //the target moved out of reach, so change to searching state.
       } else {
         //this should not EVER happen!
         return "attack_method entity_handling failure";
       }
-    } else if (!this.target || !(this.target.state != 0 || this.target.health < 0)){
+    } else if (!this.target || (((this.target.state == 0 || this.target.health <= 0)
+      && (ent instanceof Minion || ent instanceof Dragon)) && ent.removeFromWorld)){
       // the target has died (or broke)! find new target.
       this.target = null;
-      return 4;
+      return 3;
     } else {
       //this should not EVER happen! this.target yet somehow not have valid stats.
       return "attack_method targeting failed";

@@ -20,7 +20,7 @@ class Button {
     } else {
       this.isVisable = true;
     }
-  }
+  };
 
   checkButton(x, y, w, h) {
     if(this.isVisable) {
@@ -36,7 +36,7 @@ class Button {
       }
     }
     return false;
-  }
+  };
 
   drawButton(ctx, x, y, w, h, image) {
 
@@ -74,5 +74,5 @@ class Button {
       }
       ctx.restore();
     }
-  }
-}
+  };
+};

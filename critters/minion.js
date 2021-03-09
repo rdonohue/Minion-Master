@@ -226,14 +226,6 @@ class Minion {
       }
   };
 
-  // createButtons() {
-  //     this.myButtons.push(new Button(this, this.theGame, this.upgradeHealth, this.health, "health", "Red"));
-  //     this.myButtons.push(new Button(this, this.theGame, this.upgradeAgility, this.agility, "agility", "Green"));
-  //     this.myButtons.push(new Button(this, this.theGame, this.upgradeDefense, this.defense, "defense", "Gray"));
-  //     this.myButtons.push(new Button(this, this.theGame, this.upgradeAttack, this.attack, "attack", "Yellow"));
-  //     this.myButtons.push(new Button(this, this.theGame, this.upgradeIntel, this.intelligence, "intelligence", "Blue"));
-  // };
-
   updateHealth() {
     if(this.health <= 0) {
       this.state = 0;
@@ -259,30 +251,30 @@ class Minion {
   //this.state is only the *representation* of the minion's state and thats all it CAN be.
 
   attackEnemy() {
-    if(this.target) {
-      this.target = null;
-      this.state = 3
-    }
-    if(this.target) {
+    if (this.target) {
+      this.state = 3;
       //we do still have a target to attack and it is alive.
       let ent = this.target;
-      if((ent.state != 0 || ent.health > 0 || ((ent instanceof Ogre || ent instanceof Dragon ) && !ent.removeFromWorld)) && reach(this, ent)) {
+      if (ent.state != 0 && ent.health > 0 && (ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon)
+        && !ent.removeFromWorld && reach(this, ent)) {
         //the target is alive and in range and we are ready to attack.
-        var damage = (this.attack + randomInt(this.attack)) - ent.defense
+        var damage = (this.attack + randomInt(this.attack)) - ent.defense;
         if(damage < 0) {
           damage = 0 //don't heal the target by dealing negitive damage!
         }
         ent.health -= damage; //don't heal the target by dealing negitive damage!
         this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "red"));
         return 1;
-      } else if ((ent.state != 0 || ent.health > 0 || ((ent instanceof Ogre || ent instanceof Dragon ) && !ent.removeFromWorld)) && !reach(this, ent)) {
+      } else if (ent.state != 0 && ent.health > 0 && (ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon)
+        && !ent.removeFromWorld && !reach(this, ent)) {
         return 3;
         //the target moved out of reach, so change to searching state.
       } else {
         //this should not EVER happen!
         return "attack_method entity_handling failure";
       }
-    } else if (!this.target || !(this.target.state != 0 || this.target.health < 0 || ((ent instanceof Ogre || ent instanceof Dragon ) && ent.removeFromWorld))){
+    } else if (!this.target || (((this.target.state == 0 || this.target.health <= 0)
+      && (ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon)) && ent.removeFromWorld)) {
       // the target has died (or broke)! find new target.
       this.target = null;
       return 4;
@@ -290,7 +282,7 @@ class Minion {
       //this should not EVER happen! this.target yet somehow not have valid stats.
       return "attack_method targeting failed";
     }
-  }
+  };
 
   gatherResources() {
     if(this.target) {
@@ -331,7 +323,7 @@ class Minion {
         //this should not EVER happen!
         return "gather_method entity_handling failure";
       }
-    } else if (!this.target || this.target.state == 0){
+    } else if (!this.target || this.target.state == 0) {
       // the target has died (or broke)! find new target.
       this.target = null;
       return 4;
@@ -339,7 +331,7 @@ class Minion {
       //this should not EVER happen! this.target yet somehow not have valid stats.
       return "gather_method targeting failed";
     }
-  }
+  };
 
   moveToTarget() {
     var that = this;
