@@ -126,6 +126,10 @@ class Minion {
 
     this.isSelected = (this.thePlayer.selected == this);
 
+    if (this.isSelected) {
+        this.theGame.currentMinion = this;
+    }
+
     //states are numbered by how "important" the state is,
     //so alive/dead is determined first, followed by "if attacking"
     //followed by "if gathering"...etc.
@@ -174,57 +178,52 @@ class Minion {
   // The next five methods upgrade___ returns 1 if successful, -1 otherwise.
   // Function for health upgrade button
   upgradeHealth(heal) {
-      var cost = -1;
-      if (this.thePlayer.myFood >= 15) {
-          this.thePlayer.myFood -= 15;
-          this.maxHealth += Math.floor(heal * 0.3);
-          cost = 1;
+      if (this.thePlayer.myFood >= 90) {
+          this.thePlayer.myFood -= 90;
+          this.maxHealth += heal;
+      } else {
+          this.theGame.theSM.thePlayer.myFoodColor = "orange";
       }
-      return cost;
   };
 
   // Function for agility upgrade button
   upgradeAgility(agile) {
-      var cost = -1;
-      if (this.thePlayer.myFood >= 10) {
-          this.thePlayer.myFood -= 10;
-          this.agility += Math.floor(agile * 0.3);
-          cost = 1;
+      if (this.thePlayer.myFood >= 90) {
+          this.thePlayer.myFood -= 90;
+          this.agility += agile;
+      } else {
+          this.theGame.theSM.thePlayer.myFoodColor = "orange";
       }
-      return cost;
   };
 
   // Function for defense upgrade button
   upgradeDefense(def) {
-      var cost = -1;
-      if (this.thePlayer.myFood >= 25) {
-          this.thePlayer.myFood -= 25;
-          this.defense += Math.floor(def * 0.2);
-          cost = 1;
+      if (this.thePlayer.myFood >= 90) {
+          this.thePlayer.myFood -= 90;
+          this.defense += def;
+      } else {
+          this.theGame.theSM.thePlayer.myFoodColor = "orange";
       }
-      return cost;
   };
 
   // Function for attack upgrade button
   upgradeAttack(att) {
-      var cost = -1;
-      if (this.thePlayer.myFood >= 25) {
-          this.thePlayer.myFood -= 25;
-          this.attack += Math.floor(att * 0.2);
-          cost = 1;
+      if (this.thePlayer.myFood >= 90) {
+          this.thePlayer.myFood -= 90;
+          this.attack += att;
+      } else {
+          this.theGame.theSM.thePlayer.myFoodColor = "orange";
       }
-      return cost;
   };
 
   // Function for intelligence upgrade button
   upgradeIntel(intel) {
-      var cost = -1;
-      if (this.thePlayer.myFood >= 10) {
-          this.thePlayer.myFood -= 10;
-          this.intelligence += Math.floor(intel * 0.3);
-          cost = 1;
+      if (this.thePlayer.myFood >= 90) {
+          this.thePlayer.myFood -= 90;
+          this.intelligence += intel;
+      } else {
+          this.theGame.theSM.thePlayer.myFoodColor = "orange";
       }
-      return cost;
   };
 
   // createButtons() {

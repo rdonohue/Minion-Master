@@ -135,8 +135,8 @@ class Player {
     ctx.fillText("BUILD MENU", params.CANVAS_WIDTH + 78, 82);
     ctx.strokeRect(params.CANVAS_WIDTH + 76, 66, 102, 20);
 
-    ctx.fillText("MINON UPGRADES", params.CANVAS_WIDTH + 78, 232);
-    ctx.strokeRect(params.CANVAS_WIDTH + 76, 218, 145, 20);
+    // ctx.fillText("MINON UPGRADES", params.CANVAS_WIDTH + 78, 232);
+    // ctx.strokeRect(params.CANVAS_WIDTH + 76, 218, 145, 20);
   }
 
   drawSelectedInfo(ctx) {

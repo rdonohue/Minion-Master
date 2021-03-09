@@ -18,6 +18,7 @@ class GameEngine {
       this.tickDuration = 0.1;
 
       this.notDead = true;
+      this.currentMinion = null;
   };
 
   init(ctx) {
