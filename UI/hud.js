@@ -24,7 +24,7 @@ class Hud {
   };
 
   drawMe(ctx) {
-    ctx.fillStyle = "Maroon";
+    ctx.fillStyle = "DodgerBlue";
     ctx.fillRect(this.x, this.y, this.w, 576);
     ctx.strokeStyle = "Black";
     ctx.strokeRect(this.x, this.y, this.w - 2, 576 - 1);
@@ -62,9 +62,9 @@ class Hud {
 
     new Button(that, that.theGame, this.upgradeMinion, "Health", "Health     90 Food", "Crimson");
     new Button(that, that.theGame, this.upgradeMinion, "Attack", "Attack     90 Food", "Yellow");
-    new Button(that, that.theGame, this.upgradeMinion, "Agility", "Agility     90 Food", "DodgerBlue");
-    new Button(that, that.theGame, this.upgradeMinion, "Defense", "Defense     90 Food", "Gray");
-    new Button(that, that.theGame, this.upgradeMinion, "Intel", "Intel        90 Food", "Green");
+    new Button(that, that.theGame, this.upgradeMinion, "Agility", "Agility     90 Food", "Aqua");
+    new Button(that, that.theGame, this.upgradeMinion, "Defense", "Defense     90 Food", "Black");
+    new Button(that, that.theGame, this.upgradeMinion, "Intel", "Intel        90 Food", "Chartreuse");
   };
 
   upgradeMinion(type) {

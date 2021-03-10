@@ -10,6 +10,10 @@ class HealthBar {
     //this.width = this.entity.baseWidth*this.entity.scale/2
   };
 
+  drawMinimap(ctx, mmX, mmY, mmW, mmH) {
+
+  };
+
   drawMe(ctx, stat, maxStat, type) {
     if (stat < maxStat || params.DEBUG || this.entity.isSelected) {
       var ratio = stat / maxStat;
@@ -60,6 +64,10 @@ class Score {
 
     this.y += this.theGame.clockTick * this.velocity;
     this.x += randomInt(3) - 1; //this makes the number move back and forth randomly.
+  };
+
+  drawMinimap(ctx, mmX, mmY, mmW, mmH) {
+
   };
 
   drawMe(ctx) {

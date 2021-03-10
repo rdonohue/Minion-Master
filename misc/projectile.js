@@ -31,7 +31,7 @@ class Projectile {
 
     drawMinimap(ctx, mmX, mmY, mmW, mmH) {
       //do nothing;
-    }
+    };
 
     drawAngle(ctx, angle) {
         if (angle < 0 || angle > 359) return;
