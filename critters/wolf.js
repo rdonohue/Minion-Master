@@ -178,7 +178,7 @@ class Wolf {
     }
 
     this.myHealthBar.updateMe();
-  }
+  };
 
   //yes this wolf AI is INCREDABLY over-engineered, this is to GURANTEE that minions will ALWAYS be
   //in some 'state' and so can be handled as such. note that this.state is NOT the actual state
@@ -217,7 +217,7 @@ class Wolf {
       //this should not EVER happen! this.target yet somehow not have valid stats.
       return "attack_method targeting failed";
     }
-  }
+  };
 
   moveToTarget() {
     var that = this;
@@ -259,7 +259,7 @@ class Wolf {
       this.target = null;
       return 4;
     }
-  }
+  };
 
   findNewTarget() {
     //first look around for enemys
@@ -342,7 +342,7 @@ class Wolf {
       this.target = null;
       return 4;
     }
-  }
+  };
 
   idle() {
     //idle, wait till elapsedTime surpasses randomly decided wait-time.
@@ -365,16 +365,16 @@ class Wolf {
     //   this.waitTill = 0;
     //   this.state = 3; //we have waited long enough.
     // }
-  }
+  };
 
   drawMinimap(ctx, mmX, mmY, mmW, mmH) {
     let x = mmX + (this.center.x)*(mmW/params.PLAY_WIDTH);
     let y = mmY + (this.center.y)*(mmH/params.PLAY_HEIGHT);
     ctx.save();
-    ctx.strokeStyle = "brown";
-    ctx.strokeRect(x, y, 1, 1);
+    ctx.fillStyle = "Brown";
+    ctx.fillRect(x, y, 5, 5);
     ctx.restore();
-  }
+  };
 
   //this wolf has eaten enough to grow a little and also recover fully
   //since it just ate.
@@ -407,7 +407,7 @@ class Wolf {
       this.attackRange = this.radius*1.2; //give it a little extra range.
       this.visualRadius = 50 + 25 * this.intelligence;
     }
-  }
+  };
 
   drawMe(ctx) {
     if (this.facing == 0) {
@@ -485,9 +485,7 @@ class Wolf {
     }
     this.myHealthBar.drawMe(ctx, this.health, this.maxHealth, "health");
     ctx.restore();
-
-
-  }
+  };
 
   // Load the animations for this entity.
   loadAnimations() {
@@ -535,7 +533,7 @@ class Wolf {
       }
       console.log(string);
     }
-  }
+  };
 
   checkHistory() {
     let printTime = this.theGame.timer.lastTimestamp;
@@ -545,7 +543,7 @@ class Wolf {
       this.waitTill = 0;
       this.amIStuck();
     }
-  }
+  };
 
   tryToFixSelf() {
     this.target = null;
@@ -553,7 +551,7 @@ class Wolf {
     if(params.DEBUG) {
       this.printHistory();
     }
-  }
+  };
 
   amIStuck() {
     //later I will make this method check this minion if its stuck.
@@ -561,7 +559,7 @@ class Wolf {
     if(this.isSelected && params.DEBUG) {
       this.printHistory();
     }
-  }
+  };
 
   //this function puts together information on this entity's current state.
   //could also be used for player.js's selection-info printing but don't bother refactoring it.
@@ -578,6 +576,7 @@ class Wolf {
       tY: 0,
       tHealth: 0
     }
+
     if(that.target && that.target.myType) {
       entry.target = that.target.myType;
       entry.tX = Math.round(that.target.center.x);
@@ -590,5 +589,5 @@ class Wolf {
     }
 
     return entry;
-  }
+  };
 };

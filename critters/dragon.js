@@ -172,7 +172,12 @@ class Dragon {
     };
 
     drawMinimap(ctx, mmX, mmY) {
-
+      let x = mmX + (this.center.x)*(mmW/params.PLAY_WIDTH);
+      let y = mmY + (this.center.y)*(mmH/params.PLAY_HEIGHT);
+      ctx.save();
+      ctx.fillStyle = "Red";
+      ctx.fillRect(x, y, 15, 15);
+      ctx.restore();
     };
 
     drawMe(ctx) {

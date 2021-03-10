@@ -1,7 +1,6 @@
 class SceneManager {
-
   constructor(theGame) {
-      this.theGame = theGame;
+      Object.assign(this, { theGame });
       this.theGame.theSM = this;
       this.theGame.theCamera = this;
 
@@ -45,11 +44,11 @@ class SceneManager {
     this.theGame.addElement(vertwalls);
     this.theGame.addElement(horiwalls);
     this.theGame.addElement(intGrass);
-  }
+  };
 
   startGame() {
     this.populateLevel();
-  }
+  };
 
   populateLevel() {
     let castleX = params.PLAY_WIDTH/2 - 150 + randomInt(150);
@@ -62,14 +61,13 @@ class SceneManager {
 
     this.resources = new Resources(this.theGame, 8, 8, 3);
 
-    this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
-    // this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
-    // this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
+    //this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
+
     this.theGame.spawnMe("wolf", 550, 550);
     this.theGame.spawnMe("wolf", 1000, 1200);
     //this.theGame.spawnMe("cave", 250, 250);
     this.theGame.spawnMe("cave", 1050, 250);
-  }
+  };
 
   update() {
     params.DEBUG = document.getElementById("debug").checked;
@@ -158,7 +156,7 @@ class SceneManager {
       this.y = params.PLAY_HEIGHT - params.CANVAS_HEIGHT + mapBorder;
       this.moveDown = this.baseCamSpeed;
     }
-  }
+  };
 
   drawCamera(ctx, mmX, mmY, mmW, mmH) {
     //leftEdgeOfMapOnMiniMap = mmX;
@@ -173,7 +171,7 @@ class SceneManager {
     ctx.strokeStyle = "white";
     ctx.strokeRect(leftside, topside, rightside - leftside, bottomside - topside);
     ctx.restore();
-  }
+  };
 
   draw(ctx) {
     if (this.title) {

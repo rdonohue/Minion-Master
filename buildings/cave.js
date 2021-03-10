@@ -77,8 +77,8 @@ class Cave {
       let x = mmX + (this.center.x)*(mmW/params.PLAY_WIDTH);
       let y = mmY + (this.center.y)*(mmH/params.PLAY_HEIGHT);
       ctx.save();
-      ctx.strokeStyle = "brown";
-      ctx.strokeRect(x, y, 1, 1);
+      ctx.fillStyle = "black";
+      ctx.fillRect(x, y, 10, 10);
       ctx.restore();
     }
 

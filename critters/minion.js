@@ -71,7 +71,7 @@ class Minion {
     this.center = {
       x: this.x + this.baseWidth*this.scale/2,
       y: this.y + this.baseHeight*this.scale/2
-    }
+    };
     this.visualRadius = 100 + this.intelligence*25;
     this.reachRadius = this.radius*1.2;
     this.isSelected = false;
@@ -105,8 +105,6 @@ class Minion {
     this.atkValid = false;
     this.intValid = false;
 
-    // this.myButtons = [];
-    // this.createButtons();
   };
 
   //the move-speed is still staggered a bit, that might be because of async
@@ -161,9 +159,7 @@ class Minion {
         } else {
           this.tryToFixSelf(); //invalid state!
         }
-
       }
-
       this.maxListLength = 25;
       addHistoryEntry(this, this.makeStateEntry(this), this.maxListLength, this.delta, this.isBorked);
       this.checkHistory();
@@ -375,7 +371,7 @@ class Minion {
       this.target = null;
       return 4;
     }
-  }
+  };
 
   findNewTarget() {
     //first look around for enemys
@@ -484,7 +480,7 @@ class Minion {
       this.target = null;
       return "failed to find target";
     }
-  }
+  };
 
   drawMe(ctx) {
     this.ctx = ctx;
@@ -631,11 +627,11 @@ class Minion {
   };
 
   drawMinimap(ctx, mmX, mmY, mmW, mmH) {
-    let x = mmX + (this.center.x)*(mmW/params.PLAY_WIDTH);
-    let y = mmY + (this.center.y)*(mmH/params.PLAY_HEIGHT);
+    let x = mmX + (this.x)*(mmW/params.PLAY_WIDTH);
+    let y = mmY + (this.y)*(mmH/params.PLAY_HEIGHT);
     ctx.save();
-    ctx.strokeStyle = "orange";
-    ctx.strokeRect(x, y, 1, 1);
+    ctx.fillStyle = "Orange";
+    ctx.fillRect(x, y, 2.5, 2.5);
     ctx.restore();
   };
 
@@ -658,7 +654,7 @@ class Minion {
       }
       console.log(string);
     }
-  }
+  };
 
   checkHistory() {
     let printTime = this.theGame.timer.lastTimestamp;
@@ -668,7 +664,7 @@ class Minion {
       this.waitTill = 0;
       this.amIStuck();
     }
-  }
+  };
 
   tryToFixSelf() {
     this.target = null;
@@ -676,7 +672,7 @@ class Minion {
     if(params.DEBUG) {
       //console.log("minion at: {" + this.center.x + "," + this.center.y + "} self fixing, changed to: " + this.state + " and targeting: "+ this.target.x + ", " + this.target.y);
     }
-  }
+  };
 
   amIStuck() {
     //later I will make this method check this minion if its stuck.
@@ -684,7 +680,7 @@ class Minion {
     if(this.isSelected && params.DEBUG) {
       this.printHistory();
     }
-  }
+  };
 
   //this function puts together information on this entity's current state.
   //could also be used for player.js's selection-info printing but don't bother refactoring it.
@@ -713,5 +709,5 @@ class Minion {
     }
 
     return entry;
-  }
+  };
 };

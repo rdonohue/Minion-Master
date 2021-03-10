@@ -72,10 +72,8 @@ class HomeBase {
     let x = mmX + (this.center.x)*(mmW/params.PLAY_WIDTH);
     let y = mmY + (this.center.y)*(mmH/params.PLAY_HEIGHT);
     ctx.save();
-    ctx.strokeStyle = "grey";
-    ctx.strokeRect(x-1, y-1, 3, 3);
-    ctx.strokeStyle = "yellow";
-    ctx.strokeRect(x, y, 1, 1);
+    ctx.fillStyle = "grey";
+    ctx.fillRect(x-12.5, y-12.5, 25, 25);
     ctx.restore();
   }
 }

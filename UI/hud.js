@@ -24,7 +24,7 @@ class Hud {
   };
 
   drawMe(ctx) {
-    ctx.fillStyle = "SaddleBrown";
+    ctx.fillStyle = "Maroon";
     ctx.fillRect(this.x, this.y, this.w, 576);
     ctx.strokeStyle = "Black";
     ctx.strokeRect(this.x, this.y, this.w - 2, 576 - 1);

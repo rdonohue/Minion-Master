@@ -83,8 +83,8 @@ class Bush {
     let x = mmX + (this.center.x)*(mmW/params.PLAY_WIDTH);
     let y = mmY + (this.center.y)*(mmH/params.PLAY_HEIGHT);
     ctx.save();
-    ctx.strokeStyle = "pink";
-    ctx.strokeRect(x, y, 1, 1);
+    ctx.fillStyle = "Magenta";
+    ctx.fillRect(x, y, 2.5, 2.5);
     ctx.restore();
   }
 

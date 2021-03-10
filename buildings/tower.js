@@ -125,8 +125,8 @@ class Tower {
     let x = mmX + (this.center.x)*(mmW/params.PLAY_WIDTH);
     let y = mmY + (this.center.y)*(mmH/params.PLAY_HEIGHT);
     ctx.save();
-    ctx.strokeStyle = "grey";
-    ctx.strokeRect(x, y, 1, 1);
+    ctx.fillStyle = "White";
+    ctx.fillRect(x, y, 7.5, 7.5);
     ctx.restore();
   }
 
