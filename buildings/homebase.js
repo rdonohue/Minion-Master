@@ -17,6 +17,8 @@ class HomeBase {
       this.maxHealth = 200;
       this.health = 200;
       this.defense = 13;
+      this.attack = 0;
+      this.projectileScale = 1;
 
       this.baseWidth = this.castleAnim.width;
       this.baseHeight = this.castleAnim.height;
@@ -31,11 +33,13 @@ class HomeBase {
       this.loadAnimations();
       this.isSelected = false;
       this.myHealthBar = new HealthBar(this.theGame, this);
+      this.offense = false;
+      this.agility = 1;
   };
 
   loadAnimations() {
       this.animations[0] = new Animator(this.spritesheet, 0, 0, this.baseWidth, this.baseHeight, 1, 1, 0, false, true);
-  }
+  };
 
   updateMe() {
     if (this.health <= 0) {
@@ -49,7 +53,28 @@ class HomeBase {
       x: this.x + this.baseWidth*this.scale/2,
       y: this.y + this.baseHeight*this.scale/2
     }
+
+    for (var i = 0; i < this.theGame.entities.length; i++) {
+        var ent = this.theGame.entities[i];
+        if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon) &&
+              canSee(this, ent) && this.elapsedTime > 1 / this.agility && this.offense) {
+            this.elapsedTime = 0;
+            this.theGame.addEntity(new Projectile(this.theGame, this.x, this.y, ent, this.attack, this.projectileScale));
+        }
+    }
     // add more code here later about speed and physics
+  };
+
+  upgrade() {
+      this.maxHealth *= 2;
+      this.health = this.maxHealth;
+      this.defense *= 2;
+      this.attack = 50;
+      if (!this.offense) {
+        this.offense = true;
+      } else {
+        this.agility++;
+      }
   };
 
   drawMe(ctx) {
@@ -75,5 +100,5 @@ class HomeBase {
     ctx.fillStyle = "grey";
     ctx.fillRect(x-12.5, y-12.5, 25, 25);
     ctx.restore();
-  }
-}
+  };
+};
