@@ -11,7 +11,7 @@ class Projectile {
         var dist = distance(this, this.target);
         this.maxSpeed = 400; // pixels per second
 
-        this.velocity = { x: (this.target.x - this.x) / dist * this.maxSpeed, y: (this.target.y - this.y) / dist * this.maxSpeed };
+        this.velocity = { x: (this.target.center.x - this.x) / dist * this.maxSpeed, y: (this.target.center.y - this.y) / dist * this.maxSpeed };
         this.cache = [];
 
         this.animations = [];

@@ -31,8 +31,10 @@ class SceneManager {
       ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item_2.mp3");
       // this.populateLevel();
 
-      this.caveTimer = 0;
-      this.dragonTimer = 0;
+      this.caveTimer = -15; //give player extra 15 seconds
+      this.dragonTimer = -30; //give player extra 30 seconds
+      this.dragonSpawnRate = 90;
+      this.caveSpawnRate = 30
 
       this.start = false;
   };
@@ -59,6 +61,10 @@ class SceneManager {
       this.victory = false;
       this.theGame.clearEntities();
       this.thePlayer = new Player(this.theGame, 200, 200, 3, 2, 0, 0);
+      this.caveTimer = -15; //give player extra 15 seconds
+      this.dragonTimer = -30; //give player extra 30 seconds
+      this.dragonSpawnRate = 90;
+      this.caveSpawnRate = 30
       this.endMusic = true;
       this.populateLevel();
     }
@@ -76,15 +82,14 @@ class SceneManager {
 
     this.resources = new Resources(this.theGame, 8, 8, 3);
 
-    //this.theGame.spawnMe("minion", castleX + 80, castleY + 160);
-
     this.theGame.spawnMe("wolf", 550, 550);
     this.theGame.spawnMe("wolf", 1000, 1200);
-    //this.theGame.spawnMe("cave", 250, 250);
-    this.theGame.spawnMe("cave", 1050, 250);
   };
 
   update() {
+    if(params.DEBUG) {
+      console.log(Math.round(this.dragonTimer) + ", " + Math.round(this.caveTimer));
+    }
     params.DEBUG = document.getElementById("debug").checked;
     if (this.title && this.theGame.click) {
       if (this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350) {
@@ -101,22 +106,23 @@ class SceneManager {
       this.updateCamera();
     }
 
-    if(this.caveTimer >= 1000) {
+    if(this.caveTimer >= this.caveSpawnRate) {
       this.theGame.spawnMe("cave", 150 + randomInt(150), 300);
       this.caveTimer = 0;
       //spawn cave every 30 second's
-    } else {
-      this.caveTimer += this.theGame.clockTick;
     }
+    this.caveTimer += this.theGame.clockTick;
 
-    // Every 2 minutes, a dragon will spawn.
-    if (this.dragonTimer >= 0) {
-      this.theGame.spawnMe("dragon", params.PLAY_WIDTH - 150 - randomInt(150), 300);
-      this.dragonTimer = -1;
-      //spawn dragon at 2 minutes
-    } else if (this.dragonTimer != -1) {
-      this.dragonTimer += this.theGame.clockTick;
+    // Every 2 minutes, a dragon will spawn if not already present.
+    if(!this.theGame.entities.find(entity => entity.myType == "dragon")) {
+      if (this.dragonTimer >= this.dragonSpawnRate) {
+        this.theGame.spawnMe("dragon", params.PLAY_WIDTH - 150 - randomInt(150), 300);
+        this.dragonTimer = 0
+      }
+    } else {
+      this.dragonTimer = 0;
     }
+    this.dragonTimer += this.theGame.clockTick;
 
     if(this.theGame.theBase && this.theGame.theBase.health <= 0) {
       this.theGame.notDead = false;
