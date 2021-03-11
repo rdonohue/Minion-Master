@@ -18,10 +18,7 @@ class Ogre {
 
         this.myHealthBar = new HealthBar(this.theGame, this);
 
-        this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+        this.path = [{ x: randomInt(params.PLAY_WIDTH), y: randomInt(params.PLAY_HEIGHT) }];
 
         this.targetID = 0;
         if (this.path && this.path[0]) {
@@ -55,7 +52,6 @@ class Ogre {
         //this gives how long this minion will wait before moving.
         //note that its the inverse of the given speed stat.
         // this.currentAnim = this.animations[this.state];
-        this.radius = 20;
 
         this.center = {
           x: this.x + this.radius*0.8,
@@ -81,10 +77,7 @@ class Ogre {
 
       if (this.targetID >= this.path.length - 1) {
           this.targetID = 0;
-          this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-            { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-            { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-            { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+          this.path = [{ x: randomInt(params.PLAY_WIDTH), y: randomInt(params.PLAY_HEIGHT) }];
       }
 
       if (this.health <= 0) {

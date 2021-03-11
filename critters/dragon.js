@@ -34,10 +34,7 @@ class Dragon {
 
         this.healthbar = new HealthBar(this.theGame, this);
 
-        this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-          { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+        this.path = [{ x: randomInt(params.PLAY_WIDTH), y: randomInt(params.PLAY_HEIGHT) }];
 
         this.targetID = 0;
         if (this.path && this.path[0]) {
@@ -101,10 +98,7 @@ class Dragon {
 
       if (this.targetID >= this.path.length - 1) {
           this.targetID = 0;
-          this.path = [{ x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-            { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-            { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) },
-            { x: randomInt(params.CANVAS_WIDTH), y: randomInt(params.CANVAS_HEIGHT) }];
+          this.path = [{ x: randomInt(params.PLAY_WIDTH), y: randomInt(params.PLAY_HEIGHT) }];
       }
 
       this.isSelected = (this.theGame.theSM.thePlayer.selected == this);
