@@ -66,6 +66,8 @@ class SceneManager {
       this.dragonSpawnRate = 90;
       this.caveSpawnRate = 30
       this.endMusic = true;
+      this.score = 0;
+      this.gameover = false;
       this.populateLevel();
     }
 
