@@ -26,6 +26,13 @@ class GameEngine {
       this.defaultAttack = minionStats.ATTACK;
       this.defaultAgi = minionStats.AGILITY;
       this.defaultIntel = minionStats.INTELLIGENCE+1;
+
+      this.towerHealth = 150;
+      this.towerAttack = 35;
+      this.towerDefense = 3;
+      this.towerProjectile = 1;
+      this.towerAgility = 1;
+      this.towerVisual = 300;
   };
 
   init(ctx) {

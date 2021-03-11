@@ -16,7 +16,7 @@ class HomeBase {
       //Stats
       this.maxHealth = 200;
       this.health = 200;
-      this.defense = 13;
+      this.defense = 12;
       this.attack = 0;
       this.projectileScale = 1;
 
@@ -44,7 +44,7 @@ class HomeBase {
   updateMe() {
     if (this.health <= 0) {
       this.theGame.theSM.notDead = false;
-        this.state = -1;
+      this.state = -1;
     }
 
     this.isSelected = (this.thePlayer.selected == this);
