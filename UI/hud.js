@@ -144,8 +144,8 @@ class Hud {
         this.theGame.spentRock += 90;
         if (type == "Defense") {
           this.theGame.towerDefense++;
-          this.theGame.towerHealth += this.theGame.towerHealth * (50 * 0.2);
-          this.theGame.towerVisual += this.theGame.towerVisual * (0.5 / 50);
+          this.theGame.towerHealth += (50 * 0.5);
+          this.theGame.towerVisual += (0.5 / 50);
         } else {
           this.theGame.towerAttack += 15;
           this.theGame.towerProjectile += 0.5;
