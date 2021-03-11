@@ -178,7 +178,7 @@ class Hud {
         this.theGame.theSM.thePlayer.myRock -= 500;
         this.theGame.spentRock += 500;
         this.theGame.theBase.maxHealth *= 2;
-        this.theGame.theBase.health.upgrade();
+        this.theGame.theBase.upgrade();
     } else {
         this.theGame.theSM.thePlayer.myRockColor = "orange";
     }
