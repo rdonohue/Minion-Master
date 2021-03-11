@@ -72,7 +72,7 @@ class Wolf {
 
       this.myType = "WOLF";
       this.myFaction = "enemy";
-      this.description = "don't let them eat your minions!";
+      this.description = "Don't let them eat your minions!";
 
       this.timer = new Timer();
       this.timeSinceUpdate = 0;

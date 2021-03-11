@@ -82,16 +82,16 @@ class Dragon {
         }
 
         // Idle/Moving
-        this.animations[0].push(new Animator(this.leftSheet, 34, 4, 155, 120, 4, 0.2, 50, false, true));
-        this.animations[0].push(new Animator(this.rightSheet, 14, 4, 155, 121, 4, 0.2, 50, false, true));
-        this.animations[0].push(new Animator(this.upSheet, 7, 22, 191, 131, 4, 0.2, 14, false, true));
-        this.animations[0].push(new Animator(this.downSheet, 7, 26, 195, 109, 4, 0.2, 10, false, true));
+        this.animations[0].push(new Animator(this.leftSheet, 34, 4, 155, 120, 4, 0.4, 50, false, true));
+        this.animations[0].push(new Animator(this.rightSheet, 14, 4, 155, 121, 4, 0.4, 50, false, true));
+        this.animations[0].push(new Animator(this.upSheet, 7, 22, 191, 131, 4, 0.4, 14, false, true));
+        this.animations[0].push(new Animator(this.downSheet, 7, 26, 195, 109, 4, 0.4, 10, false, true));
 
         // Attack
-        this.animations[1].push(new Animator(this.leftSheet, 34, 524, 155, 92, 4, 0.2, 50, false, true));
-        this.animations[1].push(new Animator(this.rightSheet, 15, 524, 155, 92, 4, 0.2, 50, false, true));
-        this.animations[1].push(new Animator(this.upSheet, 7, 500, 191, 131, 4, 0.2, 14, false, true));
-        this.animations[1].push(new Animator(this.downSheet, 7, 509, 186, 117, 4, 0.2, 21, false, true));
+        this.animations[1].push(new Animator(this.leftSheet, 34, 524, 155, 92, 4, 0.4, 50, false, true));
+        this.animations[1].push(new Animator(this.rightSheet, 15, 524, 155, 92, 4, 0.4, 50, false, true));
+        this.animations[1].push(new Animator(this.upSheet, 7, 500, 191, 131, 4, 0.4, 14, false, true));
+        this.animations[1].push(new Animator(this.downSheet, 7, 509, 186, 117, 4, 0.4, 21, false, true));
 
     };
 

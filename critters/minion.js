@@ -79,7 +79,7 @@ class Minion {
     //i,j for cell, x,y for continuous position.
     this.myType = "MINION";
     this.myFaction = "friendly";
-    this.description = "your loyal servent";
+    this.description = "Your loyal servant";
 
     this.timer = new Timer();
     this.timeSinceUpdate = 0;

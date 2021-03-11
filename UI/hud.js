@@ -88,7 +88,7 @@ class Hud {
                this.theGame.currentMinion.upgradeAgility(15);
                break;
             case "Intel":
-               this.theGame.currentMinion.upgradeIntel(10);
+               this.theGame.currentMinion.upgradeIntel(1);
                break;
           }
       }

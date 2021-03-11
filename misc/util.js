@@ -117,7 +117,7 @@ function getFacing(velocity) {
 //returns the latest entry in history after "simplifying" history.
 function addHistoryEntry(entity, entry, maxLength, delta, isBorked) {
   if((maxLength <= 0) || (!entity) || (!entry)) {
-    console.log("diden't call history right");
+    console.log("didn't call history correctly");
     return;
   } else if (!entity.stateHistory) {
     entity.stateHistory = [];
