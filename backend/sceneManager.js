@@ -60,6 +60,8 @@ class SceneManager {
       this.theGame.clearEntities();
       this.thePlayer = new Player(this.theGame, 200, 200, 3, 2, 0, 0);
       this.endMusic = true;
+      this.score = 0;
+      this.gameover = false;
       this.populateLevel();
     }
 
