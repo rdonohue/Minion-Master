@@ -128,14 +128,29 @@ class Player {
     ctx.fillText(("Food: " + Math.round(this.myFood)), 1100 + params.TILE_W_H/4, params.TILE_W_H/4 + 24);
     ctx.fillStyle = this.myRockColor;
     ctx.fillText(("Rock: " + Math.round(this.myRock)), 1100 + params.TILE_W_H/4, params.TILE_W_H/4*2 + 24);
-    // ctx.fillText(("Selected: " + this.targetType), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*3);
+
+    ctx.fillText("100 Rock", 1200, 110);
+    ctx.fillText("50 Food", 1200, 138);
+    ctx.fillText("1000 Food", 1195, 165)
 
     ctx.fillText("BUILD MENU", params.CANVAS_WIDTH + 78, 82);
     ctx.strokeRect(params.CANVAS_WIDTH + 76, 66, 102, 20);
+    ctx.fillText("MINION STATS", params.CANVAS_WIDTH + 78, 195);
+    ctx.strokeRect(params.CANVAS_WIDTH + 76, 180, 115, 20);
+    ctx.fillText("HOME BASE", params.CANVAS_WIDTH + 78, 355);
+    ctx.strokeRect(params.CANVAS_WIDTH + 76, 340, 95, 20);
+    ctx.fillText("TOWER STATS", params.CANVAS_WIDTH + 78, 439);
+    ctx.strokeRect(params.CANVAS_WIDTH + 76, 424, 110, 20);
 
-    // ctx.fillText("MINON UPGRADES", params.CANVAS_WIDTH + 78, 232);
-    // ctx.strokeRect(params.CANVAS_WIDTH + 76, 218, 145, 20);
-  }
+    for (var i = 0; i < 5; i++) {
+        ctx.fillText("90 Food", 1200, 220 + (27 * i));
+    }
+
+    ctx.fillText("100 Rock", 1200, 382);
+    ctx.fillText("500 Rock", 1200, 409);
+    ctx.fillText("90 Rock", 1200, 462);
+    ctx.fillText("90 Rock", 1200, 489);
+  };
 
   drawSelectedInfo(ctx) {
     //Bottom Left HUD

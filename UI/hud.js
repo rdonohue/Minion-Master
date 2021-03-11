@@ -55,7 +55,7 @@ class Hud {
 
   createButtons() {
     var that = this;
-    new Button(that, that.theGame, that.spawnMinion, [that.minionCost], " Minion     50 Food", "white");
+    new Button(that, that.theGame, that.spawnMinion, [that.minionCost], " Minion", "white");
 
     new Button(
       that, that.theGame,
@@ -68,20 +68,20 @@ class Hud {
 
       },
       null,
-      "Victory    1000 Food", "white"
+      "Victory", "white"
     );
 
-    new Button(that, that.theGame, this.upgradeMinion, "Health", "Health     90 Food", "Crimson");
-    new Button(that, that.theGame, this.upgradeMinion, "Attack", "Attack     90 Food", "Yellow");
-    new Button(that, that.theGame, this.upgradeMinion, "Agility", "Agility     90 Food", "Aqua");
-    new Button(that, that.theGame, this.upgradeMinion, "Defense", "Defense     90 Food", "Black");
-    new Button(that, that.theGame, this.upgradeMinion, "Intelligence", "Intel        90 Food", "Chartreuse");
+    new Button(that, that.theGame, this.upgradeMinion, "Health", "Health", "Crimson"); // 90 Food
+    new Button(that, that.theGame, this.upgradeMinion, "Attack", "Attack", "Yellow"); // 90 Food
+    new Button(that, that.theGame, this.upgradeMinion, "Agility", "Agility", "Aqua"); // 90 Food
+    new Button(that, that.theGame, this.upgradeMinion, "Defense", "Defense", "Black"); // 90 Food
+    new Button(that, that.theGame, this.upgradeMinion, "Intelligence", "Intel", "Chartreuse"); // 90 Food
 
-    new Button(that, that.theGame, this.assistBase, 100, "Repair        100 Rock", "White");
-    new Button(that, that.theGame, this.upgradeBase, null, "BaseUp        500 Rock", "Gold");
+    new Button(that, that.theGame, this.assistBase, 100, "Repair", "White"); // 100 Rock
+    new Button(that, that.theGame, this.upgradeBase, null, "BaseUp", "Gold"); // 500 Rock
 
-    new Button(that, that.theGame, this.upgradeTower, "Defense", "Harden        90 Rock", "White");
-    new Button(that, that.theGame, this.upgradeTower, "Offense", "Offense        90 Rock", "White");
+    new Button(that, that.theGame, this.upgradeTower, "Defense", "Harden", "White"); // 90 Rock
+    new Button(that, that.theGame, this.upgradeTower, "Offense", "Offense", "White"); // 90 Rock
   };
 
   // Upgrade minion method for the game. Will upgrade certain stat based on the option selected.
