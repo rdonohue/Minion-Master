@@ -10,7 +10,6 @@ class Tower {
       this.state = 1;  // 1 = idle, 0 = destroyed
       this.upgradeAmount = 1; // 1 being the initial spawned upgrade state of a tower.
 
-      this.healthbar = new HealthBar(this.theGame, this);
 
       //Stats
       this.health = this.theGame.towerHealth;
@@ -33,6 +32,7 @@ class Tower {
 
       this.theCamera = this.theGame.theSM;
       this.thePlayer = this.theCamera.thePlayer;
+      this.myHealthBar = new HealthBar(this.theGame, this);
   };
 
   updateMe() {
@@ -42,16 +42,24 @@ class Tower {
         if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon) &&
               canSee(this, ent) && this.elapsedTime > 1 / this.agility) {
             this.elapsedTime = 0;
-            this.theGame.addEntity(new Projectile(this.theGame, this.x, this.y, ent, this.attack, this.projectileScale));
+            this.theGame.addEntity(new Projectile(this.theGame, this.x, this.y, ent, Math.floor(this.attack/2 + randomInt(this.attack)), this.projectileScale));
         }
     }
 
     if (this.health <= 0) {
       this.state = 0;
-      this.theGame.towerCount--;
+      if (!this.theGame.victory && !this.theGame.theSM.paused && this.theGame.notDead) this.theGame.deadTowers++;
     }
+    //Stats
+    this.health = this.theGame.towerHealth;
+    this.maxHealth = this.theGame.towerHealth;
+    this.defense = this.theGame.towerDefense;
+    this.attack = this.theGame.towerAttack;
+    this.projectileScale = this.theGame.towerProjectile;
+    this.visualRadius = this.theGame.towerVisual;
 
     this.isSelected = (this.thePlayer.selected == this);
+    this.myHealthBar.updateMe();
   };
 
 

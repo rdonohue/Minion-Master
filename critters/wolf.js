@@ -72,7 +72,7 @@ class Wolf {
 
       this.myType = "WOLF";
       this.myFaction = "enemy";
-      this.description = "don't let them eat your minions!";
+      this.description = "Don't let them eat your minions!";
 
       this.timer = new Timer();
       this.timeSinceUpdate = 0;
@@ -163,6 +163,7 @@ class Wolf {
   updateHealth() {
     if(this.health <= 0) {
       this.state = 0;
+      if (!this.theGame.victory && !this.theGame.theSM.paused && this.theGame.notDead)this.theGame.deadWolves++;
     } else {
       //at the end of each wolf's "turn", it heals depending on how much it went through.
       //wandering heals most for example

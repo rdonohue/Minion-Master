@@ -54,8 +54,9 @@ class Minion {
     this.defense = 1;
     this.attack = this.theGame.defaultAttack;
     this.gatherRate = 2
+
     this.agility = this.theGame.defaultAgi;
-    this.intelligence = this.theGame.defaultIntel+1;
+    this.intelligence = this.theGame.defaultIntel;
 
     this.maxSpeed = this.agility*50;
     this.actionSpeed = 3/this.agility
@@ -79,7 +80,7 @@ class Minion {
     //i,j for cell, x,y for continuous position.
     this.myType = "MINION";
     this.myFaction = "friendly";
-    this.description = "your loyal servent";
+    this.description = "Your loyal servant";
 
     this.timer = new Timer();
     this.timeSinceUpdate = 0;
@@ -176,7 +177,6 @@ class Minion {
   // Function for agility upgrade button
   upgradeAgility(agile) {
       this.agility += agile;
-
   };
 
   // Function for defense upgrade button
@@ -197,6 +197,7 @@ class Minion {
   updateHealth() {
     if(this.health <= 0) {
       this.state = 0;
+      this.theGame.deadMinions++;
     } else {
       //at the end of each wolf's "turn", it heals depending on how much it went through.
       //wandering heals most for example
@@ -258,18 +259,20 @@ class Minion {
       let ent = this.target;
       if((ent.state != 0 || ent.health > 0) && reach(this, ent)) {
         //the target is alive and in range and we are ready to attack.
-        var gather = (this.gatherRate + randomInt(this.gatherRate))
+        var gather = (this.gatherRate + randomInt(this.intelligence))
         if(ent.health - gather < 0) {
           gather = ent.health; //don't let the minion's create resources from nothing!
         }
-        if(gather > 0) {
+        if(gather > 0 && (!this.theGame.victory && !this.theGame.theSM.paused && this.theGame.notDead)) {
           if(ent instanceof Rock) {
             ent.health -= gather; //don't heal the target by dealing negitive gather!
             this.thePlayer.myRock += gather;
+            this.theGame.totalRock += gather;
           } else if (ent instanceof Bush) {
             if(this.intelligence <= 1 || ent.health/ent.maxHealth > 0.1) { //make smarter minions not kill the food!
               ent.health -= gather; //don't heal the target by dealing negitive gather!
               this.thePlayer.myFood += gather;
+              this.theGame.totalFood += gather;
             } else if (ent.health/ent.maxHealth < 0.1 && this.intelligence > 1) {
               this.target = null;
               return 3; // the berries are low on food.

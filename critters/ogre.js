@@ -48,7 +48,7 @@ class Ogre {
         //i,j for cell, x,y for continuous position.
         this.myType = "OGRE";
         this.myFaction = "enemy";
-        this.description = "don't let them destory your base!"
+        this.description = "Don't let them destroy your base!"
 
         // Object.assign(this, this.name);
         this.timeBetweenUpdates = 1/this.agility;
@@ -91,6 +91,7 @@ class Ogre {
           this.state = 2;
           this.dead = true;
           this.removeFromWorld = true;
+          if (!this.theGame.victory && !this.theGame.theSM.paused && this.theGame.notDead) this.theGame.deadOgres++;
       }
 
       if (dist < 5) {
@@ -112,7 +113,7 @@ class Ogre {
                 this.state = 1;
                 this.elapsedTime = 0;
             } else if (this.elapsedTime > 0.8) {
-                var damage = (this.attack + randomInt(5)) - ent.defense;
+                var damage = (this.attack + randomInt(this.attack)) - ent.defense;
                 if (damage <= 0) {
                     damage = 0;
                 }

@@ -89,6 +89,7 @@ class Hud {
   upgradeMinion(type) {
     if (this.theGame.theSM.thePlayer.myFood >= 90) {
       this.theGame.theSM.thePlayer.myFood -= 90;
+      this.theGame.spentFood += 90;
       for (var i = 0; i < this.theGame.entities.length; i++) {
           let ent = this.theGame.entities[i];
           if (ent instanceof Minion) {
@@ -140,17 +141,7 @@ class Hud {
   upgradeTower(type) {
      if (this.theGame.theSM.thePlayer.myRock >= 90 && this.theGame.towerCount > 0) {
         this.theGame.theSM.thePlayer.myRock -= 90;
-        for (var i = 0; i < this.theGame.entities.length; i++) {
-           let ent = this.theGame.entities[i];
-           if (ent instanceof Tower) {
-              if (type == "Defense") {
-                  ent.upgradeDefense(50);
-              } else {
-                 ent.upgradeOffense(15);
-              }
-           }
-        }
-
+        this.theGame.spentRock += 90;
         if (type == "Defense") {
           this.theGame.towerDefense++;
           this.theGame.towerHealth += this.theGame.towerHealth * (50 * 0.2);
@@ -169,6 +160,7 @@ class Hud {
   assistBase(cost) {
     if (this.theGame.theSM.thePlayer.myRock >= cost && this.theGame.theBase.health < this.theGame.theBase.maxHealth) {
         this.theGame.theSM.thePlayer.myRock -= cost;
+        this.theGame.spentRock += cost;
         let difference = this.theGame.theBase.maxHealth - this.theGame.theBase.health;
         if (difference <= 50) {
            this.theGame.theBase.health += 50;
@@ -184,6 +176,7 @@ class Hud {
   upgradeBase() {
     if (this.theGame.theSM.thePlayer.myRock >= 500) {
         this.theGame.theSM.thePlayer.myRock -= 500;
+        this.theGame.spentRock += 500;
         this.theGame.theBase.maxHealth *= 2;
         this.theGame.theBase.health.upgrade();
     } else {
@@ -195,8 +188,10 @@ class Hud {
   spawnMinion(args) {
     if(this.theGame.theSM.thePlayer.myFood >= args[0]) {
       this.theGame.theSM.thePlayer.myFood -= args[0];
+      this.theGame.spentFood += args[0];
       let theBase = this.theGame.theBase;
       this.theGame.spawnMe("minion", theBase.x +theBase.radius*0.5, theBase.y + theBase.radius*2);
+      this.theGame.spentFood += args[0];
     } else {
       this.theGame.theSM.thePlayer.myFoodColor = "orange";
     }

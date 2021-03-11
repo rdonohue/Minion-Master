@@ -18,14 +18,26 @@ class GameEngine {
       this.tickDuration = 0.1;
 
       this.notDead = true;
+
+      //Game Stats!
       this.minionCount = 0;
+      this.deadMinions = 0;
       this.towerCount = 0;
+      this.deadTowers = 0;
+      this.deadWolves = 0;
+      this.deadOgres = 0;
+      this.totalFood = 200;
+      this.spentFood = 0;
+      this.totalRock = 200;
+      this.spentRock = 0;
+      this.deadDragon = 0;
+
 
       this.defaultHealth = minionStats.HEALTH;
       this.defaultDef = 3;
       this.defaultAttack = minionStats.ATTACK;
       this.defaultAgi = minionStats.AGILITY;
-      this.defaultIntel = minionStats.INTELLIGENCE+1;
+      this.defaultIntel = minionStats.INTELLIGENCE;
 
       this.towerHealth = 150;
       this.towerAttack = 35;
@@ -57,6 +69,7 @@ class GameEngine {
     switch (type) {
         case "minion":
           let minion = new Minion(this, x, y);
+          this.minionCount++;
           this.addEntity(minion, x, y);
           break;
         case "wolf":
@@ -74,6 +87,7 @@ class GameEngine {
           break;
         case "tower":
           let tower = new Tower(this, x, y);
+          this.towerCount++;
           this.addEntity(tower, x, y);
           break;
         case "cave":
@@ -95,6 +109,35 @@ class GameEngine {
     this.elements.push(element);
   };
 
+ /*
+  * Clears all entities from the entities list.
+  * Primarily used for restarting the game.
+  */
+  clearEntities() {
+    for (const ent of this.entities) {
+      ent.state = 0;
+      ent.removeFromWorld = true;
+    }
+  }
+
+  points() {
+    return (this.spentFood * this.minionCount
+          + this.spentRock * this.towerCount)
+          + ((this.deadWolves + this.deadOgres) +
+            (this.deadDragon * 5))
+          + (this.totalFood + this.totalRock);
+  }
+
+  penalties() {
+    return (this.deadMinions * 10)
+         + (this.deadTowers * 4);
+  }
+
+  getScore() {
+    return this.points() - this.penalties();
+
+  }
+
   draw() {
     this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
     for (var i = 0; i < this.elements.length; i++) {
@@ -110,7 +153,7 @@ class GameEngine {
     var entitiesCount = this.entities.length;
     var elementsCount = this.elements.length;
 
-    if (!this.theSM.paused && this.notDead) {
+    if (!this.theSM.paused || this.theSM.victory || !this.theSM.notDead) {
       for (var i = 0; i < elementsCount; i++) {
         var element = this.elements[i];
 
