@@ -56,7 +56,7 @@ class Minion {
     this.gatherRate = 2
 
     this.agility = this.theGame.defaultAgi;
-    this.intelligence = this.theGame.defaultIntel+1;
+    this.intelligence = this.theGame.defaultIntel;
 
     this.maxSpeed = this.agility*50;
     this.actionSpeed = 3/this.agility
