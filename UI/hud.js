@@ -98,38 +98,38 @@ class Hud {
                   ent.upgradeHealth(30);
                   break;
                 case "Defense":
-                  ent.upgradeDefense(10);
+                  ent.upgradeDefense(5);
                   break;
                 case "Attack":
-                  ent.upgradeAttack(15);
+                  ent.upgradeAttack(5);
                   break;
                 case "Agility":
-                  ent.upgradeAgility(3);
+                  ent.upgradeAgility(1);
                   break;
                 case "Intelligence":
-                  ent.upgradeIntel(3);
+                  ent.upgradeIntel(1);
                   break;
             }
          }
       }
 
-      switch (type) {
-          case "Health":
-            this.theGame.defaultHealth += 30;
-            break;
-          case "Defense":
-            this.theGame.defaultDef += 10;
-            break;
-          case "Attack":
-            this.theGame.defaultAttack += 15;
-            break;
-          case "Agility":
-            this.theGame.defaultAgi += 2;
-            break;
-          case "Intelligence":
-            this.theGame.defaultIntel += 3;
-            break;
-      }
+      // switch (type) {
+      //     case "Health":
+      //       this.theGame.defaultHealth += 30;
+      //       break;
+      //     case "Defense":
+      //       this.theGame.defaultDef += 10;
+      //       break;
+      //     case "Attack":
+      //       this.theGame.defaultAttack += 15;
+      //       break;
+      //     case "Agility":
+      //       this.theGame.defaultAgi += 2;
+      //       break;
+      //     case "Intelligence":
+      //       this.theGame.defaultIntel += 3;
+      //       break;
+      // }
     } else {
         this.theGame.theSM.thePlayer.myFoodColor = "orange";
     }
@@ -144,8 +144,8 @@ class Hud {
         this.theGame.spentRock += 90;
         if (type == "Defense") {
           this.theGame.towerDefense++;
-          this.theGame.towerHealth += (50 * 0.5);
-          this.theGame.towerVisual += (0.5 / 50);
+          this.theGame.towerHealth += 25;
+          this.theGame.towerVisual += 25;
         } else {
           this.theGame.towerAttack += 15;
           this.theGame.towerProjectile += 0.5;
