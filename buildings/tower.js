@@ -12,15 +12,15 @@ class Tower {
 
 
       //Stats
-      this.health = 150;
-      this.maxHealth = 150;
-      this.defense = 3;
-      this.attack = 35;
-      this.projectileScale = 1;
+      this.health = this.theGame.towerHealth;
+      this.maxHealth = this.theGame.towerHealth;
+      this.defense = this.theGame.towerDefense;
+      this.attack = this.theGame.towerAttack;
+      this.projectileScale = this.theGame.towerProjectile;
 
       //Tower Vision
       this.radius = 35;
-      this.visualRadius = 300;
+      this.visualRadius = this.theGame.towerVisual;
 
       this.center = {
         x: this.x,
@@ -28,7 +28,7 @@ class Tower {
       }
 
       //Fire Rate of Tower
-      this.agility = 1;
+      this.agility = this.theGame.towerAgility;
 
       this.theCamera = this.theGame.theSM;
       this.thePlayer = this.theCamera.thePlayer;
@@ -49,6 +49,7 @@ class Tower {
     if (this.health <= 0) {
       this.state = 0;
       if (!this.theGame.victory && !this.theGame.theSM.paused && this.theGame.notDead) this.theGame.deadTowers++;
+      this.theGame.towerCount--;
     }
 
     this.isSelected = (this.thePlayer.selected == this);
@@ -77,7 +78,7 @@ class Tower {
    */
   upgradeOffense(upgradeAmount) {
     if (this.theGame.player.selectedAttackUP) {
-      this.attack++;
+      this.attack += upgradeAmount;
       this.projectileScale += 0.5;
       this.agility += 0.5;
     }
@@ -92,7 +93,7 @@ class Tower {
    */
   upgradeDefense(upgradeAmount) {
     if (this.theGame.player.selectedDefenseUP) {
-      this.defense += 1;
+      this.defense++;
       this.maxHealth += this.maxHealth * (upgradeAmount * 0.2);
       this.visualRadius += this.visualRadius * (0.5 / upgradeAmount);
     }

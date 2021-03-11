@@ -16,7 +16,7 @@ class HomeBase {
       //Stats
       this.maxHealth = 200;
       this.health = 200;
-      this.defense = 13;
+      this.defense = 12;
       this.attack = 0;
       this.projectileScale = 1;
 
@@ -33,8 +33,8 @@ class HomeBase {
       this.loadAnimations();
       this.isSelected = false;
       this.myHealthBar = new HealthBar(this.theGame, this);
-      this.offense = false;
-      this.agility = 1;
+      this.battle = false;
+      this.agility = 2;
   };
 
   loadAnimations() {
@@ -44,7 +44,7 @@ class HomeBase {
   updateMe() {
     if (this.health <= 0) {
       this.theGame.theSM.notDead = false;
-        this.state = -1;
+      this.state = -1;
     }
 
     this.isSelected = (this.thePlayer.selected == this);
@@ -57,7 +57,7 @@ class HomeBase {
     for (var i = 0; i < this.theGame.entities.length; i++) {
         var ent = this.theGame.entities[i];
         if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon) &&
-              canSee(this, ent) && this.elapsedTime > 1 / this.agility && this.offense) {
+              canSee(this, ent) && this.elapsedTime > 1 / this.agility && this.battle) {
             this.elapsedTime = 0;
             this.theGame.addEntity(new Projectile(this.theGame, this.x, this.y, ent, this.attack, this.projectileScale));
         }

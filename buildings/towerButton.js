@@ -99,6 +99,7 @@ constructor(theGame, x, y) {
 					 (click.x > 0 && click.x < params.CANVAS_WIDTH) &&
 					 (click.y > 0 && click.y < params.CANVAS_HEIGHT) ) {
 							this.theGame.spawnMe("tower", click.x + this.theGame.theCamera.x, click.y + this.theGame.theCamera.y);
+							this.theGame.towerCount++;
 							this.placing = false;
 					 }
 				} else if (this.placing){

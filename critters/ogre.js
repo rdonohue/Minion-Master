@@ -113,7 +113,7 @@ class Ogre {
                 this.state = 1;
                 this.elapsedTime = 0;
             } else if (this.elapsedTime > 0.8) {
-                var damage = (this.attack + randomInt(this.attack)) - ent.defense;
+                var damage = (this.attack + randomInt(5)) - ent.defense;
                 if (damage <= 0) {
                     damage = 0;
                 }

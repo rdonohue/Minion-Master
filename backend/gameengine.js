@@ -18,12 +18,12 @@ class GameEngine {
       this.tickDuration = 0.1;
 
       this.notDead = true;
-      this.currentMinion = null;
 
       //Game Stats!
       this.minionCount = 0;
       this.deadMinions = 0;
       this.towerCount = 0;
+
       this.deadTowers = 0;
       this.deadWolves = 0;
       this.deadOgres = 0;
@@ -32,6 +32,20 @@ class GameEngine {
       this.totalRock = 200;
       this.spentRock = 0;
       this.deadDragon = 0;
+
+
+      this.defaultHealth = minionStats.HEALTH;
+      this.defaultDef = 3;
+      this.defaultAttack = minionStats.ATTACK;
+      this.defaultAgi = minionStats.AGILITY;
+      this.defaultIntel = minionStats.INTELLIGENCE+1;
+
+      this.towerHealth = 150;
+      this.towerAttack = 35;
+      this.towerDefense = 3;
+      this.towerProjectile = 1;
+      this.towerAgility = 1;
+      this.towerVisual = 300;
   };
 
   init(ctx) {

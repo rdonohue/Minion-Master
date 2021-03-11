@@ -30,7 +30,11 @@ class Button {
 
       if(isInXCoord && isInYCoord){ //check y-axis
         this.theObject.buttonWasClicked = true;
-        this.myFunction(this.myArguments);
+        if (this.myArguments != null) {
+          this.myFunction(this.myArguments);
+        } else {
+          this.myFunction();
+        }
         return true;
       }
     }
