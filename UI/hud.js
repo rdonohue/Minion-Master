@@ -84,6 +84,8 @@ class Hud {
     new Button(that, that.theGame, this.upgradeTower, "Offense", "Offense        90 Rock", "White");
   };
 
+  // Upgrade minion method for the game. Will upgrade certain stat based on the option selected.
+  // After upgrade, all other preceding minions that are spawned will have said updated value.
   upgradeMinion(type) {
     if (this.theGame.theSM.thePlayer.myFood >= 90) {
       this.theGame.theSM.thePlayer.myFood -= 90;
@@ -132,8 +134,11 @@ class Hud {
     }
   };
 
+  // Upgrade method for the tower. Will upgrade certain stat depending on whatever
+  // option it is. After upgrade, all preceding towers that are spawned will have
+  // said updated value.
   upgradeTower(type) {
-     if (this.theGame.theSM.myRock >= 90 && this.theGame.towerCount > 0) {
+     if (this.theGame.theSM.thePlayer.myRock >= 90 && this.theGame.towerCount > 0) {
         this.theGame.theSM.thePlayer.myRock -= 90;
         for (var i = 0; i < this.theGame.entities.length; i++) {
            let ent = this.theGame.entities[i];
@@ -160,6 +165,7 @@ class Hud {
      }
   };
 
+  // Healing method for the home base.
   assistBase(cost) {
     if (this.theGame.theSM.thePlayer.myRock >= cost && this.theGame.theBase.health < this.theGame.theBase.maxHealth) {
         this.theGame.theSM.thePlayer.myRock -= cost;
@@ -174,6 +180,7 @@ class Hud {
     }
   };
 
+  // Upgrade method for the home base.
   upgradeBase() {
     if (this.theGame.theSM.thePlayer.myRock >= 500) {
         this.theGame.theSM.thePlayer.myRock -= 500;
@@ -184,6 +191,7 @@ class Hud {
     }
   };
 
+  // Simple spawn method for the minion
   spawnMinion(args) {
     if(this.theGame.theSM.thePlayer.myFood >= args[0]) {
       this.theGame.theSM.thePlayer.myFood -= args[0];
