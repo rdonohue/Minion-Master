@@ -48,14 +48,14 @@ class Minion {
     this.target = null;
 
     //Stats
-    this.health = minionStats.HEALTH;
-    this.maxHealth = minionStats.HEALTH;
+    this.health = this.theGame.defaultHealth;
+    this.maxHealth = this.theGame.defaultHealth;
     this.regen = this.maxHealth/20;
     this.defense = 1;
-    this.attack = minionStats.ATTACK;
+    this.attack = this.theGame.defaultAttack;
     this.gatherRate = 2
-    this.agility = minionStats.AGILITY;
-    this.intelligence = minionStats.INTELLIGENCE+1;
+    this.agility = this.theGame.defaultAgi;
+    this.intelligence = this.theGame.defaultIntel+1;
 
     this.maxSpeed = this.agility*50;
     this.actionSpeed = 3/this.agility
@@ -124,10 +124,6 @@ class Minion {
 
     this.isSelected = (this.thePlayer.selected == this);
 
-    if (this.isSelected) {
-        this.theGame.currentMinion = this;
-    }
-
     //states are numbered by how "important" the state is,
     //so alive/dead is determined first, followed by "if attacking"
     //followed by "if gathering"...etc.
@@ -174,52 +170,28 @@ class Minion {
   // The next five methods upgrade___ returns 1 if successful, -1 otherwise.
   // Function for health upgrade button
   upgradeHealth(heal) {
-      if (this.thePlayer.myFood >= 90) {
-          this.thePlayer.myFood -= 90;
-          this.maxHealth += heal;
-      } else {
-          this.theGame.theSM.thePlayer.myFoodColor = "orange";
-      }
+      this.maxHealth += heal;
   };
 
   // Function for agility upgrade button
   upgradeAgility(agile) {
-      if (this.thePlayer.myFood >= 90) {
-          this.thePlayer.myFood -= 90;
-          this.agility += agile;
-      } else {
-          this.theGame.theSM.thePlayer.myFoodColor = "orange";
-      }
+      this.agility += agile;
+
   };
 
   // Function for defense upgrade button
   upgradeDefense(def) {
-      if (this.thePlayer.myFood >= 90) {
-          this.thePlayer.myFood -= 90;
-          this.defense += def;
-      } else {
-          this.theGame.theSM.thePlayer.myFoodColor = "orange";
-      }
+      this.defense += def;
   };
 
   // Function for attack upgrade button
   upgradeAttack(att) {
-      if (this.thePlayer.myFood >= 90) {
-          this.thePlayer.myFood -= 90;
-          this.attack += att;
-      } else {
-          this.theGame.theSM.thePlayer.myFoodColor = "orange";
-      }
+      this.attack += att;
   };
 
   // Function for intelligence upgrade button
   upgradeIntel(intel) {
-      if (this.thePlayer.myFood >= 90) {
-          this.thePlayer.myFood -= 90;
-          this.intelligence += intel;
-      } else {
-          this.theGame.theSM.thePlayer.myFoodColor = "orange";
-      }
+      this.intelligence += intel;
   };
 
   updateHealth() {

@@ -73,25 +73,33 @@ class Hud {
   };
 
   upgradeMinion(type) {
-      if (this.theGame.currentMinion != null && !this.theGame.currentMinion.removeFromWorld) {
-          switch (type) {
-            case "Health":
-               this.theGame.currentMinion.upgradeHealth(30);
-               break;
-            case "Defense":
-               this.theGame.currentMinion.upgradeDefense(10);
-               break;
-            case "Attack":
-               this.theGame.currentMinion.upgradeAttack(25);
-               break;
-            case "Agility":
-               this.theGame.currentMinion.upgradeAgility(15);
-               break;
-            case "Intel":
-               this.theGame.currentMinion.upgradeIntel(10);
-               break;
-          }
+    if (this.theGame.theSM.thePlayer.myFood >= 90) {
+      this.theGame.theSM.thePlayer.myFood -= 90;
+      for (var i = 0; i < this.theGame.entities.length; i++) {
+          let ent = this.theGame.entities[i];
+          if (ent instanceof Minion) {
+            console.log("minion");
+            if (type == "Health") {
+                 ent.upgradeHealth(30);
+            } else if (type == "Defense") {
+                 ent.upgradeDefense(10);
+            } else if (type == "Attack") {
+                 ent.upgradeAttack(15);
+            } else if (type == "Agility") {
+                 ent.upgradeAgility(3);
+            } else {
+                 ent.upgradeIntel(3);
+            }
+         }
       }
+      this.theGame.defaultHealth += 30;
+      this.theGame.defaultDef += 10;
+      this.theGame.defaultAttack += 15;
+      this.theGame.defaultAgi += 3;
+      this.theGame.defaultIntel += 3;
+    } else {
+        this.theGame.theSM.thePlayer.myFoodColor = "orange";
+    }
   };
 
   assistBase(cost) {

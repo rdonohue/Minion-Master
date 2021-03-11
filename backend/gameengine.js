@@ -18,9 +18,14 @@ class GameEngine {
       this.tickDuration = 0.1;
 
       this.notDead = true;
-      this.currentMinion = null;
       this.minionCount = 0;
       this.towerCount = 0;
+
+      this.defaultHealth = minionStats.HEALTH;
+      this.defaultDef = 3;
+      this.defaultAttack = minionStats.ATTACK;
+      this.defaultAgi = minionStats.AGILITY;
+      this.defaultIntel = minionStats.INTELLIGENCE+1;
   };
 
   init(ctx) {

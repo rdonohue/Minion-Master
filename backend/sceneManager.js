@@ -93,7 +93,7 @@ class SceneManager {
     }
 
     // Every 2 minutes, a dragon will spawn.
-    if (this.dragonTimer >= 0) {
+    if (this.dragonTimer >= 120) {
       this.theGame.spawnMe("dragon", params.PLAY_WIDTH - 150 - randomInt(150), 300);
       this.dragonTimer = -1;
       //spawn dragon at 2 minutes
