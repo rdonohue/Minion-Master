@@ -63,12 +63,14 @@ class Hud {
       "Victory    1000 Food", "white"
     );
 
-    new Button(that, that.theGame, this.assistBase, 100, "Repair        100 Rock", "White");
     new Button(that, that.theGame, this.upgradeMinion, "Health", "Health     90 Food", "Crimson");
     new Button(that, that.theGame, this.upgradeMinion, "Attack", "Attack     90 Food", "Yellow");
     new Button(that, that.theGame, this.upgradeMinion, "Agility", "Agility     90 Food", "Aqua");
     new Button(that, that.theGame, this.upgradeMinion, "Defense", "Defense     90 Food", "Black");
     new Button(that, that.theGame, this.upgradeMinion, "Intel", "Intel        90 Food", "Chartreuse");
+
+    new Button(that, that.theGame, this.assistBase, 100, "Repair        100 Rock", "White");
+    new Button(that, that.theGame, this.upgradeBase, null, "BaseUp        500 Rock", "Gold");
 
   };
 
@@ -111,6 +113,18 @@ class Hud {
         } else {
            this.theGame.theBase.health += difference;
         }
+    } else {
+        this.theGame.theSM.thePlayer.myRockColor = "orange"
+    }
+  };
+
+  upgradeBase() {
+    if (this.theGame.theSM.thePlayer.myRock >= 500) {
+        this.theGame.theSM.thePlayer.myRock -= 500;
+        this.theGame.theBase.maxHealth *= 2;
+        this.theGame.theBase.health = this.theGame.theBase.maxHealth;
+        this.theGame.theBase.scale += 0.2;
+        this.theGame.theBase.battle = true;
     } else {
         this.theGame.theSM.thePlayer.myRockColor = "orange"
     }
