@@ -113,6 +113,7 @@ class Hud {
       this.theGame.theSM.thePlayer.myFood -= args[0];
       let theBase = this.theGame.theBase;
       this.theGame.spawnMe("minion", theBase.x +theBase.radius*0.5, theBase.y + theBase.radius*2);
+      this.theGame.spentFood += args[0];
     } else {
       this.theGame.theSM.thePlayer.myFoodColor = "orange";
     }

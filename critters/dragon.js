@@ -118,6 +118,7 @@ class Dragon {
           this.state = 2;
           this.dead = true;
           this.removeFromWorld = true;
+          if (!this.theGame.victory && !this.theGame.theSM.paused && this.theGame.notDead) this.theGame.deadDragon++;
       }
 
       if (dist < 5) {

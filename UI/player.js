@@ -33,7 +33,7 @@ class Player {
 
   updateMe() {
     this.timeSinceUpdate += this.timer.tick();
-    //this.updateResources();
+    if (!this.theGame.victory && !this.theGame.theSM.paused && this.theGame.notDead) this.updateResources();
     if(this.theGame.click){
       this.updateSelected(this.theGame.click);
     }
@@ -65,7 +65,7 @@ class Player {
       return;
     } else {
       //if it HAS, then allow update and reset timeSinceUpdate.
-      this.myFood += this.foodIncome * (this.timeSinceUpdate/this.timeBetweenUpdates);
+      if ((this.theGame.minionCount - this.theGame.deadMinions) > 0) this.myFood += this.foodIncome * (this.timeSinceUpdate/this.timeBetweenUpdates);
       this.myRock += this.rockIncome * (this.timeSinceUpdate/this.timeBetweenUpdates);
       this.timeSinceUpdate = 0;
       //we need to make it so that the player's resource increment

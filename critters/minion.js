@@ -55,7 +55,7 @@ class Minion {
     this.attack = minionStats.ATTACK;
     this.gatherRate = 2
     this.agility = minionStats.AGILITY;
-    this.intelligence = minionStats.INTELLIGENCE+1;
+    this.intelligence = minionStats.INTELLIGENCE;
 
     this.maxSpeed = this.agility*50;
     this.actionSpeed = 3/this.agility
@@ -177,6 +177,7 @@ class Minion {
       if (this.thePlayer.myFood >= 90) {
           this.thePlayer.myFood -= 90;
           this.maxHealth += heal;
+          this.theGame.spentFood += 90;
       } else {
           this.theGame.theSM.thePlayer.myFoodColor = "orange";
       }
@@ -187,6 +188,7 @@ class Minion {
       if (this.thePlayer.myFood >= 90) {
           this.thePlayer.myFood -= 90;
           this.agility += agile;
+          this.theGame.spentFood += 90;
       } else {
           this.theGame.theSM.thePlayer.myFoodColor = "orange";
       }
@@ -197,6 +199,7 @@ class Minion {
       if (this.thePlayer.myFood >= 90) {
           this.thePlayer.myFood -= 90;
           this.defense += def;
+          this.theGame.spentFood += 90;
       } else {
           this.theGame.theSM.thePlayer.myFoodColor = "orange";
       }
@@ -207,6 +210,7 @@ class Minion {
       if (this.thePlayer.myFood >= 90) {
           this.thePlayer.myFood -= 90;
           this.attack += att;
+          this.theGame.spentFood += 90;
       } else {
           this.theGame.theSM.thePlayer.myFoodColor = "orange";
       }
@@ -217,6 +221,7 @@ class Minion {
       if (this.thePlayer.myFood >= 90) {
           this.thePlayer.myFood -= 90;
           this.intelligence += intel;
+          this.theGame.spentFood += 90;
       } else {
           this.theGame.theSM.thePlayer.myFoodColor = "orange";
       }
@@ -225,6 +230,7 @@ class Minion {
   updateHealth() {
     if(this.health <= 0) {
       this.state = 0;
+      this.theGame.deadMinions++;
     } else {
       //at the end of each wolf's "turn", it heals depending on how much it went through.
       //wandering heals most for example
@@ -286,18 +292,20 @@ class Minion {
       let ent = this.target;
       if((ent.state != 0 || ent.health > 0) && reach(this, ent)) {
         //the target is alive and in range and we are ready to attack.
-        var gather = (this.gatherRate + randomInt(this.gatherRate))
+        var gather = (this.gatherRate + randomInt(this.intelligence))
         if(ent.health - gather < 0) {
           gather = ent.health; //don't let the minion's create resources from nothing!
         }
-        if(gather > 0) {
+        if(gather > 0 && (!this.theGame.victory && !this.theGame.theSM.paused && this.theGame.notDead)) {
           if(ent instanceof Rock) {
             ent.health -= gather; //don't heal the target by dealing negitive gather!
             this.thePlayer.myRock += gather;
+            this.theGame.totalRock += gather;
           } else if (ent instanceof Bush) {
             if(this.intelligence <= 1 || ent.health/ent.maxHealth > 0.1) { //make smarter minions not kill the food!
               ent.health -= gather; //don't heal the target by dealing negitive gather!
               this.thePlayer.myFood += gather;
+              this.theGame.totalFood += gather;
             } else if (ent.health/ent.maxHealth < 0.1 && this.intelligence > 1) {
               this.target = null;
               return 3; // the berries are low on food.

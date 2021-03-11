@@ -10,11 +10,10 @@ class Tower {
       this.state = 1;  // 1 = idle, 0 = destroyed
       this.upgradeAmount = 1; // 1 being the initial spawned upgrade state of a tower.
 
-      this.healthbar = new HealthBar(this.theGame, this);
 
       //Stats
-      this.health = 200;
-      this.maxHealth = 200;
+      this.health = 150;
+      this.maxHealth = 150;
       this.defense = 3;
       this.attack = 35;
       this.projectileScale = 1;
@@ -33,6 +32,7 @@ class Tower {
 
       this.theCamera = this.theGame.theSM;
       this.thePlayer = this.theCamera.thePlayer;
+      this.myHealthBar = new HealthBar(this.theGame, this);
   };
 
   updateMe() {
@@ -48,9 +48,11 @@ class Tower {
 
     if (this.health <= 0) {
       this.state = 0;
+      if (!this.theGame.victory && !this.theGame.theSM.paused && this.theGame.notDead) this.theGame.deadTowers++;
     }
 
     this.isSelected = (this.thePlayer.selected == this);
+    this.myHealthBar.updateMe();
   };
 
 

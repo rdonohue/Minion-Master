@@ -93,6 +93,7 @@ constructor(theGame, x, y) {
 		if (this.theGame.click) {
 			if(this.theGame.theSM.thePlayer.myRock >= this.rockCost && this.placing) {
 				this.theGame.theSM.thePlayer.myRock -= this.rockCost;
+				this.theGame.spentRock += this.rockCost;
 				let click = this.theGame.click;
 				if (this.placing &&
 					 (click.x > 0 && click.x < params.CANVAS_WIDTH) &&

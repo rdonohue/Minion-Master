@@ -6,7 +6,7 @@ class SceneManager {
 
       this.theMiniMap = new MiniMap(this.theGame, 1024, 576, 256);
       this.theHud = new Hud(this.theGame, 1024, 0, 256);
-      this.thePlayer = new Player(this.theGame, 200, 200, 5, 3, 0, 0);
+      this.thePlayer = new Player(this.theGame, 200, 200, 3, 2, 0, 0);
 
       // Credits to: https://vnitti.itch.io/grassy-mountains-parallax-background
       this.startbg = ASSET_MANAGER.getAsset("./sprites/start_bg.png");
@@ -21,7 +21,11 @@ class SceneManager {
       this.moveUp = this.baseCamSpeed;
       this.paused = false;
       this.title = true;
-      this.endMusic = 0;
+      this.victory = false;
+      this.gameover = false;
+      this.endMusic = true;
+      this.score = 0;
+
 
       this.createLevel();
       ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item_2.mp3");
@@ -46,8 +50,19 @@ class SceneManager {
     this.theGame.addElement(intGrass);
   };
 
-  startGame() {
-    this.populateLevel();
+  startGame(start) {
+    if (start) {           // New Game
+      this.title = false;
+      this.populateLevel();
+    } else {               // Restart
+      this.theGame.notDead = true;
+      this.victory = false;
+      this.theGame.clearEntities();
+      this.thePlayer = new Player(this.theGame, 200, 200, 3, 2, 0, 0);
+      this.endMusic = true;
+      this.populateLevel();
+    }
+
   };
 
   populateLevel() {
@@ -71,11 +86,13 @@ class SceneManager {
 
   update() {
     params.DEBUG = document.getElementById("debug").checked;
-
     if (this.title && this.theGame.click) {
       if (this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350) {
-        this.title = false;
-        this.startGame();
+        this.startGame(true);
+      }
+    } else if ((!this.theGame.notDead || this.victory) && this.theGame.click) {
+      if (this.theGame.mouse && this.theGame.mouse.y > 650 && this.theGame.mouse.y < 700) {
+        this.startGame(false);
       }
     } else {
       this.theHud.updateMe();
@@ -174,7 +191,56 @@ class SceneManager {
     ctx.restore();
   };
 
+
+  /*
+  * Helper function to determine the win or loss title.
+  */
+  endGame(ctx, title) {
+    if (this.endMusic) {
+      ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item.mp3");
+      this.endMusic = false;
+    }
+    ctx.save();
+    ctx.drawImage(this.startbg, 0, 0, 384, 216, 0, 0, 1280, 768);
+    ctx.fillStyle = "White";
+    ctx.font = 64 + 'px "Press Start 2P"';
+    let xCenter = (1280 - (ctx.measureText(title).width)) / 2;
+    ctx.fillText(title, xCenter, 125);
+
+    this.generateScore(ctx);
+
+    ctx.font = 48 + 'px "Press Start 2P"';
+    ctx.fillStyle = this.theGame.mouse && this.theGame.mouse.y > 650 && this.theGame.mouse.y < 700 ? "Orange" : "White";
+    let subtitle = "Play Again?";
+    xCenter = (1280 - (ctx.measureText(subtitle).width)) / 2;
+    ctx.fillText(subtitle, xCenter, 700);
+    ctx.restore();
+  }
+
+  /*
+  * Helper function to generate the total score and game statistics.
+  * This function is only called from endGame(ctx, title).
+  */
+  generateScore(ctx) {
+    let title = "Score"
+    ctx.fillStyle = "White";
+    ctx.font = 48 + 'px "Press Start 2P"';
+    let xCenter = (1280 - (ctx.measureText(title).width)) / 2;
+    ctx.fillText(title, xCenter, 225);
+
+    ctx.font = 32 + 'px "Press Start 2P"';
+
+    if (!this.gameover){
+      this.score = Math.round(this.theGame.getScore());
+    }
+    xCenter = (1280 - (ctx.measureText(this.score).width)) / 2;
+    ctx.fillText(this.score, xCenter, 275);
+    this.gameover = true;
+  }
+
   draw(ctx) {
+    let endTitle = this.victory && this.theGame.notDead ? "YOU'VE WON!" : "YOU'VE LOST!!"
+
     if (this.title) {
       ctx.save();
       ctx.drawImage(this.startbg, 0, 0, 384, 216, 0, 0, 1280, 768);
@@ -190,48 +256,13 @@ class SceneManager {
   		ctx.fillText(subtitle, xCenter, 350);
       ctx.restore();
     } else if (this.victory) {
-      if (this.endMusic < 1) {
-        ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item.mp3");
-        this.endMusic++;
-      }
-      ctx.save();
-      ctx.drawImage(this.startbg, 0, 0, 384, 216, 0, 0, 1280, 768);
-      ctx.fillStyle = "White";
-  		ctx.font = 64 + 'px "Press Start 2P"';
-  		let title = "YOU'VE WON!";
-  		let xCenter = (1280 - (ctx.measureText(title).width)) / 2;
-  		ctx.fillText(title, xCenter, 125);
-  		ctx.font = 48 + 'px "Press Start 2P"';
-      ctx.fillStyle = this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350 ? "Orange" : "White";
-  		let subtitle = "Play Again?";
-  		xCenter = (1280 - (ctx.measureText(subtitle).width)) / 2;
-  		// ctx.fillText(subtitle, xCenter, 350);
-      ctx.restore();
-    } else if (this.theGame.notDead){
+      this.endGame(ctx, endTitle);
+    } else if (!this.theGame.notDead) {
+      this.endGame(ctx, endTitle);
+    } else {
       this.theMiniMap.drawMe(ctx);
       this.theHud.drawMe(ctx);
       this.thePlayer.drawMe(ctx);
-    } else if (!this.theGame.notDead){
-      this.theMiniMap.drawMe(ctx);
-      this.theHud.drawMe(ctx);
-      this.thePlayer.drawMe(ctx);
-      if (this.endMusic < 1) {
-        ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item.mp3");
-        this.endMusic++;
-      }
-      ctx.save();
-      ctx.drawImage(this.startbg, 0, 0, 384, 216, 0, 0, 1280, 768);
-      ctx.fillStyle = "White";
-  		ctx.font = 64 + 'px "Press Start 2P"';
-  		let title = "YOU'VE LOST!!";
-  		let xCenter = (1280 - (ctx.measureText(title).width)) / 2;
-  		ctx.fillText(title, xCenter, 125);
-  		ctx.font = 48 + 'px "Press Start 2P"';
-      ctx.fillStyle = this.theGame.mouse && this.theGame.mouse.y > 300 && this.theGame.mouse.y < 350 ? "Orange" : "White";
-  		let subtitle = "Play Again?";
-  		xCenter = (1280 - (ctx.measureText(subtitle).width)) / 2;
-  		// ctx.fillText(subtitle, xCenter, 350);
-      ctx.restore();
     }
   };
 
