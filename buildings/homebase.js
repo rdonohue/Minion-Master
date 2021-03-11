@@ -16,7 +16,7 @@ class HomeBase {
       //Stats
       this.maxHealth = 200;
       this.health = 200;
-      this.defense = 3.0;
+      this.defense = 13;
 
       this.baseWidth = this.castleAnim.width;
       this.baseHeight = this.castleAnim.height;

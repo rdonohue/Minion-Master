@@ -68,19 +68,21 @@ class Fireball {
 
       for (var i = 0; i < this.theGame.entities.length; i++) {
           var ent = this.theGame.entities[i];
-          if (!ent instanceof Dragon && collide(this, ent)) {
+          if ((ent instanceof Minion || ent instanceof Wolf || ent instanceof Tower || ent instanceof HomeBase) && collide(this, ent)) {
               var damage = this.attackMod - ent.defense;
-              if(damage < 0) {
-                damage = 0
+              if (damage < 0) {
+                  damage = 0;
               }
               ent.health -= damage;
-              if(ent.health < 0) {
-                ent.state = 0;
-              }
+              this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "#FF9900"));
           }
       }
 
       this.facing = getFacing(this.velocity);
+    };
+
+    drawMinimap(ctx, mmX, mmY, mmW, mmH) {
+
     };
 
     drawMe(ctx) {

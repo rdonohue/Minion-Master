@@ -92,13 +92,13 @@ class SceneManager {
       this.caveTimer += this.theGame.clockTick;
     }
 
-    // if(this.dragonTimer >= 0) {
-    //   this.theGame.spawnMe("dragon", params.PLAY_WIDTH - 150 - randomInt(150), 300);
-    //   this.dragonTimer = -1;
-    //   //spawn dragon at 2 minutes
-    // } else if (this.dragonTimer != -1) {
-    //   this.dragonTimer += this.theGame.clockTick;
-    // }
+    if(this.dragonTimer >= 0) {
+      this.theGame.spawnMe("dragon", params.PLAY_WIDTH - 150 - randomInt(150), 300);
+      this.dragonTimer = -1;
+      //spawn dragon at 2 minutes
+    } else if (this.dragonTimer != -1) {
+      this.dragonTimer += this.theGame.clockTick;
+    }
 
     if(this.theGame.theBase && this.theGame.theBase.health <= 0) {
       this.theGame.notDead = false;

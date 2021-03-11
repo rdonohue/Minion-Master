@@ -128,6 +128,6 @@ class Tower {
     ctx.fillStyle = "White";
     ctx.fillRect(x, y, 7.5, 7.5);
     ctx.restore();
-  }
+  };
 
 };

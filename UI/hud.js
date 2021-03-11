@@ -18,7 +18,7 @@ class Hud {
     for(var i = 0; i < this.myButtons.length; i++) {
       this.myButtons[i].updateMe();
       if(this.theGame.click) {
-        this.myButtons[i].checkButton(1038, 97 +45*i + 45, 63, 22);
+        this.myButtons[i].checkButton(1038, 97 + 27 * i + 27, 63, 22);
       }
     }
   };
@@ -34,17 +34,13 @@ class Hud {
     this.pauseButton.drawMe(ctx);
 
     for(var i = 0; i < this.myButtons.length; i++) {
-      this.myButtons[i].drawButton(ctx, 1038, 97 + 45*i + 45, 63, 22, null);
+      this.myButtons[i].drawButton(ctx, 1038, 97 + 27 * i + 27, 63, 22, null);
     }
   }
 
   createButtons() {
     var that = this;
-    new Button(
-      that, that.theGame,
-      that.spawnMinion, [that.minionCost],
-      " Minion     50 Food", "white"
-    );
+    new Button(that, that.theGame, that.spawnMinion, [that.minionCost], " Minion     50 Food", "white");
 
     new Button(
       that, that.theGame,
@@ -65,6 +61,7 @@ class Hud {
     new Button(that, that.theGame, this.upgradeMinion, "Agility", "Agility     90 Food", "Aqua");
     new Button(that, that.theGame, this.upgradeMinion, "Defense", "Defense     90 Food", "Black");
     new Button(that, that.theGame, this.upgradeMinion, "Intel", "Intel        90 Food", "Chartreuse");
+
   };
 
   upgradeMinion(type) {
@@ -88,6 +85,10 @@ class Hud {
           }
       }
   };
+
+  upgradeTower(type) {
+    
+  }
 
   spawnMinion(args) {
     if(this.theGame.theSM.thePlayer.myFood >= args[0]) {

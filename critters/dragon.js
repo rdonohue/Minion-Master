@@ -130,18 +130,16 @@ class Dragon {
       var combat = false;
       for (var i = 0; i < this.theGame.entities.length; i++) {
           var ent = this.theGame.entities[i];
-          if ((ent.myFaction != "dragon" || ent.myFaction != "resource") && canSee(this, ent)) {
+          // (ent.myFaction != "dragon" && ent.myFaction != "resource")
+          if ((ent instanceof Minion || ent instanceof Wolf || ent instanceof Tower || ent instanceof HomeBase) && canSee(this, ent) && !ent.removeFromWorld) {
               this.target = ent;
               combat = true;
-              // if (this.elapsedTime > (0.2 / this.agility) && !collide(this, ent)) {
-              //     this.elapsedTime = 0;
-              //     this.theGame.addEntity(new Fireball(this.theGame,
-              //       this.x - this.theGame.theCamera.x,
-              //       this.y - this.theGame.theCamera.y,
-              //       ent, this.attack/20, this.projectileScale));
-              // }
+               if (this.elapsedTime > (2 / this.agility) && !collide(this, ent)) {
+                   this.elapsedTime = 0;
+                   this.theGame.addEntity(new Fireball(this.theGame, this.center.x, this.center.y, ent, 8, this.projectileScale));
+              }
           }
-          if ((ent.myFaction != "dragon" || ent.myFaction != "resource") && collide(this, ent) && !ent.dead) {
+          if ((ent instanceof Minion || ent instanceof Wolf || ent instanceof Tower || ent instanceof HomeBase) && collide(this, ent) && !ent.removeFromWorld) {
             if (this.state === 0) {
                 this.state = 1;
                 this.elapsedTime = 0;
@@ -171,7 +169,7 @@ class Dragon {
       }
     };
 
-    drawMinimap(ctx, mmX, mmY) {
+    drawMinimap(ctx, mmX, mmY, mmW, mmH) {
       let x = mmX + (this.center.x)*(mmW/params.PLAY_WIDTH);
       let y = mmY + (this.center.y)*(mmH/params.PLAY_HEIGHT);
       ctx.save();
