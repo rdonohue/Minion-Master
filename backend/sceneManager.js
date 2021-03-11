@@ -294,20 +294,20 @@ class SceneManager {
     xCenter = (1600 - (ctx.measureText(this.theGame.totalRock).width)) / 2;
     ctx.fillText(this.theGame.totalRock, xCenter, statYCenter);
     statYCenter += increment;
-    //Spent rocks
-    xCenter = (960 - (ctx.measureText("  Spent Rock:").width)) / 2;
-    ctx.fillText("  Spent Rock: ", xCenter, statYCenter);
-    xCenter = (1600 - (ctx.measureText(this.theGame.spentRock).width)) / 2;
-    ctx.fillText(this.theGame.spentRock, xCenter, statYCenter);
-    statYCenter += increment;
     //Total food
-    xCenter = (960 - (ctx.measureText("  Total Food:").width)) / 2;
+    xCenter = (960 - (ctx.measureText("   Total Food:").width)) / 2;
     ctx.fillText("  Total Food: ", xCenter, statYCenter);
     xCenter = (1600 - (ctx.measureText(this.theGame.totalFood).width)) / 2;
     ctx.fillText(this.theGame.totalFood, xCenter, statYCenter);
     statYCenter += increment;
+    //Spent rocks
+    xCenter = (960 - (ctx.measureText("   Spent Rock:").width)) / 2;
+    ctx.fillText("  Spent Rock: ", xCenter, statYCenter);
+    xCenter = (1600 - (ctx.measureText(this.theGame.spentRock).width)) / 2;
+    ctx.fillText(this.theGame.spentRock, xCenter, statYCenter);
+    statYCenter += increment;
     //Spent Food
-    xCenter = (960 - (ctx.measureText("  Spent Food:").width)) / 2;
+    xCenter = (960 - (ctx.measureText("   Spent Food:").width)) / 2;
     ctx.fillText("  Spent Food: ", xCenter, statYCenter);
     xCenter = (1600 - (ctx.measureText(this.theGame.spentFood).width)) / 2;
     ctx.fillText(this.theGame.spentFood, xCenter, statYCenter);
