@@ -163,7 +163,7 @@ class Wolf {
   updateHealth() {
     if(this.health <= 0) {
       this.state = 0;
-      if (!this.theGame.victory && !this.theGame.theSM.paused && this.theGame.notDead)this.theGame.deadWolves++;
+      if (!this.theGame.victory && this.theGame.notDead) this.theGame.deadWolves++;
     } else {
       //at the end of each wolf's "turn", it heals depending on how much it went through.
       //wandering heals most for example

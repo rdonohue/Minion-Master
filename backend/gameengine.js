@@ -153,7 +153,7 @@ class GameEngine {
     var entitiesCount = this.entities.length;
     var elementsCount = this.elements.length;
 
-    if (!this.theSM.paused || this.theSM.victory || !this.theSM.notDead) {
+    if ((!this.theSM.paused || this.theSM.notDead) || this.theSM.victory) {
       for (var i = 0; i < elementsCount; i++) {
         var element = this.elements[i];
 

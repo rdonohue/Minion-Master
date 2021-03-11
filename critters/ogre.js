@@ -91,7 +91,7 @@ class Ogre {
           this.state = 2;
           this.dead = true;
           this.removeFromWorld = true;
-          if (!this.theGame.victory && !this.theGame.theSM.paused && this.theGame.notDead) this.theGame.deadOgres++;
+          if (!this.theGame.victory && this.theGame.notDead) this.theGame.deadOgres++;
       }
 
       if (dist < 5) {
