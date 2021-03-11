@@ -135,7 +135,20 @@ class GameEngine {
 
   getScore() {
     return this.points() - this.penalties();
+  }
 
+  resetStats() {
+    this.minionCount = 0;
+    this.deadMinions = 0;
+    this.towerCount = 0;
+    this.deadTowers = 0;
+    this.deadWolves = 0;
+    this.deadOgres = 0;
+    this.totalFood = 200;
+    this.spentFood = 0;
+    this.totalRock = 200;
+    this.spentRock = 0;
+    this.deadDragon = 0;
   }
 
   draw() {

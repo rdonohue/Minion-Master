@@ -70,6 +70,7 @@ class SceneManager {
       this.endMusic = true;
       this.score = 0;
       this.gameover = false;
+      this.theGame.resetStats();
       this.startMusic.play();
       this.populateLevel();
     }
