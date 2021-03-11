@@ -230,6 +230,8 @@ class SceneManager {
   * This function is only called from endGame(ctx, title).
   */
   generateScore(ctx) {
+    let statYCenter = 325;
+    const increment = 30;
     let title = "Score"
     ctx.fillStyle = "White";
     ctx.font = 48 + 'px "Press Start 2P"';
@@ -243,6 +245,75 @@ class SceneManager {
     }
     xCenter = (1280 - (ctx.measureText(this.score).width)) / 2;
     ctx.fillText(this.score, xCenter, 275);
+    ctx.font = 24 + 'px "Press Start 2P"';
+    //Total Minion stat
+    xCenter = (960 - (ctx.measureText("Total Minions:").width)) / 2;
+    ctx.fillText("Total Minions: ", xCenter, statYCenter);
+    xCenter = (1600 - (ctx.measureText(this.theGame.minionCount).width)) / 2;
+    ctx.fillText(this.theGame.minionCount, xCenter, statYCenter);
+    statYCenter += increment;
+    //Dead Minion stat
+    xCenter = (960 - (ctx.measureText(" Dead Minions:").width)) / 2;
+    ctx.fillText(" Dead Minions: ", xCenter, statYCenter);
+    xCenter = (1600 - (ctx.measureText(this.theGame.deadMinions).width)) / 2;
+    ctx.fillText(this.theGame.deadMinions, xCenter, statYCenter);
+    statYCenter += increment;
+    //Total Tower stat
+    xCenter = (960 - (ctx.measureText(" Total Towers:").width)) / 2;
+    ctx.fillText(" Total Towers: ", xCenter, statYCenter);
+    xCenter = (1600 - (ctx.measureText(this.theGame.towerCount).width)) / 2;
+    ctx.fillText(this.theGame.towerCount, xCenter, statYCenter);
+    statYCenter += increment;
+    //Dead Tower stat
+    xCenter = (960 - (ctx.measureText("  Dead Towers:").width)) / 2;
+    ctx.fillText("  Dead Towers: ", xCenter, statYCenter);
+    xCenter = (1600 - (ctx.measureText(this.theGame.deadTowers).width)) / 2;
+    ctx.fillText(this.theGame.deadTowers, xCenter, statYCenter);
+    statYCenter += increment;
+    //Dead Wolves stat
+    xCenter = (960 - (ctx.measureText("  Dead Wolves:").width)) / 2;
+    ctx.fillText("  Dead Wolves: ", xCenter, statYCenter);
+    xCenter = (1600 - (ctx.measureText(this.theGame.deadWolves).width)) / 2;
+    ctx.fillText(this.theGame.deadWolves, xCenter, statYCenter);
+    statYCenter += increment;
+    //Dead Ogres stat
+    xCenter = (960 - (ctx.measureText("   Dead Ogres:").width)) / 2;
+    ctx.fillText("   Dead Ogres: ", xCenter, statYCenter);
+    xCenter = (1600 - (ctx.measureText(this.theGame.deadOgres).width)) / 2;
+    ctx.fillText(this.theGame.deadOgres, xCenter, statYCenter);
+    statYCenter += increment;
+    //Dead Dragon stat
+    xCenter = (960 - (ctx.measureText(" Dead Dragons:").width)) / 2;
+    ctx.fillText(" Dead Dragons: ", xCenter, statYCenter);
+    xCenter = (1600 - (ctx.measureText(this.theGame.deadDragon).width)) / 2;
+    ctx.fillText(this.theGame.deadDragon, xCenter, statYCenter);
+    statYCenter += increment;
+    //Total rocks
+    xCenter = (960 - (ctx.measureText("  Total Rocks:").width)) / 2;
+    ctx.fillText("  Total Rocks: ", xCenter, statYCenter);
+    xCenter = (1600 - (ctx.measureText(this.theGame.totalRock).width)) / 2;
+    ctx.fillText(this.theGame.totalRock, xCenter, statYCenter);
+    statYCenter += increment;
+    //Spent rocks
+    xCenter = (960 - (ctx.measureText("  Spent Rock:").width)) / 2;
+    ctx.fillText("  Spent Rock: ", xCenter, statYCenter);
+    xCenter = (1600 - (ctx.measureText(this.theGame.spentRock).width)) / 2;
+    ctx.fillText(this.theGame.spentRock, xCenter, statYCenter);
+    statYCenter += increment;
+    //Total food
+    xCenter = (960 - (ctx.measureText("  Total Food:").width)) / 2;
+    ctx.fillText("  Total Food: ", xCenter, statYCenter);
+    xCenter = (1600 - (ctx.measureText(this.theGame.totalFood).width)) / 2;
+    ctx.fillText(this.theGame.totalFood, xCenter, statYCenter);
+    statYCenter += increment;
+    //Spent Food
+    xCenter = (960 - (ctx.measureText("  Spent Food:").width)) / 2;
+    ctx.fillText("  Spent Food: ", xCenter, statYCenter);
+    xCenter = (1600 - (ctx.measureText(this.theGame.spentFood).width)) / 2;
+    ctx.fillText(this.theGame.spentFood, xCenter, statYCenter);
+    statYCenter += increment;
+    statYCenter = 325;
+
     this.gameover = true;
   }
 
