@@ -34,7 +34,7 @@ class HomeBase {
       this.isSelected = false;
       this.myHealthBar = new HealthBar(this.theGame, this);
       this.battle = false;
-      this.agility = 2;
+      this.agility = 1;
   };
 
   loadAnimations() {

@@ -28,8 +28,9 @@ class SceneManager {
 
 
       this.createLevel();
-      ASSET_MANAGER.playAsset("./sounds/Mega_Man_7_Special_Item_2.mp3");
-      // this.populateLevel();
+      ASSET_MANAGER.adjustVolume(0.25);
+      this.startMusic = new Audio("./sounds/Mega_Man_7_Special_Item_2.mp3");
+      this.startMusic.volume = 0.2;
 
       this.caveTimer = -15; //give player extra 15 seconds
       this.dragonTimer = -30; //give player extra 30 seconds
@@ -55,6 +56,7 @@ class SceneManager {
   startGame(start) {
     if (start) {           // New Game
       this.title = false;
+      this.startMusic.play();
       this.populateLevel();
     } else {               // Restart
       this.theGame.notDead = true;
@@ -68,6 +70,7 @@ class SceneManager {
       this.endMusic = true;
       this.score = 0;
       this.gameover = false;
+      this.startMusic.play();
       this.populateLevel();
     }
 

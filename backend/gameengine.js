@@ -23,7 +23,6 @@ class GameEngine {
       this.minionCount = 0;
       this.deadMinions = 0;
       this.towerCount = 0;
-
       this.deadTowers = 0;
       this.deadWolves = 0;
       this.deadOgres = 0;
@@ -38,7 +37,7 @@ class GameEngine {
       this.defaultDef = 3;
       this.defaultAttack = minionStats.ATTACK;
       this.defaultAgi = minionStats.AGILITY;
-      this.defaultIntel = minionStats.INTELLIGENCE+1;
+      this.defaultIntel = minionStats.INTELLIGENCE;
 
       this.towerHealth = 150;
       this.towerAttack = 35;

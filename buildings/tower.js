@@ -42,15 +42,21 @@ class Tower {
         if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon) &&
               canSee(this, ent) && this.elapsedTime > 1 / this.agility) {
             this.elapsedTime = 0;
-            this.theGame.addEntity(new Projectile(this.theGame, this.x, this.y, ent, this.attack/2 + randomInt(this.attack), this.projectileScale));
+            this.theGame.addEntity(new Projectile(this.theGame, this.x, this.y, ent, Math.floor(this.attack/2 + randomInt(this.attack)), this.projectileScale));
         }
     }
 
     if (this.health <= 0) {
       this.state = 0;
       if (!this.theGame.victory && !this.theGame.theSM.paused && this.theGame.notDead) this.theGame.deadTowers++;
-      this.theGame.towerCount--;
     }
+    //Stats
+    this.health = this.theGame.towerHealth;
+    this.maxHealth = this.theGame.towerHealth;
+    this.defense = this.theGame.towerDefense;
+    this.attack = this.theGame.towerAttack;
+    this.projectileScale = this.theGame.towerProjectile;
+    this.visualRadius = this.theGame.towerVisual;
 
     this.isSelected = (this.thePlayer.selected == this);
     this.myHealthBar.updateMe();
