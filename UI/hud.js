@@ -74,14 +74,14 @@ class Hud {
     new Button(that, that.theGame, this.upgradeMinion, "Health", "Health     90 Food", "Crimson");
     new Button(that, that.theGame, this.upgradeMinion, "Attack", "Attack     90 Food", "Yellow");
     new Button(that, that.theGame, this.upgradeMinion, "Agility", "Agility     90 Food", "Aqua");
-    new Button(that, that.theGame, this.upgradeMinion, "Defense", "Defense     90 Food", "Black");
+    new Button(that, that.theGame, this.upgradeMinion, "Defense", "Defense   90 Food", "Black");
     new Button(that, that.theGame, this.upgradeMinion, "Intelligence", "Intel        90 Food", "Chartreuse");
 
-    new Button(that, that.theGame, this.assistBase, 100, "Repair        100 Rock", "White");
-    new Button(that, that.theGame, this.upgradeBase, null, "BaseUp        500 Rock", "Gold");
+    new Button(that, that.theGame, this.assistBase, 100, "Repair       100 Rock", "White");
+    new Button(that, that.theGame, this.upgradeBase, null, "BaseUp      500 Rock", "Gold");
 
-    new Button(that, that.theGame, this.upgradeTower, "Defense", "Harden        90 Rock", "White");
-    new Button(that, that.theGame, this.upgradeTower, "Offense", "Offense        90 Rock", "White");
+    new Button(that, that.theGame, this.upgradeTower, "Defense", "Harden    90 Rock", "White");
+    new Button(that, that.theGame, this.upgradeTower, "Offense", "Offense   90 Rock", "White");
   };
 
   // Upgrade minion method for the game. Will upgrade certain stat based on the option selected.
