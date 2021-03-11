@@ -125,11 +125,9 @@ class Player {
     ctx.strokeStyle = "White";
     ctx.strokeRect(params.CANVAS_WIDTH + 76, 4, 95, 20);
     ctx.fillStyle = this.myFoodColor;
-    ctx.fillText(("Food: " + Math.round(this.myFood) + " + "
-      + Math.round(this.foodIncome) + " food/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4 + 24);
+    ctx.fillText(("Food: " + Math.round(this.myFood)), 1100 + params.TILE_W_H/4, params.TILE_W_H/4 + 24);
     ctx.fillStyle = this.myRockColor;
-    ctx.fillText(("Rock: " + Math.round(this.myRock) + " + "
-      + Math.round(this.rockIncome) + " rock/second"), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*2 + 24);
+    ctx.fillText(("Rock: " + Math.round(this.myRock)), 1100 + params.TILE_W_H/4, params.TILE_W_H/4*2 + 24);
     // ctx.fillText(("Selected: " + this.targetType), 1024 + params.TILE_W_H/4, params.TILE_W_H/4*3);
 
     ctx.fillText("BUILD MENU", params.CANVAS_WIDTH + 78, 82);
