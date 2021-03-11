@@ -15,10 +15,14 @@ class Hud {
     this.towerButton.updateMe();
     this.pauseButton.updateMe();
 
+    var inc = 0;
     for(var i = 0; i < this.myButtons.length; i++) {
+      if (i >= 3) {
+        inc = 27;
+      }
       this.myButtons[i].updateMe();
       if(this.theGame.click) {
-        this.myButtons[i].checkButton(1038, 97 + 27 * i + 27, 63, 22);
+        this.myButtons[i].checkButton(1038, inc + (97 + 27 * i + 27), 63, 22);
       }
     }
   };
@@ -32,11 +36,14 @@ class Hud {
 
     this.towerButton.drawMe(ctx);
     this.pauseButton.drawMe(ctx);
-
+    var inc = 0;
     for(var i = 0; i < this.myButtons.length; i++) {
-      this.myButtons[i].drawButton(ctx, 1038, 97 + 27 * i + 27, 63, 22, null);
+      if (i >= 3) {
+         inc = 27;
+      }
+      this.myButtons[i].drawButton(ctx, 1038, inc + (97 + 27 * i + 27), 63, 22, null);
     }
-  }
+  };
 
   createButtons() {
     var that = this;
@@ -56,12 +63,12 @@ class Hud {
       "Victory    1000 Food", "white"
     );
 
+    new Button(that, that.theGame, this.assistBase, 100, "Repair        100 Rock", "White");
     new Button(that, that.theGame, this.upgradeMinion, "Health", "Health     90 Food", "Crimson");
     new Button(that, that.theGame, this.upgradeMinion, "Attack", "Attack     90 Food", "Yellow");
     new Button(that, that.theGame, this.upgradeMinion, "Agility", "Agility     90 Food", "Aqua");
     new Button(that, that.theGame, this.upgradeMinion, "Defense", "Defense     90 Food", "Black");
     new Button(that, that.theGame, this.upgradeMinion, "Intel", "Intel        90 Food", "Chartreuse");
-    new Button(that, that.theGame, this.assistBase, 100, "Repair        100 Rock", "White");
 
   };
 

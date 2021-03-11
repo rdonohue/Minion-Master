@@ -130,13 +130,12 @@ class Dragon {
       var combat = false;
       for (var i = 0; i < this.theGame.entities.length; i++) {
           var ent = this.theGame.entities[i];
-          // (ent.myFaction != "dragon" && ent.myFaction != "resource")
           if ((ent instanceof Minion || ent instanceof Wolf || ent instanceof Tower || ent instanceof HomeBase) && canSee(this, ent) && !ent.removeFromWorld) {
               this.target = ent;
               combat = true;
                if (this.elapsedTime > (2 / this.agility) && !collide(this, ent)) {
                    this.elapsedTime = 0;
-                   this.theGame.addEntity(new Fireball(this.theGame, this.center.x, this.center.y, ent, 8, this.projectileScale));
+                   this.theGame.addEntity(new Fireball(this.theGame, this.center.x, this.center.y, ent, 15, this.projectileScale));
               }
           }
           if ((ent instanceof Minion || ent instanceof Wolf || ent instanceof Tower || ent instanceof HomeBase) && collide(this, ent) && !ent.removeFromWorld) {

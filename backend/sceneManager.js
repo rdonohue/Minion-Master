@@ -6,7 +6,7 @@ class SceneManager {
 
       this.theMiniMap = new MiniMap(this.theGame, 1024, 576, 256);
       this.theHud = new Hud(this.theGame, 1024, 0, 256);
-      this.thePlayer = new Player(this.theGame, 50, 50, 5, 3, 0, 0);
+      this.thePlayer = new Player(this.theGame, 200, 200, 5, 3, 0, 0);
 
       // Credits to: https://vnitti.itch.io/grassy-mountains-parallax-background
       this.startbg = ASSET_MANAGER.getAsset("./sprites/start_bg.png");
@@ -92,7 +92,8 @@ class SceneManager {
       this.caveTimer += this.theGame.clockTick;
     }
 
-    if(this.dragonTimer >= 0) {
+    // Every 2 minutes, a dragon will spawn.
+    if (this.dragonTimer >= 0) {
       this.theGame.spawnMe("dragon", params.PLAY_WIDTH - 150 - randomInt(150), 300);
       this.dragonTimer = -1;
       //spawn dragon at 2 minutes

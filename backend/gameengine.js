@@ -19,6 +19,8 @@ class GameEngine {
 
       this.notDead = true;
       this.currentMinion = null;
+      this.minionCount = 0;
+      this.towerCount = 0;
   };
 
   init(ctx) {
@@ -127,6 +129,7 @@ class GameEngine {
         this.elements.splice(i, 1);
       }
     }
+
   };
 
   loop() {

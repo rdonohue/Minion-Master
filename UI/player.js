@@ -33,7 +33,7 @@ class Player {
 
   updateMe() {
     this.timeSinceUpdate += this.timer.tick();
-    this.updateResources();
+    //this.updateResources();
     if(this.theGame.click){
       this.updateSelected(this.theGame.click);
     }

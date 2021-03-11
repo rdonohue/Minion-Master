@@ -27,6 +27,7 @@ class Projectile {
         this.radius = 12;
 
         this.elapsedTime = 0;
+        this.removeFromWorld = false;
     };
 
     drawMinimap(ctx, mmX, mmY, mmW, mmH) {
@@ -57,6 +58,7 @@ class Projectile {
     };
 
     updateMe() {
+
         this.x += this.velocity.x * this.theGame.clockTick;
         this.y += this.velocity.y * this.theGame.clockTick;
 
@@ -68,6 +70,7 @@ class Projectile {
                 this.state = 0;
 
                 this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "#FF9900"));
+                this.removeFromWorld = true;
             }
         }
 

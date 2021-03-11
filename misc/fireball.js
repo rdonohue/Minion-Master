@@ -16,6 +16,7 @@ class Fireball {
         this.animations = [];
         this.loadAnimations();
         this.direction = 0;
+        this.state = 1;
 
         var dist = distance(this, this.target);
         this.maxSpeed = 400; // pixels per second
@@ -25,6 +26,7 @@ class Fireball {
         this.cache = [];
         this.facing = 5;
         this.elapsedTime = 0;
+        this.removeFromWorld = false;
     };
 
     drawAngle(ctx, angle) {
@@ -58,11 +60,6 @@ class Fireball {
     };
 
     updateMe() {
-      this.elapsedTime += this.theGame.clockTick;
-      if(this.elapsedTime > 1000) {
-        this.state = 0;
-      }
-
       this.x += this.velocity.x * this.theGame.clockTick;
       this.y += this.velocity.y * this.theGame.clockTick;
 
@@ -70,11 +67,13 @@ class Fireball {
           var ent = this.theGame.entities[i];
           if ((ent instanceof Minion || ent instanceof Wolf || ent instanceof Tower || ent instanceof HomeBase) && collide(this, ent)) {
               var damage = this.attackMod - ent.defense;
+              this.state = 0;
               if (damage < 0) {
                   damage = 0;
               }
               ent.health -= damage;
               this.theGame.addElement(new Score(this.theGame, ent.x, ent.y - 10, damage, "#FF9900"));
+              this.removeFromWorld = true;
           }
       }
 
