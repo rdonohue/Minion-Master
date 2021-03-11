@@ -42,7 +42,7 @@ class Tower {
         if ((ent instanceof Wolf || ent instanceof Ogre || ent instanceof Dragon) &&
               canSee(this, ent) && this.elapsedTime > 1 / this.agility) {
             this.elapsedTime = 0;
-            this.theGame.addEntity(new Projectile(this.theGame, this.x, this.y, ent, this.attack, this.projectileScale));
+            this.theGame.addEntity(new Projectile(this.theGame, this.x, this.y, ent, this.attack/2 + randomInt(this.attack), this.projectileScale));
         }
     }
 
