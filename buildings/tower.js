@@ -50,60 +50,12 @@ class Tower {
       this.state = 0;
       if (!this.theGame.victory && !this.theGame.theSM.paused && this.theGame.notDead) this.theGame.deadTowers++;
     }
-    //Stats
-    this.health = this.theGame.towerHealth;
-    this.maxHealth = this.theGame.towerHealth;
-    this.defense = this.theGame.towerDefense;
-    this.attack = this.theGame.towerAttack;
-    this.projectileScale = this.theGame.towerProjectile;
-    this.visualRadius = this.theGame.towerVisual;
+
 
     this.isSelected = (this.thePlayer.selected == this);
     this.myHealthBar.updateMe();
   };
 
-
-// Future proofing the inevitable need of the HUD accessing a tower's attributes.
-// Don't add functionality about whether or not the tower can be upgraded in this class.
-
-// Since the HUD is the most directly interacting component, it can ask a tower
-// what it's current overall upgrade state is, and then fade out (make unavailable)
-// the upgrade option.
-
-// Our balancing question is whether or not the upgrade amount is a global value
-// where it's max upgrade state is 3, or whatever value, regardless of whether
-// it's offensive or defensive, or if each upgrade type can go to a max amount
-// individually.
-
-  /**
-   * This method interacts with HUD buttons for when a tower is selected.
-   * When a player upgrades it's tower's offensive capabilities, the
-   * tower's arrows hit harder, shoot faster, and are larger.
-   *
-   * @upgradeAmount: The stage of upgrade the tower is currently at. (ryan: I think 3 is probably the max amount of upgrades if this is a good idea.)
-   */
-  upgradeOffense(upgradeAmount) {
-    if (this.theGame.player.selectedAttackUP) {
-      this.attack += upgradeAmount;
-      this.projectileScale += 0.5;
-      this.agility += 0.5;
-    }
-  };
-
-  /**
-   * This method interacts with HUD buttons for when a tower is selected.
-   * When a player upgrades it's tower's defensive capabilities, the
-   * tower is tougher, has better built walls, and can see farther.
-   *
-   * @upgradeAmount: The stage of upgrade the tower is currently at. (ryan: I think 3 is probably the max amount of upgrades if this is a good idea.)
-   */
-  upgradeDefense(upgradeAmount) {
-    if (this.theGame.player.selectedDefenseUP) {
-      this.defense++;
-      this.maxHealth += this.maxHealth * (upgradeAmount * 0.2);
-      this.visualRadius += this.visualRadius * (0.5 / upgradeAmount);
-    }
-  };
 
   drawMe(ctx) {
     const xCenter = 52.5 / 2;

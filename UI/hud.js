@@ -142,14 +142,18 @@ class Hud {
      if (this.theGame.theSM.thePlayer.myRock >= 90 && this.theGame.towerCount > 0) {
         this.theGame.theSM.thePlayer.myRock -= 90;
         this.theGame.spentRock += 90;
-        if (type == "Defense") {
-          this.theGame.towerDefense++;
-          this.theGame.towerHealth += 25;
-          this.theGame.towerVisual += 25;
-        } else {
-          this.theGame.towerAttack += 15;
-          this.theGame.towerProjectile += 0.5;
-          this.theGame.towerAgility += 0.5;
+        for (var ent of this.theGame.entities) {
+          if (ent instanceof Tower) {
+            if (type == "Defense") {
+              this.theGame.towerDefense++;
+              this.theGame.towerHealth += 25;
+              this.theGame.towerVisual += 25;
+            } else {
+              this.theGame.towerAttack += 15;
+              this.theGame.towerProjectile += 0.5;
+              this.theGame.towerAgility += 0.5;
+            }
+          }
         }
      } else {
         this.theGame.theSM.thePlayer.myRockColor = "orange";

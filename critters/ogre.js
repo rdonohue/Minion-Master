@@ -2,8 +2,8 @@ class Ogre {
     constructor(theGame, x, y) {
         Object.assign(this, { theGame, x, y });
         this.spritesheet = ASSET_MANAGER.getAsset("./sprites/ogres.png");
-        this.walkAnimator = new Animator(this.spritesheet, 229, 205, 104, 56, 8, 0.1, 96, false, true);
-        this.attackAnimator = new Animator(this.spritesheet, 25, 9, 150, 113, 10, 0.05, 42, false, true);
+        this.walkAnimator = new Animator(this.spritesheet, 229, 205, 104, 56, 8, 0.20, 96, false, true);
+        this.attackAnimator = new Animator(this.spritesheet, 25, 9, 150, 113, 10, 0.15, 42, false, true);
 
         this.scale = 1;
         this.myDirection = 0; // 0 = left, 1 = right
